@@ -1,0 +1,16 @@
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v1
+      - uses: RafikFarhad/clang-format-github-action@v3
+        with:
+          sources: "src/**/*.h,src/**/*.c,test/**/*.c"
+          style: file
+      - name: Execute the checks
+        run: |
+          sh ./tests/push_check.sh
+
