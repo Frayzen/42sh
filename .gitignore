@@ -1,9 +1,10 @@
 **/*
-!**/*.c
+!**/*/
+!*/*.c
 !**/*.h
 !**/*.sh
-!**/Makefile
-!**/Makefile.au
+!**/Makefile.am
+!**/configure.ac
 !README.md
 !.clang-format
 !.gitignore
