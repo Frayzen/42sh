@@ -15,9 +15,8 @@ char *g_elements[9] = {
 
 int get_type(char *value)
 {
-    size_t len = strlen(value);
     int i = 0;
-    while (g_elements[i] && !strcmp(g_elements[i], value))
+    while (g_elements[i] && strcmp(g_elements[i], value))
         i++;
     return i;
 }
