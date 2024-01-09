@@ -17,7 +17,7 @@ enum type
     MAX_TYPE,
 };
 
-static const char *const type_names[] = 
+static const char *const type_names[] =
 {
     [IF] = "if",
     [THEN] = "then",
@@ -29,12 +29,12 @@ static const char *const type_names[] =
     [SINGLE_QUOTE] = "'",
 };
 
-
+/*
 static char backend(char *string, int offset)
 {
     return string[offset];
 }
-
+*/
 
 //check_terminal: at each iteration of the main loop of finder, it checks if the
 //string is a recognizable word
@@ -96,7 +96,7 @@ char *finder(char *string, int offset) //les arguments sont juste pour tester, c
     return pending;
 }
 
-
+/*
 int main(void)
 {
     char *test = "echo; 'coucou'\n";
@@ -106,11 +106,15 @@ int main(void)
         char *string = finder(test,off);
         printf("%s\n", string);
         off += strlen(string);
-        printf("inter: %c\n", test[off]);
-        while (string[off] == ' ')
+        while (test[off] == ' ')
         {
             off++;
         }
     }
 }
-
+*/
+/*
+ right now, the single quotes give out singular tokens,
+ but it can be modified to get one big token
+ containing all that is between the quotes
+ */
