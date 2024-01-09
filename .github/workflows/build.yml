@@ -1,4 +1,5 @@
-on: push
+name: Checks
+on: [push, pull_request]
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -7,10 +8,11 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v1
-      - uses: RafikFarhad/clang-format-github-action@v3
+      - name: Run clang-format style
+        uses: jidicula/clang-format-action@v4.11.0
         with:
-          sources: "src/**/*.h,src/**/*.c,test/**/*.c"
-          style: file
+          clang-format-version: '13'
+          check-path: 'src'
       - name: Execute the checks
         run: |
           sh ./tests/push_check.sh
