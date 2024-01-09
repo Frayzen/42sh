@@ -10,6 +10,6 @@ struct ringbuffer{
 };
 
 void io_put(char *str);
-char io_get(void);
+char io_get_char(void);
 
 #endif /* !BACKEND_SAVER_H */
