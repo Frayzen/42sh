@@ -8,4 +8,7 @@ Test(backend_saver, basic_put)
 {
     io_put("test");
     cr_assert_eq(io_get_char(), 't');
+    cr_assert_eq(io_get_char(), 'e');
+    cr_assert_eq(io_get_char(), 't');
+    cr_assert_eq(io_get_char(), 't');
 }

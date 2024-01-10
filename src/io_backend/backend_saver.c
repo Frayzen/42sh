@@ -42,6 +42,12 @@ void io_put(char *str)
 char io_get_char(void)
 {
     struct ringbuffer *rb = get_buffer();
+    return *rb->begin;
+}
+
+char io_pop(void)
+{
+    struct ringbuffer *rb = get_buffer();
     char v = *rb->begin;
     rb->begin++;
     if (rb->value + RINGBUFSIZE == rb->begin)
