@@ -1,8 +1,8 @@
 #ifndef TOKEN_H
 #define TOKEN_H
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 enum token_type
 {
     IF,
@@ -25,7 +25,5 @@ struct token
 struct token *init_token(char *value);
 void destroy_token(struct token *token);
 void print_token(struct token *token);
-
-
 
 #endif // !TOKEN_H

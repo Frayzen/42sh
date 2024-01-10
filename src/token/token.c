@@ -1,17 +1,8 @@
 #include "token.h"
 
-
-char *g_elements[9] = {
-    [IF] = "if" ,
-    [THEN] = "then",
-    [ELIF] = "elif",
-    [ELSE] = "else",
-    [FI] = "fi",
-    [SEMI_COLON] = ";",
-    [NEWLINE] = "\n",
-    [QUOTE] = "'",
-    [WORD] = NULL
-};
+char *g_elements[9] = { [IF] = "if",      [THEN] = "then", [ELIF] = "elif",
+                        [ELSE] = "else",  [FI] = "fi",     [SEMI_COLON] = ";",
+                        [NEWLINE] = "\n", [QUOTE] = "'",   [WORD] = NULL };
 
 int get_type(char *value)
 {
@@ -21,11 +12,9 @@ int get_type(char *value)
     return i;
 }
 
-
-
 struct token *init_token(char *value)
 {
-    struct token *tok = malloc(sizeof(struct token));   
+    struct token *tok = malloc(sizeof(struct token));
     tok->type = get_type(value);
     tok->value = value;
     return tok;
@@ -39,7 +28,6 @@ void destroy_token(struct token *token)
         free(token->value);
     free(token);
 }
-
 
 void print_token(struct token *token)
 {
