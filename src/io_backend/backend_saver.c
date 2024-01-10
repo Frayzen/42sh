@@ -1,4 +1,5 @@
 #include "io_backend/backend_saver.h"
+#include <stdbool.h>
 #include <string.h>
 
 struct ringbuffer *get_buffer(void)
@@ -45,10 +46,13 @@ char io_get_char(void)
     return *rb->begin;
 }
 
-void io_pop(void)
+bool io_pop(void)
 {
     struct ringbuffer *rb = get_buffer();
+    if (rb->begin == rb->end)
+        return false;
     rb->begin++;
     if (rb->value + RINGBUFSIZE == rb->begin)
         rb->begin = rb->value;
+    return true;
 }
