@@ -8,7 +8,7 @@
  * available
  * @return the string to be used for the token
  */
-char *finder(char *string, int offset);
+char *finder(void);
 
 enum type
 {
