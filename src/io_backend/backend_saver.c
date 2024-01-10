@@ -1,5 +1,4 @@
-#include "backend_saver.h"
-#include <string.h>
+#include "io_backend/backend_saver.h"
 
 struct ringbuffer *get_buffer(void)
 {
@@ -14,37 +13,50 @@ struct ringbuffer *get_buffer(void)
 size_t get_bufsize(void)
 {
     struct ringbuffer *rb = get_buffer();
-    if(rb->end < rb->begin)
+    if (rb->end < rb->begin)
         return RINGBUFSIZE - (rb->begin - rb->end);
     return rb->end - rb->begin;
 }
 
-void io_put(char *str)
+void io_put_chars(char *str, size_t len)
 {
     struct ringbuffer *rb = get_buffer();
-    size_t l = strlen(str);
     size_t available = RINGBUFSIZE - get_bufsize();
-    if(available < l)
+    if (available < len)
     {
-        l = available;
-        //TODO error handling
+        len = available;
+        // TODO error handling
     }
     size_t toend = rb->value + RINGBUFSIZE - rb->end;
-    if (toend < l)
+    if (toend < len)
     {
         memcpy(rb->end, str, toend);
         str += toend;
-        l -= toend;
+        len -= toend;
         rb->end = rb->value;
     }
-    memcpy(rb->end, str, l);
+    memcpy(rb->end, str, len);
+    rb->end += len;
 }
+
+void io_put(char *str)
+{
+    io_put_chars(str, strlen(str));
+}
+
 char io_get_char(void)
 {
     struct ringbuffer *rb = get_buffer();
-    char v = *rb->begin;
+    return *(rb->begin);
+}
+
+bool io_pop(void)
+{
+    struct ringbuffer *rb = get_buffer();
+    if (rb->begin == rb->end)
+        return false;
     rb->begin++;
     if (rb->value + RINGBUFSIZE == rb->begin)
         rb->begin = rb->value;
-    return v;
+    return true;
 }
