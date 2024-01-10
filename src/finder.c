@@ -2,7 +2,11 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-#include <finder.h>
+#include "finder.h"
+#define CHECK_SPECIAL_CHAR(Char)(((Char) == '\n' || (Char) == ';' || (Char) == '\'')? 1:0)
+
+
+
 
 static const char *const type_names[] =
 {
@@ -16,17 +20,18 @@ static const char *const type_names[] =
       [SINGLE_QUOTE] = "'",
 };
 
+
 /***
-* check_terminal: checks if the word given is one of the reserved word
+* check_reserved: checks if the word given is one of the reserved word
 * @param pending: a char*, the word we are inspecting
 * @return a boolean, 1 if it is a special word, 0 otherwise
 */
-static int check_terminal(char *pending)
+static int check_reserved(char *pending)
 {
-    char c = get_backend();
-   for (int i = 0; i < 8; i++)
+   char c = get_backend();
+   for (int i = 0; i < MAX_TYPE; i++)
     {
-        if (strcmp(pending, type_names[i]) == 0)
+        if (!strcmp(pending, type_names[i]))
         {
             if (c != ' ')
                 return 0;
@@ -36,46 +41,25 @@ static int check_terminal(char *pending)
     return 0;
 }
 
-
-/***
-* check_special_one_chara: check if the character given is one of the reserved
-* one
-* @param chara: the character we are looking at
-* @return a boolean, 1 if it is reserved, 0 otherwise
-*/
-
-static int check_special_one_chara(char chara)
-{
-    return (chara == '\n' || chara == ';' || chara == '\'') ? 1: 0;
-}
-
-
-/***
-* finder: gets character by character until the word is recognizable, or there
-* @get_backend function: to look at the next character without popping it
-* @pop_backend function: pops the character in backend so the next one is
-* available
-* @return the string to be used for the token
-*/
-
-char *finder(char *string, int offset) //les arguments sont juste pour tester, ce sera void normalement
+char *finder()
 {
     char *pending = malloc(2); //one character + terminating NULL to check with strcmp
 
     size_t size_pending = 0;
-    char c = get_backend(string, offset);
+    char c = get_backend();
     offset += 1;
     if (c == ' ')
-        c = get_backend(string, offset);
+        c = get_backend();
     pending[0] = c;
     size_pending++;
     pending[size_pending] = 0;
-    while (!check_terminal(pending, string, offset))
+
+    while (!check_reserved(pending))
     {
-        //pop_backend();
-        c = get_backend(string, offset);
+        //TODO pop_backend();
+        c = get_backend();
         offset += 1;
-        if (c == ' ' || !check_special_one_chara(c))
+        if (c == ' ' || !(CHECK_SPECIAL_CHAR(c)))
         {
             pending = realloc(pending, size_pending + 1);
             pending[size_pending] = c;
@@ -83,7 +67,7 @@ char *finder(char *string, int offset) //les arguments sont juste pour tester, c
             pending[size_pending] = 0;
             if (c == ' ')
             {
-                //pop_backend();
+                //TODO pop_backend();
                 return pending;
             }
         }
@@ -95,25 +79,3 @@ char *finder(char *string, int offset) //les arguments sont juste pour tester, c
     return pending;
 }
 
-/*
-int main(void)
-{
-    char *test = "ifp; 'coucou'\n";
-    int off = 0;
-    while (test[off] != 0)
-    {
-        char *string = finder(test,off);
-        printf("%s\n", string);
-        off += strlen(string);
-        while (test[off] == ' ')
-        {
-            off++;
-        }
-    }
-}
-*/
-/*
- right now, the single quotes give out singular tokens,
- but it can be modified to get one big token
- containing all that is between the quotes
- */
