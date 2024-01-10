@@ -13,7 +13,7 @@ struct ringbuffer *get_buffer(void)
 size_t get_bufsize(void)
 {
     struct ringbuffer *rb = get_buffer();
-    if(rb->end < rb->begin)
+    if (rb->end < rb->begin)
         return RINGBUFSIZE - (rb->begin - rb->end);
     return rb->end - rb->begin;
 }
@@ -22,10 +22,10 @@ void io_put_chars(char *str, size_t len)
 {
     struct ringbuffer *rb = get_buffer();
     size_t available = RINGBUFSIZE - get_bufsize();
-    if(available < len)
+    if (available < len)
     {
         len = available;
-        //TODO error handling
+        // TODO error handling
     }
     size_t toend = rb->value + RINGBUFSIZE - rb->end;
     if (toend < len)
