@@ -1,7 +1,7 @@
 #include "io_streamers.h"
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 char *io_streamer_file(char *path_to_file)
