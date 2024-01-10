@@ -1,23 +1,8 @@
 #include "tokenizer.h"
-struct token *g_cur = NULL;
-
-
 
 struct token *next_token(char *str)
 {
-    
-    struct token* result = g_cur;
-    if (is_terminating(result))
-    {
-        g_cur = NULL;
-        return result;
-    }
-    printf("createing\n");
-    char *lexeme = str;//finder function
-    struct token *next = init_token(lexeme);
-    g_cur = next;
+    struct token *result = init_token(str);
+    // TODO remove the str argument and get the lexeme from finder()
     return result;
 }
-
-
-
