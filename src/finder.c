@@ -2,47 +2,13 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
+#include <finder.h>
 
-enum type
-{
-    IF,
-    THEN,
-    ELIF,
-    ELSE,
-    FI,
-    SEMI_COLON,
-    BACK_N,
-    SINGLE_QUOTE,
-    WORD,
-    MAX_TYPE,
-};
-
-static const char *const type_names[] =
-{
-    [IF] = "if",
-    [THEN] = "then",
-    [ELIF] = "elif",
-    [ELSE] = "else",
-    [FI] = "fi",
-    [SEMI_COLON] = ";",
-    [BACK_N] = "\n",
-    [SINGLE_QUOTE] = "'",
-};
-
-
-
-//THIS WAS JUST TO TEST
-/*
-static char backend(char *string, int offset)
-{
-    return string[offset];
-}
+/***
+* check_terminal: checks if the word given is one of the reserved word
+* @param pending: a char*, the word we are inspecting
+* @return a boolean, 1 if it is a special word, 0 otherwise
 */
-
-
-//check_terminal: at each iteration of the main loop of finder, it checks if the
-//string is a recognizable word
-
 static int check_terminal(char *pending)
 {
     char c = get_backend();
@@ -59,38 +25,43 @@ static int check_terminal(char *pending)
 }
 
 
+/***
+* check_special_one_chara: check if the character given is one of the reserved
+* one
+* @param chara: the character we are looking at
+* @return a boolean, 1 if it is reserved, 0 otherwise
+*/
 
-//check_special_one_chara: checks if the character is a special word
-
-static int check_special_one_chara(char c)
+static int check_special_one_chara(char chara)
 {
-    return (c == '\n' || c == ';' || c == '\'') ? 1: 0;
+    return (chara == '\n' || chara == ';' || chara == '\'') ? 1: 0;
 }
 
 
-
-//finder: gets character by character until the word is recognizable, or there
-//is a space
-//get_backend function: to look at the next character without popping it
-//pop_backend function: pops the character in backend so the next one is
-//available
+/***
+* finder: gets character by character until the word is recognizable, or there
+* @get_backend function: to look at the next character without popping it
+* @pop_backend function: pops the character in backend so the next one is
+* available
+* @return the string to be used for the token
+*/
 
 char *finder(char *string, int offset) //les arguments sont juste pour tester, ce sera void normalement
 {
     char *pending = malloc(2); //one character + terminating NULL to check with strcmp
 
     size_t size_pending = 0;
-    char c = get_backend();
+    char c = get_backend(string, offset);
     offset += 1;
     if (c == ' ')
-        c = get_backend();
+        c = get_backend(string, offset);
     pending[0] = c;
     size_pending++;
     pending[size_pending] = 0;
-    while (!check_terminal(pending))
+    while (!check_terminal(pending, string, offset))
     {
-        pop_backend();
-        c = get_backend();
+        //pop_backend();
+        c = get_backend(string, offset);
         offset += 1;
         if (c == ' ' || !check_special_one_chara(c))
         {
@@ -100,7 +71,7 @@ char *finder(char *string, int offset) //les arguments sont juste pour tester, c
             pending[size_pending] = 0;
             if (c == ' ')
             {
-                pop_backend();
+                //pop_backend();
                 return pending;
             }
         }
