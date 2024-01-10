@@ -4,8 +4,6 @@
 #include <criterion/internal/assert.h>
 #include <criterion/internal/test.h>
 
-TestSuite(backend_saver);
-
 Test(backend_saver, basic_put)
 {
     io_put("tests");
