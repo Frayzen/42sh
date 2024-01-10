@@ -1,3 +1,18 @@
+# define the sub directories
+
+bin_PROGRAMS = unit
+
+unit_SOURCES =\
+			  io_backend/backend_saver.c
+
+unit_CPPFLAGS = -I$(top_srcdir)/src
+
+unit_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic
+
+unit_LDADD =  \
+		-lcriterion \
+       $(top_builddir)/src/io_backend/libiobackend.a
+
 check_PROGRAMS = io_backend_test
 
 io_backend_test_SOURCES = \

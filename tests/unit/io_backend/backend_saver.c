@@ -6,6 +6,6 @@ TestSuite(backend_saver);
 
 Test(backend_saver, basic_put)
 {
-   io_put("test");
+    io_put("test");
     cr_assert_eq(io_get_char(), 't');
 }

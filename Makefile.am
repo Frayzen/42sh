@@ -1,11 +1,18 @@
-bin_PROGRAMS = 42sh
 
-42sh_CFLAGS = -std=c99 -pedantic -Werror -Wall -Wextra -Wvla
-42sh_CPPFLAGS = -Isrc
-42sh_SOURCES = \
-	src/io_backend/backend_saver.c \
-	src/main.c
-42sh_LDADD = $(top_builddir)/src/io_backend/libiobackend.a
+SUBDIRS = src \
+		  tests/unit
 
-SUBDIRS = \
-		  src/io_backend
+42sh:
+	make -C src
+	mv src/42sh .
+
+unit: 42sh
+	make -C tests/unit
+	mv tests/unit/unit .
+
+funct:
+	make -C tests/funct
+	mv tests/funct/funct .
+
+clean-local:
+	$(RM) 42sh unit funct
