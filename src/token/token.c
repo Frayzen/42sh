@@ -48,15 +48,3 @@ void print_token(struct token *token)
     else
         printf(" |%s|%d| ", token->value, token->type);
 }
-
-
-char *create_string(char *str)
-{
-    size_t len = strlen(str);
-    // printf("len = %ld\n", len);
-    char * res = malloc(sizeof(char) * len);
-    res = strncpy(res, str, len);
-    res[len] = '\0';
-    return res;
-
-}

@@ -25,7 +25,6 @@ struct token
 struct token *init_token(char *value);
 void destroy_token(struct token *token);
 void print_token(struct token *token);
-char *create_string(char *str);
 
 
 
