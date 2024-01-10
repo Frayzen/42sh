@@ -4,6 +4,18 @@
 #include <string.h>
 #include <finder.h>
 
+static const char *const type_names[] =
+{
+      [IF] = "if",
+      [THEN] = "then",
+      [ELIF] = "elif",
+      [ELSE] = "else",
+      [FI] = "fi",
+      [SEMI_COLON] = ";",
+      [BACK_N] = "\n",
+      [SINGLE_QUOTE] = "'",
+};
+
 /***
 * check_terminal: checks if the word given is one of the reserved word
 * @param pending: a char*, the word we are inspecting

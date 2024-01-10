@@ -17,16 +17,5 @@ enum type
       MAX_TYPE,
 };
 
-static const char *const type_names[] =
-{
-      [IF] = "if",
-      [THEN] = "then",
-      [ELIF] = "elif",
-      [ELSE] = "else",
-      [FI] = "fi",
-      [SEMI_COLON] = ";",
-      [BACK_N] = "\n",
-      [SINGLE_QUOTE] = "'",
-};
 
 #endif /* FINDER_H */
