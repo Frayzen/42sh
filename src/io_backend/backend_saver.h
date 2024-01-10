@@ -14,7 +14,8 @@ struct ringbuffer
 
 /***
  * Add string to the io backend buffer
- * @param str the string that should be null terminated and do not contain null char
+ * @param str the string that should be null terminated and do not contain null
+ * char
  * @see io_put_chars() for non null terminated strings
  */
 void io_put(char *str);
