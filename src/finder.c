@@ -29,23 +29,29 @@ static const char *const type_names[] =
     [SINGLE_QUOTE] = "'",
 };
 
-/*
+
 static char backend(char *string, int offset)
 {
     return string[offset];
 }
-*/
+
 
 //check_terminal: at each iteration of the main loop of finder, it checks if the
 //string is a recognizable word
 
-static int check_terminal(char *pending)
+static int check_terminal(char *pending, char *string, int offset)
 {
-    for (int i = 0; i < 8; i++)
+    //printf("inside check: %s\n", pending);
+    char c = backend(string, offset);
+   for (int i = 0; i < 8; i++)
     {
         if (strcmp(pending, type_names[i]) == 0)
+        {
+            if (c != ' ')
+                return 0;
             return 1;
-    }
+        }
+        }
     return 0;
 }
 
@@ -75,8 +81,9 @@ char *finder(char *string, int offset) //les arguments sont juste pour tester, c
     pending[0] = c;
     size_pending++;
     pending[size_pending] = 0;
-    while (!check_terminal(pending))
+    while (!check_terminal(pending, string, offset))
     {
+        //pop_backend();
         c = backend(string, offset);
         offset += 1;
         if (c == ' ' || !check_special_one_chara(c))
@@ -86,7 +93,10 @@ char *finder(char *string, int offset) //les arguments sont juste pour tester, c
             size_pending++;
             pending[size_pending] = 0;
             if (c == ' ')
+            {
+                //pop_backend();
                 return pending;
+            }
         }
         else
         {
@@ -96,10 +106,10 @@ char *finder(char *string, int offset) //les arguments sont juste pour tester, c
     return pending;
 }
 
-/*
+
 int main(void)
 {
-    char *test = "echo; 'coucou'\n";
+    char *test = "ifp; 'coucou'\n";
     int off = 0;
     while (test[off] != 0)
     {
@@ -112,7 +122,7 @@ int main(void)
         }
     }
 }
-*/
+
 /*
  right now, the single quotes give out singular tokens,
  but it can be modified to get one big token
