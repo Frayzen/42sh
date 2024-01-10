@@ -5,7 +5,8 @@
 #include <string.h>
 #define RINGBUFSIZE 1024
 
-struct ringbuffer{
+struct ringbuffer
+{
     char value[RINGBUFSIZE];
     char *begin;
     char *end;

@@ -9,10 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Run clang-format style
-        uses: jidicula/clang-format-action@v4.11.0
+      - uses: DoozyX/clang-format-lint-action@v0.17
         with:
-          clang-format-version: '13'
-          check-path: 'src'
+          source: 'src'
+          extensions: 'h,c'
+          clangFormatVersion: 17
       - name: Execute the unit tests
         run: |
           make unit
