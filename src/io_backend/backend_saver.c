@@ -45,12 +45,10 @@ char io_get_char(void)
     return *rb->begin;
 }
 
-char io_pop(void)
+void io_pop(void)
 {
     struct ringbuffer *rb = get_buffer();
-    char v = *rb->begin;
     rb->begin++;
     if (rb->value + RINGBUFSIZE == rb->begin)
         rb->begin = rb->value;
-    return v;
 }
