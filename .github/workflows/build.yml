@@ -16,6 +16,8 @@ jobs:
           clangFormatVersion: 17
       - name: Execute the unit tests
         run: |
+          autoreconf -i
+          ./configure
           make unit
           ./unit
 
