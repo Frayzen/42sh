@@ -30,19 +30,22 @@ static const char *const type_names[] =
 };
 
 
+
+//THIS WAS JUST TO TEST
+/*
 static char backend(char *string, int offset)
 {
     return string[offset];
 }
+*/
 
 
 //check_terminal: at each iteration of the main loop of finder, it checks if the
 //string is a recognizable word
 
-static int check_terminal(char *pending, char *string, int offset)
+static int check_terminal(char *pending)
 {
-    //printf("inside check: %s\n", pending);
-    char c = backend(string, offset);
+    char c = get_backend();
    for (int i = 0; i < 8; i++)
     {
         if (strcmp(pending, type_names[i]) == 0)
@@ -51,7 +54,7 @@ static int check_terminal(char *pending, char *string, int offset)
                 return 0;
             return 1;
         }
-        }
+    }
     return 0;
 }
 
@@ -61,30 +64,33 @@ static int check_terminal(char *pending, char *string, int offset)
 
 static int check_special_one_chara(char c)
 {
-    return (c == '\n' || c == ';' || c == 39) ? 1: 0; //39 is the ASCII code for a single quote
+    return (c == '\n' || c == ';' || c == '\'') ? 1: 0;
 }
 
 
 
 //finder: gets character by character until the word is recognizable, or there
 //is a space
+//get_backend function: to look at the next character without popping it
+//pop_backend function: pops the character in backend so the next one is
+//available
 
 char *finder(char *string, int offset) //les arguments sont juste pour tester, ce sera void normalement
 {
     char *pending = malloc(2); //one character + terminating NULL to check with strcmp
 
     size_t size_pending = 0;
-    char c = backend(string, offset);
+    char c = get_backend();
     offset += 1;
     if (c == ' ')
-        c = backend(string, offset);
+        c = get_backend();
     pending[0] = c;
     size_pending++;
     pending[size_pending] = 0;
-    while (!check_terminal(pending, string, offset))
+    while (!check_terminal(pending))
     {
-        //pop_backend();
-        c = backend(string, offset);
+        pop_backend();
+        c = get_backend();
         offset += 1;
         if (c == ' ' || !check_special_one_chara(c))
         {
@@ -94,7 +100,7 @@ char *finder(char *string, int offset) //les arguments sont juste pour tester, c
             pending[size_pending] = 0;
             if (c == ' ')
             {
-                //pop_backend();
+                pop_backend();
                 return pending;
             }
         }
@@ -106,7 +112,7 @@ char *finder(char *string, int offset) //les arguments sont juste pour tester, c
     return pending;
 }
 
-
+/*
 int main(void)
 {
     char *test = "ifp; 'coucou'\n";
@@ -122,7 +128,7 @@ int main(void)
         }
     }
 }
-
+*/
 /*
  right now, the single quotes give out singular tokens,
  but it can be modified to get one big token
