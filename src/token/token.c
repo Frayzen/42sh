@@ -3,21 +3,32 @@
 char *g_elements[NBTOKENS] = {
     [IF] = "if",     [THEN] = "then",    [ELIF] = "elif",  [ELSE] = "else",
     [FI] = "fi",     [SEMI_COLON] = ";", [NEWLINE] = "\n", [QUOTE] = "'",
-    [BSZERO] = "\0", [WORD] = NULL,      [TRUE] = "true",  [FALSE] = "false"
+    [BSZERO] = "\0", [WORD] = NULL,      [TRUE] = "true",  [FALSE] = "false", 
+    [ECHO] = "echo"
 };
 
-int is_terminating(struct token *token)
+bool is_terminating(struct token *token)
 {
     if (!token)
-        return 0;
-    return token->type < 2;
+        return false;
+    switch (token->type) {
+        case SEMI_COLON:
+        case BSZERO:
+        case NEWLINE:
+            return true;
+        default:
+            return false;
+    }
 }
 
 enum token_type get_type(char *value)
 {
     int i = 0;
     while (g_elements[i] && strcmp(g_elements[i], value))
+    {
+         
         i++;
+    }
     return i;
 }
 
