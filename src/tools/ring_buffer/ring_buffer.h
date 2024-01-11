@@ -3,13 +3,15 @@
 
 #include "tools/token/token.h"
 
-enum ringtype{
+enum ringtype
+{
     RB_UNKOWN = 0,
     RB_CHAR,
     RB_TOKEN,
 };
 
-union ringitem{
+union ringitem
+{
     char c;
     struct token *token;
 };
@@ -41,10 +43,9 @@ union ringitem *rb_peek(struct ringbuffer *rb);
 /***
  * Jump to the next item of the buffer
  * @return true if the jump happened, false if the buffer is empty
- * @see rb_peek() to get the current item 
+ * @see rb_peek() to get the current item
  */
 bool rb_pop(struct ringbuffer *rb);
-
 
 /***
  * Create a new ringbuffer
@@ -58,6 +59,5 @@ struct ringbuffer *rb_create(enum ringtype type, size_t ring_size);
  * @param rb the ringbuffer
  */
 void rb_destroy(struct ringbuffer *rb);
-
 
 #endif /* !RING_BUFFER_H */

@@ -8,7 +8,7 @@
  * @return The first token of the buffer
  * @see tok_pop() to access the next token
  */
-struct token* tok_peek(void);
+struct token *tok_peek(void);
 
 /***
  * Jump to the next token of the buffer

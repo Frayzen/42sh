@@ -1,5 +1,7 @@
 #include "ring_buffer.h"
+
 #include <stdlib.h>
+
 #include "tools/token/token.h"
 
 void rb_push(struct ringbuffer *rb, union ringitem item)
@@ -33,17 +35,17 @@ bool rb_pop(struct ringbuffer *rb)
     return true;
 }
 
-
 void rb_destroy(struct ringbuffer *rb)
 {
     union ringitem *item = NULL;
-    switch (rb->type) {
-        case RB_TOKEN:
+    switch (rb->type)
+    {
+    case RB_TOKEN:
         for (item = rb->begin; item != rb->end; item++)
             destroy_token(item->token);
         break;
-            default:
-       break; 
+    default:
+        break;
     }
     free(rb);
 }

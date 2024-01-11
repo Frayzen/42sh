@@ -7,5 +7,5 @@ TestSuite(token_saver);
 
 Test(token_saver, test_basic)
 {
-    cr_assert_eq(tok_peek()->type, IF); 
+    cr_assert_eq(tok_peek()->type, IF);
 }

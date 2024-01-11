@@ -1,4 +1,5 @@
 #include "io_backend/backend_saver.h"
+
 #include "tools/ring_buffer/ring_buffer.h"
 
 static struct ringbuffer *get_buffer(void)
@@ -13,7 +14,8 @@ void io_put_chars(char *str, size_t len)
 {
     struct ringbuffer *rb = get_buffer();
     union ringitem item;
-    for (size_t i = 0; i < len; i++) {
+    for (size_t i = 0; i < len; i++)
+    {
         item.c = str[i];
         rb_push(rb, item);
     }
@@ -35,7 +37,7 @@ bool io_pop(void)
     return rb_pop(get_buffer());
 }
 
-//TODO call this on program exit
+// TODO call this on program exit
 void clean_bakend_saver(void)
 {
     rb_destroy(get_buffer());

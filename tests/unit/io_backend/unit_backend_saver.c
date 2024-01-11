@@ -1,8 +1,8 @@
-#include "io_backend/backend_saver.h"
-
 #include <criterion/criterion.h>
 #include <criterion/internal/assert.h>
 #include <criterion/internal/test.h>
+
+#include "io_backend/backend_saver.h"
 
 Test(backend_saver, basic_put)
 {

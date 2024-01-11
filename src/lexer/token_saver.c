@@ -15,12 +15,12 @@ void next(void)
         .type = IF,
         .terminal = false,
     };
-    //TODO push next_token
-    union ringitem item = {.token = &tok};
+    // TODO push next_token
+    union ringitem item = { .token = &tok };
     rb_push(get_buffer(), item);
 }
 
-struct token* tok_peek(void)
+struct token *tok_peek(void)
 {
     struct ringbuffer *rb = get_buffer();
     union ringitem *res = rb_peek(rb);
@@ -36,7 +36,7 @@ bool tok_pop(void)
     return rb_pop(get_buffer());
 }
 
-//TODO call this on program exit
+// TODO call this on program exit
 void clean_token_saver(void)
 {
     rb_destroy(get_buffer());
