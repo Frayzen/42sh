@@ -20,7 +20,7 @@ enum token_type
     ECHO,
     TRUE,
     FALSE,
-    WORD = NBTOKENS  //needs to be th last token in the enum for get_type()
+    WORD = NBTOKENS - 1 //needs to be th last token in the enum for get_type()
 };
 
 struct token
