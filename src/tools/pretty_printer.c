@@ -2,7 +2,8 @@
 
 #include <stdio.h>
 
-void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child, bool last_of_first)
+void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
+                           bool last_of_first)
 {
     if (!ast_root)
         return;
@@ -31,7 +32,8 @@ void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child, 
         }
         else
             is_last_child = false;
-        pretty_print_ast_help(ast_root->children[i], depth + 1, is_last_child, last_of_first);
+        pretty_print_ast_help(ast_root->children[i], depth + 1, is_last_child,
+                              last_of_first);
     }
 }
 
