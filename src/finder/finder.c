@@ -1,10 +1,10 @@
+#include "io_backend/backend_saver.h"
 #define _XOPEN_SOURCE 500
-#include "finder.h"
-
 #include <stddef.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "finder.h"
 #define CHECK_SPECIAL_CHAR(Char)                                               \
     (((Char) == '\n' || (Char) == ';' || (Char) == '\'') ? 1 : 0)
 
@@ -22,7 +22,7 @@ static const char *const type_names[] = {
  */
 static int check_reserved(char *pending)
 {
-    char c = io_get_char();
+    char c = io_peek();
     for (int i = 0; i < MAX_TYPE; i++)
     {
         if (!strcmp(pending, type_names[i]))
@@ -37,11 +37,11 @@ static int check_reserved(char *pending)
 
 void comments(void)
 {
-    char c = io_get_char();
+    char c = io_peek();
     io_pop();
     while (c != '\n' && c != '\0')
     {
-        c = io_get_char();
+        c = io_peek();
         io_pop();
     }
 }
@@ -52,11 +52,11 @@ char *finder(void)
         calloc(2, 1); // one character + terminating NULL to check with strcmp
 
     size_t size_pending = 0;
-    char c = io_get_char();
+    char c = io_peek();
     while (c == ' ')
     {
         io_pop();
-        c = io_get_char();
+        c = io_peek();
     }
     pending[0] = c;
     size_pending++;
@@ -64,7 +64,7 @@ char *finder(void)
     io_pop();
     while (!check_reserved(pending))
     {
-        c = io_get_char();
+        c = io_peek();
         if (c == '#')
             comments();
         else if (!(CHECK_SPECIAL_CHAR(c)))
