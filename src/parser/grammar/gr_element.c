@@ -2,11 +2,14 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 
-struct ast *gr_element(void)
+enum status gr_element(struct ast *ast)
 {
     struct token *token = tok_peek();
+    if (is_terminating(token))
+        return ERROR;
     token->type = WORD;
     tok_pop();
-    struct ast *ast = init_ast(token);
-    return ast;
+    struct ast *new_ast = init_ast(token);
+    *ast = add_child(ast, new_ast);
+    return OK;
 }
