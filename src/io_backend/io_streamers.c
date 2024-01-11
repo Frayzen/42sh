@@ -23,7 +23,7 @@ char *io_streamer_file(char *path_to_file)
     fseek(file, 0, SEEK_SET);
     if (!fread(buffer, 2, length_of_file, file))
     {
-        //TODO Error handling
+        // TODO Error handling
         return NULL;
     }
     fclose(file);
@@ -40,6 +40,7 @@ char *io_streamer_string(int argc, char **argv)
             return argv[i + 1];
         }
     }
+    // TODO Error handling
     return NULL;
 }
 
@@ -49,7 +50,7 @@ char *io_streamer_stdin(void)
     size_t len = 0;
     if (getline(&line, &len, stdin) == -1)
     {
-        //TODO Error handling
+        // TODO Error handling
         return NULL;
     }
     return line;
