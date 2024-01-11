@@ -5,7 +5,7 @@ bin_PROGRAMS = unit
 LIBS = $(addprefix $(top_builddir)/src/, @LIB_LIST@)
 
 unit_SOURCES =\
-			  io_backend/backend_saver.c
+			  io_backend/unit_backend_saver.c
 
 unit_CPPFLAGS = -I$(top_srcdir)/src -I.
 
