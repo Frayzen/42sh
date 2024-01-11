@@ -41,14 +41,15 @@ void comments(void)
     io_pop();
     while (c != '\n' && c != '\0')
     {
-      c = io_get_char();
-      io_pop();
-     }
+        c = io_get_char();
+        io_pop();
+    }
 }
 
 char *finder(void)
 {
-    char *pending = calloc(2, 1); // one character + terminating NULL to check with strcmp
+    char *pending =
+        calloc(2, 1); // one character + terminating NULL to check with strcmp
 
     size_t size_pending = 0;
     char c = io_get_char();
