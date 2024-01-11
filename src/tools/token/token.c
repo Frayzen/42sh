@@ -1,9 +1,9 @@
 #include "token.h"
 
-char *g_elements[10] = {
+char *g_elements[NBTOKENS] = {
     [IF] = "if",     [THEN] = "then",    [ELIF] = "elif",  [ELSE] = "else",
     [FI] = "fi",     [SEMI_COLON] = ";", [NEWLINE] = "\n", [QUOTE] = "'",
-    [BSZERO] = "\0", [WORD] = NULL
+    [BSZERO] = "\0", [WORD] = NULL,      [TRUE] = "true",  [FALSE] = "false"
 };
 
 int is_terminating(struct token *token)
@@ -13,7 +13,7 @@ int is_terminating(struct token *token)
     return token->type < 2;
 }
 
-int get_type(char *value)
+enum token_type get_type(char *value)
 {
     int i = 0;
     while (g_elements[i] && strcmp(g_elements[i], value))
@@ -23,7 +23,7 @@ int get_type(char *value)
 
 struct token *init_token(char *value)
 {
-    struct token *tok = malloc(sizeof(struct token));
+    struct token *tok = calloc(1, sizeof(struct token));
     tok->type = get_type(value);
     tok->value = value;
     tok->terminal = is_terminating(tok);
