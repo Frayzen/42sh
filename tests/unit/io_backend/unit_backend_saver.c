@@ -3,6 +3,7 @@
 #include <criterion/internal/test.h>
 
 #include "io_backend/backend_saver.h"
+TestSuite(backend_saver);
 
 Test(backend_saver, basic_put)
 {
