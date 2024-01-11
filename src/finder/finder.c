@@ -1,10 +1,10 @@
 #include "io_backend/backend_saver.h"
 #define _XOPEN_SOURCE 500
-#include "finder.h"
-
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "finder.h"
 #define CHECK_SPECIAL_CHAR(Char)                                               \
     (((Char) == '\n' || (Char) == ';' || (Char) == '\'') ? 1 : 0)
 
