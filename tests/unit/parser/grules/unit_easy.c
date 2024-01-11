@@ -3,7 +3,7 @@
 #include <criterion/internal/test.h>
 
 #include "io_backend/backend_saver.h"
-#include "parser/grules/grules.h"
+#include "parser/grammar/rules.h"
 #include "tools/ast/ast.h"
 
 TestSuite(easy_rules);
