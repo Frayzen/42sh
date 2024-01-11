@@ -2,7 +2,7 @@
 #include <criterion/internal/test.h>
 #include <criterion/redirect.h>
 
-#include "../../../src/token/token.h"
+#include "token/token.h"
 
 
 void check_token(struct token *token, char *str, enum token_type type)

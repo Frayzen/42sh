@@ -25,10 +25,7 @@ enum token_type get_type(char *value)
 {
     int i = 0;
     while (g_elements[i] && strcmp(g_elements[i], value))
-    {
-         
         i++;
-    }
     return i;
 }
 
