@@ -20,6 +20,9 @@ enum type
     SEMI_COLON,
     BACK_N,
     SINGLE_QUOTE,
+    ECHO,
+    T_TRUE,
+    T_FALSE,
     MAX_TYPE,
     WORD,
 };
