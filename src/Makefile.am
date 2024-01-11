@@ -1,6 +1,8 @@
 # define the sub directories
 SUBDIRS = \
-		  io_backend
+		  io_backend\
+		  lexer\
+		  tools
 LIBS = @LIB_LIST@
 
 bin_PROGRAMS = 42sh
