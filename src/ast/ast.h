@@ -1,6 +1,6 @@
 #ifndef AST_H
 #define AST_H
-#include "../token/token.h"
+#include "token/token.h"
 
 struct ast
 {
