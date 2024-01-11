@@ -1,6 +1,6 @@
-#include "tools/ast/ast.h"
-#include "lexer/token_saver.h"
 #include "grules.h"
+#include "lexer/token_saver.h"
+#include "tools/ast/ast.h"
 
 struct ast *grelement(void)
 {

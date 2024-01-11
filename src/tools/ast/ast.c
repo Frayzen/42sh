@@ -1,4 +1,5 @@
 #include "ast.h"
+
 #include <stdlib.h>
 
 struct ast *init_ast(struct token *token)

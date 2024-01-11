@@ -2,6 +2,7 @@
 SUBDIRS = \
 		  io_backend\
 		  lexer\
+		  parser\
 		  tools
 LIBS = @LIB_LIST@
 
