@@ -5,11 +5,12 @@ bin_PROGRAMS = unit
 LIBS = $(addprefix $(top_builddir)/src/, @LIB_LIST@)
 
 unit_SOURCES =\
-			  io_backend/backend_saver.c
+			  io_backend/backend_saver.c\
+			  finder/test_finder.c
 
 unit_CPPFLAGS = -I$(top_srcdir)/src -I.
 
-unit_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic -g
+unit_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic
 
 unit_LDADD =  \
 		$(LIBS) \
