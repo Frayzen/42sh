@@ -5,10 +5,9 @@
 
 /***
  * add_child: add a token to a tree
- * @param src_ast: the source tree to add the new ast to
- * @param new_ast: the tree to add to the source tree
- * @return the source tree with the new ast as child
- */
-struct ast *add_child(struct ast *src_ast, struct ast *new_ast);
-
+ * @param parent: the parent tree that is receiving the child
+ * @param child: the child tree that will be appended
+ * @return the parent tree with child tree as child
+*/
+struct ast *add_child(struct ast *parent, struct ast *child);
 #endif // AST_UTILS_H
