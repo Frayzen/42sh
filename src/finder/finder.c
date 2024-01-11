@@ -61,13 +61,10 @@ char *finder(void)
 
     while (!check_reserved(pending))
     {
-        // TODO pop_backend();
         io_pop();
         c = io_get_char();
         if (c == '#')
-        {
             comments();
-        }
         else if (c == ' ' || !(CHECK_SPECIAL_CHAR(c)))
         {
             pending = realloc(pending, size_pending + 1);
