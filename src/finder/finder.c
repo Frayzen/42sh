@@ -22,7 +22,7 @@ static const char *const type_names[] = {
  */
 static int check_reserved(char *pending)
 {
-    // TODO char c = get_backend();
+    char c = io_get_char();
     for (int i = 0; i < MAX_TYPE; i++)
     {
         if (!strcmp(pending, type_names[i]))
@@ -37,32 +37,32 @@ static int check_reserved(char *pending)
 
 void comments(void)
 {
-    // TODO char c = get_backend();
-    // TODO pop_backend();
+    char c = io_get_char();
+    io_pop();
     while (c != '\n' && c != '\0')
     {
-        // TODO c = get_backend();
-        // TODO pop_backend() ;
-    }
+      c = io_get_char();
+      io_pop();
+     }
 }
 
 char *finder(void)
 {
-    char *pending =
-        malloc(2); // one character + terminating NULL to check with strcmp
+    char *pending = calloc(2, 1); // one character + terminating NULL to check with strcmp
 
     size_t size_pending = 0;
-    // TODO char c = get_backend();
-    if (c == ' ')
-        // TODO c = get_backend(string, offset);
-        pending[0] = c;
+    char c = io_get_char();
+    while (c == ' ')
+        c = io_get_char();
+    pending[0] = c;
     size_pending++;
     pending[size_pending] = 0;
 
-    while (!check_reserved(pending, string, offset))
+    while (!check_reserved(pending))
     {
         // TODO pop_backend();
-        // TODO c = get_backend();
+        io_pop();
+        c = io_get_char();
         if (c == '#')
         {
             comments();
@@ -75,7 +75,7 @@ char *finder(void)
             pending[size_pending] = 0;
             if (c == ' ')
             {
-                // TODO pop_backend();
+                io_pop();
                 return pending;
             }
         }
@@ -89,7 +89,4 @@ char *finder(void)
  right now, the single quotes give out singular tokens,
  but it can be modified to get one big token
  containing all that is between the quotes
-
- Also, i don't have the right name for the backend function, but it is the right
- prototype
  */
