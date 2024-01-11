@@ -11,7 +11,7 @@ struct ast
 
 /***
  * Create a ast node structure with no children
- * @param token <- the token associated to the ast node 
+ * @param token <- the token associated to the ast node
  * return <- malloced ast structure
  */
 struct ast *init_ast(struct token *token);
