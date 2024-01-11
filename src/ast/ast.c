@@ -2,10 +2,8 @@
 
 struct ast *init_ast(struct token *token)
 {
-    struct ast *ast = malloc(sizeof(struct ast));
+    struct ast *ast = calloc(1, sizeof(struct ast));
     ast->token = token;
-    ast->nb_children = 0;
-    ast->children = NULL;
     return ast;
 }
 
