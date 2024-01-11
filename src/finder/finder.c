@@ -49,7 +49,7 @@ void comments(void)
 char *finder(void)
 {
     char *pending =
-        calloc(1, 1); // one character + terminating NULL to check with strcmp
+        calloc(2, 1); // one character + terminating NULL to check with strcmp
 
     size_t size_pending = 0;
     char c = io_get_char();
