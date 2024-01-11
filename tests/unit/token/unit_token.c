@@ -4,19 +4,17 @@
 
 #include "token/token.h"
 
-
 void check_token(struct token *token, char *str, enum token_type type)
 {
     cr_assert_neq(token, NULL, "token is null");
     cr_assert(strcmp(token->value, str) == 0, "incorrect value");
     cr_assert_eq(type, token->type, "incorrect type is %d", token->type);
-
 }
 
 Test(NewlineToken, init_newline_token)
 {
     char *str = "\n";
-    char *value = malloc(strlen(str) +1);
+    char *value = malloc(strlen(str) + 1);
     strcpy(value, str);
     struct token *token = init_token(value);
     check_token(token, value, NEWLINE);
@@ -25,8 +23,8 @@ Test(NewlineToken, init_newline_token)
 Test(BSZeroToken, init_bszero_token)
 {
     char *str = "\0";
-    char *value = malloc(strlen(str) +1);
-    strcpy(value, str);
+    char *value = malloc(2);
+    memcpy(value, str, 2);
     struct token *token = init_token(value);
     check_token(token, value, BSZERO);
     destroy_token(token);
@@ -34,8 +32,8 @@ Test(BSZeroToken, init_bszero_token)
 
 Test(Token, init_if)
 {
-    char *str= "if";
-    char *value = malloc(strlen(str) +1);
+    char *str = "if";
+    char *value = malloc(strlen(str) + 1);
     strcpy(value, str);
     struct token *token = init_token(value);
     check_token(token, value, IF);
@@ -45,7 +43,7 @@ Test(Token, init_if)
 Test(ThenToken, init_then_token)
 {
     char *str = "then";
-    char *value = malloc(strlen(str) +1);
+    char *value = malloc(strlen(str) + 1);
     strcpy(value, str);
     struct token *token = init_token(value);
     check_token(token, value, THEN);
@@ -54,7 +52,7 @@ Test(ThenToken, init_then_token)
 Test(ElifToken, init_elif_token)
 {
     char *str = "elif";
-    char *value = malloc(strlen(str) +1);
+    char *value = malloc(strlen(str) + 1);
     strcpy(value, str);
     struct token *token = init_token(value);
     check_token(token, value, ELIF);
@@ -64,7 +62,7 @@ Test(ElifToken, init_elif_token)
 Test(ElseToken, init_else_token)
 {
     char *str = "else";
-    char *value = malloc(strlen(str) +1);
+    char *value = malloc(strlen(str) + 1);
     strcpy(value, str);
     struct token *token = init_token(value);
     check_token(token, value, ELSE);
@@ -74,7 +72,7 @@ Test(ElseToken, init_else_token)
 Test(FiToken, init_fi_token)
 {
     char *str = "fi";
-    char *value = malloc(strlen(str) +1);
+    char *value = malloc(strlen(str) + 1);
     strcpy(value, str);
     struct token *token = init_token(value);
     check_token(token, value, FI);
@@ -84,7 +82,7 @@ Test(FiToken, init_fi_token)
 Test(SemiColonToken, init_semicolon_token)
 {
     char *str = ";";
-    char *value = malloc(strlen(str) +1);
+    char *value = malloc(strlen(str) + 1);
     strcpy(value, str);
     struct token *token = init_token(value);
     check_token(token, value, SEMI_COLON);
@@ -135,4 +133,3 @@ Test(FalseToken, init_false_token)
     struct token *token = init_token(value);
     check_token(token, value, FALSE);
 }
-
