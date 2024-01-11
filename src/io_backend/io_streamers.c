@@ -26,3 +26,12 @@ char *io_streamer_file(char *path_to_file)
     buffer[length_of_file - 1] = '\0';
     return buffer;
 }
+
+char *io_streamer_stdin(void)
+{
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t line_size = 0;
+    line_size = getline(&line, &len, stdin);
+    return line;
+}
