@@ -9,8 +9,10 @@
     (((Char) == '\n' || (Char) == ';' || (Char) == '\'') ? 1 : 0)
 
 static const char *const type_names[] = {
-    [IF] = "if", [THEN] = "then",    [ELIF] = "elif", [ELSE] = "else",
-    [FI] = "fi", [SEMI_COLON] = ";", [BACK_N] = "\n", [SINGLE_QUOTE] = "'", [ECHO] = "echo", [T_TRUE] = "true", [T_FALSE] = "false"
+    [IF] = "if",       [THEN] = "then",      [ELIF] = "elif",
+    [ELSE] = "else",   [FI] = "fi",          [SEMI_COLON] = ";",
+    [BACK_N] = "\n",   [SINGLE_QUOTE] = "'", [ECHO] = "echo",
+    [T_TRUE] = "true", [T_FALSE] = "false"
 };
 
 /***
