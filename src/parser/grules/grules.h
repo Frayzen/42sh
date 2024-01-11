@@ -1,7 +1,9 @@
 #ifndef GRULES_H
 #define GRULES_H
 
-#include "ast/ast.h"
+#include "tools/ast/ast.h"
+
+struct ast *grentry(void);
 
 struct ast *grelement(void);
 

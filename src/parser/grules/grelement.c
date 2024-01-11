@@ -1,11 +1,12 @@
-#include "ast/ast.h"
+#include "tools/ast/ast.h"
+#include "lexer/token_saver.h"
 #include "grules.h"
 
 struct ast *grelement(void)
 {
-    struct token *token = peek_token();
+    struct token *token = tok_peek();
     token->type = WORD;
-    pop_token();
+    tok_pop();
     struct ast *ast = init_ast(token);
     return ast;
 }
