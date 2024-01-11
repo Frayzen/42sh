@@ -1,12 +1,16 @@
-check_PROGRAMS = io_backend_test
+# define the sub directories
 
-io_backend_test_SOURCES = \
-					 io_backend/backend_saver.c
-io_backend_test_CPPFLAGS = -I$(top_srcdir)/src
-io_backend_test_LDADD = \
-				   -lcriterion \
-				   $(top_builddir)/src/io_backend/libiobackend.a
+bin_PROGRAMS = unit
 
-check-local:
-	./io_backend_test
-	
+LIBS = $(addprefix $(top_builddir)/src/, @LIB_LIST@)
+
+unit_SOURCES =\
+			  io_backend/backend_saver.c
+
+unit_CPPFLAGS = -I$(top_srcdir)/src -I.
+
+unit_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic -g
+
+unit_LDADD =  \
+		$(LIBS) \
+		-lcriterion
