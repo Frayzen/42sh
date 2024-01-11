@@ -27,6 +27,18 @@ char *io_streamer_file(char *path_to_file)
     return buffer;
 }
 
+char *io_streamer_string(int argc, char **argv)
+{
+    for (int i = 0; i < argc - 1; i++)
+    {
+        if (!strcmp(argv[i], "-c"))
+        {
+            return argv[i + 1];
+        }
+    }
+    return NULL;
+}
+
 char *io_streamer_stdin(void)
 {
     char *line = NULL;
