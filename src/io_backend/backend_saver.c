@@ -1,7 +1,7 @@
 #include "io_backend/backend_saver.h"
 #include "tools/ring_buffer/ring_buffer.h"
 
-struct ringbuffer *get_buffer(void)
+static struct ringbuffer *get_buffer(void)
 {
     static struct ringbuffer *rb = NULL;
     if (rb == NULL)
