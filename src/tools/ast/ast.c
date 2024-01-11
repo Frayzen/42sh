@@ -1,5 +1,7 @@
 #include "ast.h"
 
+#include <stdlib.h>
+
 struct ast *init_ast(struct token *token)
 {
     struct ast *ast = calloc(1, sizeof(struct ast));

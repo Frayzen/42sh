@@ -1,6 +1,10 @@
 # define the sub directories
 SUBDIRS = \
 		  io_backend\
+		  lexer\
+		  parser\
+		  tools\
+		  tools\
 		  finder
 LIBS = @LIB_LIST@
 
