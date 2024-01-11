@@ -1,5 +1,9 @@
 #include <criterion/criterion.h>
+#include <criterion/internal/test.h>
 #include <criterion/redirect.h>
+
+#include "../../../src/finder/finder.h"
+#include "../../../src/io_backend/backend_saver.h"
 void redirect_all_stdout(void)
 {
     cr_redirect_stdout();
@@ -8,76 +12,45 @@ void redirect_all_stdout(void)
 
 Test(comments, at_end)
 {
-    char *test = "echo; 'coucou'\n#okokok";
-    int off = 0;
-    while (test[off] != 0)
-    {
-        char *string = finder(test, off);
-        printf("%s\n", string);
-        if (strlen(string) == 0)
-            return 1;
-        off += strlen(string);
-        while (test[off] == ' ')
-        {
-            off++;
-        }
-    }
-    cr_assert_stdout_eq_str("echo\n;\n'\ncoucou\n'\n\n");
+    io_put("if test");
+    cr_assert_str_eq(finder(), "if");
+    cr_assert_str_eq(finder(), "test");
 }
 
-Test(easy, just_words)
+Test(comments, space)
 {
-    char *test = "hello world";
-    int off = 0;
-    while (test[off] != 0)
-    {
-        char *string = finder(test, off);
-        printf("%s\n", string);
-        if (strlen(string) == 0)
-            return 1;
-        off += strlen(string);
-        while (test[off] == ' ')
-        {
-            off++;
-        }
-    }
-    cr_assert_stdout_eq_str("hello world\n");
+    io_put("   if   echotest");
+    cr_assert_str_eq(finder(), "if");
+    cr_assert_str_eq(finder(), "echotest");
 }
 
-Test(medium, if)
+Test(comments, space2)
 {
-    char *test = "hello if";
-    int off = 0;
-    while (test[off] != 0)
-    {
-        char *string = finder(test, off);
-        printf("%s\n", string);
-        if (strlen(string) == 0)
-            return 1;
-        off += strlen(string);
-        while (test[off] == ' ')
-        {
-            off++;
-        }
-    }
-    cr_assert_stdout_eq_str("hello \nif\n");
+    io_put("   if   echo test");
+    cr_assert_str_eq(finder(), "if");
+    cr_assert_str_eq(finder(), "echo");
+    cr_assert_str_eq(finder(), "test");
 }
 
-Test(medium, if else then)
+Test(comments, semicolon)
 {
-    char *test = "hello world";
-    int off = 0;
-    while (test[off] != 0)
-    {
-        char *string = finder(test, off);
-        printf("%s\n", string);
-        if (strlen(string) == 0)
-            return 1;
-        off += strlen(string);
-        while (test[off] == ' ')
-        {
-            off++;
-        }
-    }
-    cr_assert_stdout_eq_str("if\nthen\nelse\n");
+    io_put("   if ;  echo; test;");
+    cr_assert_str_eq(finder(), "if");
+    cr_assert_str_eq(finder(), ";");
+    cr_assert_str_eq(finder(), "echo");
+    cr_assert_str_eq(finder(), ";");
+    cr_assert_str_eq(finder(), "test");
+    cr_assert_str_eq(finder(), ";");
+}
+
+Test(comments, backslashn)
+{
+    io_put("   if ;  echo\n; test;");
+    cr_assert_str_eq(finder(), "if");
+    cr_assert_str_eq(finder(), ";");
+    cr_assert_str_eq(finder(), "echo");
+    cr_assert_str_eq(finder(), "\n");
+    cr_assert_str_eq(finder(), ";");
+    cr_assert_str_eq(finder(), "test");
+    cr_assert_str_eq(finder(), ";");
 }

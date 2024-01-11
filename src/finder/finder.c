@@ -49,29 +49,31 @@ void comments(void)
 char *finder(void)
 {
     char *pending =
-        calloc(2, 1); // one character + terminating NULL to check with strcmp
+        calloc(1, 1); // one character + terminating NULL to check with strcmp
 
     size_t size_pending = 0;
     char c = io_get_char();
     while (c == ' ')
-        c = io_get_char();
-    pending[0] = c;
-    size_pending++;
-    pending[size_pending] = 0;
-
-    while (!check_reserved(pending))
     {
         io_pop();
         c = io_get_char();
+    }
+    pending[0] = c;
+    size_pending++;
+    pending[size_pending] = 0;
+    io_pop();
+    while (!check_reserved(pending))
+    {
+        c = io_get_char();
         if (c == '#')
             comments();
-        else if (c == ' ' || !(CHECK_SPECIAL_CHAR(c)))
+        else if (!(CHECK_SPECIAL_CHAR(c)))
         {
             pending = realloc(pending, size_pending + 1);
             pending[size_pending] = c;
             size_pending++;
             pending[size_pending] = 0;
-            if (c == ' ')
+            if (c == ' ' || c == '\0')
             {
                 io_pop();
                 return pending;
@@ -79,6 +81,7 @@ char *finder(void)
         }
         else
             return pending;
+        io_pop();
     }
     return pending;
 }
