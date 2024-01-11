@@ -8,6 +8,6 @@
  * @param parent: the parent tree that is receiving the child
  * @param child: the child tree that will be appended
  * @return the parent tree with child tree as child
-*/
+ */
 struct ast *add_child(struct ast *parent, struct ast *child);
 #endif // AST_UTILS_H
