@@ -3,14 +3,8 @@
 
 #include <stdbool.h>
 #include <string.h>
-#define RINGBUFSIZE 1024
 
-struct ringbuffer
-{
-    char value[RINGBUFSIZE];
-    char *begin;
-    char *end;
-};
+#define BACKEND_BUFFER_SIZE 1024
 
 /***
  * Add string to the io backend buffer
@@ -18,7 +12,7 @@ struct ringbuffer
  * char
  * @see io_put_chars() for non null terminated strings
  */
-void io_put(char *str);
+void io_push(char *str);
 
 /***
  * Add char array to the io backend buffer
@@ -33,7 +27,7 @@ void io_put_chars(char *str, size_t len);
  * @return The first character of the buffer
  * @see io_pop() to access the next char
  */
-char io_get_char(void);
+char io_peek(void);
 
 /***
  * Jump to the next char of the buffer
@@ -41,5 +35,9 @@ char io_get_char(void);
  * @see io_get_char() to get the current char value
  */
 bool io_pop(void);
+/***
+ *
+ */
+void clean_backend_saver(void);
 
 #endif /* !BACKEND_SAVER_H */
