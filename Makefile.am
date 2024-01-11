@@ -1,4 +1,3 @@
-
 SUBDIRS = src \
 		  tests/unit
 

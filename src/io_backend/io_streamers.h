@@ -9,4 +9,10 @@
  */
 char *io_streamer_string(int argc, char **argv);
 
+/***
+ * Retrieve the content of stdin in a string
+ * @return the string entered on stdin
+ */
+char *io_streamer_stdin(void);
+
 #endif /* !IO_STREAMERS */
