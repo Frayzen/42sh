@@ -6,10 +6,10 @@
 
 /***
 * add_child: add a token to a tree
-* @param ast: the tree to add the token to
-* @param token: the token to add to the tree
-* @return the tree with the new token
+* @param src_ast: the source tree to add the new ast to
+* @param new_ast: the tree to add to the source tree
+* @return the source tree with the new ast as child
 */
-struct ast *add_child(struct ast* ast,struct token *token);
+struct ast *add_child(struct ast* src_ast,struct ast *new_ast);
 
 #endif // AST_UTILS_H
