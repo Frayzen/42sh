@@ -39,7 +39,7 @@ struct token *init_token(char *value);
 
 /***
  * frees a token
- * @param tokenthe token to free
+ * @param token the token to free
  */
 void destroy_token(struct token *token);
 
@@ -51,7 +51,7 @@ void print_token(struct token *token);
 
 /***
  * checks if the token is a terminal character
- * @param token the toekn to check
+ * @param token the token to check
  * @return 1 if the token is a terminal,
  * 0 if null or non terminal
  */
