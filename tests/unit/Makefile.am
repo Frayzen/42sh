@@ -11,7 +11,7 @@ unit_SOURCES =\
 
 unit_CPPFLAGS = -I$(top_srcdir)/src -I.
 
-unit_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic -g
+unit_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic
 
 unit_LDADD =  \
 		$(LIBS) \
