@@ -7,12 +7,12 @@
  * The grammar entry
  * @return the AST built
  */
-struct ast *grentry(void);
+struct ast *gr_entry(void);
 
 /***
  * Grammar rule for element
  * @return the AST built
  */
-struct ast *grelement(void);
+struct ast *gr_element(void);
 
 #endif /* !GRULES_H */

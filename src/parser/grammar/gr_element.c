@@ -1,8 +1,8 @@
-#include "grules.h"
+#include "rules.h"
 #include "lexer/token_saver.h"
 #include "tools/ast/ast.h"
 
-struct ast *grelement(void)
+struct ast *gr_element(void)
 {
     struct token *token = tok_peek();
     token->type = WORD;
