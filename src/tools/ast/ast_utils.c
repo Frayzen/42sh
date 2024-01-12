@@ -24,7 +24,6 @@ int node_to_str(char *buf, struct ast *ast_root)
     {
     case AST_COMMAND:
         return sprintf(buf, "CMD");
-        // replace with "CMD \'%s\'", ast_root->str 
     case AST_LIST:
         return sprintf(buf, "LST");
     case AST_TOKEN:
