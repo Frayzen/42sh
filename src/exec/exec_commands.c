@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include <assert.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -7,11 +8,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include "tools/ast/ast.h"
-#include "tools/token/token.h"
-
-#include <assert.h>
-#include <stdio.h>
 
 #include "execs.h"
 #include "tools/ast/ast.h"
@@ -34,7 +30,7 @@ void exec_echo(struct ast *ast)
 char **create_command(struct ast *ast)
 {
     size_t size_array = 1;
-    char **array_arg = calloc(size_array,sizeof(char *));
+    char **array_arg = calloc(size_array, sizeof(char *));
     for (int i = 0; i < ast->nb_children; i++)
     {
         array_arg[size_array - 1] = ast->children[i]->token->value;
@@ -51,10 +47,10 @@ int basic_function(struct ast *ast)
     if (pid == 0)
     {
         char **array_arg = create_command(ast);
-        int resp  = execvp(array_arg[0], array_arg);
+        int resp = execvp(array_arg[0], array_arg);
         if (resp)
         {
-            //TODO handle errors
+            // TODO handle errors
             return -1;
         }
         else
@@ -65,7 +61,7 @@ int basic_function(struct ast *ast)
             if (WIFEXITED(returncode))
                 code = WEXITSTATUS(returncode);
             if (code == -1)
-                //TODO handle error
+                // TODO handle error
                 return -1;
             return 0;
         }
@@ -77,7 +73,7 @@ void exec_basic_function(struct ast *ast)
 {
     if (basic_function(ast) == -1)
     {
-        //TODO handle error
+        // TODO handle error
         return;
     }
 }
