@@ -22,11 +22,12 @@ void exec_echo(struct ast *ast)
 
 void exec_command(struct ast *ast)
 {
-    switch (ast->children[0]->token->type) {
-        case ECHO:
-            exec_echo(ast);
-            break;
-        default:
-            break;
+    switch (ast->children[0]->token->type)
+    {
+    case ECHO:
+        exec_echo(ast);
+        break;
+    default:
+        break;
     }
 }
