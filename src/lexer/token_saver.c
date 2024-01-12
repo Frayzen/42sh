@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <stdio.h>
 
 #include "tools/ring_buffer/ring_buffer.h"
 #include "lexer/tokenizer.h"

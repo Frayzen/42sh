@@ -2,9 +2,10 @@
 
 #include <stdlib.h>
 
-struct ast *init_ast(struct token *token)
+struct ast *init_ast(enum ast_type type, struct token *token)
 {
     struct ast *ast = calloc(1, sizeof(struct ast));
+    ast->type = type;
     ast->token = token;
     return ast;
 }

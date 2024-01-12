@@ -18,8 +18,11 @@ int main(void)
         printf("ERRROR\n");
     else
     {
-
         print_token(e->token);
+        printf("%d\n", e->nb_children);
+        for (int i = 0; i < e->nb_children; i++) {
+            print_token(e->children[i]->token);
+        }
     }
     return 0;
 }

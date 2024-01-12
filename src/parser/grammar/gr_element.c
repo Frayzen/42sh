@@ -11,7 +11,7 @@ enum status gr_element(struct ast **ast)
         return ERROR;
     token->type = WORD;
     tok_pop();
-    struct ast *new_ast = init_ast(token);
+    struct ast *new_ast = init_ast(AST_TOKEN, token);
     *ast = add_child(*ast, new_ast);
     return OK;
 }
