@@ -49,3 +49,22 @@ Test(comments, backslashn)
     cr_assert_str_eq(finder(), "test");
     cr_assert_str_eq(finder(), ";");
 }
+
+Test(comments, quotes)
+{
+    io_push("   if ';  echo'\n; test;");
+    cr_assert_str_eq(finder(), "if");
+    cr_assert_str_eq(finder(), ";  echo");
+    cr_assert_str_eq(finder(), "\n");
+    cr_assert_str_eq(finder(), ";");
+    cr_assert_str_eq(finder(), "test");
+    cr_assert_str_eq(finder(), ";");
+}
+
+Test(comments, quotes_empyt)
+{
+    io_push("if ''  \n");
+    cr_assert_str_eq(finder(), "if");
+    cr_assert_str_eq(finder(), "");
+    cr_assert_str_eq(finder(), "\n");
+}

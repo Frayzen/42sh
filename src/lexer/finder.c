@@ -7,13 +7,10 @@
 
 #include "finder.h"
 
-#define CHECK_SPECIAL_CHAR(Char)                                               \
-    (((Char) == '\n' || (Char) == ';' || (Char) == '\'') ? 1 : 0)
+#define IS_TERMINATING(Char) ((Char) == '\n' || (Char) == ';')
 
 /***
- * check_reserved: checks if the word given is one of the reserved word
- * @param pending: a char*, the word we are inspecting
- * @return a boolean, 1 if it is a special word, 0 otherwise
+ * checks if the word given is one of the reserved word
  */
 static int check_reserved(char *pending)
 {
@@ -36,25 +33,42 @@ void comments(void)
 {
     char c = io_peek();
     io_pop();
-    while (c != '\n' && c != '\0')
+    while (!IS_TERMINATING(c))
     {
         c = io_peek();
         io_pop();
     }
 }
 
-char *finder(void)
+char *quotes(void)
 {
+    io_pop();
+    size_t size_pending = 0;
     char *pending =
         calloc(2, 1); // one character + terminating NULL to check with strcmp
-
-    size_t size_pending = 0;
     char c = io_peek();
-    while (c == ' ')
+    while (c && c != '\'')
     {
         io_pop();
+        pending[size_pending] = c;
+        pending = realloc(pending, ++size_pending);
         c = io_peek();
     }
+    if (!c)
+    {
+        // TODO handle error
+        return "\0";
+    }
+    io_pop();
+    return pending;
+}
+
+char *str_maker(void)
+{
+    char c = io_peek();
+    size_t size_pending = 0;
+    char *pending =
+        calloc(2, 1); // one character + terminating NULL to check with strcmp
     pending[0] = c;
     size_pending++;
     pending[size_pending] = 0;
@@ -64,7 +78,7 @@ char *finder(void)
         c = io_peek();
         if (c == '#')
             comments();
-        else if (!(CHECK_SPECIAL_CHAR(c)))
+        else if (!IS_TERMINATING(c))
         {
             pending = realloc(pending, size_pending + 1);
             pending[size_pending] = c;
@@ -81,6 +95,24 @@ char *finder(void)
         io_pop();
     }
     return pending;
+}
+
+char *finder(void)
+{
+    char c = io_peek();
+    if (c == ' ')
+    {
+        io_pop();
+        return finder();
+    }
+    if (c == '#')
+    {
+        comments();
+        return finder();
+    }
+    if (c == '\'')
+        return quotes();
+    return str_maker();
 }
 
 /*
