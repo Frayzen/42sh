@@ -1,7 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "io_backend/io_streamers.h"
 #include "parser/grammar/rules.h"
+#include "tools/ast/ast_utils.h"
 
 int main(int argc, char **argv)
 {
@@ -19,7 +21,7 @@ int main(int argc, char **argv)
         printf("ERROR\n");
         return 1;
     }
-    e++;
-    /* pretty_print_ast(e); */
+    printf("%s\n", ast_to_str(e));
+    pretty_print_ast(e);
     return 0;
 }
