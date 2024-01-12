@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <assert.h>
+#include <stdio.h>
 
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
