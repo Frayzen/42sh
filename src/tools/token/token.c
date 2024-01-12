@@ -4,13 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *g_types_name[] = {
-    [IF] = "if",     [THEN] = "then",    [ELIF] = "elif",     [ELSE] = "else",
-    [FI] = "fi",     [SEMI_COLON] = ";", [NEWLINE] = "\n",    [QUOTE] = "'",
-    [ECHO] = "echo", [T_TRUE] = "true",  [T_FALSE] = "false", [BSZERO] = "\0",
-    [WORD] = NULL
-};
-
 bool is_terminating(struct token *token)
 {
     switch (token->type)
@@ -27,7 +20,7 @@ bool is_terminating(struct token *token)
 int get_type(char *value)
 {
     int i = 0;
-    while (g_types_name[i] && strcmp(g_types_name[i], value))
+    while (TOK_TYPE_LT[i] && strcmp(TOK_TYPE_LT[i], value))
         i++;
     return i;
 }
@@ -57,4 +50,16 @@ void print_token(struct token *token)
     else
         printf(" |%s|%d| ", token->value, token->type);
     printf("\n");
+}
+
+const char **toktype_lookup(void)
+{
+    static const char *lookup_table[] = {
+        [IF] = "if",       [THEN] = "then",     [ELIF] = "elif",
+        [ELSE] = "else",   [FI] = "fi",         [SEMI_COLON] = ";",
+        [NEWLINE] = "\n",  [QUOTE] = "'",       [ECHO] = "echo",
+        [T_TRUE] = "true", [T_FALSE] = "false", [BSZERO] = "\0",
+        [WORD] = NULL,
+    };
+    return lookup_table;
 }
