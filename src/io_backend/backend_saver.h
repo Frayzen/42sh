@@ -10,7 +10,7 @@
  * Add string to the io backend buffer
  * @param str the string that should be null terminated and do not contain null
  * char
- * @see io_put_chars() for non null terminated strings
+ * @see io_push_chars() for non null terminated strings
  */
 void io_push(char *str);
 
@@ -18,9 +18,9 @@ void io_push(char *str);
  * Add char array to the io backend buffer
  * @param str the char array pointer
  * @param len the number of char to add
- * @see io_put() for null terminated string
+ * @see io_push() for null terminated string
  */
-void io_put_chars(char *str, size_t len);
+void io_push_chars(char *str, size_t len);
 
 /***
  * Retrieve the first character from the buffer, do not change the buffer

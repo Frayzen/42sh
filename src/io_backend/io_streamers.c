@@ -1,16 +1,20 @@
+#define _POSIX_C_SOURCE 200809L
 #include "io_streamers.h"
+#include "io_backend/backend_saver.h"
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
 
-char *io_streamer_file(char *path_to_file)
+void io_streamer_file(char *path_to_file)
 {
     FILE *file = fopen(path_to_file, "r");
     if (!file)
     {
         // TODO Error handling
-        return NULL;
+        return;
     }
     fseek(file, 0, SEEK_END);
     long length_of_file = ftell(file);
@@ -18,32 +22,36 @@ char *io_streamer_file(char *path_to_file)
     if (!buffer)
     {
         // TODO Error handling
-        return NULL;
+        return;
     }
     fseek(file, 0, SEEK_SET);
-    fread(buffer, 1, length_of_file, file);
+    if(fread(buffer, 1, length_of_file, file) == 0)
+        return;
     fclose(file);
     buffer[length_of_file - 1] = '\0';
-    return buffer;
+    io_push(buffer);
 }
 
-char *io_streamer_string(int argc, char **argv)
+void io_streamer_string(int argc, char **argv)
 {
     for (int i = 0; i < argc - 1; i++)
     {
         if (!strcmp(argv[i], "-c"))
         {
-            return argv[i + 1];
+            io_push(argv[i + 1]);
         }
     }
-    return NULL;
+    return;
 }
 
-char *io_streamer_stdin(void)
+void io_streamer_stdin(void)
 {
     char *line = NULL;
     size_t len = 0;
-    ssize_t line_size = 0;
-    line_size = getline(&line, &len, stdin);
-    return line;
+    if (getline(&line, &len, stdin) == -1)
+    {
+        //ERROR HANDLE
+        return;
+    }
+    io_push(line);
 }

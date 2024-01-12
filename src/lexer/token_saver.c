@@ -1,4 +1,7 @@
+#include <stddef.h>
+
 #include "tools/ring_buffer/ring_buffer.h"
+#include "lexer/tokenizer.h"
 
 static struct ringbuffer *get_buffer(void)
 {
@@ -10,14 +13,8 @@ static struct ringbuffer *get_buffer(void)
 
 void next(void)
 {
-    static struct token tok = {
-        .value = "if",
-        .type = IF,
-        .terminal = false,
-    };
-    // TODO push next_token
-    union ringitem item = { .token = &tok };
-    rb_push(get_buffer(), item);
+    union ringitem next = {.token = next_token()};
+    rb_push(get_buffer(), next);
 }
 
 struct token *tok_peek(void)

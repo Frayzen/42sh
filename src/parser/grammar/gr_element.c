@@ -2,11 +2,12 @@
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
+#include "tools/token/token.h"
 
 enum status gr_element(struct ast **ast)
 {
     struct token *token = tok_peek();
-    if (is_terminating(token))
+    if (token->terminal)
         return ERROR;
     token->type = WORD;
     tok_pop();
