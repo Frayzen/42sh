@@ -22,11 +22,12 @@ int node_to_str(char *buf, struct ast *ast_root)
         return sprintf(buf, "[NULL]");
     switch (ast_root->type)
     {
-    case AST_COMMAND :
-        return sprintf(buf, "CMD"); // replace with "CMD \'%s\'", ast_root->str 
-    case AST_LIST :
+    case AST_COMMAND:
+        return sprintf(buf, "CMD");
+        // replace with "CMD \'%s\'", ast_root->str 
+    case AST_LIST:
         return sprintf(buf, "LST");
-    case AST_TOKEN :
+    case AST_TOKEN:
         return sprintf(buf, "%s", ast_root->token->value);
     default:
         // TODO Error handling
