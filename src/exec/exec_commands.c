@@ -23,6 +23,8 @@ void exec_echo(struct ast *ast)
         }
         if (ast->nb_children > 1)
             printf("%s\n", ast->children[ast->nb_children - 1]->token->value);
+        else
+            printf("\n");
     }
     fflush(stdout);
 }
