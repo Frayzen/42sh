@@ -1,8 +1,9 @@
+#include "tools/ast/ast_utils.h"
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
 
-enum status gr_element(struct ast *ast)
+enum status gr_element(struct ast **ast)
 {
     struct token *token = tok_peek();
     if (is_terminating(token))
@@ -10,6 +11,6 @@ enum status gr_element(struct ast *ast)
     token->type = WORD;
     tok_pop();
     struct ast *new_ast = init_ast(token);
-    *ast = add_child(ast, new_ast);
+    *ast = add_child(*ast, new_ast);
     return OK;
 }

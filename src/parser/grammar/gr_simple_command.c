@@ -6,7 +6,7 @@ enum status gr_simple_command(struct ast** ast)
 {
     enum status state = gr_element(ast);
     if (state == ERROR)
-        return NULL;
+        return ERROR;
     while (state == OK)
     {
         state = gr_element(ast);

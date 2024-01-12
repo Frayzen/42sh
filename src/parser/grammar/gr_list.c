@@ -6,7 +6,7 @@ enum status gr_line(struct ast **ast)
 {
     enum status state = gr_and_or(ast);
     if (state == ERROR)
-        return NULL;
+        return ERROR;
     while (state == OK)
     {
         struct token *token = tok_peek();

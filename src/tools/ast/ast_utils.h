@@ -1,7 +1,6 @@
 #ifndef AST_UTILS_H
 #define AST_UTILS_H
-#include "ast.h"
-#include "token/token.h"
+#include "tools/ast/ast.h"
 
 /***
  * add_child: add a token to a tree

@@ -4,7 +4,6 @@ SUBDIRS = \
 		  lexer\
 		  parser\
 		  tools\
-		  tools\
 		  finder
 LIBS = @LIB_LIST@
 
