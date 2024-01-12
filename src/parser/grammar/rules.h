@@ -10,10 +10,11 @@ enum status
 };
 
 /***
- * The grammar entry
- * @return the AST built
+ * Grammar rule for element
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
  */
-struct ast *gr_entry(void);
+enum status gr_input(struct ast **ast);
 
 /***
  * Grammar rule for element

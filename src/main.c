@@ -12,7 +12,12 @@ int main(void)
         NULL,
     };
     io_streamer_string(3, argv);
-    struct ast *e = gr_entry();
+    struct ast *e = NULL;
+    if(gr_input(&e) == ERROR)
+    {
+        printf("ERROR\n");
+        return 1;
+    }
     e++;
     /* pretty_print_ast(e); */
     return 0;

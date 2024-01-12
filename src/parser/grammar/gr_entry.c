@@ -1,18 +1,15 @@
-#include <stdlib.h>
-
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
 
-struct ast *gr_entry(void)
+enum status gr_input(struct ast **ast)
 {
-    struct ast *ast = NULL;
-    enum status state = gr_simple_command(&ast);
-    if (state == ERROR || !tok_peek()->terminal)
+    gr_simple_command(ast);
+    if (!tok_peek()->terminal)
     {
         tok_pop();
-        destroy_ast(ast);
-        return NULL;
+        destroy_ast(*ast);
+        return ERROR;
     }
-    return ast;
+    return OK;
 }

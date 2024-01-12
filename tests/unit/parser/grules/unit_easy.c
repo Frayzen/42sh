@@ -11,7 +11,8 @@ TestSuite(easy_rules);
 Test(easy_rules, test_word)
 {
     io_push("echo toto;");
-    struct ast *ast = gr_entry();
+    struct ast *ast = NULL;
+    cr_expect_eq(gr_input(&ast), OK);
     cr_expect_not_null(ast);
     // TODO uncomment when lexer is good with io saver
     cr_expect_eq(ast->type, AST_COMMAND);
