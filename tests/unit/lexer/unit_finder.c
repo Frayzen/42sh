@@ -12,6 +12,14 @@ Test(comments, at_end)
     cr_assert_str_eq(finder(), "test");
 }
 
+Test(comments, at_end2)
+{
+    io_push("hello test");
+    cr_assert_str_eq(finder(), "hello");
+    cr_assert_str_eq(finder(), "test");
+}
+
+
 Test(comments, space)
 {
     io_push("   if   echotest");

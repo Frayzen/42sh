@@ -44,6 +44,16 @@ void comments(void)
     }
 }
 
+char skip_spaces(char c)
+{
+    while (c == ' ')
+    {
+        io_pop();
+        c = io_peek();
+    }
+    return c;
+}
+
 char *finder(void)
 {
     char *pending =
@@ -51,11 +61,8 @@ char *finder(void)
 
     size_t size_pending = 0;
     char c = io_peek();
-    while (c == ' ')
-    {
-        io_pop();
-        c = io_peek();
-    }
+    if (c == ' ')
+        c = skip_spaces(c);
     pending[0] = c;
     size_pending++;
     pending[size_pending] = 0;
@@ -63,6 +70,11 @@ char *finder(void)
     while (!check_reserved(pending))
     {
         c = io_peek();
+        if (c == ' ')
+        {
+            io_pop();
+            return pending;
+        }
         if (c == '#')
             comments();
         else if (!(CHECK_SPECIAL_CHAR(c)))
