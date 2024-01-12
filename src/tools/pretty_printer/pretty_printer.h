@@ -1,7 +1,7 @@
 #ifndef PRETTY_PRINTER
 #define PRETTY_PRINTER
 
-#include "ast/ast.h"
+#include "tools/ast/ast.h"
 
 /***
  * Prints the AST

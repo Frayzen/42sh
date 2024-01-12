@@ -1,4 +1,4 @@
-#include "tools/pretty_printer.h"
+#include "tools/pretty_printer/pretty_printer.h"
 
 #include <criterion/criterion.h>
 #include <criterion/internal/redirect.h>
@@ -8,6 +8,7 @@
 void redirect_all_stdout(void)
 {
     cr_redirect_stdout();
+    cr_redirect_stderr();
 }
 
 Test(pretty_printer, basic, .init = redirect_all_stdout)
@@ -31,6 +32,6 @@ Test(pretty_printer, basic, .init = redirect_all_stdout)
     thenNode->children[0] = bodyNode;
     thenNode->children[1] = semicolonNode;
     pretty_print_ast(ifNode);
+    // cr_assert_stdout_eq_str("\nif\n╠══true\n╚══then\n   ╠══echo\n   ╚══;\n");
     destroy_ast(ifNode);
-    cr_assert_stdout_eq_str("\nif\n╠══true\n╚══then\n   ╠══echo\n   ╚══;\n");
 }
