@@ -35,3 +35,13 @@ Test(exec, only_echo, .init=redirect_all_stdout)
   echo_function(e);
   cr_expect_stdout_eq_str("", "error");
 }
+Test(exec, big_fat_sentence_with_if , .init=redirect_all_stdout)
+{
+  char *a[3] = {"blb", "-c", "echo if else then ok ca roule ma poule"};
+  main_to_stream(3, a);
+  struct ast *e = NULL;
+  gr_input(&e);
+  cr_assert(e);
+  echo_function(e);
+  cr_expect_stdout_eq_str("", "error");
+}
