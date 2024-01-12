@@ -1,4 +1,5 @@
 #include "tools/ring_buffer/ring_buffer.h"
+#include <stddef.h>
 
 static struct ringbuffer *get_buffer(void)
 {

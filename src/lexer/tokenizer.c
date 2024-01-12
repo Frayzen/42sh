@@ -1,8 +1,8 @@
 #include "tokenizer.h"
+#include "lexer/finder.h"
 
-struct token *next_token(char *str)
+struct token *next_token(void)
 {
-    struct token *result = init_token(str);
-    // TODO remove the str argument and get the lexeme from finder()
+    struct token *result = init_token(finder());
     return result;
 }

@@ -5,12 +5,6 @@
 #include "io_backend/backend_saver.h"
 #include "lexer/finder.h"
 
-void redirect_all_stdout(void)
-{
-    cr_redirect_stdout();
-    cr_redirect_stderr();
-}
-
 Test(comments, at_end)
 {
     io_push("if test");

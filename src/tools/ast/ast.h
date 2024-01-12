@@ -6,13 +6,7 @@ struct ast
 {
     struct token *token;
     int nb_children;
-    struct ast *children;
-};
-
-struct ast_head
-{
-    struct token *token;
-    int nb_children;
+    struct ast **children;
 };
 
 /***

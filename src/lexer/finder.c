@@ -5,15 +5,19 @@
 #include <string.h>
 
 #include "finder.h"
+#include <stddef.h>
+
 #define CHECK_SPECIAL_CHAR(Char)                                               \
     (((Char) == '\n' || (Char) == ';' || (Char) == '\'') ? 1 : 0)
 
-static const char *const type_names[] = {
-    [IF] = "if",       [THEN] = "then",      [ELIF] = "elif",
-    [ELSE] = "else",   [FI] = "fi",          [SEMI_COLON] = ";",
-    [BACK_N] = "\n",   [SINGLE_QUOTE] = "'", [ECHO] = "echo",
-    [T_TRUE] = "true", [T_FALSE] = "false"
-};
+/* static const char *const type_names[] = { */
+/*     [IF] = "if",       [THEN] = "then",      [ELIF] = "elif", */
+/*     [ELSE] = "else",   [FI] = "fi",          [SEMI_COLON] = ";", */
+/*     [NEWLINE] = "\n",   [QUOTE] = "'", [ECHO] = "echo", */
+/*     [T_TRUE] = "true", [T_FALSE] = "false" */
+/* }; */
+
+extern char *g_types_name[];
 
 /***
  * check_reserved: checks if the word given is one of the reserved word
@@ -23,14 +27,16 @@ static const char *const type_names[] = {
 static int check_reserved(char *pending)
 {
     char c = io_peek();
-    for (int i = 0; i < MAX_TYPE; i++)
+    size_t i = 0;
+    while (g_types_name[i])
     {
-        if (!strcmp(pending, type_names[i]))
+        if (!strcmp(pending, g_types_name[i]))
         {
             if (c != ' ')
                 return 0;
             return 1;
         }
+        i++;
     }
     return 0;
 }

@@ -2,6 +2,7 @@
 #define RING_BUFFER_H
 
 #include "tools/token/token.h"
+#include <stddef.h>
 
 enum ringtype
 {
