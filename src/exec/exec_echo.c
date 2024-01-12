@@ -6,6 +6,11 @@
 void echo_function(struct ast *ast)
 {
     assert(ast && ast->type == AST_COMMAND);
+    if (!ast)
+    {
+        // TODO error handling
+        return;
+    }
     if (ast->children[0]->token->type == ECHO)
     {
         for (int i = 1; i < ast->nb_children - 1; i++)
