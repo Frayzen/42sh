@@ -3,15 +3,16 @@
 #include "io_backend/io_streamers.h"
 #include "parser/grammar/rules.h"
 
-int main(void)
+int main(int argc, char **argv)
 {
-    char *argv[4] = {
+    /*char *argv[4] = {
         "test",
         "-c",
         "echo toto;",
         NULL,
-    };
-    io_streamer_string(3, argv);
+    };*/
+    //io_streamer_string(3, argv);
+    main_to_stream(argc, argv);
     struct ast *e = NULL;
     if (gr_input(&e) == ERROR)
     {

@@ -3,6 +3,18 @@
 
 #define _POSIX_C_SOURCE 200809L
 
+
+
+/***
+ * According to the arguments given to main, calls the right 
+    streamer function
+ * @param argc number of arguments given to the function 42sh
+ * @param argc list of the arguments given to the function 42sh
+ * @return nothing
+ */
+
+void main_to_stream(int argc, char **argv);
+
 /***
  * Retrieve the content of a file in a string
  * @param path_to_file path to the file
