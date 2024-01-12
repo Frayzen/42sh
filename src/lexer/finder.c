@@ -75,6 +75,11 @@ char *str_maker(void)
     while (!check_reserved(pending))
     {
         c = io_peek();
+        if (c == ' ')
+        {
+            io_pop();
+            return pending;
+        }
         if (c == '#')
             comments();
         else if (!IS_TERMINATING(c))
