@@ -1,8 +1,8 @@
 #include <stdio.h>
 
+#include "exec/exec_echo.h"
 #include "io_backend/io_streamers.h"
 #include "parser/grammar/rules.h"
-#include "exec/exec_echo.h"
 
 int main(int argc, char **argv)
 {

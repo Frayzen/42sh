@@ -4,8 +4,6 @@
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
 
-
-
 /***
  * echo_function: executes the echo function
  * @param ast the tree to execute

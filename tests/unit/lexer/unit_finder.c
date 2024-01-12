@@ -49,4 +49,3 @@ Test(comments, backslashn)
     cr_assert_str_eq(finder(), "test");
     cr_assert_str_eq(finder(), ";");
 }
-
