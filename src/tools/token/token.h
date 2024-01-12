@@ -8,8 +8,8 @@
 #define NBTOKENS 13
 enum token_type
 {
-    NEWLINE = 0, // for is_terminating_char funciton
-    BSZERO = 1, // for is_terminating_char funciton
+    NEWLINE,
+    BSZERO,
     IF,
     THEN,
     ELIF,
@@ -17,10 +17,10 @@ enum token_type
     FI,
     SEMI_COLON,
     QUOTE,
-    WORD,
     ECHO,
     TRUE,
-    FALSE
+    FALSE,
+    WORD = NBTOKENS - 1 // needs to be th last token in the enum for get_type()
 };
 
 struct token
@@ -55,6 +55,6 @@ void print_token(struct token *token);
  * @return 1 if the token is a terminal,
  * 0 if null or non terminal
  */
-int is_terminating(struct token *token);
+bool is_terminating(struct token *token);
 
 #endif // !TOKEN_H

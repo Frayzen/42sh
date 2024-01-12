@@ -2,7 +2,10 @@
 SUBDIRS = \
 		  io_backend\
 		  lexer\
-		  tools
+		  parser\
+		  tools\
+		  tools\
+		  finder
 LIBS = @LIB_LIST@
 
 bin_PROGRAMS = 42sh
