@@ -1,4 +1,5 @@
 #include "io_backend/backend_saver.h"
+#include "tools/token/token.h"
 #define _XOPEN_SOURCE 500
 #include <stddef.h>
 #include <stdlib.h>
@@ -9,8 +10,6 @@
 #define CHECK_SPECIAL_CHAR(Char)                                               \
     (((Char) == '\n' || (Char) == ';' || (Char) == '\'') ? 1 : 0)
 
-extern char *g_types_name[];
-
 /***
  * check_reserved: checks if the word given is one of the reserved word
  * @param pending: a char*, the word we are inspecting
@@ -20,9 +19,9 @@ static int check_reserved(char *pending)
 {
     char c = io_peek();
     size_t i = 0;
-    while (g_types_name[i])
+    while (TOK_TYPE_LT[i])
     {
-        if (!strcmp(pending, g_types_name[i]))
+        if (!strcmp(pending, TOK_TYPE_LT[i]))
         {
             if (c != ' ')
                 return 0;

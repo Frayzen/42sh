@@ -53,4 +53,11 @@ void destroy_token(struct token *token);
  */
 void print_token(struct token *token);
 
+#define TOK_TYPE_LT toktype_lookup()
+/***
+ * return the token type lookup table
+ * @return The lookup table
+ */
+const char **toktype_lookup(void);
+
 #endif // !TOKEN_H
