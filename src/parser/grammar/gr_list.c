@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <stdio.h>
 
 #include "lexer/token_saver.h"
 #include "rules.h"
@@ -14,15 +15,10 @@ enum status gr_list(struct ast **ast)
     enum status state = gr_and_or(&ast_list);
     if (state == ERROR)
         return ERROR;
-    tok_pop();
     while (state == OK)
     {
-        add_child(*ast, ast_list);
-        if (tok_peek()->terminal)
-            break;
         if (tok_peek()->type != SEMI_COLON)
         {
-            state = ERROR;
             break;
         }
         tok_pop();
