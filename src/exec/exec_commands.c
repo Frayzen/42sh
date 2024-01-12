@@ -7,7 +7,6 @@
 
 void exec_echo(struct ast *ast)
 {
-    assert(ast && ast->type == AST_COMMAND);
     if (ast->children[0]->token->type == ECHO)
     {
         for (int i = 1; i < ast->nb_children - 1; i++)
@@ -22,6 +21,8 @@ void exec_echo(struct ast *ast)
 
 void exec_command(struct ast *ast)
 {
+    assert(ast && ast->type == AST_COMMAND);
+    assert(ast->nb_children != 0);
     switch (ast->children[0]->token->type)
     {
     case ECHO:
