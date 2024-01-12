@@ -11,7 +11,9 @@ enum status gr_simple_command(struct ast **ast)
     if (token->terminal)
         return OK;
     tok_pop();
-    struct ast *ast_cmd = init_ast(AST_COMMAND, token);
+    struct ast *ast_cmd = init_ast(AST_COMMAND, NULL);
+    struct ast *new_ast = init_ast(AST_TOKEN, token);
+    ast_cmd = add_child(ast_cmd, new_ast);
     enum status state = OK;
     while (state == OK)
     {

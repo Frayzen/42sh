@@ -1,6 +1,7 @@
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
+#include "tools/ast/ast_utils.h"
 
 enum status gr_input(struct ast **ast)
 {
