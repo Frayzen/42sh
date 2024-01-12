@@ -1,5 +1,7 @@
 #include "tools/ast/ast.h"
+
 #define _POSIX_C_SOURCE 200809L
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,6 +10,7 @@
 
 char *g_ast_types[] = {
     [AST_COMMAND] = "CMD",
+    [AST_LIST] = "LST",
     [AST_TOKEN] = "",
 };
 
@@ -99,6 +102,7 @@ void ast_to_str_rec(struct ast *ast, char *buf, size_t *id)
     *id = *id + 1;
     buf[*id] = '\0';
 }
+
 char *ast_to_str(struct ast *ast)
 {
     static char buf[4096] = { 0 };

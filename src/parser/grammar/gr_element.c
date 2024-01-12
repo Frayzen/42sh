@@ -10,6 +10,7 @@ enum status gr_element(struct ast **ast)
     if (token->terminal)
         return ERROR;
     tok_pop();
+    token->type = WORD;
     struct ast *new_ast = init_ast(AST_TOKEN, token);
     *ast = add_child(*ast, new_ast);
     return OK;
