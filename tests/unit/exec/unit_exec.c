@@ -30,7 +30,7 @@ Test(exec, only_echo, .init = redirect_all_stdout)
     gr_input(&e);
     cr_assert(e);
     exec_entry(e);
-    cr_expect_stdout_eq_str("", "error");
+    cr_expect_stdout_eq_str("\n", "error");
 }
 
 Test(exec, un_mot, .init = redirect_all_stdout)
