@@ -2,7 +2,7 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 
-enum status gr_line(struct **ast ast)
+enum status gr_line(struct ast **ast)
 {
     enum status state = gr_and_or(ast);
     if (state == ERROR)
@@ -10,7 +10,7 @@ enum status gr_line(struct **ast ast)
     while (state == OK)
     {
         struct token *token = tok_peek();
-        if (!tok_peek->type == SEMI_COLON)
+        if (token->type != SEMI_COLON)
             return ERROR;
         tok_pop();
         state = gr_and_or(ast);
