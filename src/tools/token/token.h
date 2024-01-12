@@ -53,12 +53,4 @@ void destroy_token(struct token *token);
  */
 void print_token(struct token *token);
 
-/***
- * checks if the token is a terminal character
- * @param token <- the toekn to check
- * @return <- 1 if the token is a terminal,
- * 0 if null or non terminal
- */
-int is_terminating(struct token *token);
-
 #endif // !TOKEN_H

@@ -8,7 +8,7 @@
 
 TestSuite(tokenizer);
 
-Test(Token, test_colon)
+Test(tokenizer, test_colon)
 {
     io_push(";");
     struct token *tok = next_token();
@@ -18,7 +18,7 @@ Test(Token, test_colon)
     destroy_token(tok);
 }
 
-Test(Token, test_if)
+Test(tokenizer, test_if)
 {
     io_push("if");
     struct token *tok = next_token();

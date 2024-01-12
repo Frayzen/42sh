@@ -5,14 +5,21 @@
 
 char *g_types_name[] = { [IF] = "if",     [THEN] = "then",    [ELIF] = "elif",  [ELSE] = "else",
     [FI] = "fi",     [SEMI_COLON] = ";", [NEWLINE] = "\n", [QUOTE] = "'", [ECHO] = "echo",
+    [T_TRUE] = "true", [T_FALSE] = "false",
     [BSZERO] = "\0", [WORD] = NULL
 };
 
-int is_terminating(struct token *token)
+bool is_terminating(struct token *token)
 {
-    if (!token)
-        return 0;
-    return token->type < 2;
+    switch(token->type)
+    {
+        case NEWLINE:
+        case SEMI_COLON:
+        case BSZERO:
+            return true;
+        default:
+            return false;
+    }
 }
 
 int get_type(char *value)
