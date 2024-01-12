@@ -7,7 +7,7 @@
 
 int main(void)
 {
-    io_push("echo toto tata titi tutu tutut the car is going crazy");
+    io_push("echo toto");
     struct ast *ast = NULL;
     gr_input(&ast);
 
