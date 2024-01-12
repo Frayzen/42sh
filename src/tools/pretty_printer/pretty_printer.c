@@ -39,6 +39,11 @@ void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
 
 void pretty_print_ast(struct ast *ast)
 {
+    if (!ast)
+    {
+        printf("\nNULL ast\n");
+        return;
+    }
     printf("\n");
     pretty_print_ast_help(ast, 0, true, false);
     printf("\n");
