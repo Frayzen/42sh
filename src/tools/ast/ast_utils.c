@@ -18,7 +18,14 @@ struct ast *add_child(struct ast *parent, struct ast *child)
 {
     if (!parent)
         return child;
-    parent->children = realloc(parent->children, parent->nb_children + 1);
+    parent->children = realloc(parent->children,
+                               sizeof(struct ast) * (parent->nb_children + 1));
+    if (!parent->children)
+    {
+        // TODO handler error
+        // TODO clear parent & child
+        return NULL;
+    }
     parent->children[parent->nb_children] = child;
     parent->nb_children++;
     return parent;
@@ -54,7 +61,7 @@ void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
     }
     static char buf[1024];
     node_to_str(buf, ast_root);
-    printf("%s\n", buf);
+    printf("%s$\n", buf);
     for (int i = 0; i < ast_root->nb_children; i++)
     {
         if (i == ast_root->nb_children - 1)
@@ -77,9 +84,7 @@ void pretty_print_ast(struct ast *ast)
         printf("\nNULL ast\n");
         return;
     }
-    printf("\n");
     pretty_print_ast_help(ast, 0, true, false);
-    printf("\n");
 }
 
 void ast_to_str_rec(struct ast *ast, char *buf, size_t *id)

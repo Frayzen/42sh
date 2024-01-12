@@ -3,7 +3,6 @@
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
 #include "tools/token/token.h"
-
 enum status gr_element(struct ast **ast)
 {
     struct token *token = tok_peek();

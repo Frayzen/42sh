@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
@@ -13,6 +15,7 @@ enum status gr_input(struct ast **ast)
     }
     if (!tok_peek()->terminal)
     {
+        printf("no terminal tok : %s\n", tok_peek()->value);
         tok_pop();
         destroy_ast(*ast);
         return ERROR;
