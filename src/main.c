@@ -11,7 +11,7 @@ int main(int argc, char **argv)
         "echo toto;",
         NULL,
     };*/
-    //io_streamer_string(3, argv);
+    // io_streamer_string(3, argv);
     main_to_stream(argc, argv);
     struct ast *e = NULL;
     if (gr_input(&e) == ERROR)

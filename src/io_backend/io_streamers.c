@@ -5,9 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
-#include <stdio.h>
-#include "io_backend/backend_saver.h"
 
+#include "io_backend/backend_saver.h"
 
 void main_to_stream(int argc, char **argv)
 {
@@ -18,7 +17,7 @@ void main_to_stream(int argc, char **argv)
     else if (argc == 3)
         io_streamer_string(argc, argv);
     else
-        //TODO error handling
+        // TODO error handling
         return;
 }
 
