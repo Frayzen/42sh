@@ -1,10 +1,18 @@
 #include "tools/ast/ast.h"
+
 #define _POSIX_C_SOURCE 200809L
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "ast_utils.h"
+
+char *g_ast_types[] = {
+    [AST_COMMAND] = "CMD",
+    [AST_LIST] = "LST",
+    [AST_TOKEN] = "",
+};
 
 struct ast *add_child(struct ast *parent, struct ast *child)
 {
@@ -20,18 +28,9 @@ int node_to_str(char *buf, struct ast *ast_root)
 {
     if (ast_root == NULL)
         return sprintf(buf, "[NULL]");
-    switch (ast_root->type)
-    {
-    case AST_COMMAND:
-        return sprintf(buf, "CMD");
-    case AST_LIST:
-        return sprintf(buf, "LST");
-    case AST_TOKEN:
+    if (ast_root->type == AST_TOKEN)
         return sprintf(buf, "%s", ast_root->token->value);
-    default:
-        // TODO Error handling
-        return 0;
-    }
+    return sprintf(buf, "%s", g_ast_types[ast_root->type]);
 }
 
 void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
