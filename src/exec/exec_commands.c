@@ -1,5 +1,13 @@
+#define _POSIX_C_SOURCE 200809L
 #include <assert.h>
+#include <errno.h>
+#include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 #include "execs.h"
 #include "tools/ast/ast.h"
@@ -19,6 +27,57 @@ void exec_echo(struct ast *ast)
     fflush(stdout);
 }
 
+// this creates the char ** needed for the arguments of execvp
+char **create_command(struct ast *ast)
+{
+    size_t size_array = 1;
+    char **array_arg = calloc(size_array, sizeof(char *));
+    for (int i = 0; i < ast->nb_children; i++)
+    {
+        array_arg[size_array - 1] = ast->children[i]->token->value;
+        array_arg = realloc(array_arg, sizeof(char *) * size_array + 1);
+        size_array++;
+    }
+    array_arg[size_array - 1] = NULL;
+    return array_arg;
+}
+
+int external_bin(struct ast *ast)
+{
+    int pid = fork();
+    if (pid == 0)
+    {
+        char **array_arg = create_command(ast);
+        int resp = execvp(array_arg[0], array_arg);
+        if (resp)
+        {
+            // TODO handle errors
+            return -1;
+        }
+        else
+        {
+            int returncode;
+            waitpid(pid, &returncode, 0);
+            int code = 0;
+            if (WIFEXITED(returncode))
+                code = WEXITSTATUS(returncode);
+            if (code == -1)
+                // TODO handle error
+                return -1;
+            return 0;
+        }
+    }
+    return 0;
+}
+
+void exec_external_bin(struct ast *ast)
+{
+    if (external_bin(ast) == -1)
+    {
+        // TODO handle error
+        return;
+    }
+}
 void exec_command(struct ast *ast)
 {
     assert(ast && ast->type == AST_COMMAND);
@@ -29,6 +88,7 @@ void exec_command(struct ast *ast)
         exec_echo(ast);
         break;
     default:
+        exec_external_bin(ast);
         break;
     }
 }
