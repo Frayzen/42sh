@@ -45,6 +45,8 @@ Test(pretty_printer, basic_lots_children, .init = redirect_all_stdout)
 
     pretty_print_ast(ast);
     fflush(NULL);
-    cr_assert_stdout_eq_str("CMD\n╠══echo\n╠══toto\n╠══tata\n╠══titi\n╠══tutu\n╠══tutut\n╠══the\n╠══car\n╠══is\n╠══going\n╚══crazy\n");
+    cr_assert_stdout_eq_str(
+        "CMD\n╠══echo\n╠══toto\n╠══tata\n╠══titi\n╠══tutu\n╠══tutut\n╠══the\n╠═"
+        "═car\n╠══is\n╠══going\n╚══crazy\n");
     destroy_ast(ast);
 }
