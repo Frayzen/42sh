@@ -1,5 +1,6 @@
 #include "ring_buffer.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "tools/token/token.h"
@@ -14,6 +15,8 @@ void rb_push(struct ringbuffer *rb, union ringitem item)
     }
     *(rb->end) = item;
     rb->end++;
+    if (rb->end == rb->value + rb->ring_size)
+        rb->end = rb->value;
     rb->cur_size++;
 }
 

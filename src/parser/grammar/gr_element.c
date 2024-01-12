@@ -1,12 +1,16 @@
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
+#include "tools/ast/ast_utils.h"
+#include "tools/token/token.h"
 
-struct ast *gr_element(void)
+enum status gr_element(struct ast **ast)
 {
     struct token *token = tok_peek();
-    token->type = WORD;
+    if (token->terminal)
+        return ERROR;
     tok_pop();
-    struct ast *ast = init_ast(token);
-    return ast;
+    struct ast *new_ast = init_ast(AST_TOKEN, token);
+    *ast = add_child(*ast, new_ast);
+    return OK;
 }

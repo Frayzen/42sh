@@ -1,7 +1,15 @@
+#include "lexer/token_saver.h"
 #include "rules.h"
+#include "tools/ast/ast.h"
 
-struct ast *gr_entry(void)
+enum status gr_input(struct ast **ast)
 {
-    // default case, should be at the very end
-    return gr_element();
+    gr_simple_command(ast);
+    if (!tok_peek()->terminal)
+    {
+        tok_pop();
+        destroy_ast(*ast);
+        return ERROR;
+    }
+    return OK;
 }

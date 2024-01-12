@@ -11,8 +11,8 @@ unit_SOURCES =\
 			  lexer/unit_finder.c\
 			  parser/grules/unit_easy.c \
 			  token/unit_token.c \
-        io_backend/streamers.c \
-			  tools/pretty_printer.c
+        	  io_backend/unit_streamers.c \
+			  tools/unit_pretty_printer.c
 
 
 unit_CPPFLAGS = -I$(top_srcdir)/src -I.
