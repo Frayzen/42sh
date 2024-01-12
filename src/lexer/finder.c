@@ -5,7 +5,6 @@
 #include <string.h>
 
 #include "finder.h"
-#include <stddef.h>
 
 #define CHECK_SPECIAL_CHAR(Char)                                               \
     (((Char) == '\n' || (Char) == ';' || (Char) == '\'') ? 1 : 0)

@@ -8,7 +8,8 @@ void check_token(struct token *token, char *str, enum token_type type)
 {
     cr_assert_neq(token, NULL, "token is null");
     cr_assert(strcmp(token->value, str) == 0, "incorrect value");
-    cr_assert_eq(type, token->type, "incorrect type is %d expected %d", token->type, type);
+    cr_assert_eq(type, token->type, "incorrect type is %d expected %d",
+                 token->type, type);
 }
 
 Test(NewlineToken, init_newline_token)

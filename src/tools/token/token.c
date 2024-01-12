@@ -1,24 +1,26 @@
 #include "token.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-char *g_types_name[] = { [IF] = "if",     [THEN] = "then",    [ELIF] = "elif",  [ELSE] = "else",
-    [FI] = "fi",     [SEMI_COLON] = ";", [NEWLINE] = "\n", [QUOTE] = "'", [ECHO] = "echo",
-    [T_TRUE] = "true", [T_FALSE] = "false",
-    [BSZERO] = "\0", [WORD] = NULL
+char *g_types_name[] = {
+    [IF] = "if",     [THEN] = "then",    [ELIF] = "elif",     [ELSE] = "else",
+    [FI] = "fi",     [SEMI_COLON] = ";", [NEWLINE] = "\n",    [QUOTE] = "'",
+    [ECHO] = "echo", [T_TRUE] = "true",  [T_FALSE] = "false", [BSZERO] = "\0",
+    [WORD] = NULL
 };
 
 bool is_terminating(struct token *token)
 {
-    switch(token->type)
+    switch (token->type)
     {
-        case NEWLINE:
-        case SEMI_COLON:
-        case BSZERO:
-            return true;
-        default:
-            return false;
+    case NEWLINE:
+    case SEMI_COLON:
+    case BSZERO:
+        return true;
+    default:
+        return false;
     }
 }
 

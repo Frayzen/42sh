@@ -1,8 +1,9 @@
 #ifndef RING_BUFFER_H
 #define RING_BUFFER_H
 
-#include "tools/token/token.h"
 #include <stddef.h>
+
+#include "tools/token/token.h"
 
 enum ringtype
 {
