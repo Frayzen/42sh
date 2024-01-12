@@ -6,8 +6,8 @@
 enum token_type
 {
     // end of instruction
-    NEWLINE = 0, // for is_terminating_char funciton
-    BSZERO = 1, // for is_terminating_char funciton
+    NEWLINE,
+    BSZERO, 
     SEMI_COLON,
 
     // condition
@@ -15,16 +15,15 @@ enum token_type
     THEN,
     ELIF,
     ELSE,
-    ECHO,
     FI,
     // builtins
     T_TRUE,
     T_FALSE,
+    ECHO,
     // wildcard
     QUOTE,
     // terminals
     WORD,
-    TERMINAL,
 };
 
 struct token
@@ -59,5 +58,11 @@ void print_token(struct token *token);
  * @return The lookup table
  */
 const char **toktype_lookup(void);
+
+/***
+ * @param token: the toekn to check
+ * @return if the token is one of the three builtins 
+*/ 
+bool is_builtin(struct token *token);
 
 #endif // !TOKEN_H
