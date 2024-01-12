@@ -4,6 +4,8 @@
 #include "tools/ast/ast_utils.h"
 #include "tools/token/token.h"
 
+#include <stddef.h>
+
 enum status gr_line(struct ast **ast)
 {
     enum status state = gr_and_or(ast);
