@@ -87,12 +87,12 @@ void ast_to_str_rec(struct ast *ast, char *buf, size_t *id)
     if (ast->nb_children == 0)
         return;
     buf[*id] = '{';
-    *id = *id + 1;
+    (*id)++;
     ast_to_str_rec(ast->children[0], buf, id);
     for (int i = 1; i < ast->nb_children; i++)
     {
         buf[*id] = ',';
-        *id = *id + 1;
+        (*id)++;
         ast_to_str_rec(ast->children[i], buf, id);
     }
     buf[*id] = '}';
