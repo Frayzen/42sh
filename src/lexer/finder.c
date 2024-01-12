@@ -9,13 +9,6 @@
 #define CHECK_SPECIAL_CHAR(Char)                                               \
     (((Char) == '\n' || (Char) == ';' || (Char) == '\'') ? 1 : 0)
 
-/* static const char *const type_names[] = { */
-/*     [IF] = "if",       [THEN] = "then",      [ELIF] = "elif", */
-/*     [ELSE] = "else",   [FI] = "fi",          [SEMI_COLON] = ";", */
-/*     [NEWLINE] = "\n",   [QUOTE] = "'", [ECHO] = "echo", */
-/*     [T_TRUE] = "true", [T_FALSE] = "false" */
-/* }; */
-
 extern char *g_types_name[];
 
 /***
