@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -6,11 +7,7 @@
 #include "tools/token/token.h"
 void echo_function(struct ast *ast)
 {
-    if (!ast)
-    {
-        // TODO handle error
-        return;
-    }
+    assert(ast->type == AST_COMMAND);
     if (ast->children[0]->token->type == ECHO)
     {
         for (int i = 1; i < ast->nb_children - 1; i++)
