@@ -8,7 +8,8 @@ void check_token(struct token *token, char *str, enum token_type type)
 {
     cr_assert_neq(token, NULL, "token is null");
     cr_assert(strcmp(token->value, str) == 0, "incorrect value");
-    cr_assert_eq(type, token->type, "incorrect type is %d", token->type);
+    cr_assert_eq(type, token->type, "incorrect type is %d expected %d",
+                 token->type, type);
 }
 
 Test(NewlineToken, init_newline_token)
@@ -122,7 +123,7 @@ Test(TrueToken, init_true_token)
     char *value = malloc(strlen(str) + 1);
     strcpy(value, str);
     struct token *token = init_token(value);
-    check_token(token, value, TRUE);
+    check_token(token, value, T_TRUE);
 }
 
 Test(FalseToken, init_false_token)
@@ -131,5 +132,5 @@ Test(FalseToken, init_false_token)
     char *value = malloc(strlen(str) + 1);
     strcpy(value, str);
     struct token *token = init_token(value);
-    check_token(token, value, FALSE);
+    check_token(token, value, T_FALSE);
 }

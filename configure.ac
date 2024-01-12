@@ -1,7 +1,7 @@
 # Init the 42sh project
 AC_INIT([42sh], [1.0], [42sh@assistants.epita.fr])
 
-LIB_LIST="$(top_builddir)io_backend/libiobackend.a $(top_builddir)tools/libtools.a $(top_builddir)lexer/liblexer.a $(top_builddir)parser/libparser.a $(top_builddirfinder/libfinder.a)"
+LIB_LIST="$(top_builddir)io_backend/libiobackend.a $(top_builddir)tools/libtools.a $(top_builddir)lexer/liblexer.a $(top_builddir)parser/libparser.a"
 
 AC_SUBST(LIB_LIST)
 
@@ -31,7 +31,6 @@ AC_CONFIG_FILES([
                     src/tools/Makefile
                     src/parser/Makefile
                     src/lexer/Makefile
-                    src/finder/Makefile
                     tests/unit/Makefile
                 ])
 AC_OUTPUT

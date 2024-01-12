@@ -2,13 +2,8 @@
 #include <criterion/internal/test.h>
 #include <criterion/redirect.h>
 
-#include "finder/finder.h"
-
-void redirect_all_stdout(void)
-{
-    cr_redirect_stdout();
-    cr_redirect_stderr();
-}
+#include "io_backend/backend_saver.h"
+#include "lexer/finder.h"
 
 Test(comments, at_end)
 {
