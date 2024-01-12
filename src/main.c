@@ -13,7 +13,7 @@ int main(void)
     };
     io_streamer_string(3, argv);
     struct ast *e = NULL;
-    if(gr_input(&e) == ERROR)
+    if (gr_input(&e) == ERROR)
     {
         printf("ERROR\n");
         return 1;
