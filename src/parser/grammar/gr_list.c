@@ -28,6 +28,8 @@ enum status gr_line(struct ast **ast)
 
 enum status gr_list(struct ast **ast)
 {
+    if (tok_peek()->terminal)
+        return OK;
     struct ast *ast_list = init_ast(AST_LIST, NULL);
     enum status state = gr_and_or(&ast_list); 
     if (state == ERROR)

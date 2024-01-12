@@ -6,11 +6,6 @@
 
 #include "ast_utils.h"
 
-char *g_ast_types[] = {
-    [AST_COMMAND] = "CMD",
-    [AST_TOKEN] = "",
-};
-
 struct ast *add_child(struct ast *parent, struct ast *child)
 {
     if (!parent)
@@ -25,9 +20,18 @@ int node_to_str(char *buf, struct ast *ast_root)
 {
     if (ast_root == NULL)
         return sprintf(buf, "[NULL]");
-    if (ast_root->type == AST_TOKEN)
+    switch (ast_root->type)
+    {
+    case AST_COMMAND :
+        return sprintf(buf, "CMD"); // replace with "CMD \'%s\'", ast_root->str 
+    case AST_LIST :
+        return sprintf(buf, "LST");
+    case AST_TOKEN :
         return sprintf(buf, "%s", ast_root->token->value);
-    return sprintf(buf, "%s", g_ast_types[ast_root->type]);
+    default:
+        // TODO Error handling
+        return 0;
+    }
 }
 
 void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
@@ -99,6 +103,7 @@ void ast_to_str_rec(struct ast *ast, char *buf, size_t *id)
     *id = *id + 1;
     buf[*id] = '\0';
 }
+
 char *ast_to_str(struct ast *ast)
 {
     static char buf[4096] = { 0 };

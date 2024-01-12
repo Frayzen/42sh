@@ -15,7 +15,7 @@ Test(easy_rules, test_word)
     struct ast *ast = NULL;
     cr_expect_eq(gr_input(&ast), OK);
     cr_expect_not_null(ast);
-    cr_expect_str_eq(ast_to_str(ast), "CMD{echo,toto}");
+    cr_expect_str_eq(ast_to_str(ast), "LST{CMD{echo,toto}}");
     destroy_ast(ast);
 }
 
