@@ -70,8 +70,7 @@ char *str_maker(void)
     char *pending =
         calloc(2, 1); // one character + terminating NULL to check with strcmp
     pending[0] = c;
-    size_pending++;
-    pending[size_pending] = 0;
+    pending[++size_pending] = 0;
     io_pop();
     while (!check_reserved(pending))
     {
