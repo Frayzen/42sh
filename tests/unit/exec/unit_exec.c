@@ -35,6 +35,67 @@ Test(exec, only_echo, .init=redirect_all_stdout)
   echo_function(e);
   cr_expect_stdout_eq_str("", "error");
 }
+
+Test(exec, un_mot , .init=redirect_all_stdout)
+{
+  char *a[3] = {"blb", "-c", "echo if"};
+  main_to_stream(3, a);
+  struct ast *e = NULL;
+  gr_input(&e);
+  cr_assert(e);
+  echo_function(e);
+  cr_expect_stdout_eq_str("if\n", "error");
+}
+
+
+Test(exec, deux_mots , .init=redirect_all_stdout)
+{
+  char *a[3] = {"blb", "-c", "echo mot1 mot2"};
+  main_to_stream(3, a);
+  struct ast *e = NULL;
+  gr_input(&e);
+  cr_assert(e);
+  echo_function(e);
+  cr_expect_stdout_eq_str("mot1 mot2\n", "error");
+}
+
+
+Test(exec, trois_mots , .init=redirect_all_stdout)
+{
+  char *a[3] = {"blb", "-c", "echo mot1 mot2 mot3"};
+  main_to_stream(3, a);
+  struct ast *e = NULL;
+  gr_input(&e);
+  cr_assert(e);
+  echo_function(e);
+  cr_expect_stdout_eq_str("mot1 mot2 mot3\n", "error");
+}
+
+Test(exec, quatre_mots , .init=redirect_all_stdout)
+{
+  char *a[3] = {"blb", "-c", "echo mot1 mot2 mot3 mot4"};
+  main_to_stream(3, a);
+  struct ast *e = NULL;
+  gr_input(&e);
+  cr_assert(e);
+  echo_function(e);
+  cr_expect_stdout_eq_str("mot1 mot2 mot3 mot4\n", "error");
+}
+
+
+Test(exec, cinq_mots , .init=redirect_all_stdout)
+{
+  char *a[3] = {"blb", "-c", "echo mot1 mot2 mot3 mot4 mot5"};
+  main_to_stream(3, a);
+  struct ast *e = NULL;
+  gr_input(&e);
+  cr_assert(e);
+  echo_function(e);
+  cr_expect_stdout_eq_str("mot1 mot2 mot3 mot4 mot5\n", "error");
+}
+
+
+
 Test(exec, big_fat_sentence_with_if , .init=redirect_all_stdout)
 {
   char *a[3] = {"blb", "-c", "echo if else then ok ca roule ma poule"};
@@ -43,5 +104,5 @@ Test(exec, big_fat_sentence_with_if , .init=redirect_all_stdout)
   gr_input(&e);
   cr_assert(e);
   echo_function(e);
-  cr_expect_stdout_eq_str("", "error");
+  cr_expect_stdout_eq_str("if else then ok ca roule ma poule\n", "error");
 }

@@ -8,6 +8,12 @@ struct ast *add_child(struct ast *parent, struct ast *child)
     if (!parent)
         return child;
     parent->children = realloc(parent->children, parent->nb_children + 1);
+    if (!parent->children)
+    {
+        //TODO handler error
+        //TODO clear parent & child
+        return NULL;
+    }
     parent->children[parent->nb_children] = child;
     parent->nb_children++;
     return parent;
