@@ -7,10 +7,13 @@ LIBS = $(addprefix $(top_builddir)/src/, @LIB_LIST@)
 unit_SOURCES =\
 			  io_backend/unit_backend_saver.c\
 			  lexer/unit_token_saver.c\
+			  lexer/unit_tokenizer.c\
+			  lexer/unit_finder.c\
 			  parser/grules/unit_easy.c \
 			  token/unit_token.c \
+        io_backend/streamers.c \
 			  tools/pretty_printer.c
-			
+
 
 unit_CPPFLAGS = -I$(top_srcdir)/src -I.
 

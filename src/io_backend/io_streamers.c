@@ -21,7 +21,11 @@ char *io_streamer_file(char *path_to_file)
         return NULL;
     }
     fseek(file, 0, SEEK_SET);
-    fread(buffer, 1, length_of_file, file);
+    if (!fread(buffer, 2, length_of_file, file))
+    {
+        // TODO Error handling
+        return NULL;
+    }
     fclose(file);
     buffer[length_of_file - 1] = '\0';
     return buffer;
@@ -36,6 +40,7 @@ char *io_streamer_string(int argc, char **argv)
             return argv[i + 1];
         }
     }
+    // TODO Error handling
     return NULL;
 }
 
@@ -43,6 +48,10 @@ char *io_streamer_stdin(void)
 {
     char *line = NULL;
     size_t len = 0;
-    getline(&line, &len, stdin);
+    if (getline(&line, &len, stdin) == -1)
+    {
+        // TODO Error handling
+        return NULL;
+    }
     return line;
 }
