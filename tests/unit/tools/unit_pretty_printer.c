@@ -1,36 +1,50 @@
 
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
+#include <stdio.h>
+
+#include "io_backend/backend_saver.h"
+#include "parser/grammar/rules.h"
+#include "tools/ast/ast.h"
+#include "tools/ast/ast_utils.h"
 
 void redirect_all_stdout(void)
 {
     cr_redirect_stdout();
     cr_redirect_stderr();
 }
-
-Test(pretty_printer, basic, .init = redirect_all_stdout)
+Test(pretty_printer, basic_echo, .init = redirect_all_stdout)
 {
-    /* struct token *ifToken = init_token("if"); */
-    /* struct token *conditionToken = init_token("true"); */
-    /* struct token *thenToken = init_token("then"); */
-    /* struct token *bodyToken = init_token("echo"); */
-    /* struct token *semicolonToken = init_token(";"); */
-    /* struct ast *ifNode = init_ast(ifToken); */
-    /* struct ast *conditionNode = init_ast(conditionToken); */
-    /* struct ast *thenNode = init_ast(thenToken); */
-    /* struct ast *bodyNode = init_ast(bodyToken); */
-    /* struct ast *semicolonNode = init_ast(semicolonToken); */
-    /* ifNode->nb_children = 2; */
-    /* ifNode->children = malloc(ifNode->nb_children * sizeof(struct ast *)); */
-    /* ifNode->children[0] = conditionNode; */
-    /* ifNode->children[1] = thenNode; */
-    /* thenNode->nb_children = 2; */
-    /* thenNode->children = malloc(thenNode->nb_children * sizeof(struct ast
-     * *)); */
-    /* thenNode->children[0] = bodyNode; */
-    /* thenNode->children[1] = semicolonNode; */
-    /* pretty_print_ast(ifNode); */
-    /* cr_assert_stdout_eq_str("\nif\n╠══true\n╚══then\n   ╠══echo\n   ╚══;\n");
-     */
-    /* destroy_ast(ifNode); */
+    io_push("echo toto");
+    struct ast *ast = NULL;
+    cr_assert_eq(gr_input(&ast), OK);
+
+    pretty_print_ast(ast);
+    fflush(NULL);
+    cr_assert_stdout_eq_str("CMD\n╠══echo\n╚══toto\n");
+    destroy_ast(ast);
+}
+
+Test(pretty_printer, basic_echo_3_words, .init = redirect_all_stdout)
+{
+    io_push("echo toto tata");
+    struct ast *ast = NULL;
+    cr_assert_eq(gr_input(&ast), OK);
+
+    pretty_print_ast(ast);
+    fflush(NULL);
+    cr_assert_stdout_eq_str("CMD\n╠══echo\n╠══toto\n╚══tata\n");
+    destroy_ast(ast);
+}
+
+Test(pretty_printer, basic_lots_children, .init = redirect_all_stdout)
+{
+    io_push("echo toto tata titi tutu tutut the car is going crazy");
+    struct ast *ast = NULL;
+    cr_assert_eq(gr_input(&ast), OK);
+
+    pretty_print_ast(ast);
+    fflush(NULL);
+    cr_assert_stdout_eq_str("CMD\n╠══echo\n╠══toto\n╠══tata\n╠══titi\n╠══tutu\n╠══tutut\n╠══the\n╠══car\n╠══is\n╠══going\n╚══crazy\n");
+    destroy_ast(ast);
 }

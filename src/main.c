@@ -1,27 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "io_backend/io_streamers.h"
+#include "io_backend/backend_saver.h"
 #include "parser/grammar/rules.h"
 #include "tools/ast/ast_utils.h"
 
-int main(int argc, char **argv)
+int main(void)
 {
-    /*char *argv[4] = {
-        "test",
-        "-c",
-        "echo toto;",
-        NULL,
-    };*/
-    // io_streamer_string(3, argv);
-    main_to_stream(argc, argv);
-    struct ast *e = NULL;
-    if (gr_input(&e) == ERROR)
-    {
-        printf("ERROR\n");
-        return 1;
-    }
-    printf("%s\n", ast_to_str(e));
-    pretty_print_ast(e);
+    io_push("echo toto tata titi tutu tutut the car is going crazy");
+    struct ast *ast = NULL;
+    gr_input(&ast);
+
+    pretty_print_ast(ast);
+    fflush(NULL);
     return 0;
 }
