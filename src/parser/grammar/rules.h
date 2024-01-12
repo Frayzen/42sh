@@ -20,7 +20,7 @@ struct ast *gr_entry(void);
  * @param ast: the tree to be updated
  * @return enum that tells the status
  */
-enum status gr_element(struct ast *ast);
+enum status gr_element(struct ast **ast);
 
 
 /***
@@ -29,7 +29,7 @@ enum status gr_element(struct ast *ast);
  * @return enum that tells the status
  */
 
-enum status gr_simple_command(struct ast *ast);
+enum status gr_simple_command(struct ast **ast);
 
 /***
  * Grammar rule for command
@@ -37,7 +37,7 @@ enum status gr_simple_command(struct ast *ast);
  * @return enum that tells the status
  */
 
-enum status gr_command(struct ast *ast);
+enum status gr_command(struct ast **ast);
 
 /***
  * Grammar rule for pipeline
@@ -45,7 +45,7 @@ enum status gr_command(struct ast *ast);
  * @return enum that tells the status
  */
 
-enum status gr_pipeline(struct ast *ast);
+enum status gr_pipeline(struct ast **ast);
 
 /***
  * Grammar rule for and_or
@@ -53,7 +53,7 @@ enum status gr_pipeline(struct ast *ast);
  * @return enum that tells the status
  */
 
-enum status gr_and_or(struct ast *ast);
+enum status gr_and_or(struct ast **ast);
 
 /***
  * Grammar rule for list
@@ -61,7 +61,7 @@ enum status gr_and_or(struct ast *ast);
  * @return enum that tells the status
  */
 
-enum status gr_list(struct ast *ast);
+enum status gr_list(struct ast **ast);
 
 
 #endif /* !GRULES_H */
