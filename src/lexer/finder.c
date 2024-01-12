@@ -1,4 +1,5 @@
 #include "io_backend/backend_saver.h"
+#include "tools/token/token.h"
 #define _XOPEN_SOURCE 500
 #include <stddef.h>
 #include <stdlib.h>
@@ -6,23 +7,18 @@
 
 #include "finder.h"
 
-#define CHECK_SPECIAL_CHAR(Char)                                               \
-    (((Char) == '\n' || (Char) == ';' || (Char) == '\'') ? 1 : 0)
-
-extern char *g_types_name[];
+#define IS_TERMINATING(Char) ((Char) == '\n' || (Char) == ';')
 
 /***
- * check_reserved: checks if the word given is one of the reserved word
- * @param pending: a char*, the word we are inspecting
- * @return a boolean, 1 if it is a special word, 0 otherwise
+ * checks if the word given is one of the reserved word
  */
 static int check_reserved(char *pending)
 {
     char c = io_peek();
     size_t i = 0;
-    while (g_types_name[i])
+    while (TOK_TYPE_LT[i])
     {
-        if (!strcmp(pending, g_types_name[i]))
+        if (!strcmp(pending, TOK_TYPE_LT[i]))
         {
             if (c != ' ')
                 return 0;
@@ -37,35 +33,44 @@ void comments(void)
 {
     char c = io_peek();
     io_pop();
-    while (c != '\n' && c != '\0')
+    while (!IS_TERMINATING(c))
     {
         c = io_peek();
         io_pop();
     }
 }
 
-char skip_spaces(char c)
+char *quotes(void)
 {
-    while (c == ' ')
-    {
-        io_pop();
-        c = io_peek();
-    }
-    return c;
-}
-
-char *finder(void)
-{
+    io_pop();
+    size_t size_pending = 0;
     char *pending =
         calloc(2, 1); // one character + terminating NULL to check with strcmp
-
-    size_t size_pending = 0;
     char c = io_peek();
-    if (c == ' ')
-        c = skip_spaces(c);
+    while (c && c != '\'')
+    {
+        io_pop();
+        pending[size_pending] = c;
+        pending = realloc(pending, ++size_pending);
+        c = io_peek();
+    }
+    if (!c)
+    {
+        // TODO handle error
+        return "\0";
+    }
+    io_pop();
+    return pending;
+}
+
+char *str_maker(void)
+{
+    char c = io_peek();
+    size_t size_pending = 0;
+    char *pending =
+        calloc(2, 1); // one character + terminating NULL to check with strcmp
     pending[0] = c;
-    size_pending++;
-    pending[size_pending] = 0;
+    pending[++size_pending] = 0;
     io_pop();
     while (!check_reserved(pending))
     {
@@ -77,7 +82,7 @@ char *finder(void)
         }
         if (c == '#')
             comments();
-        else if (!(CHECK_SPECIAL_CHAR(c)))
+        else if (!IS_TERMINATING(c))
         {
             pending = realloc(pending, size_pending + 1);
             pending[size_pending] = c;
@@ -94,6 +99,24 @@ char *finder(void)
         io_pop();
     }
     return pending;
+}
+
+char *finder(void)
+{
+    char c = io_peek();
+    if (c == ' ')
+    {
+        io_pop();
+        return finder();
+    }
+    if (c == '#')
+    {
+        comments();
+        return finder();
+    }
+    if (c == '\'')
+        return quotes();
+    return str_maker();
 }
 
 /*

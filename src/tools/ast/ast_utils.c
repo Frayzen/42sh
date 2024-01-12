@@ -1,7 +1,15 @@
-#include "ast_utils.h"
-
+#include "tools/ast/ast.h"
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#include "ast_utils.h"
+
+char *g_ast_types[] = {
+    [AST_COMMAND] = "CMD",
+    [AST_TOKEN] = "",
+};
 
 struct ast *add_child(struct ast *parent, struct ast *child)
 {
@@ -18,6 +26,15 @@ struct ast *add_child(struct ast *parent, struct ast *child)
     parent->children[parent->nb_children] = child;
     parent->nb_children++;
     return parent;
+}
+
+int node_to_str(char *buf, struct ast *ast_root)
+{
+    if (ast_root == NULL)
+        return sprintf(buf, "[NULL]");
+    if (ast_root->type == AST_TOKEN)
+        return sprintf(buf, "%s", ast_root->token->value);
+    return sprintf(buf, "%s", g_ast_types[ast_root->type]);
 }
 
 void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
@@ -39,7 +56,9 @@ void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
         else
             printf("╠══");
     }
-    printf("%s\n", ast_root->token->value);
+    static char buf[1024];
+    node_to_str(buf, ast_root);
+    printf("%s\n", buf);
     for (int i = 0; i < ast_root->nb_children; i++)
     {
         if (i == ast_root->nb_children - 1)
@@ -65,4 +84,33 @@ void pretty_print_ast(struct ast *ast)
     printf("\n");
     pretty_print_ast_help(ast, 0, true, false);
     printf("\n");
+}
+
+void ast_to_str_rec(struct ast *ast, char *buf, size_t *id)
+{
+    if (!ast)
+        return;
+    *id += node_to_str(buf + *id, ast);
+    if (ast->nb_children == 0)
+        return;
+    buf[*id] = '{';
+    (*id)++;
+    ast_to_str_rec(ast->children[0], buf, id);
+    for (int i = 1; i < ast->nb_children; i++)
+    {
+        buf[*id] = ',';
+        (*id)++;
+        ast_to_str_rec(ast->children[i], buf, id);
+    }
+    buf[*id] = '}';
+    *id = *id + 1;
+    buf[*id] = '\0';
+}
+char *ast_to_str(struct ast *ast)
+{
+    static char buf[4096] = { 0 };
+    buf[0] = '\0';
+    size_t i = 0;
+    ast_to_str_rec(ast, buf, &i);
+    return buf;
 }

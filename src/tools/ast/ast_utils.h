@@ -40,4 +40,11 @@ void pretty_print_ast(struct ast *ast);
  *          ╚══d2
  */
 
+/***
+ * Create a string from an AST /!\ Do not forget to free the returned str
+ * @param ast AST to be stringified
+ * @return the unique malloced string associated with the AST
+ */
+char *ast_to_str(struct ast *ast);
+
 #endif // AST_UTILS_H
