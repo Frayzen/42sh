@@ -8,6 +8,7 @@ unit_SOURCES =\
 			  io_backend/unit_backend_saver.c\
 			  lexer/unit_token_saver.c\
 			  parser/grules/unit_easy.c \
+			  parser/finder/unit_finder.c \
 			  token/unit_token.c 
 			
 

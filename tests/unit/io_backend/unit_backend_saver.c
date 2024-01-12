@@ -5,7 +5,7 @@
 #include "io_backend/backend_saver.h"
 TestSuite(backend_saver);
 
-Test(backend_saver, basic_put)
+Test(backend_saver, basic_push)
 {
     io_push("tests");
     cr_assert_eq(io_peek(), 't');
@@ -64,7 +64,7 @@ Test(backend_saver, basic_long)
 Test(backend_saver, null_check)
 {
     cr_assert_eq(io_pop(), false);
-    io_put_chars("\0", 1);
+    io_push_chars("\0", 1);
     cr_assert_eq(io_peek(), '\0');
     cr_assert_eq(io_pop(), true);
     cr_assert_eq(io_pop(), false);
