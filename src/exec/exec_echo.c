@@ -1,10 +1,11 @@
 #include <stdio.h>
+#include <assert.h>
 
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
 void echo_function(struct ast *ast)
 {
-    /* assert(ast && ast->type == AST_COMMAND); */
+    assert(ast && ast->type == AST_COMMAND);
     if (!ast)
     {
         // TODO error handling
