@@ -4,56 +4,34 @@
 
 #include "io_backend/backend_saver.h"
 #include "lexer/finder.h"
-
-Test(comments, at_end)
+#include "exec/exec_echo.h"
+#include "io_backend/backend_saver.h"
+#include "io_backend/io_streamers.h"
+#include "parser/grammar/rules.h"
+#include <stdlib.h>
+static void redirect_all_stdout(void)
 {
-    io_push("if test");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), "test");
+        cr_redirect_stdout();
 }
 
-Test(comments, at_end2)
+Test(exec, one, .init=redirect_all_stdout)
 {
-    io_push("hello test");
-    cr_assert_str_eq(finder(), "hello");
-    cr_assert_str_eq(finder(), "test");
+  char *a[3] = {"blb", "-c", "echo toto"};
+  main_to_stream(3, a);
+  struct ast *e = NULL;
+  gr_input(&e);
+  cr_assert(e);
+  echo_function(e);
+  cr_expect_stdout_eq_str("toto\n", "error");
 }
 
-
-Test(comments, space)
+Test(exec, only_echo, .init=redirect_all_stdout)
 {
-    io_push("   if   echotest");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), "echotest");
-}
-
-Test(comments, space2)
-{
-    io_push("   if   echo test");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), "echo");
-    cr_assert_str_eq(finder(), "test");
-}
-
-Test(comments, semicolon)
-{
-    io_push("   if ;  echo; test;");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "echo");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "test");
-    cr_assert_str_eq(finder(), ";");
-}
-
-Test(comments, backslashn)
-{
-    io_push("   if ;  echo\n; test;");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "echo");
-    cr_assert_str_eq(finder(), "\n");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "test");
-    cr_assert_str_eq(finder(), ";");
+  char *a[3] = {"blb", "-c", "echo"};
+  main_to_stream(3, a);
+  struct ast *e = NULL;
+  gr_input(&e);
+  cr_assert(e);
+  echo_function(e);
+  cr_expect_stdout_eq_str("", "error");
 }
