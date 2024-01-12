@@ -22,10 +22,11 @@ Test(streamers, wrong_file_path)
 
 Test(streamers, string_good)
 {
-    int argc = 2;
-    char *argv[2];
+    int argc = 3;
+    char *argv[3];
     argv[0] = "-c";
     argv[1] = "Hello World !";
+    argv[2] = NULL;
     char *str = io_streamer_string(argc, argv);
     cr_assert(str);
     cr_assert_str_eq(str, argv[1]);
@@ -33,10 +34,11 @@ Test(streamers, string_good)
 
 Test(streamers, string_null)
 {
-    int argc = 2;
-    char *argv[2];
+    int argc = 3;
+    char *argv[3];
     argv[0] = "Hello World !";
     argv[1] = "-c";
+    argv[2] = NULL;
     char *str = io_streamer_string(argc, argv);
     cr_assert(!str);
 }
