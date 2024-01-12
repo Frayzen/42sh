@@ -2,6 +2,7 @@
 
 #include "io_backend/io_streamers.h"
 #include "parser/grammar/rules.h"
+#include "exec/exec_echo.h"
 
 int main(int argc, char **argv)
 {
@@ -19,7 +20,7 @@ int main(int argc, char **argv)
         printf("ERROR\n");
         return 1;
     }
-    e++;
+    echo_function(e);
     /* pretty_print_ast(e); */
     return 0;
 }

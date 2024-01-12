@@ -3,7 +3,8 @@ SUBDIRS = \
 		  io_backend\
 		  lexer\
 		  parser\
-		  tools
+		  tools\
+		  exec
 LIBS = @LIB_LIST@
 
 bin_PROGRAMS = 42sh
