@@ -1,7 +1,7 @@
 #include <stdio.h>
+
 #include "io_backend/io_streamers.h"
 #include "parser/grammar/rules.h"
-#include "tools/token/token.h"
 
 int main(void)
 {
@@ -13,16 +13,7 @@ int main(void)
     };
     io_streamer_string(3, argv);
     struct ast *e = gr_entry();
-    
-    if (e == NULL)
-        printf("ERRROR\n");
-    else
-    {
-        print_token(e->token);
-        printf("%d\n", e->nb_children);
-        for (int i = 0; i < e->nb_children; i++) {
-            print_token(e->children[i]->token);
-        }
-    }
+    e++;
+    /* pretty_print_ast(e); */
     return 0;
 }

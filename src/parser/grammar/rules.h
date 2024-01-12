@@ -22,7 +22,6 @@ struct ast *gr_entry(void);
  */
 enum status gr_element(struct ast **ast);
 
-
 /***
  * Grammar rule for simple_command
  * @param ast: the tree to be updated
@@ -62,6 +61,5 @@ enum status gr_and_or(struct ast **ast);
  */
 
 enum status gr_list(struct ast **ast);
-
 
 #endif /* !GRULES_H */

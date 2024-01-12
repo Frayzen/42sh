@@ -10,14 +10,17 @@ TestSuite(easy_rules);
 
 Test(easy_rules, test_word)
 {
-    io_push("WORD");
+    io_push("echo toto;");
     struct ast *ast = gr_entry();
     cr_expect_not_null(ast);
     // TODO uncomment when lexer is good with io saver
-    /* cr_expect_eq(ast->token->type, WORD); */
-    /* cr_expect_eq(ast->token->value, "WORD"); */
-    /* cr_expect_eq(ast->token->terminal, true); */
-    cr_expect_null(ast->children);
-    cr_expect_eq(ast->nb_children, 0);
+    cr_expect_eq(ast->type, AST_COMMAND);
+    cr_expect_eq(ast->nb_children, 2);
+    cr_expect_eq(ast->children[0]->type, AST_TOKEN);
+    cr_expect_eq(ast->children[1]->type, AST_TOKEN);
+    cr_expect_eq(ast->children[0]->token->type, ECHO);
+    cr_expect_eq(ast->children[1]->token->type, WORD);
+    cr_expect_str_eq(ast->children[0]->token->value, "echo");
+    cr_expect_str_eq(ast->children[1]->token->value, "toto");
     destroy_ast(ast);
 }

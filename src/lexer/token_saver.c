@@ -1,8 +1,8 @@
 #include <stddef.h>
 #include <stdio.h>
 
-#include "tools/ring_buffer/ring_buffer.h"
 #include "lexer/tokenizer.h"
+#include "tools/ring_buffer/ring_buffer.h"
 
 static struct ringbuffer *get_buffer(void)
 {
@@ -14,7 +14,7 @@ static struct ringbuffer *get_buffer(void)
 
 void next(void)
 {
-    union ringitem next = {.token = next_token()};
+    union ringitem next = { .token = next_token() };
     rb_push(get_buffer(), next);
 }
 

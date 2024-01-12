@@ -23,6 +23,8 @@ void io_push_chars(char *str, size_t len)
 
 void io_push(char *str)
 {
+    if (!str)
+        return;
     io_push_chars(str, strlen(str));
 }
 

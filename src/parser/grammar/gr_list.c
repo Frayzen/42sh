@@ -18,6 +18,6 @@ enum status gr_line(struct ast **ast)
     struct token *token = tok_peek();
     if (!token || token->type == SEMI_COLON)
         return OK;
-    //maybe need to check if there is something after, if yes -> ERROR ?
+    // maybe need to check if there is something after, if yes -> ERROR ?
     return ERROR;
 }

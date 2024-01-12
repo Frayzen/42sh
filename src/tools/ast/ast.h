@@ -2,7 +2,8 @@
 #define AST_H
 #include "tools/token/token.h"
 
-enum ast_type{
+enum ast_type
+{
     AST_TOKEN,
     AST_COMMAND,
 };

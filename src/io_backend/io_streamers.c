@@ -1,12 +1,12 @@
 #define _POSIX_C_SOURCE 200809L
 #include "io_streamers.h"
-#include "io_backend/backend_saver.h"
-
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+
+#include "io_backend/backend_saver.h"
 
 void io_streamer_file(char *path_to_file)
 {
@@ -25,7 +25,7 @@ void io_streamer_file(char *path_to_file)
         return;
     }
     fseek(file, 0, SEEK_SET);
-    if(fread(buffer, 1, length_of_file, file) == 0)
+    if (fread(buffer, 1, length_of_file, file) == 0)
         return;
     fclose(file);
     buffer[length_of_file - 1] = '\0';
@@ -50,7 +50,7 @@ void io_streamer_stdin(void)
     size_t len = 0;
     if (getline(&line, &len, stdin) == -1)
     {
-        //ERROR HANDLE
+        // ERROR HANDLE
         return;
     }
     io_push(line);
