@@ -10,6 +10,7 @@ unit_SOURCES =\
 			  lexer/unit_tokenizer.c\
 			  lexer/unit_finder.c\
 			  parser/grules/unit_easy.c \
+			  parser/finder/unit_finder.c \
 			  token/unit_token.c 
 			
 
