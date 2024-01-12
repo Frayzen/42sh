@@ -8,6 +8,19 @@
 
 #include "io_backend/backend_saver.h"
 
+void main_to_stream(int argc, char **argv)
+{
+    if (argc == 1)
+        io_streamer_stdin();
+    else if (argc == 2)
+        io_streamer_file(argv[1]);
+    else if (argc == 3)
+        io_streamer_string(argc, argv);
+    else
+        // TODO error handling
+        return;
+}
+
 void io_streamer_file(char *path_to_file)
 {
     FILE *file = fopen(path_to_file, "r");
