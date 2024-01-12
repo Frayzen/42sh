@@ -4,12 +4,18 @@
 
 enum status gr_input(struct ast **ast)
 {
-    gr_simple_command(ast);
+    enum status state = gr_list(ast);
+    if (state == ERROR)
+    {
+        destroy_ast(*ast);
+        return ERROR;
+    }
     if (!tok_peek()->terminal)
     {
         tok_pop();
         destroy_ast(*ast);
         return ERROR;
     }
+    tok_pop();
     return OK;
 }

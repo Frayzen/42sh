@@ -21,3 +21,8 @@ enum status gr_line(struct ast **ast)
     // maybe need to check if there is something after, if yes -> ERROR ?
     return ERROR;
 }
+
+enum status gr_list(struct ast **ast)
+{
+    return gr_and_or(ast); 
+}
