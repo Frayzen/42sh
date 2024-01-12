@@ -4,6 +4,12 @@
 #include "tools/ast/ast.h"
 
 /***
+ * executes any of the basic functions
+ * @param ast the tree to execute
+ */
+void exec_basic_function(struct ast *ast);
+
+/***
  * executes the echo function
  * @param ast the tree to execute
  */
