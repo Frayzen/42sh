@@ -10,8 +10,8 @@ unit_SOURCES =\
 			  lexer/unit_tokenizer.c\
 			  lexer/unit_finder.c\
 			  parser/grules/unit_easy.c \
-			  token/unit_token.c 
-			
+			  token/unit_token.c \
+        io_backend/streamers.c
 
 unit_CPPFLAGS = -I$(top_srcdir)/src -I.
 
