@@ -5,55 +5,17 @@
 #include "io_backend/backend_saver.h"
 #include "lexer/finder.h"
 
-Test(comments, at_end)
+void redirect_all_stdout(void)
 {
-    io_push("if test");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), "test");
+        cr_redirect_stdout();
+        cr_redirect_stderr();
 }
 
-Test(comments, at_end2)
+Test(echo, one word)
 {
-    io_push("hello test");
-    cr_assert_str_eq(finder(), "hello");
-    cr_assert_str_eq(finder(), "test");
-}
-
-
-Test(comments, space)
-{
-    io_push("   if   echotest");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), "echotest");
-}
-
-Test(comments, space2)
-{
-    io_push("   if   echo test");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), "echo");
-    cr_assert_str_eq(finder(), "test");
-}
-
-Test(comments, semicolon)
-{
-    io_push("   if ;  echo; test;");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "echo");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "test");
-    cr_assert_str_eq(finder(), ";");
-}
-
-Test(comments, backslashn)
-{
-    io_push("   if ;  echo\n; test;");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "echo");
-    cr_assert_str_eq(finder(), "\n");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "test");
-    cr_assert_str_eq(finder(), ";");
+    main_to_stream(3, "./42sh echo toto");
+    struct ast *e = NULL;
+    gr_input(&e);
+    echo_function(e);
+    cr_assert_stdout_eq_str("toto\n");
 }
