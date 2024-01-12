@@ -27,6 +27,7 @@ void exec_echo(struct ast *ast)
     fflush(stdout);
 }
 
+// this creates the char ** needed for the arguments of execvp
 char **create_command(struct ast *ast)
 {
     size_t size_array = 1;
@@ -41,7 +42,7 @@ char **create_command(struct ast *ast)
     return array_arg;
 }
 
-int basic_function(struct ast *ast)
+int external_bin(struct ast *ast)
 {
     int pid = fork();
     if (pid == 0)
@@ -69,9 +70,9 @@ int basic_function(struct ast *ast)
     return 0;
 }
 
-void exec_basic_function(struct ast *ast)
+void exec_external_bin(struct ast *ast)
 {
-    if (basic_function(ast) == -1)
+    if (external_bin(ast) == -1)
     {
         // TODO handle error
         return;
@@ -87,7 +88,7 @@ void exec_command(struct ast *ast)
         exec_echo(ast);
         break;
     default:
-        exec_basic_function(ast);
+        exec_external_bin(ast);
         break;
     }
 }
