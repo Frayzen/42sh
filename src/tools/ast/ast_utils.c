@@ -1,5 +1,7 @@
 #include "tools/ast/ast.h"
+
 #define _POSIX_C_SOURCE 200809L
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,6 +10,7 @@
 
 char *g_ast_types[] = {
     [AST_COMMAND] = "CMD",
+    [AST_LIST] = "LST",
     [AST_TOKEN] = "",
 };
 
@@ -58,7 +61,7 @@ void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
     }
     static char buf[1024];
     node_to_str(buf, ast_root);
-    printf("%s\n", buf);
+    printf("%s$\n", buf);
     for (int i = 0; i < ast_root->nb_children; i++)
     {
         if (i == ast_root->nb_children - 1)
@@ -104,6 +107,7 @@ void ast_to_str_rec(struct ast *ast, char *buf, size_t *id)
     *id = *id + 1;
     buf[*id] = '\0';
 }
+
 char *ast_to_str(struct ast *ast)
 {
     static char buf[4096] = { 0 };

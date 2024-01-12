@@ -1,11 +1,12 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include "execs.h"
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
-void echo_function(struct ast *ast)
+
+void exec_echo(struct ast *ast)
 {
-    assert(ast && ast->type == AST_COMMAND);
     if (ast->children[0]->token->type == ECHO)
     {
         for (int i = 1; i < ast->nb_children - 1; i++)
@@ -16,4 +17,18 @@ void echo_function(struct ast *ast)
             printf("%s\n", ast->children[ast->nb_children - 1]->token->value);
     }
     fflush(stdout);
+}
+
+void exec_command(struct ast *ast)
+{
+    assert(ast && ast->type == AST_COMMAND);
+    assert(ast->nb_children != 0);
+    switch (ast->children[0]->token->type)
+    {
+    case ECHO:
+        exec_echo(ast);
+        break;
+    default:
+        break;
+    }
 }
