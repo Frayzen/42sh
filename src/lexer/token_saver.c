@@ -1,4 +1,9 @@
+#include <stddef.h>
+#include <stdio.h>
+
+#include "lexer/tokenizer.h"
 #include "tools/ring_buffer/ring_buffer.h"
+#include "tools/token/token.h"
 
 static struct ringbuffer *get_buffer(void)
 {
@@ -10,14 +15,8 @@ static struct ringbuffer *get_buffer(void)
 
 void next(void)
 {
-    static struct token tok = {
-        .value = "if",
-        .type = IF,
-        .terminal = false,
-    };
-    // TODO push next_token
-    union ringitem item = { .token = &tok };
-    rb_push(get_buffer(), item);
+    union ringitem next = { .token = next_token() };
+    rb_push(get_buffer(), next);
 }
 
 struct token *tok_peek(void)
@@ -31,12 +30,20 @@ struct token *tok_peek(void)
     return res->token;
 }
 
+bool tok_pop_clean(void)
+{
+    struct token *tok = tok_peek();
+    if (!rb_pop(get_buffer()))
+        return false;
+    destroy_token(tok);
+    return true;
+}
+
 bool tok_pop(void)
 {
     return rb_pop(get_buffer());
 }
 
-// TODO call this on program exit
 void clean_token_saver(void)
 {
     rb_destroy(get_buffer());

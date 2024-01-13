@@ -10,7 +10,7 @@ static struct ringbuffer *get_buffer(void)
     return rb;
 }
 
-void io_put_chars(char *str, size_t len)
+void io_push_chars(char *str, size_t len)
 {
     struct ringbuffer *rb = get_buffer();
     union ringitem item;
@@ -23,12 +23,17 @@ void io_put_chars(char *str, size_t len)
 
 void io_push(char *str)
 {
-    io_put_chars(str, strlen(str));
+    if (!str)
+        return;
+    io_push_chars(str, strlen(str));
 }
 
 char io_peek(void)
 {
     struct ringbuffer *rb = get_buffer();
+    union ringitem *item = rb_peek(rb);
+    if (!item)
+        return '\0';
     return rb_peek(rb)->c;
 }
 
@@ -37,8 +42,7 @@ bool io_pop(void)
     return rb_pop(get_buffer());
 }
 
-// TODO call this on program exit
-void clean_bakend_saver(void)
+void clean_backend_saver(void)
 {
     rb_destroy(get_buffer());
 }

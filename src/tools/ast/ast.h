@@ -2,19 +2,29 @@
 #define AST_H
 #include "tools/token/token.h"
 
+enum ast_type
+{
+    AST_TOKEN,
+    AST_COMMAND,
+    AST_LIST,
+    AST_IF
+};
+
 struct ast
 {
+    enum ast_type type;
     struct token *token;
-    struct ast **children;
     int nb_children;
+    struct ast **children;
 };
 
 /***
  * Create a ast node structure with no children
- * @param token the token associated to the ast node
+ * @param ast_type the type of the associated ast
+ * @param token the token associated to the ast node, NULL if not AST_TOKEN
  * return malloced ast structure
  */
-struct ast *init_ast(struct token *token);
+struct ast *init_ast(enum ast_type, struct token *token);
 
 /***
  * Recurisvely free an ast structure

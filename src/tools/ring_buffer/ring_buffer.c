@@ -1,7 +1,9 @@
 #include "ring_buffer.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
+#include "exit/exit.h"
 #include "tools/token/token.h"
 
 void rb_push(struct ringbuffer *rb, union ringitem item)
@@ -9,11 +11,13 @@ void rb_push(struct ringbuffer *rb, union ringitem item)
     size_t available = rb->ring_size - rb->cur_size;
     if (available == 0)
     {
-        // TODO error handling
+        print_error(RING_BF_FULL);
         return;
     }
     *(rb->end) = item;
     rb->end++;
+    if (rb->end == rb->value + rb->ring_size)
+        rb->end = rb->value;
     rb->cur_size++;
 }
 
@@ -37,16 +41,18 @@ bool rb_pop(struct ringbuffer *rb)
 
 void rb_destroy(struct ringbuffer *rb)
 {
-    union ringitem *item = NULL;
     switch (rb->type)
     {
     case RB_TOKEN:
-        for (item = rb->begin; item != rb->end; item++)
-            destroy_token(item->token);
+        for (size_t i = 0; i < rb->cur_size; i++)
+        {
+            destroy_token(rb->begin[i].token);
+        }
         break;
     default:
         break;
     }
+    free(rb->value);
     free(rb);
 }
 struct ringbuffer *rb_create(enum ringtype type, size_t ring_size)
