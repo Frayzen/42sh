@@ -42,6 +42,8 @@ void print_echo(struct ast *ast, int i, bool interpret_bslash)
                 printf("%c", content[id]);
             id++;
         }
+        if (ast->nb_children - 1 != i)
+            printf(" ");
     }
 }
 
