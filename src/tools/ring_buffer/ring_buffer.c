@@ -40,16 +40,18 @@ bool rb_pop(struct ringbuffer *rb)
 
 void rb_destroy(struct ringbuffer *rb)
 {
-    union ringitem *item = NULL;
     switch (rb->type)
     {
     case RB_TOKEN:
-        for (item = rb->begin; item != rb->end; item++)
-            destroy_token(item->token);
+        for (size_t i = 0; i < rb->cur_size; i++)
+        {
+            destroy_token(rb->begin[i].token);
+        }
         break;
     default:
         break;
     }
+    free(rb->value);
     free(rb);
 }
 struct ringbuffer *rb_create(enum ringtype type, size_t ring_size)

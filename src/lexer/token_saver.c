@@ -34,7 +34,6 @@ bool tok_pop(void)
     return rb_pop(get_buffer());
 }
 
-// TODO call this on program exit
 void clean_token_saver(void)
 {
     rb_destroy(get_buffer());

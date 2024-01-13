@@ -84,9 +84,9 @@ char *str_maker(void)
             comments();
         else if (!IS_TERMINATING(c))
         {
-            pending = realloc(pending, size_pending + 1);
-            pending[size_pending] = c;
             size_pending++;
+            pending = realloc(pending, size_pending + 1);
+            pending[size_pending - 1] = c;
             pending[size_pending] = 0;
             if (c == ' ' || c == '\0')
             {

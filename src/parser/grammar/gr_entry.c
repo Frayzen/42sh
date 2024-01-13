@@ -1,9 +1,8 @@
-#include <stdio.h>
 
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "tools/ast/ast_utils.h"
+#include "tools/token/token.h"
 
 enum status gr_input(struct ast **ast)
 {
@@ -13,13 +12,13 @@ enum status gr_input(struct ast **ast)
         destroy_ast(*ast);
         return ERROR;
     }
-    if (!tok_peek()->terminal)
+    struct token *trm = tok_peek();
+    tok_pop();
+    if (!trm->terminal)
     {
-        printf("no terminal tok : %s\n", tok_peek()->value);
-        tok_pop();
         destroy_ast(*ast);
         return ERROR;
     }
-    tok_pop();
+    destroy_token(trm);
     return OK;
 }

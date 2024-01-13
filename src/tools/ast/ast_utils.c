@@ -8,7 +8,7 @@
 
 #include "ast_utils.h"
 
-char *g_ast_types[] = {
+const char *g_ast_types[] = {
     [AST_COMMAND] = "CMD",
     [AST_LIST] = "LST",
     [AST_TOKEN] = "",
@@ -34,10 +34,17 @@ struct ast *add_child(struct ast *parent, struct ast *child)
 int node_to_str(char *buf, struct ast *ast_root)
 {
     if (ast_root == NULL)
-        return sprintf(buf, "[NULL]");
+    {
+        strcpy(buf, "[NULL]");
+        return 6;
+    }
     if (ast_root->type == AST_TOKEN)
-        return sprintf(buf, "%s", ast_root->token->value);
-    return sprintf(buf, "%s", g_ast_types[ast_root->type]);
+    {
+        strcpy(buf, ast_root->token->value);
+        return strlen(ast_root->token->value);
+    }
+    strcpy(buf, g_ast_types[ast_root->type]);
+    return sizeof(g_ast_types[ast_root->type]);
 }
 
 void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,

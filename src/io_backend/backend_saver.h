@@ -35,8 +35,9 @@ char io_peek(void);
  * @see io_get_char() to get the current char value
  */
 bool io_pop(void);
+
 /***
- *
+ * Clean the memory saved by the buffer, the buffer is not usable after this
  */
 void clean_backend_saver(void);
 
