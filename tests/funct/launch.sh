@@ -16,15 +16,30 @@ execute() {
     res=$?
     dif_err=$(diff ours_err theirs_err)
     res_err=$?
+    toprint="┃"
     if [ $timeout -ne 0 -o $res -ne 0 -o $res_err -ne 0 ]; then
-        printf '[%b] ' "$FAILED"
-        echo "$modname"
+        toprint="$toprint$(printf '[%b] ' "$FAILED")"
+        toprint=$toprint$modname
+        if [ $timeout -ne 0 ]; then
+            toprint="$toprint - TIMEOUT"
+        fi
     else
-        printf '[%b] ' "$PASSED"
-        echo "$modname"
+        toprint="$toprint$(printf '[%b] ' "$PASSED")"
+        toprint="$toprint$modname"
     fi
+    nb_char=$(echo $toprint | wc -m)
+    nb_char=$((78-$nb_char))
+    echo -n $toprint
+    for _ in $(seq $nb_char); do
+        echo -n " "
+    done
+    echo "┃"
     # rm theirs ours code ours_err theirs_err
 }
+
+echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
+echo "┃                         FUNCTIONAL TEST                        ┃"
+echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
 
 test_dir=./tests
 for entry in "$test_dir"/*
@@ -32,6 +47,7 @@ do
     declare -u name
     name=$(basename "$entry")
     echo "[MODULE] $name"
+    echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
     save=0
     build=""
     modname=""
@@ -56,4 +72,5 @@ do
     if [ $save -eq 1 ]; then
         execute "$build" "$modname"
     fi
+    echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
 done
