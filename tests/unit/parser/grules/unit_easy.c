@@ -78,7 +78,6 @@ Test(conditions, simple_if_else)
     io_push("if true ; then echo ; elif true; then echo; else echo ; fi");
     struct ast *ast = NULL;
     cr_expect_eq(gr_input(&ast), OK);
-    // pretty_print_ast(ast);
     cr_expect_str_eq(ast_to_str(ast),
                      "LST{IF{LST{CMD{true}},LST{CMD{echo}},IF{LST{CMD{true}},"
                      "LST{CMD{echo}},LST{CMD{echo}}}}}");
@@ -91,7 +90,6 @@ Test(conditions, simple_if_elif_elif_else)
             "true; else echo ; fi");
     struct ast *ast = NULL;
     cr_expect_eq(gr_input(&ast), OK);
-    // pretty_print_ast(ast);
     cr_expect_str_eq(
         ast_to_str(ast),
         "LST{IF{LST{CMD{true}},LST{CMD{echo}},IF{LST{CMD{true}},LST{CMD{echo}},"

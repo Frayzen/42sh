@@ -11,14 +11,16 @@ enum status gr_input(struct ast **ast)
     if (state == ERROR)
     {
         destroy_ast(*ast);
-        return ERROR;
+        goto error;
     }
     if (!tok_peek()->terminal)
     {
         tok_pop();
-        destroy_ast(*ast);
-        return ERROR;
+        goto error;
     }
     tok_pop();
     return OK;
+error:
+    destroy_ast(*ast);
+    return ERROR;
 }

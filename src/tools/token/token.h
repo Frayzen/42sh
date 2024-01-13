@@ -2,6 +2,8 @@
 #define TOKEN_H
 #include <stdbool.h>
 
+#define IS_BUILTIN(t) ((t)->type >= T_TRUE && (t)->type <= ECHO)
+
 // /!\ Do not add gaps inside of this enum (see TOK_TYPE_LT)
 enum token_type
 {
@@ -16,7 +18,7 @@ enum token_type
     ELIF,
     ELSE,
     FI,
-    // builtins
+    // builtins /!\ leave T_TRUE as first one and ECHO as last one
     T_TRUE,
     T_FALSE,
     ECHO,
@@ -58,11 +60,5 @@ void print_token(struct token *token);
  * @return The lookup table
  */
 const char **toktype_lookup(void);
-
-/***
- * @param token: the toekn to check
- * @return if the token is one of the three builtins
- */
-bool is_builtin(struct token *token);
 
 #endif // !TOKEN_H

@@ -14,7 +14,10 @@ enum status gr_list(struct ast **ast)
     struct ast *ast_list = init_ast(AST_LIST, NULL);
     enum status state = gr_and_or(&ast_list);
     if (state == ERROR)
+    {
+        destroy_ast(ast_list);
         return ERROR;
+    }
     while (state == OK)
     {
         if (tok_peek()->type != SEMI_COLON)

@@ -9,7 +9,7 @@
 enum status gr_simple_command(struct ast **ast)
 {
     struct token *token = tok_peek();
-    if (!is_builtin(token) && token->type != WORD)
+    if (!IS_BUILTIN(token) && token->type != WORD)
         return ERROR;
     tok_pop();
     struct ast *ast_cmd = init_ast(AST_COMMAND, NULL);

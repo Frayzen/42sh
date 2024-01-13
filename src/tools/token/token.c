@@ -63,9 +63,3 @@ const char **toktype_lookup(void)
     };
     return lookup_table;
 }
-
-bool is_builtin(struct token *token)
-{
-    enum token_type t = token->type;
-    return t == ECHO || t == T_TRUE || t == T_FALSE;
-}
