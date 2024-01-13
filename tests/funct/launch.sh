@@ -5,6 +5,7 @@ path_42sh=../../src/42sh
 
 PASSED="\e[00;32mPASSED\e[0m"
 FAILED="\e[00;31mFAILED\e[0m"
+TIMEOUT="\e[00;31mTIMEOUT\e[0m"
 
 execute() {
     modname=$2
@@ -17,18 +18,20 @@ execute() {
     dif_err=$(diff ours_err theirs_err)
     res_err=$?
     toprint="┃"
+    toadd=0
     if [ $timeout -ne 0 -o $res -ne 0 -o $res_err -ne 0 ]; then
         toprint="$toprint$(printf '[%b] ' "$FAILED")"
-        toprint=$toprint$modname
         if [ $timeout -ne 0 ]; then
-            toprint="$toprint - TIMEOUT"
+            toprint="$toprint$(printf ' (%b) ' "$TIMEOUT")"
+            toadd=$(($toadd+12))
         fi
+        toprint=$toprint$modname
     else
         toprint="$toprint$(printf '[%b] ' "$PASSED")"
         toprint="$toprint$modname"
     fi
     nb_char=$(echo $toprint | wc -m)
-    nb_char=$((78-$nb_char))
+    nb_char=$((78-$nb_char+$toadd))
     echo -n $toprint
     for _ in $(seq $nb_char); do
         echo -n " "
