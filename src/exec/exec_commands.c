@@ -92,6 +92,7 @@ int external_bin(struct ast *ast)
     {
         char **array_arg = create_command(ast);
         int resp = execvp(array_arg[0], array_arg);
+        free(array_arg);
         if (resp)
         {
             // TODO handle errors

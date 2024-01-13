@@ -42,8 +42,7 @@ bool io_pop(void)
     return rb_pop(get_buffer());
 }
 
-// TODO call this on program exit
-void clean_bakend_saver(void)
+void clean_backend_saver(void)
 {
     rb_destroy(get_buffer());
 }

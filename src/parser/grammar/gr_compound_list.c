@@ -9,23 +9,32 @@
 
 enum status gr_compound_list(struct ast **ast)
 {
-    if (tok_peek()->terminal)
-        return OK;
-    struct ast *ast_list = init_ast(AST_LIST, NULL);
-    enum status state = gr_and_or(&ast_list);
+    while (tok_peek()->type == NEWLINE)
+        tok_pop_clean();
+    struct ast *ls_ast = init_ast(AST_LIST, NULL);
+    enum status state = gr_and_or(&ls_ast);
     if (state == ERROR)
-    {
-        destroy_ast(ast_list);
-        return ERROR;
-    }
-    if (tok_peek()->type == SEMI_COLON)
-        tok_pop();
+        goto error;
     while (state == OK)
     {
-        if (tok_peek()->type != NEWLINE)
+        if (tok_peek()->type != NEWLINE && tok_peek()->type != SEMI_COLON)
             break;
-        tok_pop();
+        tok_pop_clean();
+        while (tok_peek()->type == NEWLINE)
+            tok_pop_clean();
+        state = gr_and_or(&ls_ast);
     }
-    *ast = add_child(*ast, ast_list);
+
+    if (tok_peek()->type == SEMI_COLON)
+        tok_pop_clean();
+
+    while (tok_peek()->type == NEWLINE)
+        tok_pop_clean();
+
+    *ast = add_child(*ast, ls_ast);
     return OK;
+
+error:
+    destroy_ast(ls_ast);
+    return ERROR;
 }

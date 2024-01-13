@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <stdio.h>
 
 #include "lexer/token_saver.h"
 #include "rules.h"
@@ -12,20 +13,20 @@ enum status gr_else(struct ast **ast)
         return OK;
     if (token->type == ELSE)
     {
-        tok_pop();
+        tok_pop_clean();
         return gr_compound_list(ast);
     }
     if (token->type != ELIF)
     {
         return ERROR;
     }
-    tok_pop();
+    tok_pop_clean();
     struct ast *elif_ast = init_ast(AST_IF, NULL);
     if (gr_compound_list(&elif_ast) == ERROR)
         goto error;
     if (tok_peek()->type != THEN)
         goto error;
-    tok_pop();
+    tok_pop_clean();
     if (gr_compound_list(&elif_ast) == ERROR)
         goto error;
     if (tok_peek()->type == ELSE || tok_peek()->type == ELIF)

@@ -33,10 +33,17 @@ struct ast *add_child(struct ast *parent, struct ast *child)
 int node_to_str(char *buf, struct ast *ast_root)
 {
     if (ast_root == NULL)
-        return sprintf(buf, "[NULL]");
+    {
+        strcpy(buf, "[NULL]");
+        return 6;
+    }
     if (ast_root->type == AST_TOKEN)
-        return sprintf(buf, "%s", ast_root->token->value);
-    return sprintf(buf, "%s", g_ast_types[ast_root->type]);
+    {
+        strcpy(buf, ast_root->token->value);
+        return strlen(ast_root->token->value);
+    }
+    strcpy(buf, g_ast_types[ast_root->type]);
+    return strlen(g_ast_types[ast_root->type]);
 }
 
 void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
@@ -58,7 +65,7 @@ void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
         else
             printf("╠══");
     }
-    static char buf[1024];
+    static char buf[1024] = { 0 };
     node_to_str(buf, ast_root);
     printf("%s$\n", buf);
     for (int i = 0; i < ast_root->nb_children; i++)
@@ -88,10 +95,9 @@ void pretty_print_ast(struct ast *ast)
 
 void ast_to_str_rec(struct ast *ast, char *buf, size_t *id)
 {
-    if (!ast)
-        return;
     *id += node_to_str(buf + *id, ast);
-    if (ast->nb_children == 0)
+    buf[*id] = '\0';
+    if (!ast || ast->nb_children == 0)
         return;
     buf[*id] = '{';
     (*id)++;

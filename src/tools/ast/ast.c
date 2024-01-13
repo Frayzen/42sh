@@ -20,5 +20,6 @@ void destroy_ast(struct ast *ast)
         destroy_token(ast->token);
     for (int i = 0; i < ast->nb_children; i++)
         destroy_ast(ast->children[i]);
+    free(ast->children);
     free(ast);
 }
