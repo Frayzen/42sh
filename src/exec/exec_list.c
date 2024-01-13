@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "execs.h"
+#include "exit/exit.h"
 #include "tools/ast/ast.h"
 
 int exec_list(struct ast *ast)
@@ -18,7 +19,7 @@ int exec_list(struct ast *ast)
             ret = exec_condition(ast->children[i]);
             break;
         default:
-            // TODO handle error
+            print_error(LIST_NOT_FOUND);
             return 1;
         }
     return ret;

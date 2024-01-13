@@ -13,6 +13,7 @@ enum error_type
     FILE_COULDNT_OPEN,
     ADD_CHILD_ERROR,
     FORK_ERROR,
+    LIST_NOT_FOUND,
 };
 
 /***
