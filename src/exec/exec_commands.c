@@ -9,6 +9,7 @@
 #include <unistd.h>
 
 #include "execs.h"
+#include "exit/exit.h"
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
 
@@ -54,8 +55,7 @@ int external_bin(struct ast *ast)
         free(array_arg);
         if (resp) // false
         {
-            // execvp failed -> false
-            // TODO handle errors
+            print_error(EXECVP_FAILED);
             return 1;
         }
         else
@@ -66,8 +66,6 @@ int external_bin(struct ast *ast)
             if (WIFEXITED(returncode))
                 code = WEXITSTATUS(returncode);
             if (code == 1)
-                // child process failed
-                // TODO handle error
                 return 1;
             return 0;
         }
@@ -77,7 +75,10 @@ int external_bin(struct ast *ast)
 
 int exec_external_bin(struct ast *ast)
 {
-    return external_bin(ast);
+    int ret = external_bin(ast);
+    if (ret)
+        print_error(FORK_ERROR);
+    return ret;
 }
 int exec_command(struct ast *ast)
 {

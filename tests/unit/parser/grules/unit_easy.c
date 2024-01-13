@@ -113,6 +113,17 @@ Test(conditions, compound_smpl_if2)
     destroy_ast(ast);
 }
 
+Test(conditions, compound_smpl_if2_with_nwline)
+{
+    io_push("if false\n true\n then\n echo a\n echo b ; echo c\nfi");
+    struct ast *ast = NULL;
+    cr_expect_eq(gr_input(&ast), OK);
+    cr_expect_str_eq(ast_to_str(ast),
+                     "LST{IF{LST{CMD{false},CMD{true}},LST{CMD{echo,a},CMD{"
+                     "echo,b},CMD{echo,c}}}}");
+    destroy_ast(ast);
+}
+
 Test(conditions, compound_smpl_elif2)
 {
     io_push("if false\n true\n then\n echo a\n echo b ; echo c\n elif true\n "
