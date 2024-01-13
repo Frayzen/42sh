@@ -1,6 +1,8 @@
 SUBDIRS = src \
 		  tests/unit
 
+all:42sh
+
 42sh: src/42sh
 
 src/42sh: .FORCE
@@ -15,8 +17,10 @@ funct: 42sh .FORCE
 	chmod +x ./tests/funct/launch.sh
 	./tests/funct/launch.sh
 
+check: unit funct
+
 clean-local:
-	$(RM) 42sh unit funct
+	$(RM) src/42sh unit
 .FORCE:
 
-.phony: unit funct 42sh .FORCE
+.phony: unit funct 42sh .FORCE check
