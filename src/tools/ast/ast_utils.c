@@ -8,11 +8,10 @@
 
 #include "ast_utils.h"
 
-const char *g_ast_types[] = {
-    [AST_COMMAND] = "CMD",
-    [AST_LIST] = "LST",
-    [AST_TOKEN] = "",
-};
+char *g_ast_types[] = { [AST_COMMAND] = "CMD",
+                        [AST_LIST] = "LST",
+                        [AST_TOKEN] = "",
+                        [AST_IF] = "IF" };
 
 struct ast *add_child(struct ast *parent, struct ast *child)
 {
