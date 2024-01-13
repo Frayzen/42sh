@@ -53,7 +53,7 @@ char *quotes(void)
         pending[size - 1] = c;
         c = io_peek();
     }
-    pending = realloc(pending, size+1);
+    pending = realloc(pending, size + 1);
     pending[size] = '\0';
     io_pop();
     return pending;

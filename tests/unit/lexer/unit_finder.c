@@ -6,7 +6,10 @@
 #include "io_backend/backend_saver.h"
 #include "lexer/finder.h"
 
-#define assert_and_clear(Val) val = finder(); cr_assert_str_eq(val, (Val)); free(val);
+#define assert_and_clear(Val)                                                  \
+    val = finder();                                                            \
+    cr_assert_str_eq(val, (Val));                                              \
+    free(val);
 
 char *val = NULL;
 

@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     main_to_stream(argc, argv);
     struct ast *ast = NULL;
     gr_input(&ast);
-    exec_entry(ast);
+    /* exec_entry(ast); */
     pretty_print_ast(ast);
     printf("%s\n", ast_to_str(ast));
     fflush(NULL);

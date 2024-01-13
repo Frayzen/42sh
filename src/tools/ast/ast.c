@@ -1,7 +1,6 @@
 #include "ast.h"
 
 #include <stdlib.h>
-#include "token/token.h"
 
 #include "token/token.h"
 

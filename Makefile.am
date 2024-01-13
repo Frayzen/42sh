@@ -10,6 +10,7 @@ src/42sh: .FORCE
 unit: src/42sh .FORCE
 	make -C tests/unit
 	mv tests/unit/unit .
+	./unit --verbose
 
 funct: src/42sh .FORCE
 	make -C tests/unit

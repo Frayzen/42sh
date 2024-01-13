@@ -95,10 +95,9 @@ void pretty_print_ast(struct ast *ast)
 
 void ast_to_str_rec(struct ast *ast, char *buf, size_t *id)
 {
-    if (!ast)
-        return;
     *id += node_to_str(buf + *id, ast);
-    if (ast->nb_children == 0)
+    buf[*id] = '\0';
+    if (!ast || ast->nb_children == 0)
         return;
     buf[*id] = '{';
     (*id)++;

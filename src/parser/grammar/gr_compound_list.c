@@ -19,12 +19,12 @@ enum status gr_compound_list(struct ast **ast)
         return ERROR;
     }
     if (tok_peek()->type == SEMI_COLON)
-        tok_pop();
+        tok_pop_clean();
     while (state == OK)
     {
         if (tok_peek()->type != NEWLINE)
             break;
-        tok_pop();
+        tok_pop_clean();
     }
     *ast = add_child(*ast, ast_list);
     return OK;
