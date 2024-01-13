@@ -32,4 +32,7 @@ echo -e -E -e 'hello world \n'
 ###Echo with n flag
 echo -n 'hello world'
 
+###Echo with quotes
+echo -n ' ieufo ie ofijeo ifj ' "  uhefu eiuf heiu hfiue "
+
 

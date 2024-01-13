@@ -8,11 +8,6 @@ if false; then
     echo ok
 fi
 
-###Basic if false
-if false; then
-    echo ok
-fi
-
 ###Basic if else
 if false; then
     echo ok
@@ -58,4 +53,27 @@ elif false; then
     echo ok
 else
     echo not
+fi
+
+###Lots of elif true midle
+if false; then
+    echo ok
+elif false; then
+    echo ok
+elif false; then
+    echo ok
+elif false; true; then
+    echo ok
+elif false; then
+    echo ok
+elif false; then
+    echo ok
+else
+    echo not
+fi
+
+
+###If error
+if ejfjoeij; then
+    echo ok
 fi

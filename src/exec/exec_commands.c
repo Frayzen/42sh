@@ -110,9 +110,7 @@ int external_bin(struct ast *ast)
             int code = 0;
             if (WIFEXITED(returncode))
                 code = WEXITSTATUS(returncode);
-            if (code == 1)
-                return 1;
-            return 0;
+            return code;
         }
     }
     return 0;
