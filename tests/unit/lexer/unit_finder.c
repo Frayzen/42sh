@@ -89,3 +89,12 @@ Test(comments, quotes_empyt)
     assert_and_clear("\0");
     clean(NULL);
 }
+
+Test(comments, backslashn_fi)
+{
+    io_push("\nfi");
+    assert_and_clear("\n");
+    assert_and_clear("fi");
+    assert_and_clear("\0");
+    clean(NULL);
+}
