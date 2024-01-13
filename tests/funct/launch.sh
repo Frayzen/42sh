@@ -8,10 +8,11 @@ FAILED="\e[00;31mFAILED\e[0m"
 
 execute() {
     modname=$2
-    code=$(echo -e "$1")
-    ours=$($path_42sh -c "$(echo -e "$code")")
-    theirs=$(bash --posix -c "$(echo -e "$code")")
-    dif=$(diff  <(echo "$ours" ) <(echo "$theirs"))
+    code=$(echo "$1")
+    $path_42sh -c "$(echo "$code")" > ours
+    theirs=$(bash --posix -c "$(echo "$code")")
+    echo "$theirs" > theirs
+    dif=$(diff ours theirs)
     res=$?
     if [ $res -ne 0 ]; then
         printf '[%b] ' "$FAILED"
@@ -20,6 +21,7 @@ execute() {
         printf '[%b] ' "$PASSED"
         echo "$modname"
     fi
+    rm theirs ours
 }
 
 test_dir=./tests
