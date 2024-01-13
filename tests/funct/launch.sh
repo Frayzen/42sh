@@ -1,5 +1,6 @@
 #!/bin/sh
 cd $(dirname "$0")
+
 path_42sh=../../42sh
 
 PASSED="\e[00;32mPASSED\e[0m"
