@@ -2,12 +2,14 @@
 #define TOKEN_H
 #include <stdbool.h>
 
+#define IS_BUILTIN(t) ((t)->type >= T_TRUE && (t)->type <= ECHO)
+
 // /!\ Do not add gaps inside of this enum (see TOK_TYPE_LT)
 enum token_type
 {
     // end of instruction
-    NEWLINE = 0, // for is_terminating_char funciton
-    BSZERO = 1, // for is_terminating_char funciton
+    NEWLINE,
+    BSZERO,
     SEMI_COLON,
 
     // condition
@@ -15,16 +17,15 @@ enum token_type
     THEN,
     ELIF,
     ELSE,
-    ECHO,
     FI,
-    // builtins
+    // builtins /!\ leave T_TRUE as first one and ECHO as last one
     T_TRUE,
     T_FALSE,
+    ECHO,
     // wildcard
     QUOTE,
     // terminals
     WORD,
-    TERMINAL,
 };
 
 struct token

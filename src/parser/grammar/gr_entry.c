@@ -9,17 +9,12 @@ enum status gr_input(struct ast **ast)
 {
     enum status state = gr_list(ast);
     if (state == ERROR)
-    {
-        destroy_ast(*ast);
-        return ERROR;
-    }
+        goto error;
     if (!tok_peek()->terminal)
-    {
-        printf("no terminal tok : %s\n", tok_peek()->value);
-        tok_pop();
-        destroy_ast(*ast);
-        return ERROR;
-    }
+        goto error;
     tok_pop();
     return OK;
+error:
+    destroy_ast(*ast);
+    return ERROR;
 }

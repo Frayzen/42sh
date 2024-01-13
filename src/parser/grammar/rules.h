@@ -63,4 +63,35 @@ enum status gr_and_or(struct ast **ast);
 
 enum status gr_list(struct ast **ast);
 
+/***
+ * Grammar rule for compound lists
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+
+enum status gr_compound_list(struct ast **ast);
+
+/***
+ * Grammar rule for elif
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+
+enum status gr_else(struct ast **ast);
+
+/***
+ * Grammar rule for if
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+
+enum status gr_if(struct ast **ast);
+
+/***
+ * Grammar rule for shell comand
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_shell_cmd(struct ast **ast);
+
 #endif /* !GRULES_H */

@@ -4,12 +4,13 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
+#include "tools/token/token.h"
 
 enum status gr_simple_command(struct ast **ast)
 {
     struct token *token = tok_peek();
-    if (token->terminal)
-        return OK;
+    if (!IS_BUILTIN(token) && token->type != WORD)
+        return ERROR;
     tok_pop();
     struct ast *ast_cmd = init_ast(AST_COMMAND, NULL);
     struct ast *new_ast = init_ast(AST_TOKEN, token);

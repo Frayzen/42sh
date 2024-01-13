@@ -7,7 +7,7 @@
 #include "tools/ast/ast_utils.h"
 #include "tools/token/token.h"
 
-enum status gr_list(struct ast **ast)
+enum status gr_compound_list(struct ast **ast)
 {
     if (tok_peek()->terminal)
         return OK;
@@ -18,17 +18,14 @@ enum status gr_list(struct ast **ast)
         destroy_ast(ast_list);
         return ERROR;
     }
-    while (state == OK)
-    {
-        if (tok_peek()->type != SEMI_COLON)
-        {
-            break;
-        }
-        tok_pop();
-        state = gr_and_or(&ast_list);
-    }
     if (tok_peek()->type == SEMI_COLON)
         tok_pop();
+    while (state == OK)
+    {
+        if (tok_peek()->type != NEWLINE)
+            break;
+        tok_pop();
+    }
     *ast = add_child(*ast, ast_list);
     return OK;
 }
