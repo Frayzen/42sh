@@ -19,6 +19,10 @@ execute() {
     res_err=$?
     toprint="┃"
     toadd=0
+    res_err=0
+    if [ -s theirs_err -a ! -s ours_err ]; then
+        res_err=1
+    fi
     if [ $timeout -ne 0 -o $res -ne 0 -o $res_err -ne 0 ]; then
         toprint="$toprint$(printf '[%b] ' "$FAILED")"
         if [ $timeout -ne 0 ]; then
@@ -37,7 +41,7 @@ execute() {
         echo -n " "
     done
     echo "┃"
-    # rm theirs ours code ours_err theirs_err
+    rm theirs ours code ours_err theirs_err
 }
 
 echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"

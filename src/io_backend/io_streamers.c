@@ -6,6 +6,7 @@
 #include <string.h>
 #include <sys/types.h>
 
+#include "exit/exit.h"
 #include "io_backend/backend_saver.h"
 
 void main_to_stream(int argc, char **argv)
@@ -17,8 +18,7 @@ void main_to_stream(int argc, char **argv)
     else if (argc == 3)
         io_streamer_string(argc, argv);
     else
-        // TODO error handling
-        return;
+        print_error(ARG_ERROR);
 }
 
 void io_streamer_file(char *path_to_file)
@@ -26,7 +26,7 @@ void io_streamer_file(char *path_to_file)
     FILE *file = fopen(path_to_file, "r");
     if (!file)
     {
-        // TODO Error handling
+        print_error(FILE_COULDNT_OPEN);
         return;
     }
     fseek(file, 0, SEEK_END);
@@ -34,7 +34,7 @@ void io_streamer_file(char *path_to_file)
     char *buffer = malloc(length_of_file);
     if (!buffer)
     {
-        // TODO Error handling
+        print_error(MALLOC_NULL);
         return;
     }
     fseek(file, 0, SEEK_SET);

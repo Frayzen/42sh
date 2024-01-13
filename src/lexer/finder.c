@@ -68,6 +68,8 @@ char *str_maker(void)
     pending[0] = c;
     pending[++size_pending] = 0;
     io_pop();
+    if (c == '\n')
+        return pending;
     while (!check_reserved(pending))
     {
         c = io_peek();
@@ -91,7 +93,9 @@ char *str_maker(void)
             }
         }
         else
+        {
             return pending;
+        }
         io_pop();
     }
     return pending;
@@ -111,7 +115,9 @@ char *finder(void)
         return finder();
     }
     if (c == '\'')
+    {
         return quotes();
+    }
     return str_maker();
 }
 

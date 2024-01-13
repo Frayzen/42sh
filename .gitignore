@@ -9,4 +9,5 @@
 !.clang-format
 !.gitignore
 !.github/
+autom4te.cache
 test.c

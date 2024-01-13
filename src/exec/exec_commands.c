@@ -9,6 +9,7 @@
 #include <unistd.h>
 
 #include "execs.h"
+#include "exit/exit.h"
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
 
@@ -98,7 +99,7 @@ int external_bin(struct ast *ast)
         free(array_arg);
         if (resp)
         {
-            // TODO handle errors
+            print_error(EXECVP_FAILED);
             return -1;
         }
         else
@@ -109,7 +110,6 @@ int external_bin(struct ast *ast)
             if (WIFEXITED(returncode))
                 code = WEXITSTATUS(returncode);
             if (code == -1)
-                // TODO handle error
                 return -1;
             return 0;
         }
@@ -121,7 +121,7 @@ void exec_external_bin(struct ast *ast)
 {
     if (external_bin(ast) == -1)
     {
-        // TODO handle error
+        print_error(FORK_ERROR);
         return;
     }
 }
