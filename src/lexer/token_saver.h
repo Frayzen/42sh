@@ -11,18 +11,16 @@
 struct token *tok_peek(void);
 
 /***
- * Jump to the next token of the buffer while destroying the current
- * @return true if the jump happened, false if the buffer is empty
- * @see tok_peek() to get the current token value
- */
-bool tok_pop_clean(void);
-
-/***
- * Jump to the next token of the buffer
+ * Jump to the next token of the buffer and destroy current if not a builtin and
+ * not a word
  * @return true if the jump happened, false if the buffer is empty
  * @see tok_peek() to get the current token value
  */
 bool tok_pop(void);
+
+
+bool tok_dirty_pop(void);
+
 
 /***
  * Clean the memory saved by the buffer, the buffer is not usable after this

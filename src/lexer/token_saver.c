@@ -30,18 +30,19 @@ struct token *tok_peek(void)
     return res->token;
 }
 
-bool tok_pop_clean(void)
+bool tok_dirty_pop(void)
 {
-    struct token *tok = tok_peek();
-    if (!rb_pop(get_buffer()))
-        return false;
-    destroy_token(tok);
-    return true;
+    return rb_pop(get_buffer());
 }
 
 bool tok_pop(void)
 {
-    return rb_pop(get_buffer());
+    struct token *tok = tok_peek();
+    if (!rb_pop(get_buffer()))
+        return false;
+    if (!IS_BUILTIN(tok) && tok->type != WORD)
+        destroy_token(tok);
+    return true;
 }
 
 void clean_token_saver(void)
