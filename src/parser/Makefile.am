@@ -8,6 +8,10 @@ libparser_a_SOURCES = \
 	grammar/gr_pipeline.c \
 	grammar/gr_and_or.c \
 	grammar/gr_list.c \
+	grammar/gr_if.c \
+	grammar/gr_shell_cmd.c \
+	grammar/gr_compound_list.c \
+	grammar/gr_else.c \
 	grammar/rules.h
 libparser_a_CPPFLAGS = -I$(top_srcdir)/src
 libparser_a_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic
