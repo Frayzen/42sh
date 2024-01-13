@@ -66,7 +66,6 @@ Test(conditions, simple_if)
     io_push("if true ; then echo kaka ; fi");
     struct ast *ast = NULL;
     cr_expect_eq(gr_input(&ast), OK);
-
     cr_expect_str_eq(ast_to_str(ast),
                      "LST{IF{LST{CMD{true}},LST{CMD{echo,kaka}}}}");
 
@@ -94,5 +93,40 @@ Test(conditions, simple_if_elif_elif_else)
         ast_to_str(ast),
         "LST{IF{LST{CMD{true}},LST{CMD{echo}},IF{LST{CMD{true}},LST{CMD{echo}},"
         "IF{LST{CMD{false}},LST{CMD{true}},LST{CMD{echo}}}}}}");
+    destroy_ast(ast);
+}
+
+Test(conditions, compound_smpl_if1)
+{
+    io_push("if false; true; then \n echo a \n echo b; echo c; \n fi");
+    struct ast *ast = NULL;
+    cr_expect_eq(gr_input(&ast), OK);
+    cr_expect_str_eq(ast_to_str(ast),
+                     "LST{IF{LST{CMD{false},CMD{true}},LST{CMD{echo,a},CMD{"
+                     "echo,b},CMD{echo,c}}}}");
+    destroy_ast(ast);
+}
+
+Test(conditions, compound_smpl_if2)
+{
+    io_push("if false\n true\n then\n echo a\n echo b ; echo c\n fi");
+    struct ast *ast = NULL;
+    cr_expect_eq(gr_input(&ast), OK);
+    cr_expect_str_eq(ast_to_str(ast),
+                     "LST{IF{LST{CMD{false},CMD{true}},LST{CMD{echo,a},CMD{"
+                     "echo,b},CMD{echo,c}}}}");
+    destroy_ast(ast);
+}
+
+Test(conditions, compound_smpl_elif2)
+{
+    io_push("if false\n true\n then\n echo a\n echo b ; echo c\n elif true\n "
+            "then\n echo d\n else\n echo hello\n fi");
+    struct ast *ast = NULL;
+    cr_expect_eq(gr_input(&ast), OK);
+    cr_expect_str_eq(
+        ast_to_str(ast),
+        "LST{IF{LST{CMD{false},CMD{true}},LST{CMD{echo,a},CMD{echo,b},CMD{echo,"
+        "c}},IF{LST{CMD{true}},LST{CMD{echo,d}},LST{CMD{echo,hello}}}}}");
     destroy_ast(ast);
 }
