@@ -59,7 +59,7 @@ void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
         else
             printf("╠══");
     }
-    static char buf[1024];
+    static char buf[1024] = { 0 };
     node_to_str(buf, ast_root);
     printf("%s$\n", buf);
     for (int i = 0; i < ast_root->nb_children; i++)
