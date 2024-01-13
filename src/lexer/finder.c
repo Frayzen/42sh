@@ -6,7 +6,7 @@
 #include <string.h>
 
 #include "finder.h"
-
+#include <stdio.h>
 #define IS_TERMINATING(Char) ((Char) == '\n' || (Char) == ';')
 
 /***
@@ -72,13 +72,15 @@ char *str_maker(void)
         return pending;
     while (!check_reserved(pending))
     {
+        int space = 0;
         c = io_peek();
         if (c == ' ')
         {
+            space = 1;
             io_pop();
             return pending;
         }
-        if (c == '#')
+        if (c == '#' && space == 1)
             comments();
         else if (!IS_TERMINATING(c))
         {
@@ -104,12 +106,14 @@ char *str_maker(void)
 char *finder(void)
 {
     char c = io_peek();
+    int space = 0;
     if (c == ' ')
     {
+        space = 1;
         io_pop();
         return finder();
     }
-    if (c == '#')
+    if (c == '#' && space == 1)
     {
         comments();
         return finder();
