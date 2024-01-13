@@ -1,6 +1,7 @@
 #include <stddef.h>
 
 #include "execs.h"
+#include "exit/exit.h"
 #include "tools/ast/ast.h"
 
 void exec_entry(struct ast *ast)
@@ -13,7 +14,7 @@ void exec_entry(struct ast *ast)
         exec_list(ast);
         break;
     default:
-        // TODO handle error
+            print_error(GRAMMAR_ERROR_ENTRY);
         break;
     }
 }

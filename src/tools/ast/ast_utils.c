@@ -1,3 +1,4 @@
+#include "exit/exit.h"
 #include "tools/ast/ast.h"
 
 #define _POSIX_C_SOURCE 200809L
@@ -21,8 +22,7 @@ struct ast *add_child(struct ast *parent, struct ast *child)
                                sizeof(struct ast) * (parent->nb_children + 1));
     if (!parent->children)
     {
-        // TODO handler error
-        // TODO clear parent & child
+        print_error(ADD_CHILD_ERROR);
         return NULL;
     }
     parent->children[parent->nb_children] = child;
