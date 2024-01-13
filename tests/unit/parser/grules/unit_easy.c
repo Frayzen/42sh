@@ -47,11 +47,17 @@ Test(easy_rule, list_double_echo)
 
 Test(easy_rules, long_list)
 {
-    io_push("echo toto; echo tata; echo titi; echo foo; echo bar; echo baz; //    echo   biz    ; echo yipee yep; echo hello world !; echo 1 2 3 4 5 6");
+    io_push(
+        "echo toto; echo tata; echo titi; echo foo; echo bar; echo baz; //    "
+        "echo   biz    ; echo yipee yep; echo hello world !; echo 1 2 3 4 5 6");
     struct ast *ast = NULL;
     cr_expect_eq(gr_input(&ast), OK);
     cr_expect_not_null(ast);
-    cr_expect_str_eq(ast_to_str(ast), "LST{CMD{echo,toto},CMD{echo,tata},CMD{echo,titi},CMD{echo,foo},CMD{echo,bar},CMD{echo,baz},CMD{//,echo,biz},CMD{echo,yipee,yep},CMD{echo,hello,world,!},CMD{echo,1,2,3,4,5,6}}");
+    cr_expect_str_eq(ast_to_str(ast),
+                     "LST{CMD{echo,toto},CMD{echo,tata},CMD{echo,titi},CMD{"
+                     "echo,foo},CMD{echo,bar},CMD{echo,baz},CMD{//"
+                     ",echo,biz},CMD{echo,yipee,yep},CMD{echo,hello,world,!},"
+                     "CMD{echo,1,2,3,4,5,6}}");
     destroy_ast(ast);
 }
 
@@ -61,10 +67,10 @@ Test(conditions, simple_if)
     struct ast *ast = NULL;
     cr_expect_eq(gr_input(&ast), OK);
 
-    cr_expect_str_eq(ast_to_str(ast), "LST{IF{LST{CMD{true}},LST{CMD{echo,kaka}}}}");
+    cr_expect_str_eq(ast_to_str(ast),
+                     "LST{IF{LST{CMD{true}},LST{CMD{echo,kaka}}}}");
 
     destroy_ast(ast);
-
 }
 
 Test(conditions, simple_if_else)
@@ -73,16 +79,22 @@ Test(conditions, simple_if_else)
     struct ast *ast = NULL;
     cr_expect_eq(gr_input(&ast), OK);
     // pretty_print_ast(ast);
-    cr_expect_str_eq(ast_to_str(ast), "LST{IF{LST{CMD{true}},LST{CMD{echo}},IF{LST{CMD{true}},LST{CMD{echo}},LST{CMD{echo}}}}}");
+    cr_expect_str_eq(ast_to_str(ast),
+                     "LST{IF{LST{CMD{true}},LST{CMD{echo}},IF{LST{CMD{true}},"
+                     "LST{CMD{echo}},LST{CMD{echo}}}}}");
     destroy_ast(ast);
 }
 
 Test(conditions, simple_if_elif_elif_else)
 {
-    io_push("if true ; then echo ; elif true; then echo; elif false; then true; else echo ; fi");
+    io_push("if true ; then echo ; elif true; then echo; elif false; then "
+            "true; else echo ; fi");
     struct ast *ast = NULL;
     cr_expect_eq(gr_input(&ast), OK);
     // pretty_print_ast(ast);
-    cr_expect_str_eq(ast_to_str(ast), "LST{IF{LST{CMD{true}},LST{CMD{echo}},IF{LST{CMD{true}},LST{CMD{echo}},IF{LST{CMD{false}},LST{CMD{true}},LST{CMD{echo}}}}}}");
+    cr_expect_str_eq(
+        ast_to_str(ast),
+        "LST{IF{LST{CMD{true}},LST{CMD{echo}},IF{LST{CMD{true}},LST{CMD{echo}},"
+        "IF{LST{CMD{false}},LST{CMD{true}},LST{CMD{echo}}}}}}");
     destroy_ast(ast);
 }

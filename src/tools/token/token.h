@@ -7,7 +7,7 @@ enum token_type
 {
     // end of instruction
     NEWLINE,
-    BSZERO, 
+    BSZERO,
     SEMI_COLON,
 
     // condition
@@ -61,8 +61,8 @@ const char **toktype_lookup(void);
 
 /***
  * @param token: the toekn to check
- * @return if the token is one of the three builtins 
-*/ 
+ * @return if the token is one of the three builtins
+ */
 bool is_builtin(struct token *token);
 
 #endif // !TOKEN_H

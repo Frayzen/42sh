@@ -9,4 +9,3 @@ enum status gr_shell_cmd(struct ast **ast)
 {
     return gr_if(ast);
 }
-

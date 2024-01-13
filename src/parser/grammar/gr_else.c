@@ -28,7 +28,7 @@ enum status gr_else(struct ast **ast)
             return ERROR;
         if (tok_peek()->type == ELSE || tok_peek()->type == ELIF)
         {
-            if(gr_else(&elif_ast) == ERROR)
+            if (gr_else(&elif_ast) == ERROR)
                 return ERROR;
         }
         *ast = add_child(*ast, elif_ast);
