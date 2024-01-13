@@ -17,7 +17,7 @@ unit_SOURCES =\
 
 unit_CPPFLAGS = -I$(top_srcdir)/src -I.
 
-unit_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic -Wno-type-limits
+unit_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic -Wno-type-limits -fsanitize=address
 
 unit_LDADD =  \
 		$(LIBS) \

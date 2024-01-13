@@ -44,7 +44,7 @@ int node_to_str(char *buf, struct ast *ast_root)
         return strlen(ast_root->token->value);
     }
     strcpy(buf, g_ast_types[ast_root->type]);
-    return sizeof(g_ast_types[ast_root->type]);
+    return strlen(g_ast_types[ast_root->type]);
 }
 
 void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,

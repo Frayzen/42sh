@@ -43,22 +43,18 @@ void comments(void)
 char *quotes(void)
 {
     io_pop();
-    size_t size_pending = 0;
-    char *pending =
-        calloc(2, 1); // one character + terminating NULL to check with strcmp
     char c = io_peek();
+    char *pending = NULL;
+    size_t size = 0;
     while (c && c != '\'')
     {
         io_pop();
-        pending[size_pending] = c;
-        pending = realloc(pending, ++size_pending);
+        pending = realloc(pending, ++size);
+        pending[size - 1] = c;
         c = io_peek();
     }
-    if (!c)
-    {
-        // TODO handle error
-        return "\0";
-    }
+    pending = realloc(pending, size+1);
+    pending[size] = '\0';
     io_pop();
     return pending;
 }

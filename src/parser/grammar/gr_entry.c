@@ -16,6 +16,7 @@ enum status gr_input(struct ast **ast)
     tok_pop();
     if (!trm->terminal)
     {
+        destroy_token(trm);
         destroy_ast(*ast);
         return ERROR;
     }
