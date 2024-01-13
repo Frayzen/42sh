@@ -13,8 +13,7 @@ enum status gr_compound_list(struct ast **ast)
         tok_pop();
     struct ast *ls_ast = init_ast(AST_LIST, NULL);
     enum status state = gr_and_or(&ls_ast);
-    if (state == ERROR)
-        goto error;
+    CHECK_GOTO(state == ERROR, error);
     while (state == OK)
     {
         if (tok_peek()->type != NEWLINE && tok_peek()->type != SEMI_COLON)

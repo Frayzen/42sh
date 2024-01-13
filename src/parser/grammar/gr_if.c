@@ -14,20 +14,15 @@ enum status gr_if(struct ast **ast)
         return ERROR;
     tok_pop();
     struct ast *if_ast = init_ast(AST_IF, NULL);
-    if (gr_compound_list(&if_ast) == ERROR)
-        goto error;
-    if (tok_peek()->type != THEN)
-        goto error;
+    CHECK_GOTO(gr_compound_list(&if_ast) == ERROR, error);
+    CHECK_GOTO(tok_peek()->type != THEN, error);
     tok_pop();
-    if (gr_compound_list(&if_ast) == ERROR)
-        goto error;
+    CHECK_GOTO(gr_compound_list(&if_ast) == ERROR, error);
     if (tok_peek()->type == ELSE || tok_peek()->type == ELIF)
     {
-        if (gr_else(&if_ast) == ERROR)
-            goto error;
+        CHECK_GOTO(gr_else(&if_ast) == ERROR, error);
     }
-    if (tok_peek()->type != FI)
-        goto error;
+    CHECK_GOTO(tok_peek()->type != FI, error);
 
     tok_pop();
     *ast = add_child(*ast, if_ast);
@@ -35,5 +30,5 @@ enum status gr_if(struct ast **ast)
 
 error:
     destroy_ast(if_ast);
-    goto error;
+    return ERROR;
 }

@@ -9,10 +9,8 @@ enum status gr_input(struct ast **ast)
 {
     enum status state = gr_list(ast);
 
-    if (state == ERROR)
-        goto error;
-    if (!tok_peek()->terminal)
-        goto error;
+    CHECK_GOTO(state == ERROR, error);
+    CHECK_GOTO(!tok_peek()->terminal, error);
     tok_pop();
     return OK;
 error:
