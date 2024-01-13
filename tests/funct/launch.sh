@@ -23,7 +23,7 @@ execute() {
         printf '[%b] ' "$PASSED"
         echo "$modname"
     fi
-    rm theirs ours code ours_err theirs_err
+    # rm theirs ours code ours_err theirs_err
 }
 
 test_dir=./tests

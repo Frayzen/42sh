@@ -31,7 +31,7 @@ void io_streamer_file(char *path_to_file)
     }
     fseek(file, 0, SEEK_END);
     long length_of_file = ftell(file);
-    char *buffer = malloc(length_of_file - 1);
+    char *buffer = malloc(length_of_file);
     if (!buffer)
     {
         // TODO Error handling
@@ -43,6 +43,7 @@ void io_streamer_file(char *path_to_file)
     fclose(file);
     buffer[length_of_file - 1] = '\0';
     io_push(buffer);
+    free(buffer);
 }
 
 void io_streamer_string(int argc, char **argv)
@@ -67,4 +68,5 @@ void io_streamer_stdin(void)
         return;
     }
     io_push(line);
+    free(line);
 }

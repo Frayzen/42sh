@@ -2,6 +2,7 @@
 #include <criterion/internal/assert.h>
 #include <criterion/internal/test.h>
 
+#include "exit/exit.h"
 #include "io_backend/backend_saver.h"
 #include "lexer/tokenizer.h"
 #include "tools/token/token.h"
@@ -17,6 +18,7 @@ Test(tokenizer, test_colon)
                      tok->value);
     cr_assert_eq(tok->terminal, true);
     destroy_token(tok);
+    clean(NULL);
 }
 
 Test(tokenizer, test_if)
@@ -27,4 +29,5 @@ Test(tokenizer, test_if)
     cr_assert_str_eq(tok->value, "if");
     cr_assert_eq(tok->terminal, false);
     destroy_token(tok);
+    clean(NULL);
 }
