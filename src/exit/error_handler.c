@@ -15,6 +15,7 @@ void print_error(enum error_type type)
         [FILE_COULDNT_OPEN] = "The file couldnt be open",
         [ADD_CHILD_ERROR] = "Tried to add a child to an ast with NULL children",
         [FORK_ERROR] = "An error occured while forking another program",
+        [LIST_NOT_FOUND] = "The element in the list ast is invalid",
     };
     dprintf(STDERR_FILENO, "%s\n", error_names[type]);
 }

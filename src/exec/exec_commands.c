@@ -48,7 +48,7 @@ void print_echo(struct ast *ast, int i, bool interpret_bslash)
     }
 }
 
-void exec_echo(struct ast *ast)
+int exec_echo(struct ast *ast)
 {
     assert(ast && ast->type == AST_COMMAND
            && ast->children[0]->token->type == ECHO);
@@ -72,6 +72,7 @@ void exec_echo(struct ast *ast)
     if (print_nline)
         printf("\n");
     fflush(stdout);
+    return 0;
 }
 
 // this creates the char ** needed for the arguments of execvp
@@ -97,10 +98,10 @@ int external_bin(struct ast *ast)
         char **array_arg = create_command(ast);
         int resp = execvp(array_arg[0], array_arg);
         free(array_arg);
-        if (resp)
+        if (resp) // false
         {
             print_error(EXECVP_FAILED);
-            return -1;
+            return 1;
         }
         else
         {
@@ -109,33 +110,34 @@ int external_bin(struct ast *ast)
             int code = 0;
             if (WIFEXITED(returncode))
                 code = WEXITSTATUS(returncode);
-            if (code == -1)
-                return -1;
+            if (code == 1)
+                return 1;
             return 0;
         }
     }
     return 0;
 }
 
-void exec_external_bin(struct ast *ast)
+int exec_external_bin(struct ast *ast)
 {
-    if (external_bin(ast) == -1)
-    {
+    int ret = external_bin(ast);
+    if (ret)
         print_error(FORK_ERROR);
-        return;
-    }
+    return ret;
 }
-void exec_command(struct ast *ast)
+int exec_command(struct ast *ast)
 {
     assert(ast && ast->type == AST_COMMAND);
     assert(ast->nb_children != 0);
     switch (ast->children[0]->token->type)
     {
     case ECHO:
-        exec_echo(ast);
-        break;
+        return exec_echo(ast);
+    case T_TRUE:
+        return 0;
+    case T_FALSE:
+        return 1;
     default:
-        exec_external_bin(ast);
-        break;
+        return exec_external_bin(ast);
     }
 }

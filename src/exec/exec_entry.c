@@ -5,17 +5,16 @@
 #include "exit/exit.h"
 #include "tools/ast/ast.h"
 
-void exec_entry(struct ast *ast)
+int exec_entry(struct ast *ast)
 {
     if (ast == NULL)
-        return;
+        return 0;
     switch (ast->type)
     {
     case AST_LIST:
-        exec_list(ast);
-        break;
+        return exec_list(ast);
     default:
         print_error(GRAMMAR_ERROR_ENTRY);
-        break;
+        return 1;
     }
 }
