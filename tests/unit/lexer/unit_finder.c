@@ -98,3 +98,29 @@ Test(comments, backslashn_fi)
     assert_and_clear("\0");
     clean(NULL);
 }
+
+Test(comments, comments_chelou)
+{
+    io_push("echo not#ok");
+    assert_and_clear("echo");
+    assert_and_clear("not#ok");
+    assert_and_clear("\0");
+    clean(NULL);
+}
+
+Test(comments, comments_chelou2)
+{
+    io_push("echo not #ok");
+    assert_and_clear("echo");
+    assert_and_clear("not");
+    assert_and_clear("\0");
+    clean(NULL);
+}
+Test(comments, fi_no_space)
+{
+    io_push(";fi");
+    assert_and_clear(";");
+    assert_and_clear("fi");
+    assert_and_clear("\0");
+    clean(NULL);
+}

@@ -2,11 +2,11 @@
 #include "tools/token/token.h"
 #define _XOPEN_SOURCE 500
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "finder.h"
-
 #define IS_TERMINATING(Char) ((Char) == '\n' || (Char) == ';')
 
 /***
@@ -68,6 +68,8 @@ char *str_maker(void)
     pending[0] = c;
     pending[++size_pending] = 0;
     io_pop();
+    if (IS_TERMINATING(c))
+        return pending;
     if (c == '\n')
         return pending;
     while (!check_reserved(pending))
@@ -78,8 +80,6 @@ char *str_maker(void)
             io_pop();
             return pending;
         }
-        if (c == '#')
-            comments();
         else if (!IS_TERMINATING(c))
         {
             size_pending++;
