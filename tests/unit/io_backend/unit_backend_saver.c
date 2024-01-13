@@ -2,6 +2,7 @@
 #include <criterion/internal/assert.h>
 #include <criterion/internal/test.h>
 
+#include "exit/exit.h"
 #include "io_backend/backend_saver.h"
 TestSuite(backend_saver);
 
@@ -19,6 +20,7 @@ Test(backend_saver, basic_push)
     cr_assert_eq(io_peek(), 's');
     cr_assert_eq(io_pop(), true);
     cr_assert_eq(io_pop(), false);
+    clean(NULL);
 }
 
 Test(backend_saver, basic_alphabet)
@@ -40,6 +42,7 @@ Test(backend_saver, basic_alphabet)
     cr_assert_eq(io_peek(), 'e');
     cr_assert_eq(io_pop(), true);
     cr_assert_eq(io_pop(), false);
+    clean(NULL);
 }
 
 Test(backend_saver, basic_long)
@@ -59,6 +62,7 @@ Test(backend_saver, basic_long)
         cr_assert_eq(io_peek(), val);
         cr_assert_eq(io_pop(), true);
     }
+    clean(NULL);
 }
 
 Test(backend_saver, null_check)
@@ -68,4 +72,5 @@ Test(backend_saver, null_check)
     cr_assert_eq(io_peek(), '\0');
     cr_assert_eq(io_pop(), true);
     cr_assert_eq(io_pop(), false);
+    clean(NULL);
 }

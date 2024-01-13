@@ -3,6 +3,7 @@
 #include <criterion/internal/test.h>
 #include <criterion/redirect.h>
 
+#include "exit/exit.h"
 #include "io_backend/backend_saver.h"
 #include "io_backend/io_streamers.h"
 
@@ -18,6 +19,7 @@ Test(streamers, file)
         cr_assert_eq(io_peek(), TEST_STR[i]);
         io_pop();
     }
+    clean(NULL);
 }
 
 Test(streamers, wrong_file_path)
@@ -25,6 +27,7 @@ Test(streamers, wrong_file_path)
     char *wrong_file_path = "./wrong_file_path";
     io_streamer_file(wrong_file_path);
     cr_assert_eq(io_peek(), '\0');
+    clean(NULL);
 }
 
 Test(streamers, string_good)
@@ -39,6 +42,7 @@ Test(streamers, string_good)
         cr_assert_eq(io_peek(), TEST_STR[i]);
         io_pop();
     }
+    clean(NULL);
 }
 
 Test(streamers, string_null)
@@ -50,4 +54,5 @@ Test(streamers, string_null)
     argv[2] = NULL;
     io_streamer_string(argc, argv);
     cr_assert_eq(io_peek(), '\0');
+    clean(NULL);
 }

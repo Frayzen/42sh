@@ -3,6 +3,7 @@
 
 #include "lexer/tokenizer.h"
 #include "tools/ring_buffer/ring_buffer.h"
+#include "tools/token/token.h"
 
 static struct ringbuffer *get_buffer(void)
 {
@@ -27,6 +28,15 @@ struct token *tok_peek(void)
     next();
     res = rb_peek(rb);
     return res->token;
+}
+
+bool tok_pop_clean(void)
+{
+    struct token *tok = tok_peek();
+    if (!rb_pop(get_buffer()))
+        return false;
+    destroy_token(tok);
+    return true;
 }
 
 bool tok_pop(void)

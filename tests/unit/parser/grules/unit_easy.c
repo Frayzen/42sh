@@ -2,6 +2,7 @@
 #include <criterion/internal/assert.h>
 #include <criterion/internal/test.h>
 
+#include "exit/exit.h"
 #include "io_backend/backend_saver.h"
 #include "parser/grammar/rules.h"
 #include "tools/ast/ast.h"
@@ -17,6 +18,7 @@ Test(easy_rules, test_word)
     cr_expect_not_null(ast);
     cr_expect_str_eq(ast_to_str(ast), "LST{CMD{echo,toto}}");
     destroy_ast(ast);
+    clean(NULL);
 }
 
 Test(easy_rules, test_null_tree)
@@ -26,6 +28,7 @@ Test(easy_rules, test_null_tree)
     cr_expect_eq(gr_input(&ast), OK);
     cr_expect_null(ast);
     destroy_ast(ast);
+    clean(NULL);
 }
 
 Test(easy_rule, list_double_echo)
@@ -42,6 +45,7 @@ Test(easy_rule, list_double_echo)
     cr_expect_not_null(ast2);
     cr_expect_str_eq(ast_to_str(ast2), "LST{CMD{echo,toto},CMD{echo,tata}}");
     destroy_ast(ast2);
+    clean(NULL);
 }
 
 Test(easy_rules, long_list)
@@ -55,4 +59,5 @@ Test(easy_rules, long_list)
 CMD{echo,titi},CMD{echo,foo},CMD{echo,bar},CMD{echo,baz},CMD{echo,biz},\
 CMD{echo,yipee,yep},CMD{echo,hello,world,!},CMD{echo,1,2,3,4,5,6}}");
     destroy_ast(ast);
+    clean(NULL);
 }
