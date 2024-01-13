@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <stdio.h>
 
 #include "execs.h"
 #include "exit/exit.h"

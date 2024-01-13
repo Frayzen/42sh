@@ -34,6 +34,15 @@ else
     echo not
 fi
 
+###Test elif
+if false; then
+    echo ok
+elif false; then
+    echo elif
+else
+    echo yes
+fi
+
 ###Lots of if else
 if false; then
     echo ok
