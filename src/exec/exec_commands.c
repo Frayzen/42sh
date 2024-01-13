@@ -39,7 +39,7 @@ void print_echo(struct ast *ast, int i, bool interpret_bslash)
                 }
             }
             else
-                printf("%c\n", content[id]);
+                printf("%c", content[id]);
             id++;
         }
     }
