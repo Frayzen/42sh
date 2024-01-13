@@ -30,17 +30,12 @@ enum status gr_if(struct ast **ast)
     if (tok_peek()->type == ELSE || tok_peek()->type == ELIF)
     {
 
-        printf("enter else\n");
         if(gr_else(&if_ast) == ERROR)
             goto error;
     }
-    
-    printf("tok below\n");
-    print_token(token);
     if (tok_peek()->type != FI)
         goto error;
     tok_pop(); 
-    printf("heeeee if\n");
     *ast = add_child(*ast, if_ast);
     return OK;
 

@@ -7,7 +7,6 @@
 
 enum status gr_else(struct ast **ast)
 {
-    // enum status state = OK;
     struct token *token = tok_peek();
     if (token->terminal)
         return OK;
@@ -18,7 +17,6 @@ enum status gr_else(struct ast **ast)
     }
     if (token->type == ELIF)
     {
-        
         tok_pop();
         struct ast *elif_ast = init_ast(AST_IF, NULL);
         if (gr_compound_list(&elif_ast) == ERROR)
