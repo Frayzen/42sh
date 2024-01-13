@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "exit/exit.h"
 #include "tools/token/token.h"
 
 void rb_push(struct ringbuffer *rb, union ringitem item)
@@ -10,7 +11,7 @@ void rb_push(struct ringbuffer *rb, union ringitem item)
     size_t available = rb->ring_size - rb->cur_size;
     if (available == 0)
     {
-        // TODO error handling
+        print_error(RING_BF_FULL);
         return;
     }
     *(rb->end) = item;
