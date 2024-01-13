@@ -14,7 +14,7 @@ void exec_entry(struct ast *ast)
         exec_list(ast);
         break;
     default:
-            print_error(GRAMMAR_ERROR_ENTRY);
+        print_error(GRAMMAR_ERROR_ENTRY);
         break;
     }
 }

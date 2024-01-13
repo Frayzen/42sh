@@ -6,7 +6,6 @@
 
 enum status gr_input(struct ast **ast)
 {
-    g_root_ast = *ast;
     enum status state = gr_list(ast);
     CHECK_GOTO(state == ERROR, error);
     struct token *trm = tok_peek();

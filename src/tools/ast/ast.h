@@ -1,7 +1,6 @@
 #ifndef AST_H
 #define AST_H
 #include "tools/token/token.h"
-#include <stddef.h>
 
 enum ast_type
 {
@@ -18,8 +17,6 @@ struct ast
     int nb_children;
     struct ast **children;
 };
-
-struct ast *g_root_ast = NULL;
 
 /***
  * Create a ast node structure with no children

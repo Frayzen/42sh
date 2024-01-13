@@ -1,4 +1,3 @@
-#include "exit/exit.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
@@ -10,6 +9,7 @@
 #include <unistd.h>
 
 #include "execs.h"
+#include "exit/exit.h"
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
 

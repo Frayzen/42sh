@@ -1,5 +1,4 @@
 #define _POSIX_C_SOURCE 200809L
-#include "exit/exit.h"
 #include "io_streamers.h"
 
 #include <stdio.h>
@@ -7,6 +6,7 @@
 #include <string.h>
 #include <sys/types.h>
 
+#include "exit/exit.h"
 #include "io_backend/backend_saver.h"
 
 void main_to_stream(int argc, char **argv)

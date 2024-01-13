@@ -14,8 +14,10 @@ execute() {
     bash --posix code 1> theirs 2>theirs_err
     dif=$(diff ours theirs)
     res=$?
-    dif_err=$(diff ours_err theirs_err)
-    res_err=$?
+    res_err=0
+    if [ -s theirs_err -a ! -s ours_err ]; then
+        res_err=1
+    fi
     if [ $timeout -ne 0 -o $res -ne 0 -o $res_err -ne 0 ]; then
         printf '[%b] ' "$FAILED"
         echo "$modname"
@@ -23,7 +25,7 @@ execute() {
         printf '[%b] ' "$PASSED"
         echo "$modname"
     fi
-    # rm theirs ours code ours_err theirs_err
+    rm theirs ours code ours_err theirs_err
 }
 
 test_dir=./tests
