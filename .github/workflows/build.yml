@@ -23,8 +23,5 @@ jobs:
           ./unit
       - name: Execute the functional tests
         run: |
-          make 42sh
-          chmod +x ./tests/funct/launch.sh
-          ./tests/funct/launch.sh
-
+          make funct
 

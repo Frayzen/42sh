@@ -11,9 +11,9 @@ unit: src/42sh .FORCE
 	make -C tests/unit
 	mv tests/unit/unit .
 
-funct: src/42sh .FORCE
-	make -C tests/unit
-	mv tests/funct/funct .
+funct: 42sh .FORCE
+	chmod +x ./tests/funct/launch.sh
+	./tests/funct/launch.sh
 
 clean-local:
 	$(RM) 42sh unit funct

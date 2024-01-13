@@ -11,7 +11,6 @@ execute() {
     printf '%s\n' "$1" > code
     (timeout -k 0 .5 $path_42sh code) 1> ours 2> ours_err
     timeout=$?
-    echo "timeout is $timeout"
     bash --posix code 1> theirs 2>theirs_err
     dif=$(diff ours theirs)
     res=$?
@@ -30,7 +29,9 @@ execute() {
 test_dir=./tests
 for entry in "$test_dir"/*
 do
-    echo "[MODULE] $(basename "$entry")"
+    declare -u name
+    name=$(basename "$entry")
+    echo "[MODULE] $name"
     save=0
     build=""
     modname=""
