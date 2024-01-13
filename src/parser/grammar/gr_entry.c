@@ -8,8 +8,7 @@ enum status gr_input(struct ast **ast)
 {
     enum status state = gr_list(ast);
 
-    if (state == ERROR)
-        goto error;
+    CHECK_GOTO(state == ERROR, error);
     struct token *trm = tok_peek();
     tok_pop();
     if (!trm->terminal)
@@ -17,6 +16,8 @@ enum status gr_input(struct ast **ast)
         destroy_token(trm);
         goto error;
     }
+    // didn't put the macro here ,because need to destroy_token before goto
+    // error
     destroy_token(trm);
     return OK;
 error:

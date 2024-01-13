@@ -22,17 +22,13 @@ enum status gr_else(struct ast **ast)
     }
     tok_pop_clean();
     struct ast *elif_ast = init_ast(AST_IF, NULL);
-    if (gr_compound_list(&elif_ast) == ERROR)
-        goto error;
-    if (tok_peek()->type != THEN)
-        goto error;
+    CHECK_GOTO(gr_compound_list(&elif_ast) == ERROR, error);
+    CHECK_GOTO(tok_peek()->type != THEN, error)
     tok_pop_clean();
-    if (gr_compound_list(&elif_ast) == ERROR)
-        goto error;
+    CHECK_GOTO(gr_compound_list(&elif_ast) == ERROR, error);
     if (tok_peek()->type == ELSE || tok_peek()->type == ELIF)
     {
-        if (gr_else(&elif_ast) == ERROR)
-            goto error;
+        CHECK_GOTO(gr_else(&elif_ast) == ERROR, error);
     }
     *ast = add_child(*ast, elif_ast);
     return OK;
