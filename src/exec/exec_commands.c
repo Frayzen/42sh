@@ -65,6 +65,7 @@ void exec_echo(struct ast *ast)
             print_nline = false;
         else
             break;
+        i++;
     }
     print_echo(ast, i, interpret_bslash);
     if (print_nline)

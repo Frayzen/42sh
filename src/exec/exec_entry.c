@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <stdio.h>
 
 #include "execs.h"
 #include "tools/ast/ast.h"
