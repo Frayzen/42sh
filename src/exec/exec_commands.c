@@ -12,7 +12,7 @@
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
 
-void exec_echo(struct ast *ast)
+int exec_echo(struct ast *ast)
 {
     if (ast->children[0]->token->type == ECHO)
     {
@@ -26,6 +26,7 @@ void exec_echo(struct ast *ast)
             printf("\n");
     }
     fflush(stdout);
+    return 0;
 }
 
 // this creates the char ** needed for the arguments of execvp
@@ -51,10 +52,11 @@ int external_bin(struct ast *ast)
         char **array_arg = create_command(ast);
         int resp = execvp(array_arg[0], array_arg);
         free(array_arg);
-        if (resp)
+        if (resp) // false
         {
+            // execvp failed -> false
             // TODO handle errors
-            return -1;
+            return 1;
         }
         else
         {
@@ -63,34 +65,33 @@ int external_bin(struct ast *ast)
             int code = 0;
             if (WIFEXITED(returncode))
                 code = WEXITSTATUS(returncode);
-            if (code == -1)
+            if (code == 1)
+                // child process failed
                 // TODO handle error
-                return -1;
+                return 1;
             return 0;
         }
     }
     return 0;
 }
 
-void exec_external_bin(struct ast *ast)
+int exec_external_bin(struct ast *ast)
 {
-    if (external_bin(ast) == -1)
-    {
-        // TODO handle error
-        return;
-    }
+    return external_bin(ast);
 }
-void exec_command(struct ast *ast)
+int exec_command(struct ast *ast)
 {
     assert(ast && ast->type == AST_COMMAND);
     assert(ast->nb_children != 0);
     switch (ast->children[0]->token->type)
     {
     case ECHO:
-        exec_echo(ast);
-        break;
+        return exec_echo(ast);
+    case T_TRUE:
+        return 0;
+    case T_FALSE:
+        return 1;
     default:
-        exec_external_bin(ast);
-        break;
+        return exec_external_bin(ast);
     }
 }

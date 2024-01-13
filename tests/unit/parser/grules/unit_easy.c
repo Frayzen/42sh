@@ -119,6 +119,7 @@ Test(conditions, compound_smpl_elif2)
             "then\n echo d\n else\n echo hello\n fi");
     struct ast *ast = NULL;
     cr_expect_eq(gr_input(&ast), OK);
+
     cr_expect_str_eq(
         ast_to_str(ast),
         "LST{IF{LST{CMD{false},CMD{true}},LST{CMD{echo,a},CMD{echo,b},CMD{echo,"

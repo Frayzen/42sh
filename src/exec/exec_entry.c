@@ -3,17 +3,16 @@
 #include "execs.h"
 #include "tools/ast/ast.h"
 
-void exec_entry(struct ast *ast)
+int exec_entry(struct ast *ast)
 {
     if (ast == NULL)
-        return;
+        return 0;
     switch (ast->type)
     {
     case AST_LIST:
-        exec_list(ast);
-        break;
+        return exec_list(ast);
     default:
         // TODO handle error
-        break;
+        return 1;
     }
 }
