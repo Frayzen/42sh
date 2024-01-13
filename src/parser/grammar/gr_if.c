@@ -21,7 +21,6 @@ enum status gr_if(struct ast **ast)
     tok_pop();
     if (gr_compound_list(&if_ast) == ERROR)
         goto error;
-
     if (tok_peek()->type == ELSE || tok_peek()->type == ELIF)
     {
         if (gr_else(&if_ast) == ERROR)
@@ -29,6 +28,7 @@ enum status gr_if(struct ast **ast)
     }
     if (tok_peek()->type != FI)
         goto error;
+
     tok_pop();
     *ast = add_child(*ast, if_ast);
     return OK;

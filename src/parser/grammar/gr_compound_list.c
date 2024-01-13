@@ -25,6 +25,7 @@ enum status gr_compound_list(struct ast **ast)
         state = gr_and_or(&ls_ast);
 
     }
+    
     if (tok_peek()->type == SEMI_COLON)
         tok_pop();
 
@@ -33,6 +34,7 @@ enum status gr_compound_list(struct ast **ast)
 
     *ast = add_child(*ast, ls_ast);
     return OK;
+    
 error:
     destroy_ast(ls_ast);
     return ERROR;

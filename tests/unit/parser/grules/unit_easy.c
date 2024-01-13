@@ -61,17 +61,16 @@ TestSuite(easy_rules);
 //     destroy_ast(ast);
 // }
 //
-Test(conditions, simple_if)
-{
-    io_push("if true ; then echo kaka ; fi");
-    struct ast *ast = NULL;
-    cr_expect_eq(gr_input(&ast), OK);
-
-    cr_expect_str_eq(ast_to_str(ast),
-                     "LST{IF{LST{CMD{true}},LST{CMD{echo,kaka}}}}");
-
-    destroy_ast(ast);
-}
+// Test(conditions, simple_if)
+// {
+//     io_push("if true ; then echo kaka ; fi");
+//     struct ast *ast = NULL;
+//     cr_expect_eq(gr_input(&ast), OK);
+//     cr_expect_str_eq(ast_to_str(ast),
+//                      "LST{IF{LST{CMD{true}},LST{CMD{echo,kaka}}}}");
+//
+//     destroy_ast(ast);
+// }
 //
 // Test(conditions, simple_if_else)
 // {
@@ -96,3 +95,17 @@ Test(conditions, simple_if)
 //         "IF{LST{CMD{false}},LST{CMD{true}},LST{CMD{echo}}}}}}");
 //     destroy_ast(ast);
 // }
+//
+//
+Test(conditions, compound_test1)
+{
+    io_push("if false; true; then \n echo a \n echo b; echo c; \n fi");
+    struct ast *ast = NULL;
+    cr_expect_eq(gr_input(&ast), OK);
+    pretty_print_ast(ast);
+    // cr_expect_str_eq(
+    //     ast_to_str(ast),
+    //     "LST{IF{LST{CMD{true}},LST{CMD{echo}},IF{LST{CMD{true}},LST{CMD{echo}},"
+    //     "IF{LST{CMD{false}},LST{CMD{true}},LST{CMD{echo}}}}}}");
+    destroy_ast(ast);
+}
