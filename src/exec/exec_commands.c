@@ -1,6 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
-#include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,19 +12,43 @@
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
 
+void print_echo(struct ast *ast, int i, bool interpret_bslash)
+{
+    for (; i < ast->nb_children; i++)
+    {
+        const char *content = ast->children[i]->token->value;
+        int id = 0;
+        while (content[id])
+        {
+            printf("%c\n", content[id]);
+            id++;
+        }
+        
+    }
+}
+
 void exec_echo(struct ast *ast)
 {
-    if (ast->children[0]->token->type == ECHO)
+    assert(ast && ast->type == AST_COMMAND
+           && ast->children[0]->token->type == ECHO);
+    int i = 1;
+    bool print_nline = true;
+    bool interpret_bslash = false;
+    while (i < ast->nb_children - 1)
     {
-        for (int i = 1; i < ast->nb_children - 1; i++)
-        {
-            printf("%s ", ast->children[i]->token->value);
-        }
-        if (ast->nb_children > 1)
-            printf("%s\n", ast->children[ast->nb_children - 1]->token->value);
+        const char *content = ast->children[i]->token->value;
+        if (!strcmp(content, "-e"))
+            interpret_bslash = true;
+        else if (!strcmp(content, "-E"))
+            interpret_bslash = false;
+        else if (!strcmp(content, "-n"))
+            print_nline = false;
         else
-            printf("\n");
+            break;
     }
+    print_echo(ast, i, interpret_bslash);
+    if (print_nline)
+        printf("\n");
     fflush(stdout);
 }
 
