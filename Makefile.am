@@ -2,7 +2,6 @@ SUBDIRS = src \
 		  tests/unit
 
 42sh: src/42sh
-	mv src/42sh .
 
 src/42sh: .FORCE
 	make -C src

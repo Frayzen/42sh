@@ -1,7 +1,7 @@
 #!/bin/sh
 cd $(dirname "$0")
 
-path_42sh=../../42sh
+path_42sh=../../src/42sh
 
 PASSED="\e[00;32mPASSED\e[0m"
 FAILED="\e[00;31mFAILED\e[0m"
