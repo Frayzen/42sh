@@ -8,20 +8,23 @@ FAILED="\e[00;31mFAILED\e[0m"
 
 execute() {
     modname=$2
-    code=$(echo "$1")
-    $path_42sh -c "$(echo "$code")" > ours
-    theirs=$(bash --posix -c "$(echo "$code")")
-    echo "$theirs" > theirs
+    printf '%s\n' "$1" > code
+    (timeout -k 0 .5 $path_42sh code) 1> ours 2> ours_err
+    timeout=$?
+    echo "timeout is $timeout"
+    bash --posix code 1> theirs 2>theirs_err
     dif=$(diff ours theirs)
     res=$?
-    if [ $res -ne 0 ]; then
+    dif_err=$(diff ours_err theirs_err)
+    res_err=$?
+    if [ $timeout -ne 0 -o $res -ne 0 -o $res_err -ne 0 ]; then
         printf '[%b] ' "$FAILED"
         echo "$modname"
     else
         printf '[%b] ' "$PASSED"
         echo "$modname"
     fi
-    rm theirs ours
+    # rm theirs ours code ours_err theirs_err
 }
 
 test_dir=./tests
@@ -45,7 +48,7 @@ do
                 if [ $save -eq 0 ]; then
                     $(line)
                 else
-                    build="$build$line\n"   
+                    build=$(printf '%s\n' "$build$line")
                 fi
         esac
     done < $entry
