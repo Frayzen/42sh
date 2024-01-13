@@ -24,11 +24,11 @@ enum status gr_list(struct ast **ast)
         {
             break;
         }
-        tok_pop();
+        tok_pop_clean();
         state = gr_and_or(&ast_list);
     }
     if (tok_peek()->type == SEMI_COLON)
-        tok_pop();
+        tok_pop_clean();
     *ast = add_child(*ast, ast_list);
     return OK;
 }

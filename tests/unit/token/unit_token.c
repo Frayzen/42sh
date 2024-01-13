@@ -10,6 +10,7 @@ void check_token(struct token *token, char *str, enum token_type type)
     cr_assert(strcmp(token->value, str) == 0, "incorrect value");
     cr_assert_eq(type, token->type, "incorrect type is %d expected %d",
                  token->type, type);
+    destroy_token(token);
 }
 
 Test(NewlineToken, init_newline_token)
@@ -19,7 +20,6 @@ Test(NewlineToken, init_newline_token)
     strcpy(value, str);
     struct token *token = init_token(value);
     check_token(token, value, NEWLINE);
-    destroy_token(token);
 }
 Test(BSZeroToken, init_bszero_token)
 {
@@ -28,7 +28,6 @@ Test(BSZeroToken, init_bszero_token)
     memcpy(value, str, 2);
     struct token *token = init_token(value);
     check_token(token, value, BSZERO);
-    destroy_token(token);
 }
 
 Test(Token, init_if)
@@ -38,7 +37,6 @@ Test(Token, init_if)
     strcpy(value, str);
     struct token *token = init_token(value);
     check_token(token, value, IF);
-    destroy_token(token);
 }
 
 Test(ThenToken, init_then_token)
@@ -57,7 +55,6 @@ Test(ElifToken, init_elif_token)
     strcpy(value, str);
     struct token *token = init_token(value);
     check_token(token, value, ELIF);
-    destroy_token(token);
 }
 
 Test(ElseToken, init_else_token)
@@ -67,7 +64,6 @@ Test(ElseToken, init_else_token)
     strcpy(value, str);
     struct token *token = init_token(value);
     check_token(token, value, ELSE);
-    destroy_token(token);
 }
 
 Test(FiToken, init_fi_token)
@@ -77,7 +73,6 @@ Test(FiToken, init_fi_token)
     strcpy(value, str);
     struct token *token = init_token(value);
     check_token(token, value, FI);
-    destroy_token(token);
 }
 
 Test(SemiColonToken, init_semicolon_token)
@@ -87,7 +82,6 @@ Test(SemiColonToken, init_semicolon_token)
     strcpy(value, str);
     struct token *token = init_token(value);
     check_token(token, value, SEMI_COLON);
-    destroy_token(token);
 }
 
 Test(QuoteToken, init_quote_token)

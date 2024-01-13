@@ -2,75 +2,90 @@
 #include <criterion/internal/test.h>
 #include <criterion/redirect.h>
 
+#include "exit/exit.h"
 #include "io_backend/backend_saver.h"
 #include "lexer/finder.h"
+
+#define assert_and_clear(Val)                                                  \
+    val = finder();                                                            \
+    cr_assert_str_eq(val, (Val));                                              \
+    free(val);
+
+char *val = NULL;
 
 Test(comments, at_end)
 {
     io_push("if test");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), "test");
-    cr_assert_str_eq(finder(), "\0");
+    assert_and_clear("if");
+    assert_and_clear("test");
+    assert_and_clear("\0");
+    clean(NULL);
 }
 
 Test(comments, space)
 {
     io_push("   if   echotest");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), "echotest");
-    cr_assert_str_eq(finder(), "\0");
+    assert_and_clear("if");
+    assert_and_clear("echotest");
+    assert_and_clear("\0");
+    clean(NULL);
 }
 
 Test(comments, space2)
 {
     io_push("   if   echo test");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), "echo");
-    cr_assert_str_eq(finder(), "test");
-    cr_assert_str_eq(finder(), "\0");
+    assert_and_clear("if");
+    assert_and_clear("echo");
+    assert_and_clear("test");
+    assert_and_clear("\0");
+    clean(NULL);
 }
 
 Test(comments, semicolon)
 {
     io_push("   if ;  echo; test;");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "echo");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "test");
-    cr_assert_str_eq(finder(), ";");
+    assert_and_clear("if");
+    assert_and_clear(";");
+    assert_and_clear("echo");
+    assert_and_clear(";");
+    assert_and_clear("test");
+    assert_and_clear(";");
+    clean(NULL);
 }
 
 Test(comments, backslashn)
 {
     io_push("   if ;  echo\n; test;");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "echo");
-    cr_assert_str_eq(finder(), "\n");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "test");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "\0");
+    assert_and_clear("if");
+    assert_and_clear(";");
+    assert_and_clear("echo");
+    assert_and_clear("\n");
+    assert_and_clear(";");
+    assert_and_clear("test");
+    assert_and_clear(";");
+    assert_and_clear("\0");
+    clean(NULL);
 }
 
 Test(comments, quotes)
 {
     io_push("   if ';  echo'\n; test;");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), ";  echo");
-    cr_assert_str_eq(finder(), "\n");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "test");
-    cr_assert_str_eq(finder(), ";");
-    cr_assert_str_eq(finder(), "\0");
+    assert_and_clear("if");
+    assert_and_clear(";  echo");
+    assert_and_clear("\n");
+    assert_and_clear(";");
+    assert_and_clear("test");
+    assert_and_clear(";");
+    assert_and_clear("\0");
+    clean(NULL);
 }
 
 Test(comments, quotes_empyt)
 {
     io_push("if ''  \n");
-    cr_assert_str_eq(finder(), "if");
-    cr_assert_str_eq(finder(), "");
-    cr_assert_str_eq(finder(), "\n");
-    cr_assert_str_eq(finder(), "\0");
+    assert_and_clear("if");
+    assert_and_clear("");
+    assert_and_clear("\n");
+    assert_and_clear("\0");
+    clean(NULL);
 }

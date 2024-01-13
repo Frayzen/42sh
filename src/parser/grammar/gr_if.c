@@ -9,14 +9,13 @@
 
 enum status gr_if(struct ast **ast)
 {
-    struct token *token = tok_peek();
-    if (token->type != IF)
+    if (tok_peek()->type != IF)
         return ERROR;
-    tok_pop();
+    tok_pop_clean();
     struct ast *if_ast = init_ast(AST_IF, NULL);
     CHECK_GOTO(gr_compound_list(&if_ast) == ERROR, error);
     CHECK_GOTO(tok_peek()->type != THEN, error);
-    tok_pop();
+    tok_pop_clean();
     CHECK_GOTO(gr_compound_list(&if_ast) == ERROR, error);
     if (tok_peek()->type == ELSE || tok_peek()->type == ELIF)
     {
@@ -24,7 +23,7 @@ enum status gr_if(struct ast **ast)
     }
     CHECK_GOTO(tok_peek()->type != FI, error);
 
-    tok_pop();
+    tok_pop_clean();
     *ast = add_child(*ast, if_ast);
     return OK;
 

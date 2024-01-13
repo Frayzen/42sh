@@ -9,6 +9,7 @@ src/42sh: .FORCE
 unit: src/42sh .FORCE
 	make -C tests/unit
 	mv tests/unit/unit .
+	./unit --verbose
 
 funct: 42sh .FORCE
 	chmod +x ./tests/funct/launch.sh
