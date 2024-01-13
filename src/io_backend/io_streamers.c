@@ -68,4 +68,5 @@ void io_streamer_stdin(void)
         return;
     }
     io_push(line);
+    free(line);
 }
