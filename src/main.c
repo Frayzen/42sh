@@ -10,7 +10,7 @@ int main(void)
     io_push("ls ./");
     struct ast *ast = NULL;
     gr_input(&ast);
-    exec_entry(ast);
+    //exec_entry(ast);
     pretty_print_ast(ast);
     fflush(NULL);
     return 0;
