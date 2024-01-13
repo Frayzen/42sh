@@ -9,8 +9,8 @@ TIMEOUT="\e[00;31mTIMEOUT\e[0m"
 
 execute() {
     modname=$2
-    printf '%s\n' "$1" > code
-    (timeout -k 0 .5 $path_42sh code) 1> ours 2> ours_err
+    printf "$1\n" > code
+    (timeout -k 0 1 $path_42sh code) 1> ours 2> ours_err
     timeout=$?
     bash --posix code 1> theirs 2>theirs_err
     dif=$(diff ours theirs)
@@ -41,7 +41,7 @@ execute() {
         echo -n " "
     done
     echo "┃"
-    rm theirs ours code ours_err theirs_err
+    # rm theirs ours code ours_err theirs_err
 }
 
 echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
@@ -71,7 +71,7 @@ do
                 if [ $save -eq 0 ]; then
                     $(line)
                 else
-                    build=$(printf '%s\n' "$build$line")
+                    build="$build$line\n"
                 fi
         esac
     done < $entry
