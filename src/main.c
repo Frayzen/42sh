@@ -2,8 +2,7 @@
 #include <stdlib.h>
 
 #include "exec/execs.h"
-#include "io_backend/backend_saver.h"
-#include "lexer/token_saver.h"
+#include "exit/exit.h"
 #include "io_backend/io_streamers.h"
 #include "parser/grammar/rules.h"
 #include "tools/ast/ast.h"
@@ -16,12 +15,10 @@ int main(int argc, char *argv[])
     /* io_streamer_file("./tests/unit/exec/test_exec.txt"); */
     struct ast *ast = NULL;
     gr_input(&ast);
-    /* exec_entry(ast); */
+    exec_entry(ast);
     pretty_print_ast(ast);
     printf("%s\n", ast_to_str(ast));
     fflush(NULL);
-    destroy_ast(ast);
-    clean_backend_saver();
-    clean_token_saver();
+    clean(ast);
     return 0;
 }

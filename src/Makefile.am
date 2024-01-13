@@ -4,7 +4,8 @@ SUBDIRS = \
 		  lexer\
 		  parser\
 		  tools\
-		  exec
+		  exec\
+		  exit
 LIBS = @LIB_LIST@
 
 bin_PROGRAMS = 42sh
