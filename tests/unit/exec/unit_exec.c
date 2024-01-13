@@ -3,10 +3,8 @@
 #include <criterion/redirect.h>
 #include <stdlib.h>
 
-#include "exec/exec_echo.h"
-#include "io_backend/backend_saver.h"
+#include "exec/execs.h"
 #include "io_backend/io_streamers.h"
-#include "lexer/finder.h"
 #include "parser/grammar/rules.h"
 static void redirect_all_stdout(void)
 {
@@ -20,7 +18,7 @@ Test(exec, one, .init = redirect_all_stdout)
     struct ast *e = NULL;
     gr_input(&e);
     cr_assert(e);
-    echo_function(e);
+    exec_entry(e);
     cr_expect_stdout_eq_str("toto\n", "error");
 }
 
@@ -31,8 +29,8 @@ Test(exec, only_echo, .init = redirect_all_stdout)
     struct ast *e = NULL;
     gr_input(&e);
     cr_assert(e);
-    echo_function(e);
-    cr_expect_stdout_eq_str("", "error");
+    exec_entry(e);
+    cr_expect_stdout_eq_str("\n", "error");
 }
 
 Test(exec, un_mot, .init = redirect_all_stdout)
@@ -42,7 +40,7 @@ Test(exec, un_mot, .init = redirect_all_stdout)
     struct ast *e = NULL;
     gr_input(&e);
     cr_assert(e);
-    echo_function(e);
+    exec_entry(e);
     cr_expect_stdout_eq_str("if\n", "error");
 }
 
@@ -53,7 +51,7 @@ Test(exec, deux_mots, .init = redirect_all_stdout)
     struct ast *e = NULL;
     gr_input(&e);
     cr_assert(e);
-    echo_function(e);
+    exec_entry(e);
     cr_expect_stdout_eq_str("mot1 mot2\n", "error");
 }
 
@@ -64,7 +62,7 @@ Test(exec, trois_mots, .init = redirect_all_stdout)
     struct ast *e = NULL;
     gr_input(&e);
     cr_assert(e);
-    echo_function(e);
+    exec_entry(e);
     cr_expect_stdout_eq_str("mot1 mot2 mot3\n", "error");
 }
 
@@ -75,7 +73,7 @@ Test(exec, quatre_mots, .init = redirect_all_stdout)
     struct ast *e = NULL;
     gr_input(&e);
     cr_assert(e);
-    echo_function(e);
+    exec_entry(e);
     cr_expect_stdout_eq_str("mot1 mot2 mot3 mot4\n", "error");
 }
 
@@ -86,7 +84,7 @@ Test(exec, cinq_mots, .init = redirect_all_stdout)
     struct ast *e = NULL;
     gr_input(&e);
     cr_assert(e);
-    echo_function(e);
+    exec_entry(e);
     cr_expect_stdout_eq_str("mot1 mot2 mot3 mot4 mot5\n", "error");
 }
 
@@ -97,7 +95,7 @@ Test(exec, big_fat_sentence_with_if, .init = redirect_all_stdout)
     struct ast *e = NULL;
     gr_input(&e);
     cr_assert(e);
-    echo_function(e);
+    exec_entry(e);
     cr_expect_stdout_eq_str("if else then ok ca roule ma poule\n", "error");
 }
 
@@ -108,6 +106,6 @@ Test(exec_file, hello_world, .init = redirect_all_stdout)
     struct ast *e = NULL;
     gr_input(&e);
     cr_assert(e);
-    echo_function(e);
+    exec_entry(e);
     cr_expect_stdout_eq_str("Hello World !\n", "error");
 }

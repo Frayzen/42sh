@@ -12,7 +12,6 @@ unit_SOURCES =\
 			  parser/grules/unit_easy.c \
 			  token/unit_token.c \
 			  io_backend/unit_streamers.c \
-			  tools/unit_pretty_printer.c\
 			  exec/unit_exec.c
 
 
