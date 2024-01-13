@@ -33,7 +33,7 @@ void comments(void)
 {
     char c = io_peek();
     io_pop();
-    while (!IS_TERMINATING(c))
+    while (!IS_TERMINATING(c) && c != '\0')
     {
         c = io_peek();
         io_pop();

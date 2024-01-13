@@ -2,7 +2,6 @@ SUBDIRS = src \
 		  tests/unit
 
 42sh: src/42sh
-	mv src/42sh .
 
 src/42sh: .FORCE
 	make -C src
@@ -12,9 +11,9 @@ unit: src/42sh .FORCE
 	mv tests/unit/unit .
 	./unit --verbose
 
-funct: src/42sh .FORCE
-	make -C tests/unit
-	mv tests/funct/funct .
+funct: 42sh .FORCE
+	chmod +x ./tests/funct/launch.sh
+	./tests/funct/launch.sh
 
 clean-local:
 	$(RM) 42sh unit funct

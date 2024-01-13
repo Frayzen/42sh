@@ -20,4 +20,8 @@ jobs:
           autoreconf -i
           ./configure
           make unit
+          ./unit
+      - name: Execute the functional tests
+        run: |
+          make funct
 
