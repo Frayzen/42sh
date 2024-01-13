@@ -20,10 +20,28 @@ void print_echo(struct ast *ast, int i, bool interpret_bslash)
         int id = 0;
         while (content[id])
         {
-            printf("%c\n", content[id]);
+            if (content[id] == '\\' && interpret_bslash)
+            {
+                id++;
+                switch (content[id])
+                {
+                case 'n':
+                    printf("\n");
+                    break;
+                case '\\':
+                    printf("\\");
+                    break;
+                case 't':
+                    printf("\t");
+                    break;
+                default:
+                    continue;
+                }
+            }
+            else
+                printf("%c\n", content[id]);
             id++;
         }
-        
     }
 }
 
