@@ -6,7 +6,8 @@
 
 #define IS_BLANK(Pending) ((Pending)->blank)
 
-struct string{
+struct string
+{
     char *value;
     size_t size;
 };
