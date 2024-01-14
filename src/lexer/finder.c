@@ -51,13 +51,38 @@ void append_until(struct pending *p, char limit)
     }
 }
 
+// Special are \n \0 space and ;
+// return true if pending is over
+bool special_char(struct pending *p)
+{
+    char c = io_peek();
+    switch (c)
+    {
+    case '\n':
+    case '\0':
+    case ';':
+        if (IS_BLANK(p))
+        {
+            append_char(p, c);
+            io_pop();
+        }
+        return true;
+    case ' ':
+        if (IS_BLANK(p))
+            io_pop();
+        else
+            return true;
+        break;
+    default:
+        break;
+    }
+    return false;
+}
+
 void consumer(struct pending *p)
 {
     while (true)
     {
-        ssize_t match = match_reserved(p);
-        if (match != -1)
-            return;
         char c = io_peek();
         if (p->backslashed)
             goto append;
@@ -72,21 +97,19 @@ void consumer(struct pending *p)
         case '\'':
             io_pop();
             append_until(p, c);
+            io_pop();
             continue;
-        case ' ':
-            if (!IS_BLANK(p))
-                return;
-            break;
         case '#':
             io_pop();
             append_until(p, '\n');
             continue;
+        case ' ':
         case '\n':
         case '\0':
         case ';':
-            if (!IS_BLANK(p))
+            if (special_char(p))
                 return;
-            /* FALLTHROUGH */
+            continue;
         default:
         append:
             append_char(p, c);
