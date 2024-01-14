@@ -1,4 +1,5 @@
 #include <criterion/criterion.h>
+#include <criterion/internal/assert.h>
 #include <criterion/internal/test.h>
 #include <criterion/redirect.h>
 
@@ -6,10 +7,16 @@
 #include "io_backend/backend_saver.h"
 #include "lexer/finder.h"
 
-#define assert_and_clear(Val)                                                  \
-    val = finder();                                                            \
-    cr_assert_str_eq(val, (Val));                                              \
-    free(val);
+void assert_and_clear(const char *val)
+{
+    const struct string *str = finder();
+    for (size_t i = 0; i < str->size; i++)
+    {
+        cr_assert_not_null(val[i]);
+        cr_assert_eq(str->value[i], val[i]);
+    }
+    free(str->value);
+}
 
 char *val = NULL;
 

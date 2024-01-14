@@ -1,6 +1,7 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 #include <stdbool.h>
+#include "lexer/finder.h"
 
 #define IS_BUILTIN(t) ((t)->type >= T_TRUE && (t)->type <= ECHO)
 
@@ -42,10 +43,10 @@ struct token
 
 /***
  * creates a token, sets value to lexime or 'term', sets type
- * @param value <- the lexeme passed from the finder
+ * @param value <- the string passed from the finder
  * @return <- a malloced token structure
  */
-struct token *init_token(char *value);
+struct token *init_token(const struct string *str);
 
 /***
  * frees a token

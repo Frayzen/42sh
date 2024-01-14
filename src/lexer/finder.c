@@ -1,20 +1,20 @@
 #include "finder.h"
 
 #include <stdbool.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 
 #include "io_backend/backend_saver.h"
-#include "tools/token/token.h"
 
 // return the p->value
 char *append_char(struct pending *p, char c)
 {
-    p->value = realloc(p->value, ++p->size);
-    p->value[p->size - 1] = c;
-    return p->value;
+    struct string *str = &p->str;
+    str->value = realloc(str->value, ++str->size);
+    str->value[str->size - 1] = c;
+    p->blank = false;
+    return str->value;
 }
 
 // Append every char until limit is found (limit excluded)
@@ -76,6 +76,7 @@ void consumer(struct pending *p)
             break;
         case '\'':
         case '"':
+            p->blank = false;
             io_pop();
             skip_until(p, c, true);
             io_pop();
@@ -105,13 +106,14 @@ void consumer(struct pending *p)
     }
 }
 
-char *finder(void)
+const struct string *finder(void)
 {
     static struct pending p;
     // reset the pending structure
     memset(&p, 0, sizeof(struct pending));
-    memset(p.could_match, true, TOK_TYPES_SIZE);
+    p.blank = true;
     consumer(&p);
     append_char(&p, '\0');
-    return p.value;
+    p.str.size--;
+    return &p.str;
 }

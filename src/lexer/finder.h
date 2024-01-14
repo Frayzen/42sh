@@ -4,25 +4,25 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#include "tools/token/token.h"
+#define IS_BLANK(Pending) ((Pending)->blank)
 
-#define IS_BLANK(Pending) ((Pending)->size == 0)
+struct string{
+    char *value;
+    size_t size;
+};
 
 struct pending
 {
-    char *value;
-    size_t size;
+    struct string str;
     bool backslashed;
-    bool could_match[TOK_TYPES_SIZE];
+    bool blank;
 };
 
 /***
- * finder: gets character by character until the word is recognizable, or t here
- * @get_backend function: to look at the next character without popping it
- * @pop_backend function: pops the character in backend so the next one is
- * available
- * @return the string to be used for the token
+ * finder: gets character by character and return the string token
+ * @return a string struct
+ * @see struct string
  */
-char *finder(void);
+const struct string *finder(void);
 
 #endif /* FINDER_H */

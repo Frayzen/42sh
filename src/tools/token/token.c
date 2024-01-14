@@ -17,19 +17,31 @@ bool is_terminating(struct token *token)
     }
 }
 
-int get_type(char *value)
+int get_type(const struct string *str)
 {
+    if (!str || str->size == 0)
+        return WORD;
     int i = 0;
-    while (TOK_TYPES_LT[i] && strcmp(TOK_TYPES_LT[i], value))
+    while (TOK_TYPES_LT[i])
+    {
+        size_t c_id = 0;
+        for (; c_id < str->size; c_id++)
+{
+            if (!TOK_TYPES_LT[i][c_id] || TOK_TYPES_LT[i][c_id] != str->value[c_id])        
+                break;
+        }
+        if (c_id == str->size)
+            return i;
         i++;
+    }
     return i;
 }
 
-struct token *init_token(char *value)
+struct token *init_token(const struct string *str)
 {
     struct token *tok = malloc(sizeof(struct token));
-    tok->type = get_type(value);
-    tok->value = value;
+    tok->type = get_type(str);
+    tok->value = str->value;
     tok->terminal = is_terminating(tok);
     return tok;
 }

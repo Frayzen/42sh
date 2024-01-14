@@ -4,6 +4,9 @@ echo toto
 ###My echo tata
 echo tata
 
+###Echo spaces
+echo There '' is '' spaces
+
 ###Long echo
 echo 'fuenfiue iun iuenf iuenf iunefi ufni uenfi uenfiu nefiun'
 
