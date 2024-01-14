@@ -18,12 +18,13 @@ char *append_char(struct pending *p, char c)
 }
 
 // Append every char until limit is found (limit excluded)
-void append_until(struct pending *p, char limit)
+void skip_until(struct pending *p, char limit, bool append)
 {
     char c = io_peek();
     while (c && c != limit)
     {
-        append_char(p, c);
+        if (append)
+            append_char(p, c);
         io_pop();
         c = io_peek();
     }
@@ -76,15 +77,16 @@ void consumer(struct pending *p)
             p->backslashed = true;
             break;
         case '\'':
+        case '"':
             io_pop();
-            append_until(p, c);
+            skip_until(p, c, true);
             io_pop();
             continue;
         case '#':
             if (IS_BLANK(p))
             {
                 io_pop();
-                append_until(p, '\n');
+                skip_until(p, '\n', false);
             }else
                 goto append;
             continue;
