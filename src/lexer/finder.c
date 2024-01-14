@@ -68,9 +68,7 @@ void consumer(struct pending *p)
             p->backslashed = false;
             goto append;
         }
-        /*
-         * Any external function in the switch should handle every pop involved
-         */
+        // Any external function in the switch should handle every pop involved
         switch (c)
         {
         case '\\':
@@ -87,7 +85,8 @@ void consumer(struct pending *p)
             {
                 io_pop();
                 skip_until(p, '\n', false);
-            }else
+            }
+            else
                 goto append;
             continue;
         case ' ':

@@ -3,11 +3,13 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+
 #include "tools/token/token.h"
 
 #define IS_BLANK(Pending) ((Pending)->size == 0)
 
-struct pending {
+struct pending
+{
     char *value;
     size_t size;
     bool backslashed;
