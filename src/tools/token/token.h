@@ -4,7 +4,7 @@
 
 #define IS_BUILTIN(t) ((t)->type >= T_TRUE && (t)->type <= ECHO)
 
-// /!\ Do not add gaps inside of this enum (see TOK_TYPE_LT)
+// /!\ Do not add gaps inside of this enum (see TOK_TYPES_LT)
 enum token_type
 {
     // end of instruction
@@ -26,7 +26,12 @@ enum token_type
     QUOTE,
     // terminals
     WORD,
+
+    MAX_TOKEN = WORD
 };
+
+#define TOK_TYPES_LT (toktype_lookup())
+#define TOK_TYPES_SIZE MAX_TOKEN
 
 struct token
 {
@@ -54,7 +59,6 @@ void destroy_token(struct token *token);
  */
 void print_token(struct token *token);
 
-#define TOK_TYPE_LT (toktype_lookup())
 /***
  * return the token type lookup table
  * @return The lookup table

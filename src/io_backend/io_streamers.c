@@ -62,11 +62,9 @@ void io_streamer_stdin(void)
 {
     char *line = NULL;
     size_t len = 0;
-    if (getline(&line, &len, stdin) == -1)
+    while (getline(&line, &len, stdin) != -1)
     {
-        // ERROR HANDLE
-        return;
+        io_push(line);
     }
-    io_push(line);
     free(line);
 }

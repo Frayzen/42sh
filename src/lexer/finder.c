@@ -1,128 +1,107 @@
-#include "io_backend/backend_saver.h"
-#include "tools/token/token.h"
-#define _XOPEN_SOURCE 500
-#include <stddef.h>
+#include "finder.h"
+
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
 
-#include "finder.h"
-#define IS_TERMINATING(Char) ((Char) == '\n' || (Char) == ';')
+#include "io_backend/backend_saver.h"
+#include "tools/token/token.h"
 
-/***
- * checks if the word given is one of the reserved word
- */
-static int check_reserved(char *pending)
+// return the p->value
+char *append_char(struct pending *p, char c)
 {
-    char c = io_peek();
-    size_t i = 0;
-    while (TOK_TYPE_LT[i])
-    {
-        if (!strcmp(pending, TOK_TYPE_LT[i]))
-        {
-            if (c != ' ')
-                return 0;
-            return 1;
-        }
-        i++;
-    }
-    return 0;
+    p->value = realloc(p->value, ++p->size);
+    p->value[p->size - 1] = c;
+    return p->value;
 }
 
-void comments(void)
+// return -1 if not found, the id otherwise
+ssize_t match_reserved(struct pending *p)
 {
-    char c = io_peek();
-    io_pop();
-    while (!IS_TERMINATING(c) && c != '\0')
+    if (!p || !p->value)
+        return -1;
+    size_t index = p->size - 1;
+    for (size_t i = 0; i < TOK_TYPES_SIZE; i++)
     {
-        c = io_peek();
-        io_pop();
-    }
-}
-
-char *quotes(void)
-{
-    io_pop();
-    char c = io_peek();
-    char *pending = NULL;
-    size_t size = 0;
-    while (c && c != '\'')
-    {
-        io_pop();
-        pending = realloc(pending, ++size);
-        pending[size - 1] = c;
-        c = io_peek();
-    }
-    pending = realloc(pending, size + 1);
-    pending[size] = '\0';
-    io_pop();
-    return pending;
-}
-
-char *str_maker(void)
-{
-    char c = io_peek();
-    size_t size_pending = 0;
-    char *pending =
-        calloc(2, 1); // one character + terminating NULL to check with strcmp
-    pending[0] = c;
-    pending[++size_pending] = 0;
-    io_pop();
-    if (IS_TERMINATING(c))
-        return pending;
-    if (c == '\n')
-        return pending;
-    while (!check_reserved(pending))
-    {
-        c = io_peek();
-        if (c == ' ')
+        if (!p->could_match[i])
+            continue;
+        const char *tok_str = TOK_TYPES_LT[i];
+        if (tok_str[index] == p->value[index])
         {
-            io_pop();
-            return pending;
-        }
-        else if (!IS_TERMINATING(c))
-        {
-            size_pending++;
-            pending = realloc(pending, size_pending + 1);
-            pending[size_pending - 1] = c;
-            pending[size_pending] = 0;
-            if (c == ' ' || c == '\0')
-            {
-                io_pop();
-                return pending;
-            }
+            if (!tok_str[index + 1])
+                return i;
         }
         else
+            p->could_match[i] = false;
+    }
+    return -1;
+}
+
+// Append every char until limit is found (limit excluded)
+void append_until(struct pending *p, char limit)
+{
+    char c = io_peek();
+    while (c && c != limit)
+    {
+        append_char(p, c);
+        io_pop();
+        c = io_peek();
+    }
+}
+
+void consumer(struct pending *p)
+{
+    while (true)
+    {
+        ssize_t match = match_reserved(p);
+        if (match != -1)
+            return;
+        char c = io_peek();
+        if (p->backslashed)
+            goto append;
+        /*
+         * Any external function in the switch should handle every pop involved
+         */
+        switch (c)
         {
-            return pending;
+        case '\\':
+            p->backslashed = true;
+            break;
+        case '\'':
+            io_pop();
+            append_until(p, c);
+            continue;
+        case ' ':
+            if (!IS_BLANK(p))
+                return;
+            break;
+        case '#':
+            io_pop();
+            append_until(p, '\n');
+            continue;
+        case '\n':
+        case '\0':
+        case ';':
+            if (!IS_BLANK(p))
+                return;
+            /* FALLTHROUGH */
+        default:
+        append:
+            append_char(p, c);
         }
         io_pop();
     }
-    return pending;
 }
 
 char *finder(void)
 {
-    char c = io_peek();
-    if (c == ' ')
-    {
-        io_pop();
-        return finder();
-    }
-    if (c == '#')
-    {
-        comments();
-        return finder();
-    }
-    if (c == '\'')
-    {
-        return quotes();
-    }
-    return str_maker();
+    static struct pending p;
+    // reset the pending structure
+    memset(&p, 0, sizeof(struct pending));
+    memset(p.could_match, true, TOK_TYPES_SIZE);
+    consumer(&p);
+    append_char(&p, '\0');
+    return p.value;
 }
-
-/*
- right now, the single quotes give out singular tokens,
- but it can be modified to get one big token
- containing all that is between the quotes
- */

@@ -20,7 +20,7 @@ bool is_terminating(struct token *token)
 int get_type(char *value)
 {
     int i = 0;
-    while (TOK_TYPE_LT[i] && strcmp(TOK_TYPE_LT[i], value))
+    while (TOK_TYPES_LT[i] && strcmp(TOK_TYPES_LT[i], value))
         i++;
     return i;
 }

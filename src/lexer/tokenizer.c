@@ -1,9 +1,11 @@
 #include "tokenizer.h"
+#include <stdio.h>
 
 #include "lexer/finder.h"
 
 struct token *next_token(void)
 {
-    struct token *result = init_token(finder());
+    char *got = finder();
+    struct token *result = init_token(got);
     return result;
 }
