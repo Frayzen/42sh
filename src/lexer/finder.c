@@ -81,8 +81,12 @@ void consumer(struct pending *p)
             io_pop();
             continue;
         case '#':
-            io_pop();
-            append_until(p, '\n');
+            if (IS_BLANK(p))
+            {
+                io_pop();
+                append_until(p, '\n');
+            }else
+                goto append;
             continue;
         case ' ':
         case '\n':
