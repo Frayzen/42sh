@@ -17,28 +17,6 @@ char *append_char(struct pending *p, char c)
     return p->value;
 }
 
-// return -1 if not found, the id otherwise
-ssize_t match_reserved(struct pending *p)
-{
-    if (!p || !p->value)
-        return -1;
-    size_t index = p->size - 1;
-    for (size_t i = 0; i < TOK_TYPES_SIZE; i++)
-    {
-        if (!p->could_match[i])
-            continue;
-        const char *tok_str = TOK_TYPES_LT[i];
-        if (tok_str[index] == p->value[index])
-        {
-            if (!tok_str[index + 1])
-                return i;
-        }
-        else
-            p->could_match[i] = false;
-    }
-    return -1;
-}
-
 // Append every char until limit is found (limit excluded)
 void append_until(struct pending *p, char limit)
 {
@@ -85,7 +63,10 @@ void consumer(struct pending *p)
     {
         char c = io_peek();
         if (p->backslashed)
+        {
+            p->backslashed = false;
             goto append;
+        }
         /*
          * Any external function in the switch should handle every pop involved
          */
@@ -113,6 +94,7 @@ void consumer(struct pending *p)
         default:
         append:
             append_char(p, c);
+            break;
         }
         io_pop();
     }
