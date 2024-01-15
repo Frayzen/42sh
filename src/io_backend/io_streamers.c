@@ -18,11 +18,11 @@ void main_to_stream(int argc, char **argv)
     {
         if (!strcmp(argv[i], "--pretty-print"))
         {
-            get_env_flag().print = true;
+            get_env_flag()->print = true;
         }
         else if (!strcmp(argv[i], "--verbose"))
         {
-            get_env_flag().verbose = true;
+            get_env_flag()->verbose = true;
         }
         else
         {

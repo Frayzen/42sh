@@ -14,4 +14,4 @@ struct env_flag
  */
 struct env_flag *get_env_flag();
 
-#endif /* ENV_H
+#endif /* ENV_H */
