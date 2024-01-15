@@ -7,14 +7,15 @@ PASSED="\e[00;32mPASSED\e[0m"
 FAILED="\e[00;31mFAILED\e[0m"
 TIMEOUT="\e[00;31mTIMEOUT\e[0m"
 
-theirs="../../theirs"
-theirs_err="../../theirs_err"
-
-ours="../../ours"
-ours_err="../../ours_err"
-
 execute() {
     modname=$2
+
+    theirs="../../theirs$modname"
+    theirs_err="../../theirs_err$modname"
+
+    ours="../../ours$modname"
+    ours_err="../../ours_err$modname"
+
     code=$(echo "$1" | sed 's/\\n/\'$'\n''/g')
     printf '%s' "$code" > code
     (timeout -k 0 1 $path_42sh code) 1> $ours 2> $ours_err
@@ -54,15 +55,15 @@ execute() {
 }
 
 echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
-echo "┃                         FUNCTIONAL TEST                        ┃"
+echo "┃                       FUNCTIONAL TESTS                         ┃"
 echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
 
-test_dir=./tests
-for entry in "$test_dir"/*
-do
+
+parallelize_entry() {
+    entry=$1
     name=$(basename "$entry")
-    echo "[MODULE] $name"
-    echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
+    toprint="[MODULE] $name\n"
+    toprint="$toprint┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n"
     save=0
     build=""
     modname=""
@@ -85,7 +86,17 @@ do
         esac
     done < $entry
     if [ $save -eq 1 ]; then
-        execute "$build" "$modname"
+        toprint="$toprint$(execute "$build" "$modname")\n"
     fi
-    echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
+    toprint="$toprint┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n"
+    echo "$toprint"
+}
+
+test_dir=./tests
+for entry in "$test_dir"/*
+do
+    parallelize_entry "$entry" &
 done
+
+wait
+
