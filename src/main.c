@@ -5,6 +5,7 @@
 #include "exit/exit.h"
 #include "io_backend/io_streamers.h"
 #include "parser/grammar/rules.h"
+#include "tools/ast/ast_utils.h"
 #include "tools/ast/ast.h"
 
 int main(int argc, char *argv[])
