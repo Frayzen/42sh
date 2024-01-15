@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[])
 {
-    main_to_stream(argc, argv);
+        main_to_stream(argc, argv);
     struct ast *ast = NULL;
     gr_input(&ast);
     exec_entry(ast);
