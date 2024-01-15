@@ -27,7 +27,7 @@ int get_type(const struct string *str)
         size_t c_id = 0;
         for (; c_id < str->size; c_id++)
         {
-            if (!TOK_TYPES_LT[i][c_id]
+            if ((i != BSZERO && !TOK_TYPES_LT[i][c_id])
                 || TOK_TYPES_LT[i][c_id] != str->value[c_id])
                 break;
         }

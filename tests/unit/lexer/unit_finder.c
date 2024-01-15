@@ -10,11 +10,7 @@
 void assert_and_clear(const char *val)
 {
     const struct string *str = finder();
-    for (size_t i = 0; i < str->size; i++)
-    {
-        cr_assert_not_null(val[i]);
-        cr_assert_eq(str->value[i], val[i]);
-    }
+    cr_assert_str_eq(str->value, val);
     free(str->value);
 }
 

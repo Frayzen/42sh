@@ -28,12 +28,9 @@ enum token_type
     QUOTE,
     // terminals
     WORD,
-
-    MAX_TOKEN = WORD
 };
 
 #define TOK_TYPES_LT (toktype_lookup())
-#define TOK_TYPES_SIZE MAX_TOKEN
 
 struct token
 {

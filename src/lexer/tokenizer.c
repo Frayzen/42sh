@@ -8,7 +8,7 @@
 struct token *next_token(void)
 {
     const struct string *str = finder();
-    /* printf("GOT %s\n", str->value); */
     struct token *result = init_token(str);
+    /* printf("GOT %d\n", result->type); */
     return result;
 }

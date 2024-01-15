@@ -25,5 +25,4 @@ struct pending
  * @see struct string
  */
 const struct string *finder(void);
-
 #endif /* FINDER_H */

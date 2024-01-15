@@ -7,6 +7,8 @@
 
 #include "io_backend/backend_saver.h"
 
+#define APPEND_CHARS true
+
 // return the p->value
 char *append_char(struct pending *p, char c)
 {
@@ -78,14 +80,14 @@ void consumer(struct pending *p)
         case '"':
             p->blank = false;
             io_pop();
-            skip_until(p, c, true);
+            skip_until(p, c, APPEND_CHARS);
             io_pop();
             continue;
         case '#':
             if (IS_BLANK(p))
             {
                 io_pop();
-                skip_until(p, '\n', false);
+                skip_until(p, '\n', !APPEND_CHARS);
             }
             else
                 goto append;

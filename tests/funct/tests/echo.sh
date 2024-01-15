@@ -38,4 +38,11 @@ echo -e -E -e 'hello world \n'
 ###Echo with n flag
 echo -n 'hello world'
 
+###Double baskslash n no flag
+echo -e '\n\n'
 
+###Double baskslash n flag e
+echo -e '\n\n'
+
+###Double baskslash n flag E
+echo -E '\n\n'
