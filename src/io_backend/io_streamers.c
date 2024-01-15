@@ -56,7 +56,7 @@ void io_streamer_stdin(void)
 void main_to_stream(int argc, char **argv)
 {
     int i = 1;
-    while (1)
+    while (argc > 1)
     {
         if (!strcmp(argv[i], "--pretty-print"))
             get_env_flag()->print = true;
