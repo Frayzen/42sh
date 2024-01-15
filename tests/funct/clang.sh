@@ -10,8 +10,8 @@ output="$(clang-format -style=file --dry-run --Werror $files 2>&1)"
 r=$?
 
 if [ $r -ne 0 ]; then
-    ERROR="\e[00;31m [FORMAT] /!\\ CLANG FORMAT FAILED /!\\ \e[0m"
-    printf '\n\n%b\n' "$ERROR"
+    ERROR="\e[00;31m [CLANG FORMAT] /!\\ CLANG FORMAT FAILED /!\\ \e[0m"
+    printf '\n%b\n' "$ERROR"
     echo $top_line
     while read line;
     do
@@ -20,4 +20,13 @@ if [ $r -ne 0 ]; then
     echo $bot_line
     exit 1
 fi
+
+if [ $ERROR_ONLY -eq 0 ]; then
+    echo ""
+    echo "[CLANG FORMAT]"
+    echo "$top_line"
+    print_line "The CLANG FORMAT has been $(printf "%b%s%b" "$GREEN" "CHECKED" "$RESET")" 12
+    echo "$bot_line"
+fi
+
 exit 0

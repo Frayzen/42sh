@@ -13,13 +13,15 @@ bot_line=$(echo "┗$dash_line┛")
 #Cyan         0;36     Light Cyan    1;36
 #Light Gray   0;37     White         1;37
 
-PASSED="\e[00;32mPASSED\e[0m"
-FAILED="\e[00;31mFAILED\e[0m"
-TIMEOUT="\e[00;31mTIMEOUT\e[0m"
-
+RED="\e[00;31m"
+GREEN="\e[00;32m"
 PURPLE="\e[00;35m"
 OTHER="\e[00;34m"
 RESET="\e[0m"
+
+PASSED="\e[00;32mPASSED\e[0m"
+FAILED="\e[00;31mFAILED\e[0m"
+TIMEOUT="\e[00;31mTIMEOUT\e[0m"
 
 print_line() {
     to_print="$1"

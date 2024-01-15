@@ -1,5 +1,5 @@
-#ifndef GRULES_H
-#define GRULES_H
+#ifndef RULES_H
+#define RULES_H
 
 #include "tools/ast/ast.h"
 
@@ -105,4 +105,4 @@ enum status gr_if(struct ast **ast);
  */
 enum status gr_shell_cmd(struct ast **ast);
 
-#endif /* !GRULES_H */
+#endif /* !RULES_H */
