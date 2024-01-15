@@ -5,18 +5,24 @@
 
 #include "exit/exit.h"
 #include "io_backend/backend_saver.h"
-#include "io_backend/io_streamers.h"
 
 #define TEST_STR "Hello World !"
+
+extern void io_streamer_file(char *path);
+extern void io_streamer_stdin(char *path);
+extern void io_streamer_string(int argc, char **argv);
 
 Test(streamers, file)
 {
     char *file_path = "./tests/unit/io_backend/file_test_streamers";
     io_streamer_file(file_path);
 
-    for (unsigned int i = 0; i < sizeof(TEST_STR); i++)
+    // -1 because file is \n terminated whereas TEST_STR is null terminated
+    for (unsigned int i = 0; i < sizeof(TEST_STR) - 1; i++)
     {
-        cr_assert_eq(io_peek(), TEST_STR[i]);
+        char c = io_peek();
+        cr_assert_eq(io_peek(), TEST_STR[i], "Expected %c got %c", TEST_STR[i],
+                     c);
         io_pop();
     }
     clean(NULL);
@@ -34,12 +40,14 @@ Test(streamers, string_good)
 {
     int argc = 3;
     char *argv[3];
-    argv[0] = "-c";
-    argv[1] = TEST_STR, argv[2] = NULL;
+    argv[0] = "42sh";
+    argv[1] = "-c";
+    argv[2] = TEST_STR;
     io_streamer_string(argc, argv);
     for (unsigned int i = 0; i < sizeof(TEST_STR); i++)
     {
-        cr_assert_eq(io_peek(), TEST_STR[i]);
+        char c = io_peek();
+        cr_assert_eq(c, TEST_STR[i], "Expected %c got %c", TEST_STR[i], c);
         io_pop();
     }
     clean(NULL);
@@ -47,11 +55,10 @@ Test(streamers, string_good)
 
 Test(streamers, string_null)
 {
-    int argc = 3;
-    char *argv[3];
-    argv[0] = "Hello World !";
+    int argc = 2;
+    char *argv[2];
+    argv[0] = "42sh";
     argv[1] = "-c";
-    argv[2] = NULL;
     io_streamer_string(argc, argv);
     cr_assert_eq(io_peek(), '\0');
     clean(NULL);
