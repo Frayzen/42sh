@@ -1,7 +1,7 @@
 #!/bin/sh
 cd $(dirname "$0")
 
-source ./utils.sh
+. ./utils.sh
 path_42sh=../../src/42sh
 
 file_id=0

@@ -1,6 +1,6 @@
 #!/bin/sh
 cd $(dirname "$0")
-source ./utils.sh
+. ./utils.sh
 
 modules="tests.sh clang.sh hguards.sh"
 

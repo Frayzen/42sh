@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cd $(dirname "$0")
-source ./utils.sh
+. ./utils.sh
 
 cd $(git rev-parse --show-toplevel)
 
