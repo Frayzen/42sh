@@ -43,6 +43,9 @@ else
     echo yes
 fi
 
+###Test fi newline
+if false; then echo ok; fi
+
 ###Lots of if else
 if false; then
     echo ok
@@ -59,3 +62,4 @@ elif false; then
 else
     echo not
 fi
+

@@ -78,15 +78,9 @@ int exec_echo(struct ast *ast)
 // this creates the char ** needed for the arguments of execvp
 char **create_command(struct ast *ast)
 {
-    size_t size_array = 1;
-    char **array_arg = calloc(size_array, sizeof(char *));
+    char **array_arg = calloc(ast->nb_children + 1, sizeof(char *));
     for (int i = 0; i < ast->nb_children; i++)
-    {
-        array_arg[size_array - 1] = ast->children[i]->token->value;
-        array_arg = realloc(array_arg, sizeof(char *) * size_array + 1);
-        size_array++;
-    }
-    array_arg[size_array - 1] = NULL;
+        array_arg[i] = ast->children[i]->token->value;
     return array_arg;
 }
 
@@ -115,6 +109,7 @@ int external_bin(struct ast *ast)
             return 0;
         }
     }
+    fflush(stdout);
     return 0;
 }
 

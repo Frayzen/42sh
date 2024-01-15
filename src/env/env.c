@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "tools/token/token.h"
 struct env_flag *get_env_flag(void)
 {
     static struct env_flag flag = { .print = 0, .verbose = 0 };
@@ -12,12 +14,13 @@ struct env_flag *get_env_flag(void)
 void verbose(struct token *token)
 {
     size_t i = 0;
+    const char **tok_type = toktype_lookup();
     int done = 0;
-    while (TOK_TYPE_LT[i])
+    while (tok_type[i])
     {
-        if (!strcmp(token->value, TOK_TYPE_LT[i]))
+        if (!strcmp(token->value, tok_type[i]))
         {
-            const char *type = TOK_TYPE_LT[i];
+            const char *type = tok_type[i];
             if (!strcmp(type, "\n"))
                 printf("%s: %s\n", "NEWLINE", "\\n");
             else if (!strcmp(type, "\0"))

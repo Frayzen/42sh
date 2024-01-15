@@ -8,6 +8,7 @@
 #include "parser/grammar/rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
+
 int main(int argc, char *argv[])
 {
     main_to_stream(argc, argv);
