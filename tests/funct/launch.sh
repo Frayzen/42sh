@@ -7,22 +7,30 @@ PASSED="\e[00;32mPASSED\e[0m"
 FAILED="\e[00;31mFAILED\e[0m"
 TIMEOUT="\e[00;31mTIMEOUT\e[0m"
 
+theirs="../../theirs"
+theirs_err="../../theirs_err"
+
+ours="../../ours"
+ours_err="../../ours_err"
+
 execute() {
     modname=$2
-    printf "$1\n" > code
-    (timeout -k 0 1 $path_42sh code) 1> ours 2> ours_err
+    code=$(sed 's/\\n/\'$'\n''/g' <<< "$1")
+    printf '%s' "$code" > code
+    (timeout -k 0 1 $path_42sh code) 1> $ours 2> $ours_err
     timeout=$?
-    bash --posix code 1> theirs 2>theirs_err
-    dif=$(diff ours theirs)
+    bash --posix code 1> $theirs 2> $theirs_err
+    dif=$(diff $ours $theirs)
     res=$?
-    dif_err=$(diff ours_err theirs_err)
+    dif_err=$(diff $ours_err $theirs_err)
     res_err=$?
     toprint="┃"
     toadd=0
     res_err=0
-    if [ -s theirs_err -a ! -s ours_err ]; then
+    if [ -s $theirs_err -a ! -s $ours_err ]; then
         res_err=1
     fi
+    error=0
     if [ $timeout -ne 0 -o $res -ne 0 -o $res_err -ne 0 ]; then
         toprint="$toprint$(printf '[%b] ' "$FAILED")"
         if [ $timeout -ne 0 ]; then
@@ -30,6 +38,7 @@ execute() {
             toadd=$(($toadd+12))
         fi
         toprint=$toprint$modname
+        error=1
     else
         toprint="$toprint$(printf '[%b] ' "$PASSED")"
         toprint="$toprint$modname"
@@ -41,7 +50,7 @@ execute() {
         echo -n " "
     done
     echo "┃"
-    # rm theirs ours code ours_err theirs_err
+    rm $theirs $ours $ours_err $theirs_err code
 }
 
 echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"

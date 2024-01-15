@@ -88,6 +88,7 @@ void consumer(struct pending *p)
             {
                 io_pop();
                 skip_until(p, '\n', !APPEND_CHARS);
+                io_pop();
             }
             else
                 goto append;

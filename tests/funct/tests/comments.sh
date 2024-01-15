@@ -93,12 +93,6 @@ cut -f1,2 data.csv # Extracting columns 1 and 2 from a CSV file
 ### WC command with a comment
 wc -l textfile.txt # Counting the number of lines in a file
 
-### Piping commands with comments
-ls -l | grep "pattern" | sort # Combining commands with a pipeline
-
-### Redirecting output with a comment
-echo "Hello World" > output.txt # Writing to an output file
-
 ### Command substitution with a comment
 result=$(echo "This is a result") # Storing the result in a variable
 
