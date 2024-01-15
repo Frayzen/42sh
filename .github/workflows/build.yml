@@ -7,11 +7,10 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Execute the checks
         run: |
-          sudo apt-get install libcriterion-dev
-          sudo apt-get install clang-format
+          sudo apt-get install libcriterion-dev clang-format
           autoreconf -i
           ./configure
           make check
