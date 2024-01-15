@@ -1,6 +1,8 @@
 #ifndef IO_STREAMERS
 #define IO_STREAMERS
 
+#include <stddef.h>
+
 #define _POSIX_C_SOURCE 200809L
 
 /***
@@ -19,6 +21,6 @@ void main_to_stream(int argc, char **argv);
  * @param size the maximum number of char to read
  * @return the number of character read
  */
-int stream_input(int size);
+size_t stream_input(size_t size);
 
 #endif /* !IO_STREAMERS */

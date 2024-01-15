@@ -64,13 +64,12 @@ void main_to_stream(int argc, char **argv)
         print_error(ARG_ERROR);
 }
 
-int stream_input(int size)
+size_t stream_input(size_t size)
 {
     if (IO_FILE == NULL)
         return 0;
-    char *buffer = malloc(sizeof(char) * (size + 1));
-    int amount = fread(buffer, 1, size, IO_FILE);
-    buffer[amount] = '\0';
+    char *buffer = malloc(sizeof(char) * size);
+    int amount = getline(&buffer, &size, IO_FILE);
     io_push(buffer);
     free(buffer);
     return amount;
