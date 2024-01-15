@@ -55,23 +55,16 @@ void io_streamer_stdin(void)
 
 void main_to_stream(int argc, char **argv)
 {
-    int flag = true;
     int i = 1;
-    while (flag)
+    while (1)
     {
         if (!strcmp(argv[i], "--pretty-print"))
-        {
             get_env_flag()->print = true;
-        }
         else if (!strcmp(argv[i], "--verbose"))
-        {
             get_env_flag()->verbose = true;
-        }
         else
-        {
-            flag = false;
-        }
-        i += (flag) ? 1 : 0;
+            break;
+        i++;
     }
     argc -= i;
     argv += i;
