@@ -15,7 +15,7 @@ ours_err="../../ours_err"
 
 execute() {
     modname=$2
-    code=$(sed 's/\\n/\'$'\n''/g' <<< "$1")
+    code=$(echo "$1" | sed 's/\\n/\'$'\n''/g')
     printf '%s' "$code" > code
     (timeout -k 0 1 $path_42sh code) 1> $ours 2> $ours_err
     timeout=$?
