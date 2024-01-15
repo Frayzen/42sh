@@ -21,7 +21,8 @@ Test(streamers, file)
     for (unsigned int i = 0; i < sizeof(TEST_STR) - 1; i++)
     {
         char c = io_peek();
-        cr_assert_eq(io_peek(), TEST_STR[i], "Expected %c got %c", TEST_STR[i], c);
+        cr_assert_eq(io_peek(), TEST_STR[i], "Expected %c got %c", TEST_STR[i],
+                     c);
         io_pop();
     }
     clean(NULL);
