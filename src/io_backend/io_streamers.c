@@ -44,6 +44,7 @@ void io_streamer_string(int argc, char **argv)
             set_fd(file);
         }
     }
+    print_error(ARG_ERROR);
     return;
 }
 

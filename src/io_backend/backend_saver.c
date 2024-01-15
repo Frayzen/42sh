@@ -45,7 +45,7 @@ char io_peek(void)
     union ringitem *item = rb_peek(rb);
     if (!item)
         return '\0';
-    return rb_peek(rb)->c;
+    return item->c;
 }
 
 bool io_pop(void)
