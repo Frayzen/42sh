@@ -6,16 +6,37 @@
 #include <string.h>
 #include <sys/types.h>
 
+#include "env/env.h"
 #include "exit/exit.h"
 #include "io_backend/backend_saver.h"
 
 void main_to_stream(int argc, char **argv)
 {
-    if (argc == 1)
+    int flag = true;
+    int i = 1;
+    while (flag)
+    {
+        if (!strcmp(argv[i], "--pretty-print"))
+        {
+            get_env_flag().print = true;
+        }
+        else if (!strcmp(argv[i], "--verbose"))
+        {
+            get_env_flag().verbose = true;
+        }
+        else
+        {
+            flag = false;
+        }
+        i += (flag) ? 1 : 0;
+    }
+    argc -= i;
+    argv += i;
+    if (argc == 0)
         io_streamer_stdin();
+    else if (argc == 1)
+        io_streamer_file(argv[i]);
     else if (argc == 2)
-        io_streamer_file(argv[1]);
-    else if (argc == 3)
         io_streamer_string(argc, argv);
     else
         print_error(ARG_ERROR);
