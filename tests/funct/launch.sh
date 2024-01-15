@@ -112,7 +112,7 @@ execute() {
         fi
         print_line "[ = END = ]" 0 $PURPLE
     fi
-    # rm $theirs $ours $ours_err $theirs_err $script
+    rm $theirs $ours $ours_err $theirs_err $script
 }
 
 echo $top_line
