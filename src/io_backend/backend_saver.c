@@ -1,5 +1,7 @@
 #include "io_backend/backend_saver.h"
+#include <stdio.h>
 
+#include "io_streamers.h"
 #include "tools/ring_buffer/ring_buffer.h"
 
 static struct ringbuffer *get_buffer(void)
@@ -28,12 +30,21 @@ void io_push(char *str)
     io_push_chars(str, strlen(str));
 }
 
+void refill(void)
+{
+    if (stream_input(1024) == 0)
+        io_push("");
+}
+
 char io_peek(void)
 {
     struct ringbuffer *rb = get_buffer();
     union ringitem *item = rb_peek(rb);
     if (!item)
+    {
+        refill();
         return '\0';
+    }
     return rb_peek(rb)->c;
 }
 

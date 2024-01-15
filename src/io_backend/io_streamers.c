@@ -5,9 +5,53 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 #include "exit/exit.h"
 #include "io_backend/backend_saver.h"
+
+#define IO_FILE (set_fd(NULL))
+
+FILE *set_fd(FILE *new_file)
+{
+    static FILE *file = NULL;
+    if (new_file == NULL)
+        return file;
+    file = new_file;
+    return file;
+}
+
+void io_streamer_file(char *path_to_file)
+{
+    FILE *file = fopen(path_to_file, "r");
+    if (!file)
+    {
+        print_error(FILE_COULDNT_OPEN);
+        return;
+    }
+    fseek(file, 0, SEEK_SET);
+    set_fd(file);
+}
+
+void io_streamer_string(int argc, char **argv)
+{
+    for (int i = 0; i < argc - 1; i++)
+    {
+        if (!strcmp(argv[i], "-c"))
+        {
+            io_push(argv[i + 1]);
+            char *buf = argv[i + 1];
+            FILE *file = fmemopen(buf, strlen(buf), "r");
+            set_fd(file);
+        }
+    }
+    return;
+}
+
+void io_streamer_stdin(void)
+{
+    set_fd(stdin);
+}
 
 void main_to_stream(int argc, char **argv)
 {
@@ -21,52 +65,12 @@ void main_to_stream(int argc, char **argv)
         print_error(ARG_ERROR);
 }
 
-void io_streamer_file(char *path_to_file)
+int stream_input(int size)
 {
-    FILE *file = fopen(path_to_file, "r");
-    if (!file)
-    {
-        print_error(FILE_COULDNT_OPEN);
-        return;
-    }
-    fseek(file, 0, SEEK_END);
-    long length_of_file = ftell(file);
-    char *buffer = malloc(length_of_file);
-    if (!buffer)
-    {
-        print_error(MALLOC_NULL);
-        return;
-    }
-    fseek(file, 0, SEEK_SET);
-    if (fread(buffer, 1, length_of_file, file) == 0)
-        return;
-    fclose(file);
-    buffer[length_of_file - 1] = '\0';
+    char *buffer = malloc(sizeof(char) * (size + 1));
+    int amount = fread(buffer, 1, size, IO_FILE);
+    buffer[amount] = '\0';
     io_push(buffer);
     free(buffer);
-}
-
-void io_streamer_string(int argc, char **argv)
-{
-    for (int i = 0; i < argc - 1; i++)
-    {
-        if (!strcmp(argv[i], "-c"))
-        {
-            io_push(argv[i + 1]);
-        }
-    }
-    return;
-}
-
-void io_streamer_stdin(void)
-{
-    char *line = NULL;
-    size_t len = 0;
-    if (getline(&line, &len, stdin) == -1)
-    {
-        // ERROR HANDLE
-        return;
-    }
-    io_push(line);
-    free(line);
+    return amount;
 }
