@@ -1,13 +1,28 @@
 #ifndef FINDER_H
 #define FINDER_H
 
-/***
- * finder: gets character by character until the word is recognizable, or t here
- * @get_backend function: to look at the next character without popping it
- * @pop_backend function: pops the character in backend so the next one is
- * available
- * @return the string to be used for the token
- */
-char *finder(void);
+#include <stdbool.h>
+#include <stddef.h>
 
+#define IS_BLANK(Pending) ((Pending)->blank)
+
+struct string
+{
+    char *value;
+    size_t size;
+};
+
+struct pending
+{
+    struct string str;
+    bool backslashed;
+    bool blank;
+};
+
+/***
+ * finder: gets character by character and return the string token
+ * @return a string struct
+ * @see struct string
+ */
+const struct string *finder(void);
 #endif /* FINDER_H */

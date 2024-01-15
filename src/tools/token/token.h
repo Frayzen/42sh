@@ -2,9 +2,11 @@
 #define TOKEN_H
 #include <stdbool.h>
 
+#include "lexer/finder.h"
+
 #define IS_BUILTIN(t) ((t)->type >= T_TRUE && (t)->type <= ECHO)
 
-// /!\ Do not add gaps inside of this enum (see TOK_TYPE_LT)
+// /!\ Do not add gaps inside of this enum (see TOK_TYPES_LT)
 enum token_type
 {
     // end of instruction
@@ -28,6 +30,8 @@ enum token_type
     WORD,
 };
 
+#define TOK_TYPES_LT (toktype_lookup())
+
 struct token
 {
     enum token_type type;
@@ -37,10 +41,10 @@ struct token
 
 /***
  * creates a token, sets value to lexime or 'term', sets type
- * @param value <- the lexeme passed from the finder
+ * @param value <- the string passed from the finder
  * @return <- a malloced token structure
  */
-struct token *init_token(char *value);
+struct token *init_token(const struct string *str);
 
 /***
  * frees a token
@@ -54,7 +58,6 @@ void destroy_token(struct token *token);
  */
 void print_token(struct token *token);
 
-#define TOK_TYPE_LT (toktype_lookup())
 /***
  * return the token type lookup table
  * @return The lookup table
