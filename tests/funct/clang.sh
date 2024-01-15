@@ -12,12 +12,11 @@ if [ $r -ne 0 ]; then
     ERROR="\e[00;31m [CLANG FORMAT] /!\\ CLANG FORMAT FAILED /!\\ \e[0m"
     printf '\n%b\n' "$ERROR"
     echo $top_line
-    while read line;
-    do
-        print_line "$line" 0 "$PURPLE"
-    done < <(echo "$output")
-    echo $bot_line
-    exit 1
+    echo "$output" | while IFS= read -r line; do
+    print_line "$line" 0 "$PURPLE"
+done
+echo $bot_line
+exit 1
 fi
 
 if [ $ERROR_ONLY -eq 0 ]; then
