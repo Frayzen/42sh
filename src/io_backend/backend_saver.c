@@ -39,12 +39,11 @@ void refill(void)
 char io_peek(void)
 {
     struct ringbuffer *rb = get_buffer();
+    if (rb->cur_size == 0)
+        refill();
     union ringitem *item = rb_peek(rb);
     if (!item)
-    {
-        refill();
         return '\0';
-    }
     return rb_peek(rb)->c;
 }
 

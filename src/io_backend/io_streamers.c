@@ -39,7 +39,6 @@ void io_streamer_string(int argc, char **argv)
     {
         if (!strcmp(argv[i], "-c"))
         {
-            io_push(argv[i + 1]);
             char *buf = argv[i + 1];
             FILE *file = fmemopen(buf, strlen(buf), "r");
             set_fd(file);
@@ -67,6 +66,8 @@ void main_to_stream(int argc, char **argv)
 
 int stream_input(int size)
 {
+    if (IO_FILE == NULL)
+        return 0;
     char *buffer = malloc(sizeof(char) * (size + 1));
     int amount = fread(buffer, 1, size, IO_FILE);
     buffer[amount] = '\0';
