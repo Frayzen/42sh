@@ -12,6 +12,7 @@ enum status gr_list(struct ast **ast)
     if (tok_peek()->terminal)
         return OK;
     struct ast *ast_list = init_ast(AST_LIST, NULL);
+    set_ast_root(ast_list);
     enum status state = gr_and_or(&ast_list);
     if (state == ERROR)
     {

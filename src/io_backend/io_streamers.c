@@ -26,8 +26,7 @@ void io_streamer_file(char *path_to_file)
     FILE *file = fopen(path_to_file, "r");
     if (!file)
     {
-        print_error(FILE_COULDNT_OPEN);
-        return;
+        exit_gracefully(INVALID_FILE_PATH);
     }
     fseek(file, 0, SEEK_END);
     long length_of_file = ftell(file);

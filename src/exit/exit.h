@@ -10,10 +10,10 @@ enum error_type
     EXECVP_FAILED,
     RING_BF_FULL,
     MALLOC_NULL,
-    FILE_COULDNT_OPEN,
     ADD_CHILD_ERROR,
     FORK_ERROR,
     LIST_NOT_FOUND,
+    INVALID_FILE_PATH,
 };
 
 /***
@@ -21,6 +21,13 @@ enum error_type
  * @param ast the ast created by the parser
  */
 void clean(struct ast *ast);
+
+/***
+ * Cleans the tree, prints the message associatedto the error type and exits
+ * with the value associated to the error type
+ * @param type of the error
+ */
+void exit_gracefully(enum error_type type);
 
 /***
  * Print the appropriate error string on stferr
