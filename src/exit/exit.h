@@ -5,15 +5,21 @@
 
 enum error_type
 {
+    // General Errors -> 1
+    MALLOC_NULL,
+    RING_BF_FULL,
+    ADD_CHILD_ERROR,
+    LIST_NOT_FOUND,
+    // Misuse of shell built-ins -> 2
     ARG_ERROR,
     GRAMMAR_ERROR_ENTRY,
-    EXECVP_FAILED,
-    RING_BF_FULL,
-    MALLOC_NULL,
-    ADD_CHILD_ERROR,
     FORK_ERROR,
-    LIST_NOT_FOUND,
+    //  Command cannot execute (permission or not an executable) -> 126
+    NO_EXEC_PERM,
+    NO_READ_PERM,
     INVALID_FILE_PATH,
+    // Command not found -> 127
+    EXECVP_FAILED,
 };
 
 /***

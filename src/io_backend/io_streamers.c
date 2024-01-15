@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -21,12 +22,33 @@ FILE *set_fd(FILE *new_file)
     return file;
 }
 
+bool is_executable(char *path_to_file)
+{
+    if (access(path_to_file, X_OK))
+        return false;
+    struct stat file_info;
+    if (stat(path_to_file, &file_info))
+        return false;
+    if (!S_ISREG(file_info.st_mode))
+        return false;
+    return true;
+}
+
 void io_streamer_file(char *path_to_file)
 {
+    if (access(path_to_file, F_OK))
+        exit_gracefully(INVALID_FILE_PATH);
+    if (access(path_to_file, R_OK))
+        exit_gracefully(NO_EXEC_PERM);
     FILE *file = fopen(path_to_file, "r");
     if (!file)
     {
         exit_gracefully(INVALID_FILE_PATH);
+    }
+    if (!is_executable(path_to_file))
+    {
+        fclose(file);
+        exit_gracefully(NO_EXEC_PERM);
     }
     fseek(file, 0, SEEK_SET);
     set_fd(file);
@@ -60,7 +82,7 @@ void main_to_stream(int argc, char **argv)
     else if (argc == 3)
         io_streamer_string(argc, argv);
     else
-        print_error(ARG_ERROR);
+        exit_gracefully(ARG_ERROR);
 }
 
 size_t stream_input(size_t size)
