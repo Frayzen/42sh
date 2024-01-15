@@ -7,10 +7,22 @@ PASSED="\e[00;32mPASSED\e[0m"
 FAILED="\e[00;31mFAILED\e[0m"
 TIMEOUT="\e[00;31mTIMEOUT\e[0m"
 
+file_id=0
+
+if [ $# -ge 1 ]; then
+    file_id=$1
+fi
+
+mod_id=0
+
+if [ $# -ge 2 ]; then
+    mod_id=$2
+fi
+
+
 execute() {
     modname=$2
     id=$3
-
     theirs="../../theirs$id"
     theirs_err="../../theirs_err$id"
 
@@ -27,7 +39,7 @@ execute() {
     res=$?
     dif_err=$(diff $ours_err $theirs_err)
     res_err=$?
-    toprint="┃"
+    toprint="┃($id)"
     toadd=0
     res_err=0
     if [ -s $theirs_err -a ! -s $ours_err ]; then
@@ -65,17 +77,21 @@ parallelize_entry() {
     entry=$1
     id=$2
     name=$(basename "$entry")
-    toprint="[MODULE] $name\n"
+    toprint="[MODULE $id] $name\n"
     toprint="$toprint┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n"
     save=0
     build=""
     modname=""
+    curid=1
     while IFS= read -r line; do
         case $line in
             '###'*)
                 if [ $save -eq 1 ]; then
-                    toprint="$toprint$(execute "$build" "$modname" "$id")\n"
+                    if [ $mod_id -eq 0 -o $curid -eq $mod_id ]; then
+                        toprint="$toprint$(execute "$build" "$modname" "$curid")\n"
+                    fi
                     build=""
+                    curid=$(($curid+1))
                 fi
                 save=1
                 modname="$(echo $line | cut -c4-)"
@@ -89,7 +105,9 @@ parallelize_entry() {
         esac
     done < $entry
     if [ $save -eq 1 ]; then
-        toprint="$toprint$(execute "$build" "$modname" "$id")\n"
+        if [ $mod_id -eq 0 -o $curid -eq $mod_id ]; then
+            toprint="$toprint$(execute "$build" "$modname" "$curid")\n"
+        fi
     fi
     toprint="$toprint┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n"
     echo ""
@@ -100,7 +118,10 @@ test_dir=./tests
 id=0
 for entry in "$test_dir"/*
 do
-    parallelize_entry "$entry" $id &
     id=$(($id+1))
+    if [ $file_id -ne 0 -a $file_id -ne $id ]; then
+        continue
+    fi
+    parallelize_entry "$entry" $id &
 done
 wait
