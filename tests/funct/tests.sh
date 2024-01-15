@@ -53,6 +53,7 @@ execute() {
         error=1
     else
         if [ $ERROR_ONLY -eq 1 ]; then
+            rm $theirs $ours $ours_err $theirs_err $script
             exit 0
         fi
         toprint="$toprint$(printf '[%b] ' "$PASSED")"
