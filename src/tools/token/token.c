@@ -58,10 +58,18 @@ void destroy_token(struct token *token)
 
 void print_token(struct token *token)
 {
+    const char **tok_type = toktype_lookup();
+    const char *type = tok_type[token->type];
     if (!token)
         printf(" |NULL| ");
+    else if (!type)
+        printf(" |%s|%s| ", "WORD", token->value);
+    else if (!strcmp(type, "\n"))
+        printf(" |%s|%s| ", "NEWLINE", "\\n");
+    else if (!strcmp(type, "\0"))
+        printf(" |%s|%s| ", "BSZERO", "\\0");
     else
-        printf(" |%s|%d| ", token->value, token->type);
+        printf(" |%s|%s| ", token->value, type);
     printf("\n");
 }
 

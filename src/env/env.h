@@ -1,7 +1,7 @@
 #ifndef ENV_H
 #define ENV_H
 #include "tools/token/token.h"
-// need to add th defualt value in the get_env_flag function for each new flag
+// need to add the default value in the get_env_flag function for each new flag
 struct env_flag
 {
     int print;
@@ -16,6 +16,7 @@ struct env_flag *get_env_flag(void);
 
 /***
  * executes the verbose flag
+ * @param token the token to print
  */
 void verbose(struct token *token);
 #endif /* ENV_H */
