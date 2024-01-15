@@ -12,7 +12,7 @@ AM_INIT_AUTOMAKE([subdir-objects] [foreign])
 # AM_SILENT_RULES([yes])
 
 # Enable ar for Makefile
-AM_PROG_AR
+# AM_PROG_AR
 
 # Check if a ranlib is available
 AC_PROG_RANLIB
