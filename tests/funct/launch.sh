@@ -1,6 +1,12 @@
 #!/bin/sh
 cd $(dirname "$0")
 
+line_size=80
+dash_line=$(printf '━%.0s' $(seq 1 $line_size))
+
+top_line=$(echo "┏$dash_line┓")
+bot_line=$(echo "┗$dash_line┛")
+
 path_42sh=../../src/42sh
 
 PASSED="\e[00;32mPASSED\e[0m"
@@ -19,6 +25,20 @@ if [ $# -ge 2 ]; then
     mod_id=$2
 fi
 
+print_line() {
+    to_print="$1"
+    to_add=0
+    if [ $# -ge 2 ]; then
+        to_add=$2
+    fi
+    nb_char=$(echo $to_print | wc -m)
+    nb_char=$(($line_size-$nb_char+$to_add+1))
+    echo -n "┃$to_print"
+    for _ in $(seq $nb_char); do
+        echo -n " "
+    done
+    echo "┃"
+}
 
 execute() {
     modname=$2
@@ -40,8 +60,8 @@ execute() {
     res=$?
     dif_err=$(diff $ours_err $theirs_err)
     res_err=$?
-    toprint="┃($id)"
-    toadd=0
+    toprint="($id)"
+    toadd=12
     res_err=0
     if [ -s $theirs_err -a ! -s $ours_err ]; then
         res_err=1
@@ -59,19 +79,13 @@ execute() {
         toprint="$toprint$(printf '[%b] ' "$PASSED")"
         toprint="$toprint$modname"
     fi
-    nb_char=$(echo $toprint | wc -m)
-    nb_char=$((78-$nb_char+$toadd))
-    echo -n $toprint
-    for _ in $(seq $nb_char); do
-        echo -n " "
-    done
-    echo "┃"
+    print_line "$toprint" $toadd
     rm $theirs $ours $ours_err $theirs_err $script
 }
 
-echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
-echo "┃                       FUNCTIONAL TESTS                         ┃"
-echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
+echo $top_line
+print_line "$(printf ' %.0s' $(seq 1 $((-8+line_size/2))))FUNCTIONAL TESTS"
+echo $bot_line
 
 
 parallelize_entry() {
@@ -79,7 +93,7 @@ parallelize_entry() {
     file_id=$2
     name=$(basename "$entry")
     toprint="[MODULE $file_id] $name\n"
-    toprint="$toprint┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n"
+    toprint="$toprint$top_line\n"
     save=0
     build=""
     modname=""
@@ -110,7 +124,7 @@ parallelize_entry() {
             toprint="$toprint$(execute "$build" "$modname" $curid)\n"
         fi
     fi
-    toprint="$toprint┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n"
+    toprint="$toprint$bot_line\n"
     echo ""
     echo "$(echo "$toprint" | sed 's/\\n/\'$'\n''/g')"
 }
