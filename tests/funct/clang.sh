@@ -2,7 +2,6 @@
 cd $(dirname "$0")
 source ./utils.sh
 
-
 cd $(git rev-parse --show-toplevel)
 
 files=$(find . -name "*.c" -o -name "*.h")
