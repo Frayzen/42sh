@@ -1,3 +1,4 @@
+#define _POXIC_C_SOURCE 200809L
 #include "token.h"
 
 #include <ctype.h>
