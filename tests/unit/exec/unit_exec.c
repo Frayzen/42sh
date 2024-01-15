@@ -9,7 +9,7 @@
 #include "parser/grammar/rules.h"
 static void redirect_all_stdout(void)
 {
-    cr_redirect_stdout();
+        cr_redirect_stdout();
 }
 
 Test(exec, one, .init = redirect_all_stdout)
