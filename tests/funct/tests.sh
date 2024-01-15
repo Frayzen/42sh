@@ -72,12 +72,12 @@ execute() {
         print_line "[ = END = ]" 0 $PURPLE
     fi
     rm $theirs $ours $ours_err $theirs_err $script
+    if [ $error -ne 1 ]; then
+        exit 0
+    else
+        exit 1
+    fi
 }
-
-echo $top_line
-print_line "$(printf ' %.0s' $(seq 1 $((-8+line_size/2))))FUNCTIONAL TESTS"
-echo $bot_line
-
 
 parallelize_entry() {
     entry=$1
@@ -89,12 +89,17 @@ parallelize_entry() {
     build=""
     modname=""
     curid=1
+    ers=0
     while IFS= read -r line; do
         case $line in
             '###'*)
                 if [ $save -eq 1 ]; then
                     if [ $mod_id -eq 0 -o $curid -eq $mod_id ]; then
-                        toprint="$toprint$(execute "$build" "$modname" $curid)\n"
+                        val=$(execute "$build" "$modname" $curid)
+                        if [ $? -eq 1 ]; then
+                            errs=1
+                        fi
+                        toprint="$toprint$val\n"
                     fi
                     build=""
                     curid=$(($curid+1))
@@ -112,12 +117,18 @@ parallelize_entry() {
     done < $entry
     if [ $save -eq 1 ]; then
         if [ $mod_id -eq 0 -o $curid -eq $mod_id ]; then
-            toprint="$toprint$(execute "$build" "$modname" $curid)\n"
+            val=$(execute "$build" "$modname" $curid)
+            if [ $? -eq 1 ]; then
+                errs=1
+            fi
+            toprint="$toprint$val\n"
         fi
     fi
     toprint="$toprint$bot_line\n"
-    echo ""
-    echo "$(echo "$toprint" | sed 's/\\n/\'$'\n''/g')"
+    if [ $ers -eq 1 ]; then
+        echo ""
+        echo "$(echo "$toprint" | sed 's/\\n/\'$'\n''/g')"
+    fi
 }
 
 test_dir=./tests

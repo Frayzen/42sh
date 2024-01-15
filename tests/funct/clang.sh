@@ -10,7 +10,7 @@ r=$?
 
 if [ $r -ne 0 ]; then
     ERROR="\e[00;31m [FORMAT] /!\\ CLANG FORMAT FAILED /!\\ \e[0m"
-    printf '\n\n%b\n' "$ERROR"
+    printf '\n%b\n' "$ERROR"
     echo $top_line
     while read line;
     do

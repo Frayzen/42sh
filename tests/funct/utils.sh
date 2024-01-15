@@ -37,6 +37,6 @@ print_line() {
         echo -n " "
     done
     printf '%b' "$RESET"
-    echo "┃"
+    echo  ┃
 }
 

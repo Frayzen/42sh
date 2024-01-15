@@ -1,11 +1,27 @@
 #!/bin/sh
 cd $(dirname "$0")
+source ./utils.sh
 
-./tests.sh
-if [ $? -eq 1 ]; then
-    exit 1
+modules="tests.sh clang.sh hguards.sh"
+
+echo $top_line
+print_line "$(printf ' %.0s' $(seq 1 $((-8+line_size/2))))FUNCTIONAL TESTS"
+echo $bot_line
+
+export ERROR_ONLY=0
+if [ $# -ge 1 ]; then
+    if [ "$1" = "errors" ]; then
+        ERROR_ONLY=1
+    fi
 fi
-./clang.sh
-if [ $? -eq 1 ]; then
-    exit 1
-fi
+
+retval=0
+for module in $modules;
+do
+    ./$module
+    if [ $? -eq 1 ]; then
+        retval=1
+    fi
+done
+
+exit $retval
