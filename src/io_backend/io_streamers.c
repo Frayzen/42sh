@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "env/env.h"
 #include "exit/exit.h"
 #include "io_backend/backend_saver.h"
 
@@ -54,11 +55,24 @@ void io_streamer_stdin(void)
 
 void main_to_stream(int argc, char **argv)
 {
-    if (argc == 1)
+    int i = 1;
+    while (1)
+    {
+        if (!strcmp(argv[i], "--pretty-print"))
+            get_env_flag()->print = true;
+        else if (!strcmp(argv[i], "--verbose"))
+            get_env_flag()->verbose = true;
+        else
+            break;
+        i++;
+    }
+    argc -= i;
+    argv += i;
+    if (argc == 0)
         io_streamer_stdin();
+    else if (argc == 1)
+        io_streamer_file(*argv);
     else if (argc == 2)
-        io_streamer_file(argv[1]);
-    else if (argc == 3)
         io_streamer_string(argc, argv);
     else
         print_error(ARG_ERROR);
