@@ -52,6 +52,9 @@ execute() {
         toprint=$toprint$modname
         error=1
     else
+        if [ $ERROR_ONLY -eq 1 ]; then
+            exit 0
+        fi
         toprint="$toprint$(printf '[%b] ' "$PASSED")"
         toprint="$toprint$modname"
     fi
@@ -89,7 +92,7 @@ parallelize_entry() {
     build=""
     modname=""
     curid=1
-    ers=0
+    errs=0
     while IFS= read -r line; do
         case $line in
             '###'*)
@@ -125,7 +128,7 @@ parallelize_entry() {
         fi
     fi
     toprint="$toprint$bot_line\n"
-    if [ $ers -eq 1 ]; then
+    if [ $errs -eq 1 -o $ERROR_ONLY -eq 0 ]; then
         echo ""
         echo "$(echo "$toprint" | sed 's/\\n/\'$'\n''/g')"
     fi

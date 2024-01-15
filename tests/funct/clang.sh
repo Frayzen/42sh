@@ -2,7 +2,6 @@
 cd $(dirname "$0")
 source ./utils.sh
 
-
 cd $(git rev-parse --show-toplevel)
 
 output="$(clang-format -style=file --dry-run --Werror **/*.c **/*.h 2>&1)"
