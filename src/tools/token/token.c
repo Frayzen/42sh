@@ -1,4 +1,4 @@
-#define _POXIX_C_SOURCE 200809L
+#define _XOPEN_SOURCE 700
 #include "token.h"
 
 #include <ctype.h>
