@@ -9,18 +9,20 @@ TIMEOUT="\e[00;31mTIMEOUT\e[0m"
 
 execute() {
     modname=$2
+    id=$3
 
-    theirs="../../theirs$modname"
-    theirs_err="../../theirs_err$modname"
+    theirs="../../theirs$id"
+    theirs_err="../../theirs_err$id"
 
-    ours="../../ours$modname"
-    ours_err="../../ours_err$modname"
+    ours="../../ours$id"
+    ours_err="../../ours_err$id"
 
+    script="../../script$id"
     code=$(echo "$1" | sed 's/\\n/\'$'\n''/g')
-    printf '%s' "$code" > code
-    (timeout -k 0 1 $path_42sh code) 1> $ours 2> $ours_err
+    printf '%s' "$code" > $script
+    (timeout -k 0 1 $path_42sh $script) 1> $ours 2> $ours_err
     timeout=$?
-    bash --posix code 1> $theirs 2> $theirs_err
+    bash --posix $script 1> $theirs 2> $theirs_err
     dif=$(diff $ours $theirs)
     res=$?
     dif_err=$(diff $ours_err $theirs_err)
@@ -51,7 +53,7 @@ execute() {
         echo -n " "
     done
     echo "┃"
-    rm $theirs $ours $ours_err $theirs_err code
+    rm $theirs $ours $ours_err $theirs_err $script
 }
 
 echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
@@ -61,6 +63,7 @@ echo "┗━━━━━━━━━━━━━━━━━━━━━━━�
 
 parallelize_entry() {
     entry=$1
+    id=$2
     name=$(basename "$entry")
     toprint="[MODULE] $name\n"
     toprint="$toprint┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n"
@@ -71,7 +74,7 @@ parallelize_entry() {
         case $line in
             '###'*)
                 if [ $save -eq 1 ]; then
-                    execute "$build" "$modname"
+                    toprint="$toprint$(execute "$build" "$modname" "$id")\n"
                     build=""
                 fi
                 save=1
@@ -86,17 +89,18 @@ parallelize_entry() {
         esac
     done < $entry
     if [ $save -eq 1 ]; then
-        toprint="$toprint$(execute "$build" "$modname")\n"
+        toprint="$toprint$(execute "$build" "$modname" "$id")\n"
     fi
     toprint="$toprint┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n"
-    echo "$toprint"
+    echo ""
+    echo "$(echo "$toprint" | sed 's/\\n/\'$'\n''/g')"
 }
 
 test_dir=./tests
+id=0
 for entry in "$test_dir"/*
 do
-    parallelize_entry "$entry" &
+    parallelize_entry "$entry" $id &
+    id=$(($id+1))
 done
-
 wait
-
