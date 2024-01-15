@@ -5,7 +5,9 @@ SUBDIRS = \
 		  parser\
 		  tools\
 		  exec\
+		  exit\
 		  env
+
 LIBS = @LIB_LIST@
 
 bin_PROGRAMS = 42sh
