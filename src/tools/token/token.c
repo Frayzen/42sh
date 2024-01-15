@@ -1,5 +1,6 @@
 #include "token.h"
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -56,20 +57,39 @@ void destroy_token(struct token *token)
     free(token);
 }
 
+char *to_upper(const char *type)
+{
+    if (!type)
+        return NULL;
+    char *str = strdup(type);
+    size_t i = 0;
+    while (str[i] != 0)
+    {
+        str[i] = toupper(str[i]);
+        i++;
+    }
+    return str;
+}
+
 void print_token(struct token *token)
 {
-    const char **tok_type = toktype_lookup();
-    const char *type = tok_type[token->type];
     if (!token)
         printf(" |NULL| ");
-    else if (!type)
-        printf(" |%s|%s| ", "WORD", token->value);
-    else if (!strcmp(type, "\n"))
-        printf(" |%s|%s| ", "NEWLINE", "\\n");
-    else if (!strcmp(type, "\0"))
-        printf(" |%s|%s| ", "BSZERO", "\\0");
     else
-        printf(" |%s|%s| ", token->value, type);
+    {
+        const char **tok_type = toktype_lookup();
+        const char *type_token = tok_type[token->type];
+        char *type = to_upper(type_token);
+        if (!type)
+            printf(" |%s|%s| ", "WORD", token->value);
+        else if (!strcmp(type, "\n"))
+            printf(" |%s|%s| ", "NEWLINE", "\\n");
+        else if (!strcmp(type, "\0"))
+            printf(" |%s|%s| ", "BSZERO", "\\0");
+        else
+            printf(" |%s|%s| ", type, token->value);
+        free(type);
+    }
     printf("\n");
 }
 
