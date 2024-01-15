@@ -109,9 +109,9 @@ int external_bin(struct ast *ast)
             int code = 0;
             if (WIFEXITED(returncode))
                 code = WEXITSTATUS(returncode);
-            if (code == 1)
-                return 1;
-            return 0;
+            if (code == 0)
+                return 0;
+            return 1;
         }
     }
     fflush(stdout);
@@ -135,9 +135,9 @@ int exec_command(struct ast *ast)
     case ECHO:
         return exec_echo(ast);
     case T_TRUE:
-        return 0;
-    case T_FALSE:
         return 1;
+    case T_FALSE:
+        return 0;
     default:
         return exec_external_bin(ast);
     }
