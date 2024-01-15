@@ -68,7 +68,7 @@ size_t stream_input(size_t size)
 {
     if (IO_FILE == NULL)
         return 0;
-    char *buffer = malloc(sizeof(char) * size);
+    char *buffer = calloc(size, sizeof(char));
     int amount = getline(&buffer, &size, IO_FILE);
     io_push(buffer);
     free(buffer);
