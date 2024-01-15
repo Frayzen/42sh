@@ -63,3 +63,8 @@ else
     echo not
 fi
 
+
+###Invaild condition
+if fnj; then
+    echo yeye;
+fi 

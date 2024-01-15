@@ -21,5 +21,6 @@ int exec_list(struct ast *ast)
             print_error(LIST_NOT_FOUND);
             return 1;
         }
+
     return ret;
 }

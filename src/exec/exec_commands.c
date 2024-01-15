@@ -110,7 +110,7 @@ int external_bin(struct ast *ast)
         }
     }
     fflush(stdout);
-    return 0;
+    return 1;
 }
 
 int exec_external_bin(struct ast *ast)
