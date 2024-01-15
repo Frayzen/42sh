@@ -23,13 +23,14 @@ fi
 execute() {
     modname=$2
     id=$3
-    theirs="../../theirs$id"
-    theirs_err="../../theirs_err$id"
+    unique="$id\_$file_id"
+    theirs="../../theirs$unique"
+    theirs_err="../../theirs_err$unique"
 
-    ours="../../ours$id"
-    ours_err="../../ours_err$id"
+    ours="../../ours$unique"
+    ours_err="../../ours_err$unique"
 
-    script="../../script$id"
+    script="../../script$unique"
     code=$(echo "$1" | sed 's/\\n/\'$'\n''/g')
     printf '%s' "$code" > $script
     (timeout -k 0 1 $path_42sh $script) 1> $ours 2> $ours_err
@@ -75,9 +76,9 @@ echo "┗━━━━━━━━━━━━━━━━━━━━━━━�
 
 parallelize_entry() {
     entry=$1
-    id=$2
+    file_id=$2
     name=$(basename "$entry")
-    toprint="[MODULE $id] $name\n"
+    toprint="[MODULE $file_id] $name\n"
     toprint="$toprint┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n"
     save=0
     build=""
@@ -88,7 +89,7 @@ parallelize_entry() {
             '###'*)
                 if [ $save -eq 1 ]; then
                     if [ $mod_id -eq 0 -o $curid -eq $mod_id ]; then
-                        toprint="$toprint$(execute "$build" "$modname" "$curid")\n"
+                        toprint="$toprint$(execute "$build" "$modname" $curid)\n"
                     fi
                     build=""
                     curid=$(($curid+1))
@@ -106,7 +107,7 @@ parallelize_entry() {
     done < $entry
     if [ $save -eq 1 ]; then
         if [ $mod_id -eq 0 -o $curid -eq $mod_id ]; then
-            toprint="$toprint$(execute "$build" "$modname" "$curid")\n"
+            toprint="$toprint$(execute "$build" "$modname" $curid)\n"
         fi
     fi
     toprint="$toprint┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n"
