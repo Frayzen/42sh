@@ -68,3 +68,11 @@ void remove_form_fd_dictionary(int old_fd)
     }
     FD_DICTIONARY->nb_entries--;
 }
+
+void free_fd_dictionary(void)
+{
+    if (!FD_DICTIONARY)
+    {
+        free(FD_DICTIONARY->entries);
+    }
+}
