@@ -14,3 +14,8 @@ if false; then
 elif ! false; then
     pwd
 fi
+
+###Negate command
+if ! echo ok; then
+    echo double
+fi
