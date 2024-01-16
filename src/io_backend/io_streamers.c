@@ -77,7 +77,7 @@ void io_streamer_stdin(void)
 void main_to_stream(int argc, char **argv)
 {
     int i = 1;
-    while (argc > 1)
+    while (i < argc)
     {
         if (!strcmp(argv[i], "--pretty-print"))
             get_env_flag()->print = true;
@@ -99,13 +99,17 @@ void main_to_stream(int argc, char **argv)
         exit_gracefully(ARG_ERROR);
 }
 
-size_t stream_input(size_t size)
+void stream_input(size_t size)
 {
     if (IO_FILE == NULL)
-        return 0;
-    char *buffer = calloc(size + 1, sizeof(char));
-    int amount = fread(buffer, 1, size, IO_FILE);
-    io_push(buffer);
+    {
+        io_push_chars("\0", 1);
+        return;
+    }
+    char *buffer = calloc(size, sizeof(char));
+    if (!fgets(buffer, size, IO_FILE))
+        io_push_chars("\0", 1);
+    else
+        io_push(buffer);
     free(buffer);
-    return amount;
 }

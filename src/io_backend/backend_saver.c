@@ -31,17 +31,11 @@ void io_push(char *str)
     io_push_chars(str, strlen(str));
 }
 
-void refill(void)
-{
-    if (stream_input(get_buffer()->ring_size) == 0)
-        io_push("");
-}
-
 char io_peek(void)
 {
     struct ringbuffer *rb = get_buffer();
     if (rb->cur_size == 0)
-        refill();
+        stream_input(get_buffer()->ring_size);
     union ringitem *item = rb_peek(rb);
     if (!item)
         return '\0';
