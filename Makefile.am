@@ -13,9 +13,13 @@ unit: src/42sh .FORCE
 	mv tests/unit/unit .
 	./unit --verbose
 
+funct_errors: 42sh .FORCE
+	chmod +x ./tests/funct/*.sh
+	./tests/funct/launch.sh errors
+
 funct: 42sh .FORCE
-	chmod +x ./tests/funct/launch.sh
-	./tests/funct/launch.sh
+	chmod +x ./tests/funct/*.sh
+	./tests/funct/launch.sh all
 
 check: unit funct
 
