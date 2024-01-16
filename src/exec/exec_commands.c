@@ -96,7 +96,7 @@ int external_bin(struct ast *ast)
     }
     int returncode;
     waitpid(pid, &returncode, 0);
-    int code = 1;
+    int code = 0;
     if (WIFEXITED(returncode))
         code = WEXITSTATUS(returncode);
     fflush(stdout);

@@ -13,13 +13,17 @@ int main(int argc, char *argv[])
 {
     main_to_stream(argc, argv);
     struct ast *ast = NULL;
-    set_ast_root(&ast);
-    if (gr_input(&ast) == ERROR)
-        exit_gracefully(GRAMMAR_ERROR_ENTRY);
-    if (get_env_flag()->print)
-        pretty_print_ast(ast);
-    int ret = exec_entry(ast);
-    fflush(NULL);
+    int ret = 0;
+    do
+    {
+        gr_input(&ast);
+        if (get_env_flag()->print)
+            pretty_print_ast(ast);
+        ret = exec_entry(ast);
+        fflush(NULL);
+        destroy_ast(ast);
+        ast = NULL;
+    } while (!get_env_flag()->null_received);
     clean(ast);
     return ret;
 }

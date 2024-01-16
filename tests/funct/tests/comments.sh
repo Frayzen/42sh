@@ -93,5 +93,5 @@ cut -f1,2 data.csv # Extracting columns 1 and 2 from a CSV file
 ### WC command with a comment
 wc -l textfile.txt # Counting the number of lines in a file
 
-### Find and delete with a comment
-find . -name "*.tmp" -delete # Deleting temporary files
+### Find with a comment
+find . -name "*.tmp" # Deleting temporary files
