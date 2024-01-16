@@ -120,17 +120,23 @@ int exec_external_bin(struct ast *ast)
 
 int exec_command(struct ast *ast)
 {
+    int ret;
     assert(ast && ast->type == AST_COMMAND);
     assert(ast->nb_children != 0);
     switch (ast->children[0]->token->type)
     {
     case ECHO:
-        return exec_echo(ast);
+        ret = exec_echo(ast);
+        break;
     case T_TRUE:
-        return 1;
+        ret = 1;
+        break;
     case T_FALSE:
-        return 0;
+        ret = 0;
+        break;
     default:
-        return exec_external_bin(ast);
+        ret = exec_external_bin(ast);
     }
+    printf("ret cmd = %d\n", ret);
+    return ret;
 }
