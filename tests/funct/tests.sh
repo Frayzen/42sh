@@ -44,7 +44,7 @@ execute() {
         res_err=1
     fi
     ret_val=0
-    if [ $theirs_ret -ne $res_err ]; then
+    if [ $theirs_ret -ne $ours_ret ]; then
         ret_val=1
     fi
     error=0

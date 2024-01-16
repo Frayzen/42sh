@@ -78,15 +78,9 @@ int exec_echo(struct ast *ast)
 // this creates the char ** needed for the arguments of execvp
 char **create_command(struct ast *ast)
 {
-    size_t size_array = 1;
-    char **array_arg = calloc(size_array, sizeof(char *));
+    char **array_arg = calloc(ast->nb_children + 1, sizeof(char *));
     for (int i = 0; i < ast->nb_children; i++)
-    {
-        array_arg[size_array - 1] = ast->children[i]->token->value;
-        array_arg = realloc(array_arg, sizeof(char *) * size_array + 1);
-        size_array++;
-    }
-    array_arg[size_array - 1] = NULL;
+        array_arg[i] = ast->children[i]->token->value;
     return array_arg;
 }
 
@@ -96,12 +90,8 @@ int external_bin(struct ast *ast)
     if (pid == 0)
     {
         char **array_arg = create_command(ast);
-        printf("arg 0 = %s\n", array_arg[0]);
-        printf("arg 1 = %s\n", array_arg[1]);
-        printf("arg 2 = %s\n", array_arg[2]);
         execvp(array_arg[0], array_arg);
         free(array_arg);
-        print_error(EXECVP_FAILED);
         exit(127);
     }
     int returncode;
@@ -116,30 +106,23 @@ int external_bin(struct ast *ast)
 int exec_external_bin(struct ast *ast)
 {
     int ret = external_bin(ast);
-    // if (ret)
-    //     exit_gracefully(EXECVP_FAILED);
+    if (ret)
+        print_error(FORK_ERROR);
     return ret;
 }
-
 int exec_command(struct ast *ast)
 {
-    int ret;
     assert(ast && ast->type == AST_COMMAND);
     assert(ast->nb_children != 0);
     switch (ast->children[0]->token->type)
     {
     case ECHO:
-        ret = exec_echo(ast);
-        break;
+        return exec_echo(ast);
     case T_TRUE:
-        ret = 0;
-        break;
+        return 0;
     case T_FALSE:
-        ret = 1;
-        break;
+        return 1;
     default:
-        ret = exec_external_bin(ast);
+        return exec_external_bin(ast);
     }
-    // printf("ret cmd = %d\n", ret);
-    return ret;
 }
