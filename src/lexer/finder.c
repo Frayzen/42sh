@@ -111,8 +111,9 @@ void consumer(struct pending *p)
         {
             p->backslashed = false;
             append_char(p, c);
+            io_pop();
         }
-        else if(consume(p, c))
+        else if (consume(p, c))
             return;
     }
 }
