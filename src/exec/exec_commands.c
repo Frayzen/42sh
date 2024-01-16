@@ -90,27 +90,17 @@ int external_bin(struct ast *ast)
     if (pid == 0)
     {
         char **array_arg = create_command(ast);
-        int resp = execvp(array_arg[0], array_arg);
+        execvp(array_arg[0], array_arg);
         free(array_arg);
-        if (resp) // false
-        {
-            print_error(EXECVP_FAILED);
-            return 0;
-        }
-        else
-        {
-            int returncode;
-            waitpid(pid, &returncode, 0);
-            int code = 0;
-            if (WIFEXITED(returncode))
-                code = WEXITSTATUS(returncode);
-            if (code == 0)
-                return 0;
-            return 1;
-        }
+        exit(127);
     }
+    int returncode;
+    waitpid(pid, &returncode, 0);
+    int code = 1;
+    if (WIFEXITED(returncode))
+        code = WEXITSTATUS(returncode);
     fflush(stdout);
-    return 0;
+    return code;
 }
 
 int exec_external_bin(struct ast *ast)
@@ -129,9 +119,9 @@ int exec_command(struct ast *ast)
     case ECHO:
         return exec_echo(ast);
     case T_TRUE:
-        return 1;
-    case T_FALSE:
         return 0;
+    case T_FALSE:
+        return 1;
     default:
         return exec_external_bin(ast);
     }

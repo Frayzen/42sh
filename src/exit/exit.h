@@ -5,15 +5,21 @@
 
 enum error_type
 {
+    // General Errors -> 1
+    MALLOC_NULL,
+    RING_BF_FULL,
+    ADD_CHILD_ERROR,
+    LIST_NOT_FOUND,
+    // Misuse of shell built-ins -> 2
     ARG_ERROR,
     GRAMMAR_ERROR_ENTRY,
-    EXECVP_FAILED,
-    RING_BF_FULL,
-    MALLOC_NULL,
-    FILE_COULDNT_OPEN,
-    ADD_CHILD_ERROR,
     FORK_ERROR,
-    LIST_NOT_FOUND,
+    //  Command cannot execute (permission or not an executable) -> 126
+    NO_EXEC_PERM,
+    NO_READ_PERM,
+    INVALID_FILE_PATH,
+    // Command not found -> 127
+    EXECVP_FAILED,
 };
 
 /***
@@ -21,6 +27,13 @@ enum error_type
  * @param ast the ast created by the parser
  */
 void clean(struct ast *ast);
+
+/***
+ * Cleans the tree, prints the message associatedto the error type and exits
+ * with the value associated to the error type
+ * @param type of the error
+ */
+void exit_gracefully(enum error_type type);
 
 /***
  * Print the appropriate error string on stferr
