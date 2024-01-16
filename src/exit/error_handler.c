@@ -35,6 +35,7 @@ void print_error(enum error_type type)
         [RING_BF_FULL] = "Ring buffer is full",
         [ADD_CHILD_ERROR] = "Tried to add a child to an ast with NULL children",
         [LIST_NOT_FOUND] = "The element in the list ast is invalid",
+        [FD_DICO_FULL] = "The file descriptor dictionary is full",
         // Misuse of shell built-ins -> 2
         [ARG_ERROR] = "The arguments did not match",
         [GRAMMAR_ERROR_ENTRY] = "The entry grammar failed to find a match",
