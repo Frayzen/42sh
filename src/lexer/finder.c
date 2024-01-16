@@ -1,6 +1,7 @@
 #include "finder.h"
 
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -60,6 +61,47 @@ bool special_char(struct pending *p)
     return false;
 }
 
+// return true if finished
+bool consume(struct pending *p, char c)
+{
+    // Any external function in the switch should handle every pop involved
+    switch (c)
+    {
+    case '\\':
+        p->backslashed = true;
+        break;
+    case '\'':
+    case '"':
+        p->blank = false;
+        p->force_word = true;
+        io_pop();
+        skip_until(p, c, APPEND_CHARS);
+        io_pop();
+        return false;
+    case '#':
+        if (IS_BLANK(p))
+        {
+            io_pop();
+            skip_until(p, '\n', !APPEND_CHARS);
+            io_pop();
+        }
+        else
+            goto append;
+        return false;
+    case ' ':
+    case '\n':
+    case '\0':
+    case ';':
+        return special_char(p);
+    default:
+    append:
+        append_char(p, c);
+        break;
+    }
+    io_pop();
+    return false;
+}
+
 void consumer(struct pending *p)
 {
     while (true)
@@ -68,48 +110,14 @@ void consumer(struct pending *p)
         if (p->backslashed)
         {
             p->backslashed = false;
-            goto append;
-        }
-        // Any external function in the switch should handle every pop involved
-        switch (c)
-        {
-        case '\\':
-            p->backslashed = true;
-            break;
-        case '\'':
-        case '"':
-            p->blank = false;
-            io_pop();
-            skip_until(p, c, APPEND_CHARS);
-            io_pop();
-            continue;
-        case '#':
-            if (IS_BLANK(p))
-            {
-                io_pop();
-                skip_until(p, '\n', !APPEND_CHARS);
-                io_pop();
-            }
-            else
-                goto append;
-            continue;
-        case ' ':
-        case '\n':
-        case '\0':
-        case ';':
-            if (special_char(p))
-                return;
-            continue;
-        default:
-        append:
             append_char(p, c);
-            break;
         }
-        io_pop();
+        else if(consume(p, c))
+            return;
     }
 }
 
-const struct pending *finder(void);
+const struct pending *finder(void)
 {
     static struct pending p;
     // reset the pending structure
