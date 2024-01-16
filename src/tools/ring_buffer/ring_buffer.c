@@ -5,6 +5,7 @@
 
 #include "exit/exit.h"
 #include "tools/token/token.h"
+#include <err.h>
 
 void rb_push(struct ringbuffer *rb, union ringitem item)
 {
