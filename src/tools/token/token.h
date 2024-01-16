@@ -24,6 +24,8 @@ enum token_type
     T_TRUE,
     T_FALSE,
     ECHO,
+    // redir
+    CHEVRON,
     // wildcard
     QUOTE,
     // terminals

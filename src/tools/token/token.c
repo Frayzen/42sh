@@ -2,6 +2,7 @@
 #include "token.h"
 
 #include <ctype.h>
+#include <fnmatch.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,6 +18,25 @@ bool is_terminating(struct token *token)
     default:
         return false;
     }
+}
+
+bool chevron_type(const struct string *str)
+{
+    if (!strcmp(">", str->value))
+        return 1;
+    if (!strcmp("<", str->value))
+        return 1;
+    if (!strcmp(">>", str->value))
+        return 1;
+    if (!strcmp(">&", str->value))
+        return 1;
+    if (!strcmp("<&", str->value))
+        return 1;
+    if (!strcmp(">|", str->value))
+        return 1;
+    if (!strcmp("<>", str->value))
+        return 1;
+    return 0;
 }
 
 int get_type(const struct string *str)
@@ -36,6 +56,10 @@ int get_type(const struct string *str)
         if (c_id == str->size)
             return i;
         i++;
+    }
+    if (chevron_type(str))
+    {
+        return CHEVRON;
     }
     return i;
 }
@@ -97,11 +121,11 @@ void print_token(struct token *token)
 const char **toktype_lookup(void)
 {
     static const char *lookup_table[] = {
-        [IF] = "if",       [THEN] = "then",     [ELIF] = "elif",
-        [ELSE] = "else",   [FI] = "fi",         [SEMI_COLON] = ";",
-        [NEWLINE] = "\n",  [QUOTE] = "'",       [ECHO] = "echo",
-        [T_TRUE] = "true", [T_FALSE] = "false", [BSZERO] = "\0",
-        [WORD] = NULL,
+        [IF] = "if",           [THEN] = "then",     [ELIF] = "elif",
+        [ELSE] = "else",       [FI] = "fi",         [SEMI_COLON] = ";",
+        [NEWLINE] = "\n",      [QUOTE] = "'",       [ECHO] = "echo",
+        [T_TRUE] = "true",     [T_FALSE] = "false", [BSZERO] = "\0",
+        [CHEVRON] = "CHEVRON", [WORD] = NULL,
     };
     return lookup_table;
 }
