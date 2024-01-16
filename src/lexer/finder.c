@@ -109,7 +109,7 @@ void consumer(struct pending *p)
     }
 }
 
-const struct string *finder(void)
+const struct pending *finder(void);
 {
     static struct pending p;
     // reset the pending structure
@@ -118,5 +118,5 @@ const struct string *finder(void)
     consumer(&p);
     append_char(&p, '\0');
     p.str.size--;
-    return &p.str;
+    return &p;
 }
