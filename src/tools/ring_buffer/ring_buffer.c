@@ -1,11 +1,11 @@
 #include "ring_buffer.h"
 
+#include <err.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "exit/exit.h"
 #include "tools/token/token.h"
-#include <err.h>
 
 void rb_push(struct ringbuffer *rb, union ringitem item)
 {
