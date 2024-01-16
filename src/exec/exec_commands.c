@@ -96,33 +96,24 @@ int external_bin(struct ast *ast)
     if (pid == 0)
     {
         char **array_arg = create_command(ast);
-        int resp = execvp(array_arg[0], array_arg);
+        execvp(array_arg[0], array_arg);
         free(array_arg);
-        if (resp) // false
-        {
-            exit_gracefully(EXECVP_FAILED);
-        }
-        else
-        {
-            int returncode;
-            waitpid(pid, &returncode, 0);
-            int code = 0;
-            if (WIFEXITED(returncode))
-                code = WEXITSTATUS(returncode);
-            if (code == 0)
-                return 0;
-            return 1;
-        }
+        exit(1);
     }
+    int returncode;
+    waitpid(pid, &returncode, 0);
+    int code = 1;
+    if (WIFEXITED(returncode))
+        code = WEXITSTATUS(returncode);
     fflush(stdout);
-    return 0;
+    return code;
 }
 
 int exec_external_bin(struct ast *ast)
 {
     int ret = external_bin(ast);
     if (ret)
-        exit_gracefully(FORK_ERROR);
+        exit_gracefully(EXECVP_FAILED);
     return ret;
 }
 

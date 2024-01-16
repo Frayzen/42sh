@@ -44,7 +44,7 @@ void print_error(enum error_type type)
         [NO_READ_PERM] = "Permission to read denied",
         [INVALID_FILE_PATH] = "No such file or directory",
         // Command not found -> 127
-        [EXECVP_FAILED] = "The provided binary doesn't exist",
+        [EXECVP_FAILED] = "Command not found",
     };
     dprintf(STDERR_FILENO, "%s\n", error_names[type]);
 }
