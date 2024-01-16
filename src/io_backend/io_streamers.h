@@ -1,5 +1,5 @@
-#ifndef IO_STREAMERS
-#define IO_STREAMERS
+#ifndef IO_STREAMERS_H
+#define IO_STREAMERS_H
 
 #include <stddef.h>
 
@@ -23,4 +23,4 @@ void main_to_stream(int argc, char **argv);
  */
 size_t stream_input(size_t size);
 
-#endif /* !IO_STREAMERS */
+#endif /* !IO_STREAMERS_H */

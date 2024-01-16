@@ -1,5 +1,5 @@
-#ifndef LEXER_H
-#define LEXER_H
+#ifndef TOKENIZER_H
+#define TOKENIZER_H
 #include "tools/token/token.h"
 
 /***
@@ -11,4 +11,4 @@
  */
 struct token *next_token(void);
 
-#endif // !LEXER_H
+#endif // !TOKENIZER_H

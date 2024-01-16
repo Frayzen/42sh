@@ -7,21 +7,11 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v2
-      - name: Run clang-format style
-        uses: DoozyX/clang-format-lint-action@v0.17
-        with:
-          source: 'src'
-          extensions: 'h,c'
-          clangFormatVersion: 17
-      - name: Execute the unit tests
+      - uses: actions/checkout@v4
+      - name: Execute the checks
         run: |
-          sudo apt-get install libcriterion-dev
+          sudo apt-get install libcriterion-dev clang-format
           autoreconf -i
           ./configure
-          make unit
-          ./unit
-      - name: Execute the functional tests
-        run: |
-          make funct
+          make check
 
