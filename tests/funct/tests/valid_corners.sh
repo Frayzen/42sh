@@ -7,9 +7,12 @@
 echo 
 
 
-test 
+pwd
 
 
 ###echo echo echo 
 echo echo echo
+
+###empty
+
 

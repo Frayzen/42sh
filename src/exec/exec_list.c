@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 
 #include "execs.h"
 #include "exit/exit.h"
@@ -18,9 +19,10 @@ int exec_list(struct ast *ast)
             ret = exec_condition(ast->children[i]);
             break;
         default:
-            print_error(LIST_NOT_FOUND);
+            exit_gracefully(LIST_NOT_FOUND);
             return 1;
         }
+    // printf("ret list = %d\n", ret);
 
     return ret;
 }
