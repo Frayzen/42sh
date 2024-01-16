@@ -33,7 +33,7 @@ void io_push(char *str)
 
 void refill(void)
 {
-    if (stream_input(get_buffer()->ring_size - 1) == 0)
+    if (stream_input(get_buffer()->ring_size) == 0)
         io_push("");
 }
 
