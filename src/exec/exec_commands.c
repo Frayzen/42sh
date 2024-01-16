@@ -98,7 +98,8 @@ int external_bin(struct ast *ast)
         char **array_arg = create_command(ast);
         execvp(array_arg[0], array_arg);
         free(array_arg);
-        exit(1);
+        print_error(EXECVP_FAILED);
+        exit(127);
     }
     int returncode;
     waitpid(pid, &returncode, 0);
@@ -112,8 +113,8 @@ int external_bin(struct ast *ast)
 int exec_external_bin(struct ast *ast)
 {
     int ret = external_bin(ast);
-    if (ret)
-        exit_gracefully(EXECVP_FAILED);
+    // if (ret)
+    //     exit_gracefully(EXECVP_FAILED);
     return ret;
 }
 

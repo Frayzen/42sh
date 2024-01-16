@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
     gr_input(&ast);
     if (get_env_flag()->print)
         pretty_print_ast(ast);
-    exec_entry(ast);
+    int ret = exec_entry(ast);
     fflush(NULL);
     clean(ast);
-    return 0;
+    return ret;
 }
