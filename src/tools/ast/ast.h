@@ -21,10 +21,11 @@ struct ast
 };
 
 /***
- * Set or gets the ast root
- * @param ast to set as the root if not NULL
+ * Set or gets the pointer to the ast root
+ * @param pointer to the ast to set as the root if not NULL
+ * @return the pointer to the ast root 
  */
-struct ast *set_ast_root(struct ast *ast);
+struct ast **set_ast_root(struct ast **ast);
 
 /***
  * Create a ast node structure with no children

@@ -8,17 +8,23 @@
 
 void exit_gracefully(enum error_type type)
 {
-    clean(AST_ROOT);
+    clean(*AST_ROOT);
     print_error(type);
-    if (type == ARG_ERROR || type == GRAMMAR_ERROR_ENTRY || type == FORK_ERROR)
+    switch (type)
+    {
+    case ARG_ERROR:
+    case GRAMMAR_ERROR_ENTRY:
+    case FORK_ERROR:
         exit(2);
-    if (type == NO_EXEC_PERM || type == NO_READ_PERM
-        || type == INVALID_FILE_PATH)
+    case NO_EXEC_PERM:
+    case NO_READ_PERM:
         exit(126);
-    else if (type == EXECVP_FAILED || type == INVALID_FILE_PATH)
+    case EXECVP_FAILED:
+    case INVALID_FILE_PATH:
         exit(127);
-    else
+    default:
         exit(1);
+    }
 }
 
 void print_error(enum error_type type)

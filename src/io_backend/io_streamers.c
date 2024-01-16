@@ -25,10 +25,10 @@ FILE *set_fd(FILE *new_file)
 
 bool is_executable(char *path_to_file)
 {
-    if (access(path_to_file, X_OK))
+    if (access(path_to_file, X_OK) == true)
         return false;
     struct stat file_info;
-    if (stat(path_to_file, &file_info))
+    if (stat(path_to_file, &file_info) == true)
         return false;
     if (!S_ISREG(file_info.st_mode))
         return false;

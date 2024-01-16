@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 {
     main_to_stream(argc, argv);
     struct ast *ast = NULL;
+    set_ast_root(&ast);
     gr_input(&ast);
     if (get_env_flag()->print)
         pretty_print_ast(ast);
