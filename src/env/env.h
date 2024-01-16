@@ -4,8 +4,8 @@
 // need to add the default value in the get_env_flag function for each new flag
 struct env_flag
 {
-    int print;
-    int verbose;
+    bool print;
+    bool verbose;
 };
 
 /***
