@@ -1,14 +1,14 @@
 #include "env.h"
 
 #include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "tools/token/token.h"
+
 struct env_flag *get_env_flag(void)
 {
-    static struct env_flag flag = { .print = false, .verbose = false };
+    static struct env_flag flag = { .print = false,
+                                    .verbose = false,
+                                    .null_received = false };
     return &flag;
 }
 

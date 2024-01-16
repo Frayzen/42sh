@@ -2,6 +2,8 @@
 #define AST_H
 #include "tools/token/token.h"
 
+#define AST_ROOT (set_ast_root(NULL))
+
 enum ast_type
 {
     AST_TOKEN,
@@ -18,6 +20,13 @@ struct ast
     int nb_children;
     struct ast **children;
 };
+
+/***
+ * Set or gets the pointer to the ast root
+ * @param pointer to the ast to set as the root if not NULL
+ * @return the pointer to the ast root
+ */
+struct ast **set_ast_root(struct ast **ast);
 
 /***
  * Create a ast node structure with no children

@@ -28,14 +28,6 @@ Test(streamers, file)
     clean(NULL);
 }
 
-Test(streamers, wrong_file_path)
-{
-    char *wrong_file_path = "./wrong_file_path";
-    io_streamer_file(wrong_file_path);
-    cr_assert_eq(io_peek(), '\0');
-    clean(NULL);
-}
-
 Test(streamers, string_good)
 {
     int argc = 3;

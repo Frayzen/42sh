@@ -13,8 +13,9 @@ int exec_entry(struct ast *ast)
     {
     case AST_LIST:
         return exec_list(ast);
+        break;
     default:
-        print_error(GRAMMAR_ERROR_ENTRY);
-        return 1;
+        exit_gracefully(GRAMMAR_ERROR_ENTRY);
     }
+    return -1; // shouldn't happpend
 }
