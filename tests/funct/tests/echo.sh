@@ -65,3 +65,5 @@ echo -n -n -e -e -n -n -n -e 42\\nsh
 ###Slashs 2.0
 echo -E -e -E \\\\\\\\\\\\\\\\
 
+###Two echos
+echo first; echo second
