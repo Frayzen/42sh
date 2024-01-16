@@ -27,7 +27,7 @@ execute() {
     ours_err="../../ours_err$unique"
 
     script="../../script$unique"
-    code=$(echo "$1" | sed 's/ timflochaslm/\'$'\n''/g')
+    code=$(echo "$1" | sed 's/ timflochaslm/\n/g')
     printf '%s' "$code" > $script
     $path_42sh $script 1> $ours 2> $ours_err
     ours_ret=$?
@@ -54,7 +54,7 @@ execute() {
         error=1
     else
         if [ -n "$ERROR_ONLY" ]; then
-            rm $theirs $ours $ours_err $theirs_err $script
+            # rm $theirs $ours $ours_err $theirs_err $script
             exit 0
         fi
         toprint="$toprint$(printf '[%b] ' "$PASSED")"
@@ -84,7 +84,7 @@ execute() {
         fi
         print_line "[ = END = ]" 0 $PURPLE
     fi
-    rm $theirs $ours $ours_err $theirs_err $script
+    # rm $theirs $ours $ours_err $theirs_err $script
     if [ $error -ne 1 ]; then
         exit 0
     else
