@@ -17,10 +17,10 @@ void main_to_stream(int argc, char **argv);
 
 /***
  * Append using io_push the next string of max length size
+ * If no string can be read, a \0 is pushed to the io buffer
  * /!\ Do not forget to call main_to_stream before
  * @param size the maximum number of char to read
- * @return the number of character read
  */
-size_t stream_input(size_t size);
+void stream_input(size_t size);
 
 #endif /* !IO_STREAMERS */

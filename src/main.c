@@ -13,11 +13,16 @@ int main(int argc, char *argv[])
 {
     main_to_stream(argc, argv);
     struct ast *ast = NULL;
-    gr_input(&ast);
-    if (get_env_flag()->print)
-        pretty_print_ast(ast);
-    exec_entry(ast);
-    fflush(NULL);
+    do
+    {
+        ast = NULL;
+        gr_input(&ast);
+        if (get_env_flag()->print)
+            pretty_print_ast(ast);
+        exec_entry(ast);
+        fflush(NULL);
+        destroy_ast(ast);
+    } while (ast != NULL);
     clean(ast);
     return 0;
 }
