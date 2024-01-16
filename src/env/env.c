@@ -6,7 +6,9 @@
 
 struct env_flag *get_env_flag(void)
 {
-    static struct env_flag flag = { .print = false, .verbose = false };
+    static struct env_flag flag = { .print = false,
+                                    .verbose = false,
+                                    .null_received = false };
     return &flag;
 }
 

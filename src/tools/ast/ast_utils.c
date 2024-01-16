@@ -22,8 +22,7 @@ struct ast *add_child(struct ast *parent, struct ast *child)
                                sizeof(struct ast) * (parent->nb_children + 1));
     if (!parent->children)
     {
-        print_error(ADD_CHILD_ERROR);
-        return NULL;
+        exit_gracefully(ADD_CHILD_ERROR);
     }
     parent->children[parent->nb_children] = child;
     parent->nb_children++;

@@ -96,7 +96,7 @@ int external_bin(struct ast *ast)
     }
     int returncode;
     waitpid(pid, &returncode, 0);
-    int code = 1;
+    int code = 0;
     if (WIFEXITED(returncode))
         code = WEXITSTATUS(returncode);
     fflush(stdout);
@@ -119,9 +119,9 @@ int exec_command(struct ast *ast)
     case ECHO:
         return exec_echo(ast);
     case T_TRUE:
-        return 1;
-    case T_FALSE:
         return 0;
+    case T_FALSE:
+        return 1;
     default:
         return exec_external_bin(ast);
     }
