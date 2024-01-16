@@ -31,7 +31,7 @@ do
     fi
 done
 
-if [ $error -eq 0 -a $ERROR_ONLY -eq 0 ]; then
+if [ $error -eq 0 -a -z "$ERROR_ONLY" ]; then
     echo ""
     echo "[HEADER FILES]"
     echo "$top_line"

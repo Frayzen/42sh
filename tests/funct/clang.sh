@@ -19,7 +19,7 @@ echo $bot_line
 exit 1
 fi
 
-if [ $ERROR_ONLY -eq 0 ]; then
+if [ -z "$ERROR_ONLY" ]; then
     echo ""
     echo "[CLANG FORMAT]"
     echo "$top_line"

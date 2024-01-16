@@ -8,9 +8,10 @@ extern char **environ;
 
 struct env
 {
-    int print;
-    int verbose;
     char **environ;
+    bool null_received;
+    bool print;
+    bool verbose;
 };
 
 /***

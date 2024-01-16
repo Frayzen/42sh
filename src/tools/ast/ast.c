@@ -4,6 +4,14 @@
 
 #include "token/token.h"
 
+struct ast **set_ast_root(struct ast **ast)
+{
+    static struct ast **ast_root = NULL;
+    if (ast)
+        ast_root = ast;
+    return ast_root;
+}
+
 struct ast *init_ast(enum ast_type type, struct token *token)
 {
     struct ast *ast = calloc(1, sizeof(struct ast));

@@ -44,7 +44,7 @@ execute() {
         res_err=1
     fi
     ret_val=0
-    if [ $theirs_ret -ne $res_err ]; then
+    if [ $theirs_ret -ne $ours_ret ]; then
         ret_val=1
     fi
     error=0
@@ -53,7 +53,7 @@ execute() {
         toprint=$toprint$modname
         error=1
     else
-        if [ $ERROR_ONLY -eq 1 ]; then
+        if [ -n "$ERROR_ONLY" ]; then
             rm $theirs $ours $ours_err $theirs_err $script
             exit 0
         fi
@@ -142,7 +142,7 @@ parallelize_entry() {
         fi
     fi
     toprint="$toprint$bot_line\n"
-    if [ $errs -eq 1 -o $ERROR_ONLY -eq 0 ]; then
+    if [ $errs -eq 1 -o -z "$ERROR_ONLY" ]; then
         echo ""
         echo "$(echo "$toprint" | sed 's/\\n/\'$'\n''/g')"
     fi

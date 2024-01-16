@@ -7,7 +7,7 @@
 echo 
 
 
-test 
+pwd
 
 
 ###echo echo echo 
