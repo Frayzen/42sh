@@ -1,6 +1,5 @@
 #include "ring_buffer.h"
 
-#include <err.h>
 #include <stdio.h>
 #include <stdlib.h>
 
