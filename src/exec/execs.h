@@ -1,5 +1,5 @@
-#ifndef EXEC_ECHO_H
-#define EXEC_ECHO_H
+#ifndef EXECS_H
+#define EXECS_H
 
 #include "tools/ast/ast.h"
 
@@ -39,4 +39,4 @@ int exec_entry(struct ast *ast);
  */
 int exec_condition(struct ast *ast);
 
-#endif /* EXEC_ECHO_H */
+#endif /* EXECS_H */
