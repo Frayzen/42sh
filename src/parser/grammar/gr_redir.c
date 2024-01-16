@@ -33,7 +33,7 @@ enum status gr_redir(struct ast **ast)
     struct token *token = tok_peek();
     if (tok_peek()->type == IO_NUMBER)
     {
-        tok_pop;
+        tok_pop();
         struct ast *optional = init_ast(AST_TOKEN, token);
         redir_ast = add_child(redir_ast, optional);
     }
@@ -45,7 +45,7 @@ enum status gr_redir(struct ast **ast)
     token = tok_peek();
     CHECK_GOTO(token->type != WORD, error);
     struct ast *new_ast = init_ast(AST_TOKEN, token);
-    tok_pop;
+    tok_pop();
     redir_ast = add_child(redir_ast, new_ast);
     *ast = add_child(*ast, redir_ast);
     return OK;

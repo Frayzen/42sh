@@ -1,6 +1,7 @@
 #include "finder.h"
 
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -152,5 +153,6 @@ const struct string *finder(void)
     consumer(&p);
     append_char(&p, '\0');
     p.str.size--;
+    printf("%s\n", p.str.value);
     return &p.str;
 }

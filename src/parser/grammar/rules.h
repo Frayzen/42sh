@@ -105,4 +105,18 @@ enum status gr_if(struct ast **ast);
  */
 enum status gr_shell_cmd(struct ast **ast);
 
+/***
+ * Grammar rule for redirection
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_redir(struct ast **ast);
+
+/***
+ * Grammar rule for prefix
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_prefix(struct ast **ast);
+
 #endif /* !RULES_H */

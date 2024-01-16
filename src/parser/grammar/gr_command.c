@@ -8,6 +8,14 @@ enum status gr_command(struct ast **ast)
 {
     if (gr_simple_command(ast) == OK)
         return OK;
-
-    return gr_shell_cmd(ast);
+    if (gr_shell_cmd(ast) == ERROR)
+        return ERROR;
+    enum status state = OK;
+    while (state == OK)
+    {
+        if (tok_peek()->terminal)
+            break;
+        state = gr_redir(ast);
+    }
+    return OK;
 }

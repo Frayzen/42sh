@@ -26,6 +26,8 @@ enum token_type
     ECHO,
     // redir
     CHEVRON,
+    // numbers
+    IO_NUMBER,
     // wildcard
     QUOTE,
     // terminals
