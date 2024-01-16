@@ -3,7 +3,6 @@
 #include <stdbool.h>
 
 #include "tools/token/token.h"
-<<<<<<< HEAD
 struct env *get_env_flag(void)
 {
     static struct env flag = { .print = false, .verbose = false };
