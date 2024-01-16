@@ -47,3 +47,5 @@ echo -e '\n\n'
 ###Double baskslash n flag E
 echo -E '\n\n'
 
+### echo with spaces
+echo      4    2    s    h

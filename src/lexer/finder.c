@@ -72,6 +72,7 @@ bool special_char(struct pending *p)
         {
             chevron(p, c);
         }
+        return true;
     case '\n':
     case '\0':
     case ';':
@@ -97,6 +98,7 @@ void consumer(struct pending *p)
 {
     while (true)
     {
+        printf("ok\n");
         char c = io_peek();
         if (p->backslashed)
         {
@@ -153,6 +155,5 @@ const struct string *finder(void)
     consumer(&p);
     append_char(&p, '\0');
     p.str.size--;
-    printf("%s\n", p.str.value);
     return &p.str;
 }

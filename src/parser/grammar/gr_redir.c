@@ -38,7 +38,7 @@ enum status gr_redir(struct ast **ast)
         redir_ast = add_child(redir_ast, optional);
     }
     token = tok_peek();
-    CHECK_GOTO(token->type == CHEVRON, error);
+    CHECK_GOTO(token->type != CHEVRON, error);
     tok_pop();
     struct ast *chevron = init_ast(AST_TOKEN, token);
     redir_ast = add_child(redir_ast, chevron);
