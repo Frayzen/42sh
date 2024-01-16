@@ -47,3 +47,9 @@ echo -e '\n\n'
 ###Double baskslash n flag E
 echo -E '\n\n'
 
+###Quoted tricky one
+echo toto ';' ls
+
+###interpret newline
+echo -n -n -e -e -n -n -n -e 42'\nsh'
+echo ok
