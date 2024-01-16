@@ -112,7 +112,9 @@ parallelize_entry() {
                         if [ $? -eq 1 ]; then
                             errs=1
                         fi
-                        toprint="$toprint$val\n"
+                        if [ ! -z "$(echo $val)" ]; then
+                            toprint="$toprint$val\n"
+                        fi
                     fi
                     build=""
                     curid=$(($curid+1))
@@ -134,7 +136,9 @@ parallelize_entry() {
             if [ $? -eq 1 ]; then
                 errs=1
             fi
-            toprint="$toprint$val\n"
+            if [ ! -z "$(echo $val)" ]; then
+                toprint="$toprint$val\n"
+            fi
         fi
     fi
     toprint="$toprint$bot_line\n"
