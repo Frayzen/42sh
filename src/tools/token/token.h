@@ -24,6 +24,7 @@ enum token_type
     T_TRUE,
     T_FALSE,
     ECHO,
+    EQUAL,
     // wildcard
     QUOTE,
     // terminals

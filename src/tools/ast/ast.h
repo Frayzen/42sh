@@ -7,7 +7,8 @@ enum ast_type
     AST_TOKEN,
     AST_COMMAND,
     AST_LIST,
-    AST_IF
+    AST_IF,
+    AST_ASS
 };
 
 struct ast
