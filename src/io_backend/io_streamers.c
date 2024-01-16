@@ -82,8 +82,8 @@ size_t stream_input(size_t size)
 {
     if (IO_FILE == NULL)
         return 0;
-    char *buffer = calloc(size, sizeof(char));
-    int amount = getline(&buffer, &size, IO_FILE);
+    char *buffer = calloc(size + 1, sizeof(char));
+    int amount = fread(buffer, 1, size, IO_FILE);
     io_push(buffer);
     free(buffer);
     return amount;
