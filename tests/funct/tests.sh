@@ -29,9 +29,10 @@ execute() {
     script="../../script$unique"
     code=$(echo "$1" | sed 's/\\n/\'$'\n''/g')
     printf '%s' "$code" > $script
-    (timeout -k 0 1 $path_42sh $script) 1> $ours 2> $ours_err
-    timeout=$?
+    $path_42sh $script 1> $ours 2> $ours_err
+    ours_ret=$?
     bash --posix $script 1> $theirs 2> $theirs_err
+    theirs_ret=$?
     dif=$(diff -q $ours $theirs)
     res=$?
     dif_err=$(diff -q $ours_err $theirs_err)
@@ -42,13 +43,13 @@ execute() {
     if [ -s $theirs_err -a ! -s $ours_err ]; then
         res_err=1
     fi
+    ret_val=0
+    if [ $theirs_ret -ne $res_err ]; then
+        ret_val=1
+    fi
     error=0
-    if [ $timeout -ne 0 -o $res -ne 0 -o $res_err -ne 0 ]; then
+    if [ $res -ne 0 -o $res_err -ne 0 -o $ret_val -ne 0 ]; then
         toprint="$toprint$(printf '[%b] ' "$FAILED")"
-        if [ $timeout -ne 0 ]; then
-            toprint="$toprint$(printf ' (%b) ' "$TIMEOUT")"
-            toadd=$(($toadd+12))
-        fi
         toprint=$toprint$modname
         error=1
     else
@@ -70,8 +71,16 @@ execute() {
             done
             print_line "= END differs" 0 $PURPLE
         fi
+        if [ $ret_val -ne 0 ]; then
+            print_line "RETURN VALUE differs" 0 $PURPLE
+            print_line "EXPECTED $theirs_ret but got $ours_ret" 0 $PURPLE
+        fi
         if [ $res_err -ne 0 ]; then
-            print_line "STDERR empty" 0 $PURPLE
+            if [ -z "$(cat $theirs_err)" ]; then
+                print_line "STDERR should be empty but isn't" 0 $PURPLE
+            else
+                print_line "STDERR should not be empty but is" 0 $PURPLE
+            fi
         fi
         print_line "[ = END = ]" 0 $PURPLE
     fi
