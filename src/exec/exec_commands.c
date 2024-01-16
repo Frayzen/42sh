@@ -96,6 +96,9 @@ int external_bin(struct ast *ast)
     if (pid == 0)
     {
         char **array_arg = create_command(ast);
+        printf("arg 0 = %s\n", array_arg[0]);
+        printf("arg 1 = %s\n", array_arg[1]);
+        printf("arg 2 = %s\n", array_arg[2]);
         execvp(array_arg[0], array_arg);
         free(array_arg);
         print_error(EXECVP_FAILED);
@@ -129,14 +132,14 @@ int exec_command(struct ast *ast)
         ret = exec_echo(ast);
         break;
     case T_TRUE:
-        ret = 1;
+        ret = 0;
         break;
     case T_FALSE:
-        ret = 0;
+        ret = 1;
         break;
     default:
         ret = exec_external_bin(ast);
     }
-    printf("ret cmd = %d\n", ret);
+    // printf("ret cmd = %d\n", ret);
     return ret;
 }

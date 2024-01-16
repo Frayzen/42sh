@@ -22,7 +22,7 @@ int exec_list(struct ast *ast)
             exit_gracefully(LIST_NOT_FOUND);
             return 1;
         }
-    printf("ret list = %d\n", ret);
+    // printf("ret list = %d\n", ret);
 
     return ret;
 }
