@@ -27,7 +27,7 @@ execute() {
     ours_err="../../ours_err$unique"
 
     script="../../script$unique"
-    code=$(echo "$1" | sed 's/\\n/\'$'\n''/g')
+    code=$(echo "$1" | sed 's/ timflochaslm/\n/g')
     printf '%s' "$code" > $script
     $path_42sh $script 1> $ours 2> $ours_err
     ours_ret=$?
@@ -126,7 +126,7 @@ parallelize_entry() {
                 if [ $save -eq 0 ]; then
                     $(line)
                 else
-                    build="$build$line\n"
+                    build="$build$line timflochaslm"
                 fi
         esac
     done < $entry
