@@ -5,8 +5,13 @@
 #include "tools/token/token.h"
 struct token *next_token(void)
 {
-    const struct string *str = finder();
-    struct token *result = init_token(str);
+    const struct pending *pending = finder();
+    struct token *result = init_token(&pending->str);
+    if (pending->force_word)
+    {
+        result->terminal = false;
+        result->type = WORD;
+    }
     if (result->type == BSZERO)
         get_env_flag()->null_received = true;
     if (get_env_flag()->verbose)

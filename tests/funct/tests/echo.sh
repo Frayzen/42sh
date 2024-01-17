@@ -49,3 +49,10 @@ echo -E '\n\n'
 
 ### echo with spaces
 echo      4    2    s    h
+=======
+###Quoted tricky one
+echo toto ';' ls
+
+###interpret newline
+echo -n -n -e -e -n -n -n -e 42'\nsh'
+echo ok
