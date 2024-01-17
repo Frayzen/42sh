@@ -31,11 +31,6 @@ enum error_type
 void clean(struct ast *ast);
 
 /***
- * Consume all o he tokens to ensure a proper exit (grammar error)
- */
-void comsume_all(void);
-
-/***
  * Cleans the tree, prints the message associatedto the error type and exits
  * with the value associated to the error type
  * @param type of the error

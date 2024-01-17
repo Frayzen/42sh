@@ -33,13 +33,6 @@ void exit_gracefully(enum error_type type)
     }
 }
 
-void comsume_all(void)
-{
-    while (!tok_peek()->terminal)
-        tok_pop_clean();
-    tok_pop_clean();
-}
-
 void print_error(enum error_type type)
 {
     static const char *const error_names[] = {
