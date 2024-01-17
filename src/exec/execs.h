@@ -41,7 +41,7 @@ int exec_condition(struct ast *ast);
 
 /***
  * executes the not ast
- * * @param ast tree to execute
+ * @param ast tree to execute
  */
 int exec_negate(struct ast *ast);
 
