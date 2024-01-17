@@ -9,10 +9,7 @@ struct fd_dictionary *get_dict(void)
 {
     static struct fd_dictionary *fd_dico = NULL;
     if (!fd_dico)
-    {
         fd_dico = calloc(1, sizeof(struct fd_dictionary));
-        fd_dico->nb_entries = 0;
-    }
     return fd_dico;
 }
 
