@@ -9,7 +9,7 @@
 #include "parser/grammar/rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
-#include "tools/fd_manager/fd_manager.h"
+#include "tools/fd_manager/fd_dictionnary.h"
 
 int main(int argc, char *argv[])
 {
@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
         gr_input(&ast);
         if (get_env_flag()->print)
             pretty_print_ast(ast);
-        ret = exec_entry(ast);
-        assert(DICT->nb_entries == 0);
+        /* ret = exec_entry(ast); */
+        /* assert(DICT->nb_entries == 0); */
         fflush(NULL);
         destroy_ast(ast);
         ast = NULL;

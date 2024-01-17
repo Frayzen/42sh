@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "exit/exit.h"
-#include "tools/fd_manager/fd_manager.h"
+#include "tools/fd_manager/fd_dictionnary.h"
 
 struct fd_dictionary *get_dict(void)
 {

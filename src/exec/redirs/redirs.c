@@ -1,7 +1,10 @@
 #include "redirs.h"
 #include <fcntl.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <unistd.h>
+#include "tools/fd_manager/fd_dictionnary.h"
 
 int create_fd(char *str, bool is_io, int flags)
 {
@@ -13,32 +16,86 @@ int create_fd(char *str, bool is_io, int flags)
     return ret;
 }
 
-void apply_redirection(struct sh_command *cmd, struct ast *redir)
+int dup_fd(int fd)
 {
-    assert(redir->type == AST_REDIR && redir->nb_children >= 2);
+    int new = dup(fd);
+    dict_push(fd, new);
+    return new;
+}
+
+void redirect(int from, int to)
+{
+    dup2(from, to);
+    dict_push(from, to);
+}
+
+void build_redir(struct ast *ast, struct redir *redir)
+{
     int i = 0;
     //PARSE FROM
-    char* from = NULL;
-    struct token *token = redir->children[i++]->token;
+    struct token *token = ast->children[i++]->token;
     if(token->type == CHEVRON)
-    {
-        if (token->value[0] == '<')
-            from = "1";
-        else if (token->value[0] == '>')
-            from = "0";
-    }else
-        from = token->value;
-    token = redir->children[i++]->token;
+        redir->left = token->value[0] == '<' ? "1" : "0";
+    else
+        redir->left = token->value;
+    token = ast->children[i++]->token;
     //PARSE CHEVRON
-    bool is_io = token->value[1] == '&';
-    bool append = token->value[1] == '>';
-    bool both_way = token->value[1] == '<';
-    is_io &= token->type == IO_NUMBER;
-    token = redir->children[i++]->token;
+    char sec_char = token->value[1];
+    if (token->value[0] == '>')
+    {
+        redir->dir = RIGHT_TO_LEFT;
+        if (sec_char == '>')
+            redir->append = true;
+    }
+    else if (token->value[0] == '<')
+        redir->dir = sec_char == '>' ? BOTH_WAY : LEFT_TO_RIGHT;
+    else
+        assert(false);
+    if (sec_char == '&')
+        redir->dup = true;
+    token = ast->children[i++]->token;
     //PARSE TO
-    char *to = token->value;
-    is_io = (token->type != WORD) && is_io;
-    int from_fd = create_fd(from, true, append);
-    int to_fd = create_fd(to, is_io, false);
-    assert(from_fd != -1 && to_fd != -1);
+    redir->is_io = token->type == IO_NUMBER;
+    redir->right = token->value;
+}
+
+int get_flag(struct redir *redir, bool left)
+{
+    int flag = O_CREAT;
+    switch (redir->dir) {
+        case BOTH_WAY:
+            flag |= O_RDWR;
+            break;
+        case RIGHT_TO_LEFT:
+            flag |= left ? O_RDONLY : O_WRONLY;
+            break;
+        case LEFT_TO_RIGHT:
+            flag |= !left ? O_RDONLY : O_WRONLY;
+            break;
+    }
+    if (redir->append)
+        flag |= O_APPEND;
+    return flag; 
+}
+
+void apply_redirection(struct sh_command *cmd, struct ast *redir_ast)
+{
+    assert(redir_ast->type == AST_REDIR && redir_ast->nb_children >= 2);
+    struct redir redir = { 0 };
+    build_redir(redir_ast, &redir);
+    int from = create_fd(redir.left, true, get_flag(&redir, true));
+    int to = create_fd(redir.right, redir.is_io, get_flag(&redir, false));
+    if (redir.dup && !redir.is_io)
+        to = dup(to);
+    if (redir.dir == RIGHT_TO_LEFT)
+    {
+        int tmp_fd = from;
+        from = to;
+        to = tmp_fd;
+    }
+    redirect(from, to);
+    if (redir.dir == BOTH_WAY)
+        redirect(to, from);
+    if (from < 3)
+        cmd->redirs_fds[from] = to;
 }
