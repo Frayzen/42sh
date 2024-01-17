@@ -20,6 +20,7 @@ void dict_push(int old_fd, int new_fd)
 {
     assert(old_fd != new_fd);
     assert(old_fd >= 0 && new_fd >= 0);
+    assert(old_fd < 1025 && new_fd < 1025);
     if (DICT->nb_entries == DICT_SIZE)
         exit_gracefully(FD_DICO_FULL);
     DICT->entries[DICT->nb_entries].old_fd = old_fd;
