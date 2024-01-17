@@ -48,16 +48,17 @@ void print_echo(struct ast *ast, int i, bool interpret_bslash)
     }
 }
 
-int exec_echo(struct ast *ast)
+int exec_echo(struct sh_command *cmd)
 {
+    struct ast *ast = cmd->root;
     assert(ast && ast->type == AST_COMMAND
            && ast->children[0]->token->type == ECHO);
     int i = 1;
     bool print_nline = true;
     bool interpret_bslash = false;
-    while (i < ast->nb_children - 1)
+    while (i < cmd->argc - 1)
     {
-        const char *content = ast->children[i]->token->value;
+        const char *content = cmd->argv[i];
         if (!strcmp(content, "-e"))
             interpret_bslash = true;
         else if (!strcmp(content, "-E"))
@@ -75,27 +76,12 @@ int exec_echo(struct ast *ast)
     return 0;
 }
 
-// this creates the char ** needed for the arguments of execvp
-char **create_command(struct ast *ast)
-{
-    char **array_arg = calloc(ast->nb_children + 1, sizeof(char *));
-    for (int i = 0; i < ast->nb_children; i++)
-    {
-        if (ast->children[i]->type == AST_REDIR)
-            apply_redirection(ast, ast->children[i]->type);
-        array_arg[i] = ast->children[i]->token->value;
-    }
-    return array_arg;
-}
-
-int external_bin(struct ast *ast)
+int external_bin(struct sh_command *cmd)
 {
     int pid = fork();
     if (pid == 0)
     {
-        char **array_arg = create_command(ast);
-        execvp(array_arg[0], array_arg);
-        free(array_arg);
+        execvp(cmd->argv[0], cmd->argv);
         exit(127);
     }
     int returncode;
@@ -107,26 +93,74 @@ int external_bin(struct ast *ast)
     return code;
 }
 
-int exec_external_bin(struct ast *ast)
+void apply_redirection(struct sh_command *cmd, struct ast *redir)
 {
-    int ret = external_bin(ast);
-    if (ret)
-        print_error(FORK_ERROR);
-    return ret;
+    assert(redir->type == AST_REDIR);
+    int from = -1;
+    int i = 0;
+    struct token *token = redir->children[i++]->token;
+    if (token->type == IO_NUMBER)
+    {
+        from = atoi(token->value);
+        token = redir->children[i++]->token;
+    }
+    else {
+        if (token->value[0] == '<')
+            from = 1;
+        if (token->value[0] == '>')
+            from = 0;
+    }
+    assert(from != -1);
+    bool is_io = token->value[1] == '&';
+    bool append = token->value[1] == '>';
+    bool both_way = token->value[1] == '<';
 }
-int exec_command(struct ast *ast)
+
+int execute(struct sh_command *command)
 {
-    assert(ast && ast->type == AST_COMMAND);
-    assert(ast->nb_children != 0);
-    switch (ast->children[0]->token->type)
+    struct token *token = command->root->children[0]->token;
+    int ret;
+    switch (token->type)
     {
     case ECHO:
-        return exec_echo(ast);
+        return exec_echo(command);
     case T_TRUE:
         return 0;
     case T_FALSE:
         return 1;
     default:
-        return exec_external_bin(ast);
+        ret = external_bin(command);
+        if (ret)
+            print_error(FORK_ERROR);
+        return ret;
     }
+
+}
+
+void build_command(struct sh_command *cmd)
+{
+    struct ast *ast = cmd->root;
+    cmd->argv = calloc(ast->nb_children + 1, sizeof(char *));
+    cmd->argc = 0;
+    for (int i = 0; i < ast->nb_children; i++)
+    {
+        if (ast->children[i]->type == AST_REDIR)
+            apply_redirection(cmd, ast->children[i]);
+        else
+            cmd->argv[cmd->argc++] = ast->children[i]->token->value;
+    }
+}
+
+
+
+int exec_command(struct ast *ast)
+{
+    assert(ast && ast->type == AST_COMMAND);
+    assert(ast->nb_children != 0);
+    struct sh_command command = { 0 };
+    command.root = ast;
+    build_command(&command);
+    int ret = execute(&command);
+    free(command.argv);
+    return ret;
 }
