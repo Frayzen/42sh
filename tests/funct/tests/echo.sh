@@ -47,3 +47,6 @@ echo -e '\n\n'
 ###Double baskslash n flag E
 echo -E '\n\n'
 
+###interpret newline
+echo -n -n -e -e -n -n -n -e 42'\nsh'
+echo ok
