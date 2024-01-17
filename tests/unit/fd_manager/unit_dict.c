@@ -22,6 +22,8 @@ Test(fd_dict, all)
         cr_assert_eq(dict_peek_new(i), i + 10);
         cr_assert_eq(dict_peek_old(i + 10), i);
     }
+    cr_assert_eq(dict_peek_old(1), -1);
+    cr_assert_eq(dict_peek_new(10), -1);
     int nb_entries_init = DICT->nb_entries;
     for (int i = 0; i < nb_entries_init; i++)
     {

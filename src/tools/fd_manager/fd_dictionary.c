@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -17,6 +18,7 @@ struct fd_dictionary *get_dict(void)
 
 void dict_push(int old_fd, int new_fd)
 {
+    assert(old_fd != new_fd);
     if (DICT->nb_entries == DICT_SIZE)
         exit_gracefully(FD_DICO_FULL);
     DICT->entries[DICT->nb_entries].old_fd = old_fd;
@@ -67,4 +69,30 @@ void dict_free(void)
 {
     if (!DICT)
         free(DICT->entries);
+}
+
+void dict_print(void)
+{
+    if (!DICT->nb_entries)
+        return;
+    printf("┏━━━━━━━━━━━━━┓\n");
+    for (int i = 0; i < DICT->nb_entries; i++)
+    {
+        printf("┃ %d", DICT->entries[i].old_fd);
+        if (DICT->entries[i].old_fd < 1000)
+            printf(" ");
+        if (DICT->entries[i].old_fd < 100)
+            printf(" ");
+        if (DICT->entries[i].old_fd < 10)
+            printf(" ");
+        printf(" ↦ ");
+        if (DICT->entries[i].new_fd < 1000)
+            printf(" ");
+        if (DICT->entries[i].new_fd < 100)
+            printf(" ");
+        if (DICT->entries[i].new_fd < 10)
+            printf(" ");
+        printf("%d ┃\n", DICT->entries[i].new_fd);
+    }
+    printf("┗━━━━━━━━━━━━━┛\n");
 }
