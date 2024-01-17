@@ -67,6 +67,7 @@ echo -E -e -E \\\\\\\\\\\\\\\\
 ###Two echos
 echo first; echo second
 
+=======
 ###Quoted tricky one
 echo toto ';' ls
 

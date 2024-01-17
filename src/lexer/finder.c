@@ -83,6 +83,7 @@ bool special_char(struct pending *p)
     case '\n':
     case '\0':
     case ';':
+    case '=':
         if (IS_BLANK(p))
         {
             append_char(p, c);
@@ -133,6 +134,9 @@ bool consume(struct pending *p, char c)
     case '\n':
     case '\0':
     case ';':
+    case '>':
+    case '<':
+    case '=':
         return special_char(p);
     default:
     append:
@@ -147,47 +151,10 @@ void consumer(struct pending *p)
 {
     while (true)
     {
-        printf("ok\n");
         char c = io_peek();
         if (p->backslashed)
         {
             p->backslashed = false;
-            goto append;
-        }
-        // Any external function in the switch should handle every pop involved
-        switch (c)
-        {
-        case '\\':
-            p->backslashed = true;
-            break;
-        case '\'':
-        case '"':
-            p->blank = false;
-            io_pop();
-            skip_until(p, c, APPEND_CHARS);
-            io_pop();
-            continue;
-        case '#':
-            if (IS_BLANK(p))
-            {
-                io_pop();
-                skip_until(p, '\n', !APPEND_CHARS);
-                io_pop();
-            }
-            else
-                goto append;
-            continue;
-        case ' ':
-        case '\n':
-        case '\0':
-        case ';':
-        case '>':
-        case '<':
-            if (special_char(p))
-                return;
-            continue;
-        default:
-        append:
             append_char(p, c);
             io_pop();
         }

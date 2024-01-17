@@ -10,7 +10,8 @@ enum ast_type
     AST_COMMAND,
     AST_LIST,
     AST_IF,
-    AST_REDIR
+    AST_REDIR,
+    AST_ASS
 };
 
 struct ast

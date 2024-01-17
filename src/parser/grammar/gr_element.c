@@ -6,6 +6,8 @@
 enum status gr_element(struct ast **ast)
 {
     struct token *token = tok_peek();
+    if (token->terminal)
+        return ERROR;
     if (IS_BUILTIN(token) || token->type == WORD)
     {
         tok_pop();
@@ -13,5 +15,12 @@ enum status gr_element(struct ast **ast)
         *ast = add_child(*ast, new_ast);
         return OK;
     }
-    return gr_redir(ast);
+    if (gr_redir(ast) == ERROR)
+    {
+        tok_pop();
+        struct ast *new_ast = init_ast(AST_TOKEN, token);
+        *ast = add_child(*ast, new_ast);
+        return OK;
+    }
+    return OK;
 }
