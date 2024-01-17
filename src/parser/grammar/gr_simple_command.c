@@ -57,5 +57,6 @@ enum status gr_simple_command(struct ast **ast)
     }
 error:
     destroy_ast(ast_cmd);
+
     return ERROR;
 }

@@ -61,6 +61,7 @@ int get_type(const struct string *str)
     {
         return CHEVRON;
     }
+    // printf("valu = %s|\n", str->value);
     if (fnmatch("[0-9]+", str->value, 0) == 0)
         return IO_NUMBER;
     return i;
