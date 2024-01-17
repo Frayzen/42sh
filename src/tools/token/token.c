@@ -39,6 +39,18 @@ bool chevron_type(const struct string *str)
     return 0;
 }
 
+bool is_number(char *val)
+{
+    int i = 0;
+    while (val[i])
+    {
+        if (val[i] > '9' || val[i] < '0')
+            return false;
+        i++;
+    }
+    return true;
+}
+
 int get_type(const struct string *str)
 {
     if (!str || str->size == 0)
@@ -58,10 +70,8 @@ int get_type(const struct string *str)
         i++;
     }
     if (chevron_type(str))
-    {
         return CHEVRON;
-    }
-    if (fnmatch("[0-9]+", str->value, 0) == 0)
+    if (is_number(str->value))
         return IO_NUMBER;
     return i;
 }
@@ -129,7 +139,7 @@ const char **toktype_lookup(void)
         [NEWLINE] = "\n",      [QUOTE] = "'",
         [ECHO] = "echo",       [T_TRUE] = "true",
         [T_FALSE] = "false",   [BSZERO] = "\0",
-        [CHEVRON] = "CHEVRON", [IO_NUMBER] = "[0-9]+",
+        [CHEVRON] = "CHEVRON", [IO_NUMBER] = "NB",
         [EQUAL] = "=",         [WORD] = NULL,
     };
     return lookup_table;

@@ -8,17 +8,18 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include "exec/redirs/redirs.h"
 #include "execs.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
-#include "exec/redirs/redirs.h"
 
-void print_echo(struct ast *ast, int i, bool interpret_bslash)
+void print_echo(struct sh_command *cmd, int i, bool interpret_bslash,
+                bool print_nline)
 {
-    for (; i < ast->nb_children; i++)
+    for (; i < cmd->argc; i++)
     {
-        const char *content = ast->children[i]->token->value;
+        const char *content = cmd->argv[i];
         int id = 0;
         while (content[id])
         {
@@ -28,25 +29,27 @@ void print_echo(struct ast *ast, int i, bool interpret_bslash)
                 switch (content[id])
                 {
                 case 'n':
-                    printf("\n");
+                    dprintf(cmd->redirs_fds[1], "\n");
                     break;
                 case '\\':
-                    printf("\\");
+                    dprintf(cmd->redirs_fds[1], "\\");
                     break;
                 case 't':
-                    printf("\t");
+                    dprintf(cmd->redirs_fds[1], "\t");
                     break;
                 default:
                     continue;
                 }
             }
             else
-                printf("%c", content[id]);
+                dprintf(cmd->redirs_fds[1], "%c", content[id]);
             id++;
         }
-        if (ast->nb_children - 1 != i)
-            printf(" ");
+        if (cmd->argc - 1 != i)
+            dprintf(cmd->redirs_fds[1], " ");
     }
+    if (print_nline)
+        dprintf(cmd->redirs_fds[1], "\n");
 }
 
 int exec_echo(struct sh_command *cmd)
@@ -70,10 +73,8 @@ int exec_echo(struct sh_command *cmd)
             break;
         i++;
     }
-    print_echo(ast, i, interpret_bslash);
-    if (print_nline)
-        printf("\n");
-    fflush(stdout);
+    print_echo(cmd, i, interpret_bslash, print_nline);
+    fflush(NULL);
     return 0;
 }
 
@@ -133,6 +134,8 @@ int exec_command(struct ast *ast)
     assert(ast && ast->type == AST_COMMAND);
     assert(ast->nb_children != 0);
     struct sh_command command = { 0 };
+    for (int i = 0; i < 3; i++)
+        command.redirs_fds[i] = i;
     command.root = ast;
     build_command(&command);
     int ret = execute(&command);

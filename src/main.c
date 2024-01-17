@@ -21,14 +21,12 @@ int main(int argc, char *argv[])
         gr_input(&ast);
         if (get_env_flag()->print)
             pretty_print_ast(ast);
-        /* ret = exec_entry(ast); */
-        /* assert(DICT->nb_entries == 0); */
+        ret = exec_entry(ast);
+        assert(DICT->nb_entries == 0);
         fflush(NULL);
         destroy_ast(ast);
         ast = NULL;
     } while (!get_env_flag()->null_received);
-
-    // while (!get_env_flag()->null_received && !get_env_flag()->str_input);
     clean(ast);
     return ret;
 }

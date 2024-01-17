@@ -1,9 +1,12 @@
 #include "redirs.h"
 #include <fcntl.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <unistd.h>
+#include "env/env.h"
+#include "execs.h"
 #include "tools/fd_manager/fd_dictionnary.h"
 
 int create_fd(char *str, bool is_io, int flags)
@@ -12,7 +15,7 @@ int create_fd(char *str, bool is_io, int flags)
     if (is_io)
         ret = atoi(str);
     else
-        ret = open(str, flags);
+        ret = open(str, flags, 0644);
     return ret;
 }
 
@@ -23,9 +26,16 @@ int dup_fd(int fd)
     return new;
 }
 
-void redirect(int from, int to)
+void redirect(struct sh_command *cmd, int from, int to)
 {
-    dup2(from, to);
+    if (get_env_flag()->verbose)
+        printf(" [REDIRECT] %d -> %d\n", from, to);
+    if (from < 3)
+    {
+        cmd->redirs_fds[from] = to;
+        return;
+    }
+    assert(dup2(from, to) != -1);
     dict_push(from, to);
 }
 
@@ -35,20 +45,22 @@ void build_redir(struct ast *ast, struct redir *redir)
     //PARSE FROM
     struct token *token = ast->children[i++]->token;
     if(token->type == CHEVRON)
-        redir->left = token->value[0] == '<' ? "1" : "0";
+        redir->left = token->value[0] == '>' ? "1" : "0";
     else
+    {
         redir->left = token->value;
-    token = ast->children[i++]->token;
+        token = ast->children[i++]->token;
+    }
     //PARSE CHEVRON
     char sec_char = token->value[1];
     if (token->value[0] == '>')
     {
-        redir->dir = RIGHT_TO_LEFT;
+        redir->dir = LEFT_TO_RIGHT;
         if (sec_char == '>')
             redir->append = true;
     }
     else if (token->value[0] == '<')
-        redir->dir = sec_char == '>' ? BOTH_WAY : LEFT_TO_RIGHT;
+        redir->dir = sec_char == '>' ? BOTH_WAY : RIGHT_TO_LEFT;
     else
         assert(false);
     if (sec_char == '&')
@@ -93,9 +105,7 @@ void apply_redirection(struct sh_command *cmd, struct ast *redir_ast)
         from = to;
         to = tmp_fd;
     }
-    redirect(from, to);
+    redirect(cmd, from, to);
     if (redir.dir == BOTH_WAY)
-        redirect(to, from);
-    if (from < 3)
-        cmd->redirs_fds[from] = to;
+        redirect(cmd, to, from);
 }
