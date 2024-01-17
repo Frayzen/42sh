@@ -11,8 +11,7 @@ void rb_push(struct ringbuffer *rb, union ringitem item)
     size_t available = rb->ring_size - rb->cur_size;
     if (available == 0)
     {
-        print_error(RING_BF_FULL);
-        return;
+        exit_gracefully(RING_BF_FULL);
     }
     *(rb->end) = item;
     rb->end++;

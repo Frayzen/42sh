@@ -1,7 +1,7 @@
 # Init the 42sh project
 AC_INIT([42sh], [1.0], [42sh@assistants.epita.fr])
 
-LIB_LIST="$(top_builddir)exec/libexec.a $(top_builddir)parser/libparser.a $(top_builddir)lexer/liblexer.a $(top_builddir)io_backend/libiobackend.a $(top_builddir)exit/libexit.a $(top_builddir)tools/libtools.a "
+LIB_LIST="$(top_builddir)exec/libexec.a $(top_builddir)parser/libparser.a $(top_builddir)lexer/liblexer.a $(top_builddir)io_backend/libiobackend.a $(top_builddir)exit/libexit.a $(top_builddir)env/libenv.a $(top_builddir)tools/libtools.a"
 
 AC_SUBST(LIB_LIST)
 
@@ -12,7 +12,7 @@ AM_INIT_AUTOMAKE([subdir-objects] [foreign])
 # AM_SILENT_RULES([yes])
 
 # Enable ar for Makefile
-AM_PROG_AR
+# AM_PROG_AR
 
 # Check if a ranlib is available
 AC_PROG_RANLIB
@@ -33,6 +33,7 @@ AC_CONFIG_FILES([
                     src/lexer/Makefile
                     src/exec/Makefile
                     src/exit/Makefile
+                    src/env/Makefile
                     tests/unit/Makefile
                 ])
 AC_OUTPUT

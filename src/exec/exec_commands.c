@@ -78,15 +78,9 @@ int exec_echo(struct ast *ast)
 // this creates the char ** needed for the arguments of execvp
 char **create_command(struct ast *ast)
 {
-    size_t size_array = 1;
-    char **array_arg = calloc(size_array, sizeof(char *));
+    char **array_arg = calloc(ast->nb_children + 1, sizeof(char *));
     for (int i = 0; i < ast->nb_children; i++)
-    {
-        array_arg[size_array - 1] = ast->children[i]->token->value;
-        array_arg = realloc(array_arg, sizeof(char *) * size_array + 1);
-        size_array++;
-    }
-    array_arg[size_array - 1] = NULL;
+        array_arg[i] = ast->children[i]->token->value;
     return array_arg;
 }
 
@@ -96,26 +90,17 @@ int external_bin(struct ast *ast)
     if (pid == 0)
     {
         char **array_arg = create_command(ast);
-        int resp = execvp(array_arg[0], array_arg);
+        execvp(array_arg[0], array_arg);
         free(array_arg);
-        if (resp) // false
-        {
-            print_error(EXECVP_FAILED);
-            return 1;
-        }
-        else
-        {
-            int returncode;
-            waitpid(pid, &returncode, 0);
-            int code = 0;
-            if (WIFEXITED(returncode))
-                code = WEXITSTATUS(returncode);
-            if (code == 1)
-                return 1;
-            return 0;
-        }
+        exit(127);
     }
-    return 0;
+    int returncode;
+    waitpid(pid, &returncode, 0);
+    int code = 0;
+    if (WIFEXITED(returncode))
+        code = WEXITSTATUS(returncode);
+    fflush(stdout);
+    return code;
 }
 
 int exec_external_bin(struct ast *ast)

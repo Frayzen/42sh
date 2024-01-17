@@ -4,46 +4,55 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <sys/types.h>
+#include <unistd.h>
 
+#include "env/env.h"
 #include "exit/exit.h"
 #include "io_backend/backend_saver.h"
 
-void main_to_stream(int argc, char **argv)
+#define IO_FILE (set_fd(NULL))
+
+FILE *set_fd(FILE *new_file)
 {
-    if (argc == 1)
-        io_streamer_stdin();
-    else if (argc == 2)
-        io_streamer_file(argv[1]);
-    else if (argc == 3)
-        io_streamer_string(argc, argv);
-    else
-        print_error(ARG_ERROR);
+    static FILE *file = NULL;
+    if (new_file == NULL)
+        return file;
+    file = new_file;
+    return file;
+}
+
+bool is_executable(char *path_to_file)
+{
+    if (access(path_to_file, X_OK) == true)
+        return false;
+    struct stat file_info;
+    if (stat(path_to_file, &file_info) == true)
+        return false;
+    if (!S_ISREG(file_info.st_mode))
+        return false;
+    return true;
 }
 
 void io_streamer_file(char *path_to_file)
 {
+    if (access(path_to_file, F_OK))
+        exit_gracefully(INVALID_FILE_PATH);
+    if (access(path_to_file, R_OK))
+        exit_gracefully(NO_EXEC_PERM);
     FILE *file = fopen(path_to_file, "r");
     if (!file)
     {
-        print_error(FILE_COULDNT_OPEN);
-        return;
+        exit_gracefully(INVALID_FILE_PATH);
     }
-    fseek(file, 0, SEEK_END);
-    long length_of_file = ftell(file);
-    char *buffer = malloc(length_of_file);
-    if (!buffer)
+    if (!is_executable(path_to_file))
     {
-        print_error(MALLOC_NULL);
-        return;
+        fclose(file);
+        exit_gracefully(NO_EXEC_PERM);
     }
     fseek(file, 0, SEEK_SET);
-    if (fread(buffer, 1, length_of_file, file) == 0)
-        return;
-    fclose(file);
-    buffer[length_of_file - 1] = '\0';
-    io_push(buffer);
-    free(buffer);
+    set_fd(file);
 }
 
 void io_streamer_string(int argc, char **argv)
@@ -52,7 +61,9 @@ void io_streamer_string(int argc, char **argv)
     {
         if (!strcmp(argv[i], "-c"))
         {
-            io_push(argv[i + 1]);
+            char *buf = argv[i + 1];
+            FILE *file = fmemopen(buf, strlen(buf), "r");
+            set_fd(file);
         }
     }
     return;
@@ -60,13 +71,45 @@ void io_streamer_string(int argc, char **argv)
 
 void io_streamer_stdin(void)
 {
-    char *line = NULL;
-    size_t len = 0;
-    if (getline(&line, &len, stdin) == -1)
+    set_fd(stdin);
+}
+
+void main_to_stream(int argc, char **argv)
+{
+    int i = 1;
+    while (i < argc)
     {
-        // ERROR HANDLE
+        if (!strcmp(argv[i], "--pretty-print"))
+            get_env_flag()->print = true;
+        else if (!strcmp(argv[i], "--verbose"))
+            get_env_flag()->verbose = true;
+        else
+            break;
+        i++;
+    }
+    argc -= i;
+    argv += i;
+    if (argc == 0)
+        io_streamer_stdin();
+    else if (argc == 1)
+        io_streamer_file(*argv);
+    else if (argc == 2)
+        io_streamer_string(argc, argv);
+    else
+        exit_gracefully(ARG_ERROR);
+}
+
+void stream_input(size_t size)
+{
+    if (IO_FILE == NULL)
+    {
+        io_push_chars("\0", 1);
         return;
     }
-    io_push(line);
-    free(line);
+    char *buffer = calloc(size, sizeof(char));
+    if (!fgets(buffer, size, IO_FILE))
+        io_push_chars("\0", 1);
+    else
+        io_push(buffer);
+    free(buffer);
 }

@@ -34,7 +34,7 @@ else
     echo not
 fi
 
-###Test elif
+###Test elif FF
 if false; then
     echo ok
 elif false; then
@@ -42,6 +42,20 @@ elif false; then
 else
     echo yes
 fi
+
+###Test elif FT
+if false; then
+    echo ok
+elif true; then
+    echo elif
+else
+    echo yes
+fi
+
+
+
+###Test fi newline
+if false; then echo ok; fi
 
 ###Lots of if else
 if false; then
@@ -59,3 +73,12 @@ elif false; then
 else
     echo not
 fi
+
+
+###Invaild condition
+if fnj; then
+    echo yeye;
+fi 
+
+###Counpoumd list
+if true; then echo Never; echo Gonna; echo Give; echo You; echo Up; fi
