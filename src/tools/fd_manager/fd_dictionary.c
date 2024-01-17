@@ -65,10 +65,7 @@ void dict_pop(int old_fd)
     }
     if (index == -1)
         return;
-    for (int i = index; i < DICT->nb_entries - 1; ++i)
-    {
-        DICT->entries[i] = DICT->entries[i + 1];
-    }
+    DICT->entries[index] = DICT->entries[DICT->nb_entries - 1];
     DICT->nb_entries--;
 }
 
