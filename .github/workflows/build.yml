@@ -1,0 +1,17 @@
+name: Checks
+on: [pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Execute the checks
+        run: |
+          sudo apt-get install libcriterion-dev clang-format
+          autoreconf -i
+          ./configure
+          make check
+
