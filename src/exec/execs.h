@@ -3,6 +3,17 @@
 
 #include "tools/ast/ast.h"
 
+union redirection{
+    char *file;
+    int ionb;
+};
+
+struct sh_command{
+    struct ast *root;
+    union redirection redirs[3];
+    bool redirs_files[3];
+};
+
 /***
  * executes any of the basic functions
  * @param ast the tree to execute

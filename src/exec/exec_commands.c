@@ -80,7 +80,11 @@ char **create_command(struct ast *ast)
 {
     char **array_arg = calloc(ast->nb_children + 1, sizeof(char *));
     for (int i = 0; i < ast->nb_children; i++)
+    {
+        if (ast->children[i]->type == AST_REDIR)
+            apply_redirection(ast, ast->children[i]->type);
         array_arg[i] = ast->children[i]->token->value;
+    }
     return array_arg;
 }
 
