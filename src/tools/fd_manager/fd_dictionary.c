@@ -66,7 +66,7 @@ void dict_pop(int old_fd)
 
 void dict_free(void)
 {
-    if (!DICT)
+    if (DICT)
         free(DICT->entries);
 }
 
