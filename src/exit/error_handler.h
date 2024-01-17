@@ -48,4 +48,4 @@ void exit_gracefully(enum error_type type);
  */
 void print_error(enum error_type type);
 
-#endif /* !ERROR_HANDLER_H_H */
+#endif /* !ERROR_HANDLER_H */
