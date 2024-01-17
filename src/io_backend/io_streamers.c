@@ -57,6 +57,7 @@ void io_streamer_file(char *path_to_file)
 
 void io_streamer_string(int argc, char **argv)
 {
+    get_env_flag()->str_input = true;
     for (int i = 0; i < argc - 1; i++)
     {
         if (!strcmp(argv[i], "-c"))

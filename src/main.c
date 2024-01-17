@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
         fflush(NULL);
         destroy_ast(ast);
         ast = NULL;
-    } while (!get_env_flag()->null_received);
+    } while (!get_env_flag()->null_received && !get_env_flag()->str_input);
     clean(ast);
     return ret;
 }

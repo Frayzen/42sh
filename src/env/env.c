@@ -5,7 +5,9 @@
 #include "tools/token/token.h"
 struct env *get_env_flag(void)
 {
-    static struct env flag = { .print = false, .verbose = false };
+    static struct env flag = { .print = false,
+                               .verbose = false,
+                               .str_input = true };
     return &flag;
 }
 

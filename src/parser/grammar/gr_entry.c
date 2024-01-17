@@ -1,6 +1,6 @@
-
 #include <stdio.h>
 
+#include "exit/exit.h"
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
@@ -23,5 +23,6 @@ enum status gr_input(struct ast **ast)
     return OK;
 error:
     destroy_ast(*ast);
+    print_error(GRAMMAR_ERROR_ENTRY);
     return ERROR;
 }
