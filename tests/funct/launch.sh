@@ -17,8 +17,8 @@ fi
 retval=0
 for module in $modules;
 do
-    ./$module
-    if [ $? -eq 1 ]; then
+    timeout -k 0 60 ./$module
+    if [ $? -ne 0 ]; then
         retval=1
     fi
 done
