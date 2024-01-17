@@ -1,0 +1,13 @@
+**/*
+!**/*/
+!**/*.c
+!**/*.h
+!**/*.sh
+!**/Makefile.am
+!**/configure.ac
+!README.md
+!.clang-format
+!.gitignore
+!.github/
+autom4te.cache
+test.c
