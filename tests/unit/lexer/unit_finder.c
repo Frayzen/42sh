@@ -9,9 +9,10 @@
 
 void assert_and_clear(const char *val)
 {
-    const struct string *str = finder();
-    cr_assert_str_eq(str->value, val);
-    free(str->value);
+    const struct pending *pending = finder();
+    struct string str = pending->str;
+    cr_assert_str_eq(str.value, val);
+    free(str.value);
 }
 
 char *val = NULL;

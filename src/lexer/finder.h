@@ -15,6 +15,7 @@ struct string
 struct pending
 {
     struct string str;
+    bool force_word;
     bool backslashed;
     bool blank;
 };
@@ -24,5 +25,5 @@ struct pending
  * @return a string struct
  * @see struct string
  */
-const struct string *finder(void);
+const struct pending *finder(void);
 #endif /* FINDER_H */
