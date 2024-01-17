@@ -12,7 +12,6 @@ struct env
     bool null_received;
     bool print;
     bool verbose;
-    bool str_input;
 };
 
 /***

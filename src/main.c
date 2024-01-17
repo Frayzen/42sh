@@ -4,7 +4,7 @@
 
 #include "env/env.h"
 #include "exec/execs.h"
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "io_backend/io_streamers.h"
 #include "parser/grammar/rules.h"
 #include "tools/ast/ast.h"
@@ -26,7 +26,9 @@ int main(int argc, char *argv[])
         fflush(NULL);
         destroy_ast(ast);
         ast = NULL;
-    } while (!get_env_flag()->null_received && !get_env_flag()->str_input);
+    } while (!get_env_flag()->null_received);
+
+    // while (!get_env_flag()->null_received && !get_env_flag()->str_input);
     clean(ast);
     return ret;
 }

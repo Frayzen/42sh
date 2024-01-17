@@ -3,7 +3,7 @@
 #include <criterion/internal/test.h>
 #include <lexer/token_saver.h>
 
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "io_backend/backend_saver.h"
 
 TestSuite(token_saver);

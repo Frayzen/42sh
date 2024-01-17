@@ -1,5 +1,5 @@
-#ifndef EXIT_H
-#define EXIT_H
+#ifndef ERROR_HANDLER_H
+#define ERROR_HANDLER_H
 
 #include "tools/ast/ast.h"
 
@@ -21,7 +21,7 @@ enum error_type
     NO_READ_PERM,
     INVALID_FILE_PATH,
     // Command not found -> 127
-    EXECVP_FAILED,
+    EXECVP_FAILED
 };
 
 /***
@@ -29,6 +29,11 @@ enum error_type
  * @param ast the ast created by the parser
  */
 void clean(struct ast *ast);
+
+/***
+ * Consume all o he tokens to ensure a proper exit (grammar error)
+ */
+void comsume_all(void);
 
 /***
  * Cleans the tree, prints the message associatedto the error type and exits
@@ -43,4 +48,4 @@ void exit_gracefully(enum error_type type);
  */
 void print_error(enum error_type type);
 
-#endif /* !EXIT_H */
+#endif /* !ERROR_HANDLER_H_H */

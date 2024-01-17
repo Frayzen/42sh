@@ -3,7 +3,7 @@
 #include <criterion/internal/test.h>
 #include <stdio.h>
 
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "io_backend/backend_saver.h"
 #include "parser/grammar/rules.h"
 #include "tools/ast/ast.h"

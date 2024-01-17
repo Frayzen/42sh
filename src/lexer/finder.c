@@ -5,7 +5,7 @@
 #include <string.h>
 #include <sys/types.h>
 
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "io_backend/backend_saver.h"
 
 #define APPEND_CHARS true

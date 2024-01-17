@@ -1,9 +1,12 @@
 #define _POSIX_C_SOURCE 200809L
+#include "exit/error_handler.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "exit/exit.h"
+#include "env/env.h"
+#include "lexer/token_saver.h"
 #include "tools/ast/ast.h"
 
 void exit_gracefully(enum error_type type)
@@ -28,6 +31,13 @@ void exit_gracefully(enum error_type type)
     default:
         exit(1);
     }
+}
+
+void comsume_all(void)
+{
+    while (!tok_peek()->terminal)
+        tok_pop();
+    tok_pop();
 }
 
 void print_error(enum error_type type)
