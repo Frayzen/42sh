@@ -9,16 +9,10 @@
 
 enum status gr_list(struct ast **ast)
 {
-    printf("enter list\n");
-    struct token *token = tok_peek();
-    print_token(token);
-    printf("tried to print token\n");
     if (tok_peek()->terminal)
         return OK;
-    printf("after if statment\n");
     struct ast *ast_list = init_ast(AST_LIST, NULL);
     enum status state = gr_and_or(&ast_list);
-    printf("here\n");
     if (state == ERROR)
     {
         destroy_ast(ast_list);

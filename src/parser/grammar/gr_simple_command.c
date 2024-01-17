@@ -10,11 +10,9 @@
 enum status gr_simple_command(struct ast **ast)
 {
     struct ast *ast_cmd = init_ast(AST_COMMAND, NULL);
-    printf("here pr cond simple command\n");
     if (gr_prefix(&ast_cmd) == ERROR)
     {
         struct token *token = tok_peek();
-        print_token(token);
         CHECK_GOTO(!IS_BUILTIN(token) && token->type != WORD, error);
         tok_pop();
         struct ast *new_ast = init_ast(AST_TOKEN, token);
@@ -31,13 +29,13 @@ enum status gr_simple_command(struct ast **ast)
     }
     else
     {
-        printf("sec onditions\n");
         enum status state = OK;
         while (state == OK)
         {
             if (tok_peek()->terminal)
                 break;
             state = gr_prefix(&ast_cmd);
+
         }
         struct token *token = tok_peek();
         if (!IS_BUILTIN(token) && token->type != WORD)

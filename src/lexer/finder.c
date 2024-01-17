@@ -98,7 +98,6 @@ void consumer(struct pending *p)
 {
     while (true)
     {
-        printf("ok\n");
         char c = io_peek();
         if (p->backslashed)
         {

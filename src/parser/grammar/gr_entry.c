@@ -1,6 +1,5 @@
 
 #include <stdio.h>
-
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
@@ -9,7 +8,6 @@
 enum status gr_input(struct ast **ast)
 {
     enum status state = gr_list(ast);
-    printf("afterlist input\n");
     CHECK_GOTO(state == ERROR, error);
     struct token *trm = tok_peek();
     tok_pop();
