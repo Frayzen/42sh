@@ -69,7 +69,7 @@ execute() {
             do
                 print_line "$(echo $difline | head -c $line_size)" 0 $OTHER
             done
-            print_line "= END differs" 0 $PURPLE
+            print_line "= END diffems" 0 $PURPLE
         fi
         if [ $ret_val -ne 0 ]; then
             print_line "RETURN VALUE differs" 0 $PURPLE

@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
@@ -9,7 +11,7 @@ enum status gr_element(struct ast **ast)
     struct token *token = tok_peek();
     if (token->terminal)
         return ERROR;
-    if (token->type != CHEVRON)
+    if (IS_WORDABLE(token))
     {
         token->type = WORD;
         tok_pop();
