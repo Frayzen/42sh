@@ -8,13 +8,16 @@
 
 void exit_gracefully(enum error_type type)
 {
-    clean(*AST_ROOT);
+    struct ast **root = AST_ROOT;
+    if (root)
+        clean(*root);
     print_error(type);
     switch (type)
     {
     case ARG_ERROR:
     case GRAMMAR_ERROR_ENTRY:
     case FORK_ERROR:
+    case UNEXPECTED_EOF:
         exit(2);
     case NO_EXEC_PERM:
     case NO_READ_PERM:
@@ -45,6 +48,7 @@ void print_error(enum error_type type)
         [INVALID_FILE_PATH] = "No such file or directory",
         // Command not found -> 127
         [EXECVP_FAILED] = "Command not found",
+        [UNEXPECTED_EOF] = "Unexpected end of file",
     };
     dprintf(STDERR_FILENO, "%s\n", error_names[type]);
 }
