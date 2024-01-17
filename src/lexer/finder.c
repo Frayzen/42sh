@@ -1,14 +1,20 @@
 #include "finder.h"
 
 #include <stdbool.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 
+#include "exit/exit.h"
 #include "io_backend/backend_saver.h"
 
 #define APPEND_CHARS true
+#define SPACE_CASES                                                            \
+    case ' ':                                                                  \
+    case '\f':                                                                 \
+    case '\r':                                                                 \
+    case '\t':                                                                 \
+    case '\v'
 
 // return the p->value
 char *append_char(struct pending *p, char c)
@@ -83,11 +89,10 @@ bool special_char(struct pending *p)
             io_pop();
         }
         return true;
-    case ' ':
-        if (IS_BLANK(p))
-            io_pop();
-        else
+    SPACE_CASES:
+        if (!IS_BLANK(p))
             return true;
+        io_pop();
         break;
     default:
         break;
@@ -110,6 +115,8 @@ bool consume(struct pending *p, char c)
         p->force_word = true;
         io_pop();
         skip_until(p, c, APPEND_CHARS);
+        if (!io_peek())
+            exit_gracefully(UNEXPECTED_EOF);
         io_pop();
         return false;
     case '#':
@@ -122,7 +129,7 @@ bool consume(struct pending *p, char c)
         else
             goto append;
         return false;
-    case ' ':
+    SPACE_CASES:
     case '\n':
     case '\0':
     case ';':

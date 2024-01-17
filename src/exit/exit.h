@@ -10,6 +10,8 @@ enum error_type
     RING_BF_FULL,
     ADD_CHILD_ERROR,
     LIST_NOT_FOUND,
+    FD_DICO_FULL,
+    UNEXPECTED_EOF,
     // Misuse of shell built-ins -> 2
     ARG_ERROR,
     GRAMMAR_ERROR_ENTRY,
