@@ -44,6 +44,13 @@ bool tok_pop(void)
     return rb_pop(get_buffer());
 }
 
+void comsume_all(void)
+{
+    while (!tok_peek()->terminal)
+        tok_pop_clean();
+    tok_pop_clean();
+}
+
 void clean_token_saver(void)
 {
     rb_destroy(get_buffer());

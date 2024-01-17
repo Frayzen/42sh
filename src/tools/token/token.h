@@ -5,6 +5,7 @@
 #include "lexer/finder.h"
 
 #define IS_BUILTIN(t) ((t)->type >= T_TRUE && (t)->type <= ECHO)
+#define IS_WORDABLE(t) ((t)->type >= IF)
 
 // /!\ Do not add gaps inside of this enum (see TOK_TYPES_LT)
 enum token_type
@@ -13,7 +14,13 @@ enum token_type
     NEWLINE,
     BSZERO,
     SEMI_COLON,
-
+    // redir
+    CHEVRON,
+    // numbers
+    IO_NUMBER,
+    EQUAL,
+    // wildcard
+    QUOTE,
     // condition
     IF,
     THEN,
@@ -24,13 +31,6 @@ enum token_type
     T_TRUE,
     T_FALSE,
     ECHO,
-    // redir
-    CHEVRON,
-    // numbers
-    IO_NUMBER,
-    EQUAL,
-    // wildcard
-    QUOTE,
     // terminals
     WORD,
 };

@@ -74,3 +74,6 @@ echo toto ';' ls
 ###interpret newline
 echo -n -n -e -e -n -n -n -e 42'\nsh'
 echo ok
+
+### wordables
+echo echo echo  fi if else elif
