@@ -17,9 +17,9 @@ enum ast_type
 struct ast
 {
     enum ast_type type;
-    struct token *token;
     int nb_children;
     struct ast **children;
+    struct token *token;
 };
 
 /***

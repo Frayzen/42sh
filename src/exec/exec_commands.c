@@ -12,6 +12,7 @@
 #include "exit/exit.h"
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
+#include "exec/redirs/redirs.h"
 
 void print_echo(struct ast *ast, int i, bool interpret_bslash)
 {
@@ -93,29 +94,6 @@ int external_bin(struct sh_command *cmd)
     return code;
 }
 
-void apply_redirection(struct sh_command *cmd, struct ast *redir)
-{
-    assert(redir->type == AST_REDIR);
-    int from = -1;
-    int i = 0;
-    struct token *token = redir->children[i++]->token;
-    if (token->type == IO_NUMBER)
-    {
-        from = atoi(token->value);
-        token = redir->children[i++]->token;
-    }
-    else {
-        if (token->value[0] == '<')
-            from = 1;
-        if (token->value[0] == '>')
-            from = 0;
-    }
-    assert(from != -1);
-    bool is_io = token->value[1] == '&';
-    bool append = token->value[1] == '>';
-    bool both_way = token->value[1] == '<';
-}
-
 int execute(struct sh_command *command)
 {
     struct token *token = command->root->children[0]->token;
@@ -134,7 +112,6 @@ int execute(struct sh_command *command)
             print_error(FORK_ERROR);
         return ret;
     }
-
 }
 
 void build_command(struct sh_command *cmd)
@@ -150,8 +127,6 @@ void build_command(struct sh_command *cmd)
             cmd->argv[cmd->argc++] = ast->children[i]->token->value;
     }
 }
-
-
 
 int exec_command(struct ast *ast)
 {
