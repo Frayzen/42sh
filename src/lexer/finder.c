@@ -68,7 +68,7 @@ bool special_char(struct pending *p)
     return false;
 }
 
-//return true if the chevron is accepted
+// return true if the chevron is accepted
 bool chevron(struct pending *p, char c)
 {
     append_char(p, c);
@@ -127,9 +127,9 @@ bool consume(struct pending *p, char c)
         return false;
     case '>':
     case '<':
-            if (IS_BLANK(p) && !chevron(p, c))
-                goto append;
-            return true;
+        if (IS_BLANK(p) && !chevron(p, c))
+            goto append;
+        return true;
     SPACE_CASES:
     case '\n':
     case '\0':

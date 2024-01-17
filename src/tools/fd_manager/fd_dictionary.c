@@ -4,8 +4,6 @@
 
 #include "exit/error_handler.h"
 #include "tools/fd_manager/fd_dictionnary.h"
-#include "exit/error_handler.h"
-#include "tools/fd_manager/fd_dictionnary.h"
 
 struct fd_dictionary *get_dict(void)
 {

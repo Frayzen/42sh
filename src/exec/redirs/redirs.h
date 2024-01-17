@@ -4,12 +4,14 @@
 #include "execs.h"
 #include "tools/ast/ast.h"
 
-enum direction{
+enum direction
+{
     RIGHT_TO_LEFT,
     LEFT_TO_RIGHT,
     BOTH_WAY,
 };
-struct redir{
+struct redir
+{
     enum direction dir;
     char *left;
     char *right;

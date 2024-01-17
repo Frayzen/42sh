@@ -8,6 +8,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include "env/env.h"
 #include "exec/redirs/redirs.h"
 #include "execs.h"
 #include "exit/error_handler.h"
@@ -84,7 +85,7 @@ int external_bin(struct sh_command *cmd)
     if (pid == 0)
     {
         for (int i = 0; i < 3; i++)
-            dup2(i, cmd->redirs_fds[i]);
+            dup2(cmd->redirs_fds[i], i);
         execvp(cmd->argv[0], cmd->argv);
         exit(127);
     }

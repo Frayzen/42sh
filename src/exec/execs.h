@@ -3,7 +3,8 @@
 
 #include "tools/ast/ast.h"
 
-struct sh_command{
+struct sh_command
+{
     struct ast *root;
     int redirs_fds[3];
     char **argv;

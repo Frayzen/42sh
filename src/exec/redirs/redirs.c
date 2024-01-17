@@ -1,10 +1,12 @@
 #include "redirs.h"
+
+#include <assert.h>
 #include <fcntl.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <unistd.h>
+
 #include "env/env.h"
 #include "execs.h"
 #include "tools/fd_manager/fd_dictionnary.h"
@@ -41,16 +43,16 @@ void redirect(struct sh_command *cmd, int from, int to)
 void build_redir(struct ast *ast, struct redir *redir)
 {
     int i = 0;
-    //PARSE FROM
+    // PARSE FROM
     struct token *token = ast->children[i++]->token;
-    if(token->type == CHEVRON)
+    if (token->type == CHEVRON)
         redir->left = token->value[0] == '>' ? "1" : "0";
     else
     {
         redir->left = token->value;
         token = ast->children[i++]->token;
     }
-    //PARSE CHEVRON
+    // PARSE CHEVRON
     char sec_char = token->value[1];
     if (token->value[0] == '>')
     {
@@ -65,30 +67,29 @@ void build_redir(struct ast *ast, struct redir *redir)
     if (sec_char == '&')
         redir->dup = true;
     token = ast->children[i++]->token;
-    //PARSE TO
-    redir->is_io = token->type == IO_NUMBER && redir->dup;
+    // PARSE TO
+    redir->is_io = token->type == IO_NUMBER;
     redir->right = token->value;
 }
 
 int get_flag(struct redir *redir, bool left)
 {
     int flag = O_CREAT;
-    switch (redir->dir) {
-        case BOTH_WAY:
-            flag |= O_RDWR;
-            break;
-        case RIGHT_TO_LEFT:
-            flag |= (left ? O_WRONLY : O_RDONLY);
-            break;
-        case LEFT_TO_RIGHT:
-            flag |= (left ? O_RDONLY : O_WRONLY);
-            break;
+    switch (redir->dir)
+    {
+    case BOTH_WAY:
+        flag |= O_RDWR;
+        break;
+    case RIGHT_TO_LEFT:
+        flag |= (left ? O_WRONLY : O_RDONLY);
+        break;
+    case LEFT_TO_RIGHT:
+        flag |= (left ? O_RDONLY : O_WRONLY);
+        break;
     }
     if (redir->append)
         flag |= O_APPEND;
-    else
-        flag |= O_TRUNC;
-    return flag; 
+    return flag;
 }
 
 void apply_redirection(struct sh_command *cmd, struct ast *redir_ast)
