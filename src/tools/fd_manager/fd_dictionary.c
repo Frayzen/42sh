@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "exit/exit.h"
@@ -34,7 +35,9 @@ int dict_peek_new(int old_fd)
     for (int i = 0; i < DICT->nb_entries; i++)
     {
         if (DICT->entries[i].old_fd == old_fd)
+        {
             return DICT->entries[i].new_fd;
+        }
     }
     return -1;
 }

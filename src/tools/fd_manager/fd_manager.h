@@ -17,6 +17,12 @@ struct fd_dictionary
 };
 
 /***
+ * Initialize the file descriptor dictionary
+ * @return the new file descriptor dictionary
+ */
+struct fd_dictionary *dict_init(void);
+
+/***
  * Gets the file descriptor dictonary
  * @param dico file descripor dictonary to set or NULL
  * @return the file descriptor dictonary
