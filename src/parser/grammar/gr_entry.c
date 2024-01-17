@@ -24,6 +24,6 @@ enum status gr_input(struct ast **ast)
     return OK;
 error:
     get_env_flag()->null_received = true;
-    destroy_ast(*ast);  
+    destroy_ast(*ast);
     return ERROR;
 }
