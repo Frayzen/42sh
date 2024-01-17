@@ -7,33 +7,15 @@
 
 #include "tools/fd_manager/fd_manager.h"
 
-Test(fd_dict, null_dict)
+Test(fd_dict, empty_dict)
 {
-    cr_assert(!DICT);
-}
-
-Test(fd_dict, init)
-{
-    struct fd_dictionary *dict = dict_init();
-    cr_assert(dict);
-    cr_assert_eq(dict->nb_entries, 0);
-    free(dict->entries);
+    cr_assert_eq(DICT->nb_entries, 0);
 }
 
 Test(fd_dict, all)
 {
-    dict_push(0, 10);
-    cr_assert(DICT);
-    cr_assert_eq(DICT->nb_entries, 1);
-    dict_push(1, 11);
-    dict_push(2, 12);
-    dict_push(3, 13);
-    dict_push(4, 14);
-    dict_push(5, 15);
-    dict_push(6, 16);
-    dict_push(7, 17);
-    dict_push(8, 18);
-    dict_push(9, 19);
+    for (int i = 0; i < 10; i++)
+        dict_push(i, 10 + i);
     cr_assert_eq(DICT->nb_entries, 10);
     for (int i = 0; i < DICT->nb_entries; i++)
     {

@@ -2,7 +2,7 @@
 #define FD_MANAGER_H
 
 #define DICT_SIZE 1024
-#define DICT (get_dict(NULL))
+#define DICT (get_dict())
 
 struct fd_pair
 {
@@ -17,17 +17,10 @@ struct fd_dictionary
 };
 
 /***
- * Initialize the file descriptor dictionary
- * @return the new file descriptor dictionary
- */
-struct fd_dictionary *dict_init(void);
-
-/***
- * Gets the file descriptor dictonary
- * @param dico file descripor dictonary to set or NULL
+ * Initialize or gets the file descriptor dictonary
  * @return the file descriptor dictonary
  */
-struct fd_dictionary *get_dict(struct fd_dictionary *dico);
+struct fd_dictionary *get_dict(void);
 
 /***
  * Adds an entry to the file descriptor dictionary

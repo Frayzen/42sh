@@ -4,25 +4,19 @@
 #include "exit/exit.h"
 #include "tools/fd_manager/fd_manager.h"
 
-struct fd_dictionary *dict_init(void)
-{
-    struct fd_dictionary *fd_dico = malloc(sizeof(struct fd_dictionary));
-    fd_dico->nb_entries = 0;
-    return fd_dico;
-}
-
-struct fd_dictionary *get_dict(struct fd_dictionary *dico)
+struct fd_dictionary *get_dict(void)
 {
     static struct fd_dictionary *fd_dico = NULL;
-    if (dico)
-        fd_dico = dico;
+    if (!fd_dico)
+    {
+        fd_dico = calloc(1, sizeof(struct fd_dictionary));
+        fd_dico->nb_entries = 0;
+    }
     return fd_dico;
 }
 
 void dict_push(int old_fd, int new_fd)
 {
-    if (!DICT)
-        get_dict(dict_init());
     if (DICT->nb_entries == DICT_SIZE)
         exit_gracefully(FD_DICO_FULL);
     DICT->entries[DICT->nb_entries].old_fd = old_fd;
@@ -72,7 +66,5 @@ void dict_pop(int old_fd)
 void dict_free(void)
 {
     if (!DICT)
-    {
         free(DICT->entries);
-    }
 }
