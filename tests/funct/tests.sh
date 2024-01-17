@@ -54,7 +54,9 @@ execute() {
         error=1
     else
         if [ -n "$ERROR_ONLY" ]; then
-            rm $theirs $ours $ours_err $theirs_err $script
+            if [ $mod_id -eq 0 ]; then
+                rm $theirs $ours $ours_err $theirs_err $script
+            fi
             exit 0
         fi
         toprint="$toprint$(printf '[%b] ' "$PASSED")"
@@ -84,7 +86,9 @@ execute() {
         fi
         print_line "[ = END = ]" 0 $PURPLE
     fi
-    rm $theirs $ours $ours_err $theirs_err $script
+    if [ $mod_id -eq 0 ]; then
+        rm $theirs $ours $ours_err $theirs_err $script
+    fi
     if [ $error -ne 1 ]; then
         exit 0
     else
