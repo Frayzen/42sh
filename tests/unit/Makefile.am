@@ -12,7 +12,8 @@ unit_SOURCES =\
 			  lexer/unit_finder.c\
 			  lexer/unit_tokenizer.c\
 			  lexer/unit_token_saver.c\
-			  io_backend/unit_backend_saver.c
+			  io_backend/unit_backend_saver.c\
+			  fd_manager/unit_dict.c
 
 
 unit_CPPFLAGS = -I$(top_srcdir)/src -I.
