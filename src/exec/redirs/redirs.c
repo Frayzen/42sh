@@ -36,7 +36,6 @@ void redirect(struct sh_command *cmd, int from, int to)
         return;
     }
     assert(dup2(from, to) != -1);
-    dict_push(from, to);
 }
 
 void build_redir(struct ast *ast, struct redir *redir)
@@ -67,7 +66,7 @@ void build_redir(struct ast *ast, struct redir *redir)
         redir->dup = true;
     token = ast->children[i++]->token;
     //PARSE TO
-    redir->is_io = token->type == IO_NUMBER;
+    redir->is_io = token->type == IO_NUMBER && redir->dup;
     redir->right = token->value;
 }
 
@@ -87,6 +86,8 @@ int get_flag(struct redir *redir, bool left)
     }
     if (redir->append)
         flag |= O_APPEND;
+    else
+        flag |= O_TRUNC;
     return flag; 
 }
 
@@ -97,7 +98,7 @@ void apply_redirection(struct sh_command *cmd, struct ast *redir_ast)
     build_redir(redir_ast, &redir);
     int from = create_fd(redir.left, true, get_flag(&redir, true));
     int to = create_fd(redir.right, redir.is_io, get_flag(&redir, false));
-    if (redir.dup && !redir.is_io)
+    if (redir.dup)
         to = dup(to);
     if (redir.dir == RIGHT_TO_LEFT)
     {

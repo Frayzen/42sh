@@ -83,6 +83,8 @@ int external_bin(struct sh_command *cmd)
     int pid = fork();
     if (pid == 0)
     {
+        for (int i = 0; i < 3; i++)
+            dup2(i, cmd->redirs_fds[i]);
         execvp(cmd->argv[0], cmd->argv);
         exit(127);
     }
