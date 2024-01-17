@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "tools/token/token.h"
 
 void rb_push(struct ringbuffer *rb, union ringitem item)

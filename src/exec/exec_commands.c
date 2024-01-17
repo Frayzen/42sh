@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 #include "execs.h"
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
 #include "exec/redirs/redirs.h"

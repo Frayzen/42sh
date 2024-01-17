@@ -49,6 +49,7 @@ echo -E '\n\n'
 
 ### echo with spaces
 echo      4    2    s    h
+
 ###Lots of baskslash
 echo EeE \\\\\\\\\\\\\\\\
 
@@ -67,7 +68,6 @@ echo -E -e -E \\\\\\\\\\\\\\\\
 ###Two echos
 echo first; echo second
 
-=======
 ###Quoted tricky one
 echo toto ';' ls
 

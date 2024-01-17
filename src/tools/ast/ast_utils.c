@@ -1,4 +1,4 @@
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 
 #define _POSIX_C_SOURCE 200809L
