@@ -76,6 +76,7 @@ bool special_char(struct pending *p)
     case '\n':
     case '\0':
     case ';':
+    case '=':
         if (IS_BLANK(p))
         {
             append_char(p, c);
@@ -133,6 +134,7 @@ void consumer(struct pending *p)
         case ';':
         case '>':
         case '<':
+        case '=':
             if (special_char(p))
                 return;
             continue;

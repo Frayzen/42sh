@@ -28,6 +28,7 @@ enum token_type
     CHEVRON,
     // numbers
     IO_NUMBER,
+    EQUAL,
     // wildcard
     QUOTE,
     // terminals
