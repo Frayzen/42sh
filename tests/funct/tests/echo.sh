@@ -59,11 +59,15 @@ echo fuck your malloc 10000; echo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 ###Slashs
 echo -e -E -e \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-###Mixed option
-echo -n -n -e -e -n -n -n -e 42\\nsh
-
 ###Slashs 2.0
 echo -E -e -E \\\\\\\\\\\\\\\\
 
 ###Two echos
 echo first; echo second
+
+###Quoted tricky one
+echo toto ';' ls
+
+###interpret newline
+echo -n -n -e -e -n -n -n -e 42'\nsh'
+echo ok
