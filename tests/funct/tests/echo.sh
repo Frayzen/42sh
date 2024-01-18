@@ -20,31 +20,31 @@ echo if fi then echo ifa fia thena;
 echo Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras commodo lobortis tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut euismod imperdiet nulla vel ornare. In cursus vel lectus nec scelerisque. Integer vestibulum tellus eu vehicula pharetra. Praesent porttitor libero id justo commodo consequat. Nunc nisi quam, interdum eu leo a, placerat tempor orci. Morbi nec dui vitae nisi molestie condimentum et scelerisque elit. Proin eget tempus ex, et sagittis ligula.
 
 
-###Echo without E flag
+###Echo without E option
 echo -E 'hello world \n'
 
-###Echo with e flag
+###Echo with e option
 echo -e 'hello world \n'
 
-###Echo with e default flag
+###Echo with e default option
 echo 'hello world \n'
 
-###Echo with several e E flags 1
+###Echo with several e E options 1
 echo -e -E -e -E 'hello world \n'
 
-###Echo with several e E flags 2
+###Echo with several e E options 2
 echo -e -E -e 'hello world \n'
 
-###Echo with n flag
+###Echo with n option
 echo -n 'hello world'
 
-###Double baskslash n no flag
+###Double baskslash n no option
 echo -e '\n\n'
 
-###Double baskslash n flag e
+###Double baskslash n option e
 echo -e '\n\n'
 
-###Double baskslash n flag E
+###Double baskslash n option E
 echo -E '\n\n'
 
 ### echo with spaces
@@ -60,6 +60,9 @@ echo 4	 2 s 	 h
 echo fuck your malloc 10000; echo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 ###Slashs
+echo -e -E -e \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+###Slashs no spaces
 echo -eEe \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 ###Slashs 2.0
@@ -68,7 +71,7 @@ echo -E -e -E \\\\\\\\\\\\\\\\
 ###Two echos
 echo first; echo second
 
-###Non flag dash 
+###Non option dash 
 echo -a
 
 ###Dash with other char
@@ -77,7 +80,7 @@ echo -neEnneEEnea 42\nsh\\\\
 ###Non setting dash and setting dash
 echo -neEnnEeen -nef 42sh\n\\\\
 
-###Double flag set
+###Double option set
 echo -nEEennneE -nnneee 42sh\n\\\\
 
 ###Quoted tricky one
@@ -95,3 +98,6 @@ echo   biz    ; echo yipee yep; echo hello world !; echo 1 2 3 4 5 6
 
 ### ionumbers
 echo 3 4 55 > 2  2>file
+
+###Lots of dash option
+echo -n -n -e -e -n -n -n -e 42'\nsh'
