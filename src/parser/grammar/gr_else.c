@@ -7,9 +7,9 @@
 #include "tools/ast/ast_utils.h"
 /***
  else_clause =
-            'else' compound_list
-            | 'elif' compound_list 'then' compound_list [ else_clause ]
-            ;
+'else' compound_list
+| 'elif' compound_list 'then' compound_list [ else_clause ]
+;
 ***/
 enum status gr_else(struct ast **ast)
 {

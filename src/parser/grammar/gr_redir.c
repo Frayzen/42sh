@@ -6,9 +6,11 @@
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
 #include "tools/token/token.h"
-// redirection = [IONUMBER] ( '>' | '<' | '>>' | '>&' | '<&' | '>|' | '<>' )
-// WORD ;
-
+/*
+redirection =
+|[IONUMBER] ( '>' | '<' | '>>' | '>&' | '<&' | '>|' | '<>' )
+|WORD ;
+*/
 enum status gr_redir(struct ast **ast)
 {
     struct ast *redir_ast = init_ast(AST_REDIR, NULL);
