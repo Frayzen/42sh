@@ -1,7 +1,7 @@
 #ifndef REDIRS_H
 #define REDIRS_H
 
-#include "execs.h"
+#include "exec/execs.h"
 #include "tools/ast/ast.h"
 
 enum direction

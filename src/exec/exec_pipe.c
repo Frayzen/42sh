@@ -52,10 +52,11 @@ int exec_pipe(struct ast *ast)
         DBG_PIPE("Create pipe [write]%d => %d[read]\n", p[1], p[0]);
         exec_piped(ast->children[i], last_read, p[1]);
         close(last_read);
-        last_read = p[0];
         close(p[1]);
+        last_read = p[0];
     }
     ret = exec_piped(ast->children[i], last_read, STDOUT_FILENO);
+    close(last_read);
     fflush(NULL);
     return ret;
 }

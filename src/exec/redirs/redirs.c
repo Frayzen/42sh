@@ -9,23 +9,16 @@
 
 #include "env/env.h"
 #include "execs.h"
-#include "tools/fd_manager/fd_dictionnary.h"
 
 int create_fd(char *str, bool is_io, int flags)
 {
     int ret = -1;
+    printf("OPEN %s (TRUE)%d = %d\n", str, true, is_io);
     if (is_io)
         ret = atoi(str);
     else
         ret = open(str, flags, 0644);
     return ret;
-}
-
-int dup_fd(int fd)
-{
-    int new = dup(fd);
-    dict_push(fd, new);
-    return new;
 }
 
 bool redirect(struct sh_command *cmd, int from, int to)
@@ -38,6 +31,7 @@ bool redirect(struct sh_command *cmd, int from, int to)
     return dup2(from, to) != -1;
 }
 
+//ast is the redir ast and redir is the redir struct
 void build_redir(struct ast *ast, struct redir *redir)
 {
     int i = 0;
@@ -99,9 +93,14 @@ bool apply_redirection(struct sh_command *cmd, struct ast *redir_ast)
     int to = create_fd(redir.right, redir.is_io, get_flag(&redir, false));
     if (from == -1 || to == -1)
         return false;
-    DBG_PIPE("Created redirection from (%d) to (%d)\n", from, to);
+    if (to < 3)
+        to = cmd->redirs_fds[to];
     if (redir.dup)
+    {
         to = dup(to);
+        DBG_PIPE("Duplicated in %d\n", to);
+    }
+    DBG_PIPE("Created redirection from (%d) to (%d)\n", from, to);
     if (redir.dir == RIGHT_TO_LEFT)
     {
         int tmp_fd = from;
