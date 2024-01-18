@@ -11,9 +11,9 @@ enum status gr_shell_cmd(struct ast **ast)
     if (gr_if(ast) == OK)
         return OK;
     if (gr_while(ast) == OK)
-    {
-        printf("shoudlnt be =========================================\n");
         return OK;
-    }
+    if (gr_until(ast) == OK)
+        return OK;
+
     return ERROR;
 }

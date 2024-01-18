@@ -33,6 +33,7 @@ enum token_type
     FI,
 
     WHILE,
+    UNTIL,
     DO,
     DONE,
 
