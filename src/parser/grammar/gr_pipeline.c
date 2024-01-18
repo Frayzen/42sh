@@ -2,7 +2,7 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
-
+// pipeline = ['!'] command { '|' {'\n'} command } ;
 enum status gr_pipeline(struct ast **ast)
 {
     struct ast *parent = *ast;
