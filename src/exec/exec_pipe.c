@@ -24,6 +24,13 @@ int exec_piped(struct ast *ast, int in, int out)
     case AST_IF:
         ret = exec_condition(ast);
         break;
+    case AST_WHILE:
+        ret = exec_while(ast);
+        break;
+    case AST_UNTIL:
+        ret = exec_until(ast);
+        break;
+
     default:
         print_error(PIPE_NOT_FOUND);
         ret = 1;
