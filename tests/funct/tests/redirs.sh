@@ -15,3 +15,15 @@ cat < input_file.txt
 
 ### Using Tee for Output
 echo "This is the script part" | tee output_and_terminal.txt
+
+### First tricky
+echo hey 1>file
+
+### Second tricky
+echo hey 1
+
+### Backslashed 1
+echo hey 1 \>2
+
+### Backslashed 2
+echo hey 1 >\&2

@@ -53,6 +53,7 @@ void print_error(enum error_type type)
         // Command not found -> 127
         [EXECVP_FAILED] = "Command not found",
         [UNEXPECTED_EOF] = "Unexpected end of file",
+        [BAD_REDIRECTION] = "Bad redirection",
     };
     dprintf(STDERR_FILENO, "%s\n", error_names[type]);
 }

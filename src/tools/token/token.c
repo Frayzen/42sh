@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "io_backend/backend_saver.h"
+
 bool is_terminating(struct token *token)
 {
     switch (token->type)
@@ -71,7 +73,8 @@ int get_type(const struct string *str)
     }
     if (chevron_type(str))
         return CHEVRON;
-    if (is_number(str->value))
+    char next = io_peek();
+    if ((next == '>' || next == '<') && is_number(str->value))
         return IO_NUMBER;
     return i;
 }

@@ -28,16 +28,16 @@ int dup_fd(int fd)
     return new;
 }
 
-void redirect(struct sh_command *cmd, int from, int to)
+bool redirect(struct sh_command *cmd, int from, int to)
 {
     if (get_env_flag()->verbose)
         printf(" [REDIRECT] %d -> %d\n", from, to);
     if (from < 3)
     {
         cmd->redirs_fds[from] = to;
-        return;
+        return true;
     }
-    assert(dup2(from, to) != -1);
+    return dup2(from, to) != -1;
 }
 
 void build_redir(struct ast *ast, struct redir *redir)
@@ -92,13 +92,15 @@ int get_flag(struct redir *redir, bool left)
     return flag;
 }
 
-void apply_redirection(struct sh_command *cmd, struct ast *redir_ast)
+bool apply_redirection(struct sh_command *cmd, struct ast *redir_ast)
 {
     assert(redir_ast->type == AST_REDIR && redir_ast->nb_children >= 2);
     struct redir redir = { 0 };
     build_redir(redir_ast, &redir);
     int from = create_fd(redir.left, true, get_flag(&redir, true));
     int to = create_fd(redir.right, redir.is_io, get_flag(&redir, false));
+    if (from == -1 || to == -1)
+        return false;
     if (redir.dup)
         to = dup(to);
     if (redir.dir == RIGHT_TO_LEFT)
@@ -107,7 +109,9 @@ void apply_redirection(struct sh_command *cmd, struct ast *redir_ast)
         from = to;
         to = tmp_fd;
     }
-    redirect(cmd, from, to);
-    if (redir.dir == BOTH_WAY)
-        redirect(cmd, to, from);
+    if (!redirect(cmd, from, to))
+        return false;
+    if (redir.dir == BOTH_WAY && !redirect(cmd, to, from))
+        return false;
+    return true;
 }

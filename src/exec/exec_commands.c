@@ -118,7 +118,8 @@ int execute(struct sh_command *command)
     }
 }
 
-void build_command(struct sh_command *cmd)
+// true if everything is fine
+bool build_command(struct sh_command *cmd)
 {
     struct ast *ast = cmd->root;
     cmd->argv = calloc(ast->nb_children + 1, sizeof(char *));
@@ -126,10 +127,17 @@ void build_command(struct sh_command *cmd)
     for (int i = 0; i < ast->nb_children; i++)
     {
         if (ast->children[i]->type == AST_REDIR)
-            apply_redirection(cmd, ast->children[i]);
+        {
+            if (!apply_redirection(cmd, ast->children[i]))
+            {
+                print_error(BAD_REDIRECTION);
+                return false;
+            }
+        }
         else
             cmd->argv[cmd->argc++] = ast->children[i]->token->value;
     }
+    return true;
 }
 
 int exec_command(struct ast *ast)
@@ -140,7 +148,8 @@ int exec_command(struct ast *ast)
     for (int i = 0; i < 3; i++)
         command.redirs_fds[i] = i;
     command.root = ast;
-    build_command(&command);
+    if (!build_command(&command))
+        return 1;
     int ret = execute(&command);
     free(command.argv);
     return ret;

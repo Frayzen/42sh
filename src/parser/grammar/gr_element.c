@@ -13,11 +13,8 @@ WORD
 enum status gr_element(struct ast **ast)
 {
     struct token *token = tok_peek();
-    if (token->type == IO_NUMBER)
-    {
-        gr_redir(ast);
+    if (gr_redir(ast) == OK)
         return OK;
-    }
     if (!IS_WORDABLE(token))
         return ERROR;
     struct ast *ast_tok = init_ast(AST_TOKEN, token);

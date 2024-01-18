@@ -20,6 +20,11 @@ struct redir
     bool is_io;
 };
 
-void apply_redirection(struct sh_command *cmd, struct ast *redir);
+/*
+ * Apply a redirection on command
+ * @param cmd the command
+ * @param redir the redirection ast to apply
+ */
+bool apply_redirection(struct sh_command *cmd, struct ast *redir);
 
 #endif /* !REDIRS_H */

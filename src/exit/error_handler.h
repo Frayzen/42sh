@@ -12,6 +12,7 @@ enum error_type
     LIST_NOT_FOUND,
     FD_DICO_FULL,
     UNEXPECTED_EOF,
+    BAD_REDIRECTION,
     // Misuse of shell built-ins -> 2
     ARG_ERROR,
     GRAMMAR_ERROR_ENTRY,
