@@ -12,6 +12,9 @@ extern char **environ;
     if (get_env_flag()->verbose)                                               \
         printf(__VA_ARGS__);
 
+#define STDIN (get_env_flag()->fds[0])
+#define STDOUT (get_env_flag()->fds[1])
+
 struct env
 {
     char **environ;
@@ -19,6 +22,7 @@ struct env
     bool pretty_print;
     bool verbose;
     bool debug_pipe;
+    int fds[3];
 };
 
 /***

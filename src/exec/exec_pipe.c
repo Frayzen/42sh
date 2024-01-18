@@ -11,10 +11,11 @@
 int exec_piped(struct ast *ast, int in, int out)
 {
     int ret;
-    int oldin = dup(in);
-    int oldout = dup(out);
-    dup2(in, STDIN_FILENO);
-    dup2(out, STDOUT_FILENO);
+    int oldin = STDOUT;
+    int oldout = STDIN;
+    STDIN = in;
+    STDOUT = out;
+    DBG_PIPE("Pipe stdin(%d) and stdout(%d)\n", STDIN, STDOUT);
     switch (ast->type)
     {
     case AST_COMMAND:
@@ -27,8 +28,8 @@ int exec_piped(struct ast *ast, int in, int out)
         print_error(PIPE_NOT_FOUND);
         ret = 1;
     }
-    dup2(oldin, STDIN_FILENO);
-    dup2(oldout, STDOUT_FILENO);
+    STDIN = oldin;
+    STDOUT = oldout;
     return ret;
 }
 

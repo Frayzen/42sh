@@ -98,6 +98,8 @@ int external_bin(struct sh_command *cmd)
     int code = 0;
     if (WIFEXITED(returncode))
         code = WEXITSTATUS(returncode);
+    if (code)
+        print_error(FORK_ERROR);
     fflush(stdout);
     return code;
 }
@@ -129,34 +131,29 @@ bool build_command(struct sh_command *cmd)
 int exec_sh_command(struct sh_command *command)
 {
     struct token *token = command->root->children[0]->token;
-    int ret;
     switch (token->type)
     {
     case ECHO:
-        ret = exec_echo(command);
-        break;
+        return exec_echo(command);
     case T_TRUE:
-        ret = 0;
-        break;
+        return 0;
     case T_FALSE:
-        ret = 1;
-        break;
+        return 1;
     default:
-        ret = external_bin(command);
-        if (ret)
-            print_error(FORK_ERROR);
-        break;
+        return external_bin(command);
     }
-    free(command->argv);
-    return ret;
 }
 
 int exec_command(struct ast *ast)
 {
     assert(ast && ast->type == AST_COMMAND);
     assert(ast->nb_children != 0);
-    struct sh_command command = { .root = ast, .redirs_fds = { 0, 1, 2 }, 0 };
-    if (!build_command(&command))
-        return 1;
-    return exec_sh_command(&command);
+    struct sh_command command = { .root = ast,
+                                  .redirs_fds = { STDIN, STDOUT, 2 },
+                                  0 };
+    int ret = 1;
+    if (build_command(&command))
+        ret = exec_sh_command(&command);
+    free(command.argv);
+    return ret;
 }
