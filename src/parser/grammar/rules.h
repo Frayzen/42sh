@@ -119,4 +119,11 @@ enum status gr_redir(struct ast **ast);
  */
 enum status gr_prefix(struct ast **ast);
 
+/***
+ * Grammar rule for while
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_while(struct ast **ast);
+
 #endif /* !RULES_H */
