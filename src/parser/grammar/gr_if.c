@@ -6,7 +6,7 @@
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
 #include "tools/token/token.h"
-
+// rule_if = 'if' compound_list 'then' compound_list [else_clause] 'fi' ;
 enum status gr_if(struct ast **ast)
 {
     if (tok_peek()->type != IF)
@@ -20,10 +20,7 @@ enum status gr_if(struct ast **ast)
 
     tok_pop_clean();
     CHECK_GOTO(gr_compound_list(&if_ast) == ERROR, error);
-    if (tok_peek()->type == ELSE || tok_peek()->type == ELIF)
-    {
-        CHECK_GOTO(gr_else(&if_ast) == ERROR, error);
-    }
+    gr_else(&if_ast);
     CHECK_GOTO(tok_peek()->type != FI, error);
 
     tok_pop_clean();
