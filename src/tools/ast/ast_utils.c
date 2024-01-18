@@ -1,4 +1,4 @@
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 
 #define _POSIX_C_SOURCE 200809L
@@ -9,11 +9,10 @@
 
 #include "ast_utils.h"
 
-char *g_ast_types[] = { [AST_COMMAND] = "CMD",
-                        [AST_LIST] = "LST",
-                        [AST_TOKEN] = "",
-                        [AST_NEGATE] = "NOT",
-                        [AST_IF] = "IF" };
+char *g_ast_types[] = {
+    [AST_COMMAND] = "CMD", [AST_LIST] = "LST",  [AST_TOKEN] = "",
+    [AST_IF] = "IF",       [AST_REDIR] = "RDR", [AST_NEGATE] = "NOT",
+};
 
 struct ast *add_child(struct ast *parent, struct ast *child)
 {

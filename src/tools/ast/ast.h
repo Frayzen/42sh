@@ -9,16 +9,18 @@ enum ast_type
     AST_TOKEN,
     AST_COMMAND,
     AST_LIST,
-    AST_NEGATE,
     AST_IF,
+    AST_REDIR,
+    AST_ASS,
+    AST_NEGATE,
 };
 
 struct ast
 {
     enum ast_type type;
-    struct token *token;
     int nb_children;
     struct ast **children;
+    struct token *token;
 };
 
 /***

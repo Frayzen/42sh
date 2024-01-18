@@ -29,4 +29,9 @@ bool tok_pop(void);
  */
 void clean_token_saver(void);
 
+/***
+ * Consume all the tokens to ensure a proper exit (grammar error)
+ */
+void comsume_all(void);
+
 #endif /* !TOKEN_SAVER_H */

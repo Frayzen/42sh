@@ -5,7 +5,7 @@
 #include <string.h>
 #include <sys/types.h>
 
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "io_backend/backend_saver.h"
 
 #define APPEND_CHARS true
@@ -49,6 +49,7 @@ bool special_char(struct pending *p)
     case '\n':
     case '\0':
     case ';':
+    case '=':
         if (IS_BLANK(p))
         {
             append_char(p, c);
@@ -64,6 +65,34 @@ bool special_char(struct pending *p)
         break;
     }
     return false;
+}
+
+// return true if the chevron is accepted
+bool chevron(struct pending *p, char c)
+{
+    append_char(p, c);
+    io_pop();
+    char next = io_peek();
+    switch (c)
+    {
+    case '>':
+        if (next == '>' || next == '&' || next == '|')
+        {
+            append_char(p, next);
+            io_pop();
+        }
+        break;
+    case '<':
+        if (next == '&' || next == '>')
+        {
+            append_char(p, next);
+            io_pop();
+        }
+        break;
+    default:
+        return false;
+    }
+    return true;
 }
 
 // return true if finished
@@ -95,10 +124,16 @@ bool consume(struct pending *p, char c)
         else
             goto append;
         return false;
+    case '>':
+    case '<':
+        if (IS_BLANK(p) && !chevron(p, c))
+            goto append;
+        return true;
     SPACE_CASES:
     case '\n':
     case '\0':
     case ';':
+    case '=':
         return special_char(p);
     default:
     append:

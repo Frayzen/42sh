@@ -3,12 +3,11 @@
 #include <stdbool.h>
 
 #include "tools/token/token.h"
-
-struct env_flag *get_env_flag(void)
+struct env *get_env_flag(void)
 {
-    static struct env_flag flag = { .print = false,
-                                    .verbose = false,
-                                    .null_received = false };
+    static struct env flag = { .print = false,
+                               .verbose = false,
+                               .null_received = false };
     return &flag;
 }
 

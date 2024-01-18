@@ -3,17 +3,13 @@
 
 #include "tools/ast/ast.h"
 
-/***
- * executes any of the basic functions
- * @param ast the tree to execute
- */
-int exec_basic_function(struct ast *ast);
-
-/***
- * executes the echo function
- * @param ast the tree to execute
- */
-int exec_echo(struct ast *ast);
+struct sh_command
+{
+    struct ast *root;
+    int redirs_fds[3];
+    char **argv;
+    int argc;
+};
 
 /***
  * executes the command ast

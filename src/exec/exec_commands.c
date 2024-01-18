@@ -8,16 +8,19 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include "env/env.h"
+#include "exec/redirs/redirs.h"
 #include "execs.h"
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
 
-void print_echo(struct ast *ast, int i, bool interpret_bslash)
+void print_echo(struct sh_command *cmd, int i, bool interpret_bslash,
+                bool print_nline)
 {
-    for (; i < ast->nb_children; i++)
+    for (; i < cmd->argc; i++)
     {
-        const char *content = ast->children[i]->token->value;
+        const char *content = cmd->argv[i];
         int id = 0;
         while (content[id])
         {
@@ -27,37 +30,40 @@ void print_echo(struct ast *ast, int i, bool interpret_bslash)
                 switch (content[id])
                 {
                 case 'n':
-                    printf("\n");
+                    dprintf(cmd->redirs_fds[1], "\n");
                     break;
                 case '\\':
-                    printf("\\");
+                    dprintf(cmd->redirs_fds[1], "\\");
                     break;
                 case 't':
-                    printf("\t");
+                    dprintf(cmd->redirs_fds[1], "\t");
                     break;
                 default:
                     continue;
                 }
             }
             else
-                printf("%c", content[id]);
+                dprintf(cmd->redirs_fds[1], "%c", content[id]);
             id++;
         }
-        if (ast->nb_children - 1 != i)
-            printf(" ");
+        if (cmd->argc - 1 != i)
+            dprintf(cmd->redirs_fds[1], " ");
     }
+    if (print_nline)
+        dprintf(cmd->redirs_fds[1], "\n");
 }
 
-int exec_echo(struct ast *ast)
+int exec_echo(struct sh_command *cmd)
 {
+    struct ast *ast = cmd->root;
     assert(ast && ast->type == AST_COMMAND
            && ast->children[0]->token->type == ECHO);
     int i = 1;
     bool print_nline = true;
     bool interpret_bslash = false;
-    while (i < ast->nb_children - 1)
+    while (i < cmd->argc - 1)
     {
-        const char *content = ast->children[i]->token->value;
+        const char *content = cmd->argv[i];
         if (!strcmp(content, "-e"))
             interpret_bslash = true;
         else if (!strcmp(content, "-E"))
@@ -68,30 +74,19 @@ int exec_echo(struct ast *ast)
             break;
         i++;
     }
-    print_echo(ast, i, interpret_bslash);
-    if (print_nline)
-        printf("\n");
-    fflush(stdout);
+    print_echo(cmd, i, interpret_bslash, print_nline);
+    fflush(NULL);
     return 0;
 }
 
-// this creates the char ** needed for the arguments of execvp
-char **create_command(struct ast *ast)
-{
-    char **array_arg = calloc(ast->nb_children + 1, sizeof(char *));
-    for (int i = 0; i < ast->nb_children; i++)
-        array_arg[i] = ast->children[i]->token->value;
-    return array_arg;
-}
-
-int external_bin(struct ast *ast)
+int external_bin(struct sh_command *cmd)
 {
     int pid = fork();
     if (pid == 0)
     {
-        char **array_arg = create_command(ast);
-        execvp(array_arg[0], array_arg);
-        free(array_arg);
+        for (int i = 0; i < 3; i++)
+            dup2(cmd->redirs_fds[i], i);
+        execvp(cmd->argv[0], cmd->argv);
         exit(127);
     }
     int returncode;
@@ -103,26 +98,59 @@ int external_bin(struct ast *ast)
     return code;
 }
 
-int exec_external_bin(struct ast *ast)
+int execute(struct sh_command *command)
 {
-    int ret = external_bin(ast);
-    if (ret)
-        print_error(FORK_ERROR);
-    return ret;
-}
-int exec_command(struct ast *ast)
-{
-    assert(ast && ast->type == AST_COMMAND);
-    assert(ast->nb_children != 0);
-    switch (ast->children[0]->token->type)
+    struct token *token = command->root->children[0]->token;
+    int ret;
+    switch (token->type)
     {
     case ECHO:
-        return exec_echo(ast);
+        return exec_echo(command);
     case T_TRUE:
         return 0;
     case T_FALSE:
         return 1;
     default:
-        return exec_external_bin(ast);
+        ret = external_bin(command);
+        if (ret)
+            print_error(FORK_ERROR);
+        return ret;
     }
+}
+
+// true if everything is fine
+bool build_command(struct sh_command *cmd)
+{
+    struct ast *ast = cmd->root;
+    cmd->argv = calloc(ast->nb_children + 1, sizeof(char *));
+    cmd->argc = 0;
+    for (int i = 0; i < ast->nb_children; i++)
+    {
+        if (ast->children[i]->type == AST_REDIR)
+        {
+            if (!apply_redirection(cmd, ast->children[i]))
+            {
+                print_error(BAD_REDIRECTION);
+                return false;
+            }
+        }
+        else
+            cmd->argv[cmd->argc++] = ast->children[i]->token->value;
+    }
+    return true;
+}
+
+int exec_command(struct ast *ast)
+{
+    assert(ast && ast->type == AST_COMMAND);
+    assert(ast->nb_children != 0);
+    struct sh_command command = { 0 };
+    for (int i = 0; i < 3; i++)
+        command.redirs_fds[i] = i;
+    command.root = ast;
+    if (!build_command(&command))
+        return 1;
+    int ret = execute(&command);
+    free(command.argv);
+    return ret;
 }

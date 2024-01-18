@@ -1,7 +1,7 @@
 #include <assert.h>
 
 #include "execs.h"
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 
 int exec_list(struct ast *ast)

@@ -12,6 +12,8 @@ libparser_a_SOURCES = \
 	grammar/gr_shell_cmd.c \
 	grammar/gr_compound_list.c \
 	grammar/gr_else.c \
+	grammar/gr_redir.c \
+	grammar/gr_prefix.c \
 	grammar/rules.h
 libparser_a_CPPFLAGS = -I$(top_srcdir)/src
 libparser_a_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic

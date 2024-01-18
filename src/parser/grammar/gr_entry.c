@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "env/env.h"
+#include "exit/error_handler.h"
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
@@ -23,7 +24,7 @@ enum status gr_input(struct ast **ast)
     destroy_token(trm);
     return OK;
 error:
-    get_env_flag()->null_received = true;
+    comsume_all();
     destroy_ast(*ast);
     return ERROR;
 }

@@ -21,9 +21,7 @@ enum status gr_list(struct ast **ast)
     while (state == OK)
     {
         if (tok_peek()->type != SEMI_COLON)
-        {
             break;
-        }
         tok_pop_clean();
         state = gr_and_or(&ast_list);
     }

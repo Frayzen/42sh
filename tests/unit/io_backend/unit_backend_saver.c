@@ -2,7 +2,7 @@
 #include <criterion/internal/assert.h>
 #include <criterion/internal/test.h>
 
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "io_backend/backend_saver.h"
 TestSuite(backend_saver);
 

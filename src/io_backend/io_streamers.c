@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 #include "env/env.h"
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "io_backend/backend_saver.h"
 
 #define IO_FILE (set_fd(NULL))
@@ -79,9 +79,9 @@ void main_to_stream(int argc, char **argv)
     int i = 1;
     while (i < argc)
     {
-        if (!strcmp(argv[i], "--pretty-print"))
+        if (!strcmp(argv[i], "--pretty-print") || !strcmp(argv[i], "-p"))
             get_env_flag()->print = true;
-        else if (!strcmp(argv[i], "--verbose"))
+        else if (!strcmp(argv[i], "--verbose") || !strcmp(argv[i], "-v"))
             get_env_flag()->verbose = true;
         else
             break;

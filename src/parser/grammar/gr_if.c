@@ -13,8 +13,11 @@ enum status gr_if(struct ast **ast)
         return ERROR;
     tok_pop_clean();
     struct ast *if_ast = init_ast(AST_IF, NULL);
+
     CHECK_GOTO(gr_compound_list(&if_ast) == ERROR, error);
+
     CHECK_GOTO(tok_peek()->type != THEN, error);
+
     tok_pop_clean();
     CHECK_GOTO(gr_compound_list(&if_ast) == ERROR, error);
     if (tok_peek()->type == ELSE || tok_peek()->type == ELIF)

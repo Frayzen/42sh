@@ -1,5 +1,6 @@
 #include "ast.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "token/token.h"
@@ -27,7 +28,9 @@ void destroy_ast(struct ast *ast)
     if (ast->token)
         destroy_token(ast->token);
     for (int i = 0; i < ast->nb_children; i++)
+    {
         destroy_ast(ast->children[i]);
+    }
     free(ast->children);
     free(ast);
 }

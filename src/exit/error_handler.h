@@ -1,5 +1,5 @@
-#ifndef EXIT_H
-#define EXIT_H
+#ifndef ERROR_HANDLER_H
+#define ERROR_HANDLER_H
 
 #include "tools/ast/ast.h"
 
@@ -12,6 +12,7 @@ enum error_type
     LIST_NOT_FOUND,
     FD_DICO_FULL,
     UNEXPECTED_EOF,
+    BAD_REDIRECTION,
     // Misuse of shell built-ins -> 2
     ARG_ERROR,
     GRAMMAR_ERROR_ENTRY,
@@ -21,7 +22,7 @@ enum error_type
     NO_READ_PERM,
     INVALID_FILE_PATH,
     // Command not found -> 127
-    EXECVP_FAILED,
+    EXECVP_FAILED
 };
 
 /***
@@ -43,4 +44,4 @@ void exit_gracefully(enum error_type type);
  */
 void print_error(enum error_type type);
 
-#endif /* !EXIT_H */
+#endif /* !ERROR_HANDLER_H */

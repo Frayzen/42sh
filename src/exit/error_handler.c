@@ -1,9 +1,12 @@
 #define _POSIX_C_SOURCE 200809L
+#include "exit/error_handler.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "exit/exit.h"
+#include "env/env.h"
+#include "lexer/token_saver.h"
 #include "tools/ast/ast.h"
 
 void exit_gracefully(enum error_type type)
@@ -50,6 +53,7 @@ void print_error(enum error_type type)
         // Command not found -> 127
         [EXECVP_FAILED] = "Command not found",
         [UNEXPECTED_EOF] = "Unexpected end of file",
+        [BAD_REDIRECTION] = "Bad redirection",
     };
     dprintf(STDERR_FILENO, "%s\n", error_names[type]);
 }

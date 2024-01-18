@@ -47,6 +47,9 @@ echo -e '\n\n'
 ###Double baskslash n flag E
 echo -E '\n\n'
 
+### echo with spaces
+echo      4    2    s    h
+
 ###Lots of baskslash
 echo EeE \\\\\\\\\\\\\\\\
 
@@ -71,3 +74,9 @@ echo toto ';' ls
 ###interpret newline
 echo -n -n -e -e -n -n -n -e 42'\nsh'
 echo ok
+
+### wordables
+echo echo echo  fi if else elif
+
+### negation
+echo   biz    ; echo yipee yep; echo hello world !; echo 1 2 3 4 5 6
