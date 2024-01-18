@@ -26,6 +26,7 @@ enum token_type
     ECHO,
     // wildcard
     QUOTE,
+    PIPE,
     // terminals
     WORD,
 };

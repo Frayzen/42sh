@@ -101,7 +101,7 @@ const char **toktype_lookup(void)
         [ELSE] = "else",   [FI] = "fi",         [SEMI_COLON] = ";",
         [NEWLINE] = "\n",  [QUOTE] = "'",       [ECHO] = "echo",
         [T_TRUE] = "true", [T_FALSE] = "false", [BSZERO] = "\0",
-        [WORD] = NULL,
+        [PIPE] = "|",      [WORD] = NULL,
     };
     return lookup_table;
 }
