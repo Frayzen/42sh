@@ -27,5 +27,10 @@ struct redir
  * @param redir the redirection ast to apply
  */
 bool apply_redirection(struct sh_command *cmd, struct ast *redir);
+/*
+ * Close all redirection after the command
+ * @param cmd the shell command structure
+ */
+void close_redirs(struct sh_command *cmd);
 
 #endif /* !REDIRS_H */

@@ -20,14 +20,33 @@ int create_fd(char *str, bool is_io, int flags)
     return ret;
 }
 
-bool redirect(struct sh_command *cmd, int from, int to)
+bool redirect(struct sh_command *cmd, int from, int to, bool dup_io)
 {
+    int newto = to;
+    if (dup_io)
+    {
+        if (to < 3)
+        {
+            DBG_PIPE("Replace %d by its stored value : %d\n", to,
+                     cmd->redirs_fds[to]);
+            to = cmd->redirs_fds[to];
+        }
+        newto = dup(to);
+        DBG_PIPE("Duplicate %d in %d\n", to, newto);
+    }
     if (from < 3)
     {
-        cmd->redirs_fds[from] = to;
+        if (cmd->redirs_fds[from] >= 3)
+        {
+            DBG_PIPE("Closing %d before storing | ", cmd->redirs_fds[from]);
+            close(cmd->redirs_fds[from]);
+        }
+        DBG_PIPE("Storing %d in fd[%d]\n", newto, from);
+        cmd->redirs_fds[from] = newto;
         return true;
     }
-    return dup2(from, to) != -1;
+    DBG_PIPE("Redirect (%d) to (%d)\n", from, newto);
+    return dup2(from, newto) != -1;
 }
 
 // ast is the redir ast and redir is the redir struct
@@ -90,23 +109,30 @@ bool apply_redirection(struct sh_command *cmd, struct ast *redir_ast)
     int to = create_fd(redir.right, redir.dup_io, get_flag(&redir, false));
     if (from == -1 || to == -1)
         return false;
-    if (to < 3)
-        to = cmd->redirs_fds[to];
-    if (redir.dup_io)
-    {
-        to = dup(to);
-        DBG_PIPE("Duplicated in %d\n", to);
-    }
-    DBG_PIPE("Created redirection from (%d) to (%d)\n", from, to);
+    DBG_PIPE("Creating redirection from (%d) to (%d)...\n", from, to);
     if (redir.dir == RIGHT_TO_LEFT)
     {
         int tmp_fd = from;
         from = to;
         to = tmp_fd;
     }
-    if (!redirect(cmd, from, to))
+    if (!redirect(cmd, from, to, redir.dup_io))
         return false;
-    if (redir.dir == BOTH_WAY && !redirect(cmd, to, from))
+    if (redir.dir == BOTH_WAY && !redirect(cmd, to, from, false))
         return false;
     return true;
+}
+
+void close_redirs(struct sh_command *cmd)
+{
+    DBG_PIPE("[REDIR] Cleaning, closing fds: ");
+    for (int i = 0; i < 3; i++)
+    {
+        if (cmd->redirs_fds[i] >= 3)
+        {
+            close(cmd->redirs_fds[i]);
+            DBG_PIPE("%d ", cmd->redirs_fds[i]);
+        }
+    }
+    DBG_PIPE("\n");
 }

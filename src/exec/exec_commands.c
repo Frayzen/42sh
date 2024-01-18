@@ -18,7 +18,7 @@
 void print_echo(struct sh_command *cmd, int i, bool interpret_bslash,
                 bool print_nline)
 {
-    DBG_PIPE("Echo command [OUT] %d\n", cmd->redirs_fds[1]);
+    DBG_PIPE("[COMMAND] Echo command [OUT] %d\n", cmd->redirs_fds[1]);
     for (; i < cmd->argc; i++)
     {
         const char *content = cmd->argv[i];
@@ -78,6 +78,7 @@ int exec_echo(struct ast *ast)
     print_echo(cmd, i, interpret_bslash, print_nline);
     free(cmd->argv);
     fflush(NULL);
+    close_redirs(cmd);
     return 0;
 }
 
@@ -92,7 +93,7 @@ int external_bin(struct ast *ast)
     if (pid == 0)
     {
         struct sh_command *cmd = build_command(ast);
-        DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n",
+        DBG_PIPE("[COMMAND] %s fds are [IN] %d | [OUT] %d | [ERR] %d\n",
                  cmd->argv[0], cmd->redirs_fds[0], cmd->redirs_fds[1],
                  cmd->redirs_fds[2]);
         for (int i = 0; i < 3; i++)
@@ -126,11 +127,13 @@ struct sh_command *build_command(struct ast *ast)
     {
         if (ast->children[i]->type == AST_REDIR)
         {
+            DBG_PIPE("[BEGIN REDIRECTION] =\n");
             if (!apply_redirection(&cmd, ast->children[i]))
             {
                 print_error(BAD_REDIRECTION);
                 return NULL;
             }
+            DBG_PIPE("[END REDIRECTION] =\n\n");
         }
         else
             cmd.argv[cmd.argc++] = ast->children[i]->token->value;
