@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
@@ -53,6 +54,31 @@ void print_echo(struct sh_command *cmd, int i, bool interpret_bslash,
         dprintf(cmd->redirs_fds[1], "\n");
 }
 
+bool set_flag_echo(const char *content, bool *interpret_bslash,
+                   bool *print_nline)
+{
+    bool init_bslash = *interpret_bslash;
+    bool init_print = *print_nline;
+    if (content[0] != '-')
+        return false;
+    for (int i = 1; content[i] != '\0'; i++)
+    {
+        if (content[i] == 'n')
+            *print_nline = false;
+        else if (content[i] == 'e')
+            *interpret_bslash = true;
+        else if (content[i] == 'E')
+            *interpret_bslash = false;
+        else
+        {
+            *print_nline = init_print;
+            *interpret_bslash = init_bslash;
+            return false;
+        }
+    }
+    return true;
+}
+
 int exec_echo(struct sh_command *cmd)
 {
     struct ast *ast = cmd->root;
@@ -64,13 +90,7 @@ int exec_echo(struct sh_command *cmd)
     while (i < cmd->argc - 1)
     {
         const char *content = cmd->argv[i];
-        if (!strcmp(content, "-e"))
-            interpret_bslash = true;
-        else if (!strcmp(content, "-E"))
-            interpret_bslash = false;
-        else if (!strcmp(content, "-n"))
-            print_nline = false;
-        else
+        if (!set_flag_echo(content, &interpret_bslash, &print_nline))
             break;
         i++;
     }
