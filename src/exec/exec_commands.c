@@ -18,6 +18,7 @@
 void print_echo(struct sh_command *cmd, int i, bool interpret_bslash,
                 bool print_nline)
 {
+    printf("Echo command [OUT] %d\n", cmd->redirs_fds[1]);
     for (; i < cmd->argc; i++)
     {
         const char *content = cmd->argv[i];
@@ -84,6 +85,9 @@ int external_bin(struct sh_command *cmd)
     int pid = fork();
     if (pid == 0)
     {
+        DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n",
+                 cmd->argv[0], cmd->redirs_fds[0], cmd->redirs_fds[1],
+                 cmd->redirs_fds[2]);
         for (int i = 0; i < 3; i++)
             dup2(cmd->redirs_fds[i], i);
         execvp(cmd->argv[0], cmd->argv);
@@ -151,7 +155,7 @@ int exec_command(struct ast *ast)
 {
     assert(ast && ast->type == AST_COMMAND);
     assert(ast->nb_children != 0);
-    struct sh_command command = {.root = ast, .redirs_fds = {0, 1, 2}, 0};
+    struct sh_command command = { .root = ast, .redirs_fds = { 0, 1, 2 }, 0 };
     if (!build_command(&command))
         return 1;
     return exec_sh_command(&command);

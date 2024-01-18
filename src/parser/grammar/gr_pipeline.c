@@ -22,7 +22,7 @@ enum status gr_pipeline(struct ast **ast)
     CHECK_GOTO(gr_command(&pipe_ast) == ERROR, error);
     while (tok_peek()->type == PIPE)
     {
-        tok_pop();
+        tok_pop_clean();
         while (tok_peek()->type == NEWLINE)
             tok_pop_clean();
         CHECK_GOTO(gr_command(&pipe_ast), error);

@@ -30,8 +30,7 @@ int dup_fd(int fd)
 
 bool redirect(struct sh_command *cmd, int from, int to)
 {
-    if (get_env_flag()->verbose)
-        printf(" [REDIRECT] %d -> %d\n", from, to);
+    DBG_PIPE(" [REDIRECT] %d -> %d\n", from, to);
     if (from < 3)
     {
         cmd->redirs_fds[from] = to;

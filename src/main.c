@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
             print_error(GRAMMAR_ERROR_ENTRY);
             continue;
         }
-        if (get_env_flag()->print)
+        if (get_env_flag()->pretty_print)
             pretty_print_ast(ast);
         ret = exec_entry(ast);
         assert(DICT->nb_entries == 0);
