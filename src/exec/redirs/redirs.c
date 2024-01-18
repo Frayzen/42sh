@@ -31,7 +31,7 @@ bool redirect(struct sh_command *cmd, int from, int to)
     return dup2(from, to) != -1;
 }
 
-//ast is the redir ast and redir is the redir struct
+// ast is the redir ast and redir is the redir struct
 void build_redir(struct ast *ast, struct redir *redir)
 {
     int i = 0;
@@ -56,11 +56,9 @@ void build_redir(struct ast *ast, struct redir *redir)
         redir->dir = sec_char == '>' ? BOTH_WAY : RIGHT_TO_LEFT;
     else
         assert(false);
-    if (sec_char == '&')
-        redir->dup = true;
     token = ast->children[i++]->token;
     // PARSE TO
-    redir->is_io = token->type == IO_NUMBER;
+    redir->dup_io = sec_char == '&' && is_number(token->value);
     redir->right = token->value;
 }
 
@@ -90,12 +88,12 @@ bool apply_redirection(struct sh_command *cmd, struct ast *redir_ast)
     struct redir redir = { 0 };
     build_redir(redir_ast, &redir);
     int from = create_fd(redir.left, true, get_flag(&redir, true));
-    int to = create_fd(redir.right, redir.is_io, get_flag(&redir, false));
+    int to = create_fd(redir.right, redir.dup_io, get_flag(&redir, false));
     if (from == -1 || to == -1)
         return false;
     if (to < 3)
         to = cmd->redirs_fds[to];
-    if (redir.dup)
+    if (redir.dup_io)
     {
         to = dup(to);
         DBG_PIPE("Duplicated in %d\n", to);

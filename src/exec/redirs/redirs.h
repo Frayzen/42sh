@@ -15,9 +15,10 @@ struct redir
     enum direction dir;
     char *left;
     char *right;
+    // if redir is >>
     bool append;
-    bool dup;
-    bool is_io;
+    // is redir is (>&) or (<&) AND the right member is an io_nb
+    bool dup_io;
 };
 
 /*
