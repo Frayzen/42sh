@@ -2,10 +2,8 @@
 #include <criterion/internal/assert.h>
 #include <criterion/internal/test.h>
 #include <criterion/redirect.h>
-#include <stdio.h>
-#include <stdlib.h>
 
-#include "tools/fd_manager/fd_manager.h"
+#include "tools/fd_manager/fd_dictionnary.h"
 
 Test(fd_dict, empty_dict)
 {

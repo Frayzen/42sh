@@ -17,7 +17,6 @@ enum token_type
     // redir
     CHEVRON,
     // numbers
-    IO_NUMBER,
     EQUAL,
     // wildcard
     QUOTE,
@@ -30,6 +29,8 @@ enum token_type
     ELIF,
     ELSE,
     FI,
+
+    IO_NUMBER,
     // builtins /!\ leave T_TRUE as first one and ECHO as last one
     T_TRUE,
     T_FALSE,
