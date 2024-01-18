@@ -5,8 +5,12 @@
 extern char **environ;
 // need to add the default value in the get_env_flag function for each new flag
 
-#define DBG_PIPE(...) if (get_env_flag()->debug_pipe) printf(__VA_ARGS__);
-#define VERBOSE(...) if (get_env_flag()->verbose) printf(__VA_ARGS__);
+#define DBG_PIPE(...)                                                          \
+    if (get_env_flag()->debug_pipe)                                            \
+        printf(__VA_ARGS__);
+#define VERBOSE(...)                                                           \
+    if (get_env_flag()->verbose)                                               \
+        printf(__VA_ARGS__);
 
 struct env
 {

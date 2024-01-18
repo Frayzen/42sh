@@ -18,7 +18,7 @@
 void print_echo(struct sh_command *cmd, int i, bool interpret_bslash,
                 bool print_nline)
 {
-    printf("Echo command [OUT] %d\n", cmd->redirs_fds[1]);
+    DBG_PIPE("Echo command [OUT] %d\n", cmd->redirs_fds[1]);
     for (; i < cmd->argc; i++)
     {
         const char *content = cmd->argv[i];

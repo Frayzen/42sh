@@ -4,24 +4,27 @@
 
 #include "env/env.h"
 #include "execs.h"
+#include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 
 // return the result of the function and update out
 int exec_piped(struct ast *ast, int in, int out)
 {
-    DBG_PIPE("Command %s in %d out %d\n", ast->children[0]->token->value, in,
-             out);
-    assert(ast->type == AST_COMMAND);
-    struct sh_command cmd = { .root = ast,
-                              .redirs_fds = { in, out, dup(STDOUT_FILENO) },
-                              0 };
-    int ret = 1;
-    if (!build_command(&cmd))
-        goto clean;
-    ret = exec_sh_command(&cmd);
-clean:
-    close(cmd.redirs_fds[STDIN_FILENO]);
-    close(cmd.redirs_fds[STDERR_FILENO]);
+    int ret;
+    dup2(in, STDIN_FILENO);
+    dup2(out, STDOUT_FILENO);
+    switch (ast->type)
+    {
+    case AST_COMMAND:
+        ret = exec_command(ast);
+        break;
+    case AST_IF:
+        ret = exec_condition(ast);
+        break;
+    default:
+        exit_gracefully(PIPE_NOT_FOUND);
+        return 1;
+    }
     return ret;
 }
 
