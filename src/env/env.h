@@ -22,7 +22,7 @@ struct env
     bool pretty_print;
     bool verbose;
     bool debug_pipe;
-    int fds[3];
+    int fds[2];
 };
 
 /***

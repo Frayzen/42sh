@@ -15,7 +15,7 @@ int exec_piped(struct ast *ast, int in, int out)
     int oldout = STDIN;
     STDIN = in;
     STDOUT = out;
-    DBG_PIPE("Pipe stdin(%d) and stdout(%d)\n", STDIN, STDOUT);
+    DBG_PIPE("[PIPE] New stdin=%d | stdout=%d\n", STDIN, STDOUT);
     switch (ast->type)
     {
     case AST_COMMAND:
@@ -37,8 +37,8 @@ int exec_pipe(struct ast *ast)
 {
     assert(ast->type == AST_PIPE && ast->nb_children != 0);
     int ret = 1;
-    int last_read = dup(STDIN_FILENO);
-    DBG_PIPE("Duplicate %d in %d\n", STDIN_FILENO, last_read);
+    int last_read = dup(STDIN);
+    DBG_PIPE("Duplicate %d in %d\n", STDIN, last_read);
     int i = 0;
     for (; i < ast->nb_children - 1; i++)
     {

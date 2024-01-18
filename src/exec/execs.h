@@ -11,21 +11,7 @@ struct sh_command
     int argc;
 };
 
-/***
- * build the command list based on the root of cmd
- * @param cmd the command list initialized with the root and each fds assigned
- * to themselves
- * @return true if everything went fine
- */
-bool build_command(struct sh_command *cmd);
-
-/***
- * Execute the sh_command previously built
- * @param command the sh_command to execute
- * @return the return value of the command
- * @see build_comman()
- */
-int exec_sh_command(struct sh_command *command);
+struct sh_command *build_command(struct ast *ast);
 
 /***
  * executes the command ast
