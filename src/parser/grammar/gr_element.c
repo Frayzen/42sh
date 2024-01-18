@@ -1,30 +1,27 @@
-#include <stdio.h>
-
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
 #include "tools/token/token.h"
 
+/*
+element =
+WORD
+| redirection
+;
+*/
 enum status gr_element(struct ast **ast)
 {
     struct token *token = tok_peek();
-    if (token->terminal)
-        return ERROR;
-    if (IS_WORDABLE(token))
+    if (token->type == IO_NUMBER)
     {
-        tok_pop();
-        struct ast *new_ast = init_ast(AST_TOKEN, token);
-        *ast = add_child(*ast, new_ast);
+        gr_redir(ast);
         return OK;
     }
-    return gr_redir(ast);
-    // if (gr_redir(ast) == ERROR)
-    // {
-    //     tok_pop();
-    //     struct ast *new_ast = init_ast(AST_TOKEN, token);
-    //     *ast = add_child(*ast, new_ast);
-    //     return OK;
-    // }
-    // return OK;
+    if (!IS_WORDABLE(token))
+        return ERROR;
+    struct ast *ast_tok = init_ast(AST_TOKEN, token);
+    *ast = add_child(*ast, ast_tok);
+    tok_pop();
+    return OK;
 }
