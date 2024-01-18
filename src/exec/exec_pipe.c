@@ -38,7 +38,7 @@ int exec_pipe(struct ast *ast)
     assert(ast->type == AST_PIPE && ast->nb_children != 0);
     int ret = 1;
     int last_read = dup(STDIN);
-    DBG_PIPE("Duplicate %d in %d\n", STDIN, last_read);
+    DBG_PIPE("Duplicate STDIN(%d) in %d\n", STDIN, last_read);
     int i = 0;
     for (; i < ast->nb_children - 1; i++)
     {

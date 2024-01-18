@@ -13,7 +13,6 @@
 int create_fd(char *str, bool is_io, int flags)
 {
     int ret = -1;
-    printf("OPEN %s (TRUE)%d = %d\n", str, true, is_io);
     if (is_io)
         ret = atoi(str);
     else
