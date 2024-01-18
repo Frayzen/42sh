@@ -98,30 +98,12 @@ int external_bin(struct sh_command *cmd)
     return code;
 }
 
-int execute(struct sh_command *command)
-{
-    struct token *token = command->root->children[0]->token;
-    int ret;
-    switch (token->type)
-    {
-    case ECHO:
-        return exec_echo(command);
-    case T_TRUE:
-        return 0;
-    case T_FALSE:
-        return 1;
-    default:
-        ret = external_bin(command);
-        if (ret)
-            print_error(FORK_ERROR);
-        return ret;
-    }
-}
-
 // true if everything is fine
 bool build_command(struct sh_command *cmd)
 {
     struct ast *ast = cmd->root;
+    assert(ast && ast->type == AST_COMMAND);
+    assert(ast->nb_children != 0);
     cmd->argv = calloc(ast->nb_children + 1, sizeof(char *));
     cmd->argc = 0;
     for (int i = 0; i < ast->nb_children; i++)
@@ -140,17 +122,37 @@ bool build_command(struct sh_command *cmd)
     return true;
 }
 
+int exec_sh_command(struct sh_command *command)
+{
+    struct token *token = command->root->children[0]->token;
+    int ret;
+    switch (token->type)
+    {
+    case ECHO:
+        ret = exec_echo(command);
+        break;
+    case T_TRUE:
+        ret = 0;
+        break;
+    case T_FALSE:
+        ret = 1;
+        break;
+    default:
+        ret = external_bin(command);
+        if (ret)
+            print_error(FORK_ERROR);
+        break;
+    }
+    free(command->argv);
+    return ret;
+}
+
 int exec_command(struct ast *ast)
 {
     assert(ast && ast->type == AST_COMMAND);
     assert(ast->nb_children != 0);
-    struct sh_command command = { 0 };
-    for (int i = 0; i < 3; i++)
-        command.redirs_fds[i] = i;
-    command.root = ast;
+    struct sh_command command = {.root = ast, .redirs_fds = {0, 1, 2}, 0};
     if (!build_command(&command))
         return 1;
-    int ret = execute(&command);
-    free(command.argv);
-    return ret;
+    return exec_sh_command(&command);
 }

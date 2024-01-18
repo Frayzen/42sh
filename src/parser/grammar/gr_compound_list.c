@@ -6,7 +6,10 @@
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
 #include "tools/token/token.h"
-
+/*
+compound_list =
+{'\n'} and_or { ( ';' | '\n' ) {'\n'} and_or } [';'] {'\n'} ;
+*/
 enum status gr_compound_list(struct ast **ast)
 {
     while (tok_peek()->type == NEWLINE)

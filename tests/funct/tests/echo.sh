@@ -79,4 +79,4 @@ echo ok
 echo echo echo  fi if else elif
 
 ### negation
-echo   biz    ; echo yipee yep; echo hello world !; echo 1 2 3 4 5 6
+echo   !biz!    ; echo yipee ! yep; echo hello world !; echo 1 2 3 4 5 6

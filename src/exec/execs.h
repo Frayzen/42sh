@@ -12,8 +12,24 @@ struct sh_command
 };
 
 /***
+ * build the command list based on the root of cmd
+ * @param cmd the command list initialized with the root and each fds assigned
+ * to themselves
+ * @return true if everything went fine
+ */
+bool build_command(struct sh_command *cmd);
+
+/***
+ * Execute the sh_command previously built
+ * @param command the sh_command to execute
+ * @return the return value of the command
+ * @see build_comman()
+ */
+int exec_sh_command(struct sh_command *command);
+
+/***
  * executes the command ast
- * @param ast the AST_COMMAND to execute
+ * @param ast the AST_CMD tree to execute
  */
 int exec_command(struct ast *ast);
 
@@ -40,5 +56,11 @@ int exec_condition(struct ast *ast);
  * @param ast tree to execute
  */
 int exec_negate(struct ast *ast);
+
+/***
+ * executes the pipe ast
+ * @param ast tree to execute
+ */
+int exec_pipe(struct ast *ast);
 
 #endif /* EXECS_H */

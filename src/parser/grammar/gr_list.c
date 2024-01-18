@@ -7,10 +7,11 @@
 #include "tools/ast/ast_utils.h"
 #include "tools/token/token.h"
 
+/*
+list = and_or { ';' and_or } [ ';' ] ;
+*/
 enum status gr_list(struct ast **ast)
 {
-    if (tok_peek()->terminal)
-        return OK;
     struct ast *ast_list = init_ast(AST_LIST, NULL);
     enum status state = gr_and_or(&ast_list);
     if (state == ERROR)

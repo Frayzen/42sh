@@ -4,7 +4,9 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
-
+/*
+pipeline = ['!'] command { '|' {'\n'} command } ;
+*/
 enum status gr_pipeline(struct ast **ast)
 {
     struct ast *parent = *ast;
@@ -22,10 +24,10 @@ enum status gr_pipeline(struct ast **ast)
     {
         tok_pop();
         while (tok_peek()->type == NEWLINE)
-            tok_pop();
+            tok_pop_clean();
         CHECK_GOTO(gr_command(&pipe_ast), error);
     }
-    *ast = add_child(*ast, pipe_ast);
+    parent = add_child(parent, pipe_ast);
     return OK;
 error:
     destroy_ast(pipe_ast);

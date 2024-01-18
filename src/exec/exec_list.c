@@ -21,8 +21,7 @@ int exec_list(struct ast *ast)
             ret = exec_condition(ast->children[i]);
             break;
         case AST_PIPE:
-            // TODO replace by exec_pipe
-            ret = exec_command(ast->children[i]->children[0]);
+            ret = exec_pipe(ast->children[i]);
             break;
         default:
             exit_gracefully(LIST_NOT_FOUND);
