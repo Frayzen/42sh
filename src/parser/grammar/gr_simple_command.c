@@ -23,7 +23,7 @@ enum status gr_simple_command(struct ast **ast)
         nb_prefix++;
 
     struct token *tok_word = tok_peek();
-    if (!IS_WORDABLE(tok_word) && nb_prefix == 0)
+    if (!IS_COMMAND(tok_word) && nb_prefix == 0)
         goto error;
     // WORLD
     struct ast *word = init_ast(AST_TOKEN, tok_word);

@@ -4,8 +4,8 @@
 
 #include "lexer/finder.h"
 
-#define IS_BUILTIN(t) ((t)->type >= T_TRUE && (t)->type <= ECHO)
 #define IS_WORDABLE(t) ((t)->type >= IF)
+#define IS_COMMAND(t) ((t)->type >= T_TRUE)
 
 // /!\ Do not add gaps inside of this enum (see TOK_TYPES_LT)
 enum token_type
@@ -21,6 +21,9 @@ enum token_type
     EQUAL,
     // wildcard
     QUOTE,
+
+    // WORDABLES UNDER
+
     // condition
     IF,
     THEN,
