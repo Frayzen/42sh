@@ -80,9 +80,11 @@ void main_to_stream(int argc, char **argv)
     while (i < argc)
     {
         if (!strcmp(argv[i], "--pretty-print") || !strcmp(argv[i], "-p"))
-            get_env_flag()->print = true;
+            get_env_flag()->pretty_print = true;
         else if (!strcmp(argv[i], "--verbose") || !strcmp(argv[i], "-v"))
             get_env_flag()->verbose = true;
+        else if (!strcmp(argv[i], "--debug-pipe") || !strcmp(argv[i], "-d"))
+            get_env_flag()->debug_pipe = true;
         else
             break;
         i++;

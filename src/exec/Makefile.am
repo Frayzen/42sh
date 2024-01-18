@@ -6,6 +6,9 @@ libexec_a_SOURCES = \
 	exec_entry.c\
 	exec_list.c \
 	exec_condition.c\
+	exec_pipe.c\
+	exec_while.c \
+	exec_until.c \
 	redirs/redirs.c redirs/redirs.h
 libexec_a_CPPFLAGS = -I$(top_srcdir)/src
 libexec_a_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic

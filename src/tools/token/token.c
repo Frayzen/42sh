@@ -61,13 +61,15 @@ int get_type(const struct string *str)
     while (TOK_TYPES_LT[i])
     {
         size_t c_id = 0;
+        const char *check_with = TOK_TYPES_LT[i];
         for (; c_id < str->size; c_id++)
         {
-            if ((i != BSZERO && !TOK_TYPES_LT[i][c_id])
-                || TOK_TYPES_LT[i][c_id] != str->value[c_id])
+            if (i != BSZERO && !check_with[c_id])
+                break;
+            if (check_with[c_id] != str->value[c_id])
                 break;
         }
-        if (c_id == str->size)
+        if (c_id == str->size && !check_with[c_id])
             return i;
         i++;
     }
@@ -141,7 +143,9 @@ const char **toktype_lookup(void)
         [NEWLINE] = "\n",      [QUOTE] = "'",       [ECHO] = "echo",
         [T_TRUE] = "true",     [T_FALSE] = "false", [BSZERO] = "\0",
         [CHEVRON] = "CHEVRON", [IO_NUMBER] = "NB",  [EQUAL] = "=",
-        [NEGATION] = "!",      [WORD] = NULL,
+        [NEGATION] = "!",      [PIPE] = "|",        [WORD] = NULL,
+        [WHILE] = "while",     [DO] = "do",         [DONE] = "done",
+        [UNTIL] = "until",
     };
     return lookup_table;
 }

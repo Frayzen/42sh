@@ -13,7 +13,7 @@ WORD
 enum status gr_element(struct ast **ast)
 {
     struct token *token = tok_peek();
-    if (IS_WORDABLE(token) && token->type != IO_NUMBER)
+    if (IS_WORDABLE(token))
     {
         *ast = add_child(*ast, init_ast(AST_TOKEN, token));
         tok_pop();

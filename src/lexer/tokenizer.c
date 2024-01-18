@@ -15,6 +15,6 @@ struct token *next_token(void)
     if (result->type == BSZERO)
         get_env_flag()->null_received = true;
     if (get_env_flag()->verbose)
-        verbose(result);
+        print_token(result);
     return result;
 }

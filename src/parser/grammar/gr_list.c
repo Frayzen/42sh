@@ -6,7 +6,10 @@
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
 #include "tools/token/token.h"
-// list = and_or { ';' and_or } [ ';' ] ;
+
+/*
+list = and_or { ';' and_or } [ ';' ] ;
+*/
 enum status gr_list(struct ast **ast)
 {
     struct ast *ast_list = init_ast(AST_LIST, NULL);
