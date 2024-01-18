@@ -9,12 +9,6 @@
 
 #include "ast_utils.h"
 
-char *g_ast_types[] = {
-    [AST_COMMAND] = "CMD", [AST_LIST] = "LST",  [AST_TOKEN] = "",
-    [AST_IF] = "IF",       [AST_REDIR] = "RDR", [AST_NEGATE] = "NOT",
-    [AST_PIPE] = "PIPE"
-};
-
 struct ast *add_child(struct ast *parent, struct ast *child)
 {
     if (!parent)
@@ -32,6 +26,12 @@ struct ast *add_child(struct ast *parent, struct ast *child)
 
 int node_to_str(char *buf, struct ast *ast_root)
 {
+    char *ast_types[] = {
+        [AST_COMMAND] = "CMD", [AST_LIST] = "LST",  [AST_TOKEN] = "",
+        [AST_IF] = "IF",       [AST_REDIR] = "RDR", [AST_NEGATE] = "NOT",
+        [AST_PIPE] = "PIPE"
+    };
+
     if (ast_root == NULL)
     {
         strcpy(buf, "[NULL]");
@@ -42,8 +42,8 @@ int node_to_str(char *buf, struct ast *ast_root)
         strcpy(buf, ast_root->token->value);
         return strlen(ast_root->token->value);
     }
-    strcpy(buf, g_ast_types[ast_root->type]);
-    return strlen(g_ast_types[ast_root->type]);
+    strcpy(buf, ast_types[ast_root->type]);
+    return strlen(ast_types[ast_root->type]);
 }
 
 void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
@@ -120,4 +120,75 @@ char *ast_to_str(struct ast *ast)
     size_t i = 0;
     ast_to_str_rec(ast, buf, &i);
     return buf;
+}
+
+int write_buf(char *buffer, char *str, int i)
+{
+    int size = strlen(str);
+    memcpy(buffer + i, str, size);
+    i += size;
+    return i;
+}
+
+int each_child(struct ast *ast, char *buffer, int i, char *between)
+{
+    for (int j = 0; j < ast->nb_children - 1; j++)
+    {
+        i = ast_rebuild(ast->children[j], buffer, i);
+        i = write_buf(buffer, between, i);
+    }
+    i = ast_rebuild(ast->children[ast->nb_children - 1], buffer, i);
+    return i;
+}
+
+int ast_rebuild(struct ast *ast, char *buffer, int i)
+{
+    if (!ast)
+        return i;
+    bool elif;
+    switch (ast->type)
+    {
+    case AST_IF:
+        elif = buffer[i] == 'l';
+        i = write_buf(buffer, "if ", i);
+        i = ast_rebuild(ast->children[0], buffer, i);
+        i = write_buf(buffer, "then ", i);
+        i = ast_rebuild(ast->children[1], buffer, i);
+        if (ast->nb_children > 2)
+        {
+            if (ast->children[2]->type == AST_IF)
+                i = write_buf(buffer, "el", i);
+            else
+                i = write_buf(buffer, "else ", i);
+            i = ast_rebuild(ast->children[2], buffer, i);
+        }
+        if (!elif)
+            i = write_buf(buffer, "fi ", i);
+        break;
+    case AST_REDIR:
+    case AST_COMMAND:
+        i = each_child(ast, buffer, i, " ");
+        break;
+    case AST_LIST:
+        i = each_child(ast, buffer, i, " ; ");
+        i = write_buf(buffer, "; ", i);
+        break;
+    case AST_PIPE:
+        i = each_child(ast, buffer, i, " | ");
+        break;
+    default:
+        i = write_buf(buffer, ast->token->value, i);
+        break;
+    }
+    return i;
+}
+
+void debug_pretty_print(struct ast *ast)
+{
+    char buffer[2048];
+    buffer[ast_rebuild(ast, buffer, 0)] = '\0';
+    if (ast)
+        printf("%s\n", buffer);
+    printf("%s\n", ast_to_str(ast));
+    pretty_print_ast(ast);
 }
