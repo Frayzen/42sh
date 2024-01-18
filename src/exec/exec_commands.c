@@ -105,7 +105,7 @@ int external_bin(struct ast *ast)
     int code = 0;
     if (WIFEXITED(returncode))
         code = WEXITSTATUS(returncode);
-    if (code)
+    if (code == 127)
         print_error(FORK_ERROR);
     fflush(stdout);
     return code;

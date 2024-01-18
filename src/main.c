@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "env/env.h"
 #include "exec/execs.h"
@@ -18,6 +19,8 @@ int main(int argc, char *argv[])
     int ret = 0;
     do
     {
+        STDOUT = STDOUT_FILENO;
+        STDIN = STDIN_FILENO;
         if (gr_input(&ast) == ERROR)
         {
             ast = NULL;

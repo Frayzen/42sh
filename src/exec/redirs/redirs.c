@@ -84,10 +84,9 @@ int get_flag(struct redir *redir, bool left)
     case LEFT_TO_RIGHT:
         flag |= (left ? O_RDONLY : O_WRONLY);
         flag |= O_CREAT;
+        flag |= (redir->append) ? O_APPEND : O_TRUNC;
         break;
     }
-    if (redir->append)
-        flag |= O_APPEND;
     return flag;
 }
 

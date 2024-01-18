@@ -28,7 +28,7 @@ echo hey 1 \>2
 echo hey 1 >\&2
 
 ###Several redirs
-cat not_exist 2>&1 1>file_err
+cat not_exist 1>file_err 2>&1
 cat file_err
 
 ###Weird behavior
