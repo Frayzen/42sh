@@ -9,13 +9,13 @@ file="../io_file"
 str="../io_str"
 stdin="../io_stdin"
 
-$path_42sh ./io/basics.sh > $file
+$path_42sh ./io/basics.sh 2>&1 > $file
 file_out=$?
 
-$path_42sh -c "$(cat ./io/basics.sh)" > $str
+$path_42sh -c "$(cat ./io/basics.sh)" 2>&1 > $str
 str_out=$?
 
-(echo "$(cat ./io/basics.sh)" | $path_42sh) > $stdin
+(echo "$(cat ./io/basics.sh)" | $path_42sh) 2>&1 > $stdin
 stdin_out=$?
 
 err=0

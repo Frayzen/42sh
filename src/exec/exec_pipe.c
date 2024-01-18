@@ -11,6 +11,8 @@
 int exec_piped(struct ast *ast, int in, int out)
 {
     int ret;
+    int oldin = dup(in);
+    int oldout = dup(out);
     dup2(in, STDIN_FILENO);
     dup2(out, STDOUT_FILENO);
     switch (ast->type)
@@ -22,9 +24,11 @@ int exec_piped(struct ast *ast, int in, int out)
         ret = exec_condition(ast);
         break;
     default:
-        exit_gracefully(PIPE_NOT_FOUND);
-        return 1;
+        print_error(PIPE_NOT_FOUND);
+        ret = 1;
     }
+    dup2(oldin, STDIN_FILENO);
+    dup2(oldout, STDOUT_FILENO);
     return ret;
 }
 
