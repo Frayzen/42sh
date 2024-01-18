@@ -13,12 +13,7 @@ enum status gr_command(struct ast **ast)
         return OK;
     if (gr_shell_cmd(ast) == ERROR)
         return ERROR;
-    enum status state = OK;
-    while (state == OK)
-    {
-        if (tok_peek()->terminal)
-            break;
-        state = gr_redir(ast);
-    }
+    while (gr_redir(ast) == OK)
+        ;
     return OK;
 }

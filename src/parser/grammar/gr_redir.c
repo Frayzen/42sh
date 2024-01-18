@@ -7,46 +7,31 @@
 #include "tools/ast/ast_utils.h"
 #include "tools/token/token.h"
 /*
-int check_chevron(char *value)
-{
-    if (!strcmp(value, ">"))
-        return 1;
-    if (!strcmp(value, "<"))
-        return 1;
-    if (!strcmp(value, ">>"))
-        return 1;
-    if (!strcmp(value, ">&"))
-        return 1;
-    if (!strcmp(value, "<&"))
-        return 1;
-    if (!strcmp(value, ">|"))
-        return 1;
-    if (!strcmp(value, "<>"))
-        return 1;
-    return 0;
-}
+redirection =
+|[IONUMBER] ( '>' | '<' | '>>' | '>&' | '<&' | '>|' | '<>' )
+|WORD ;
 */
-
 enum status gr_redir(struct ast **ast)
 {
     struct ast *redir_ast = init_ast(AST_REDIR, NULL);
     struct token *token = tok_peek();
+
     if (tok_peek()->type == IO_NUMBER)
     {
         tok_pop();
-        struct ast *optional = init_ast(AST_TOKEN, token);
-        redir_ast = add_child(redir_ast, optional);
+        redir_ast = add_child(redir_ast, init_ast(AST_TOKEN, token));
     }
+
     token = tok_peek();
     CHECK_GOTO(token->type != CHEVRON, error);
     tok_pop();
-    struct ast *chevron = init_ast(AST_TOKEN, token);
-    redir_ast = add_child(redir_ast, chevron);
+    redir_ast = add_child(redir_ast, init_ast(AST_TOKEN, token));
+
     token = tok_peek();
     CHECK_GOTO(!IS_WORDABLE(token), error);
-    struct ast *new_ast = init_ast(AST_TOKEN, token);
     tok_pop();
-    redir_ast = add_child(redir_ast, new_ast);
+
+    redir_ast = add_child(redir_ast, init_ast(AST_TOKEN, token));
     *ast = add_child(*ast, redir_ast);
     return OK;
 error:
