@@ -16,6 +16,7 @@ enum token_type
     SEMI_COLON,
     // redir
     CHEVRON,
+    PIPE,
     // numbers
     EQUAL,
     // wildcard

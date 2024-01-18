@@ -13,6 +13,7 @@ enum ast_type
     AST_REDIR,
     AST_ASS,
     AST_NEGATE,
+    AST_PIPE,
 };
 
 struct ast
