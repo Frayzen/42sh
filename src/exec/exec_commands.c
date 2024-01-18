@@ -1,6 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -54,6 +55,41 @@ void print_echo(struct sh_command *cmd, int i, bool interpret_bslash,
         dprintf(cmd->redirs_fds[1], "\n");
 }
 
+/***
+ * sets the options according to the content sequence
+ * returns true if the sequence sets options and false otherwise
+ * ie: if content does not start with '-' or contains a char that is not 'n' 'e'
+ * or 'E'
+ */
+bool set_option_echo(const char *content, bool *interpret_bslash,
+                     bool *print_nline)
+{
+    bool init_bslash = *interpret_bslash;
+    bool init_print = *print_nline;
+    if (content[0] != '-')
+        return false;
+    for (int i = 1; content[i] != '\0'; i++)
+    {
+        switch (content[i])
+        {
+        case 'n':
+            *print_nline = false;
+            break;
+        case 'e':
+            *interpret_bslash = true;
+            break;
+        case 'E':
+            *interpret_bslash = false;
+            break;
+        default:
+            *print_nline = init_print;
+            *interpret_bslash = init_bslash;
+            return false;
+        }
+    }
+    return true;
+}
+
 int exec_echo(struct ast *ast)
 {
     assert(ast && ast->type == AST_COMMAND
@@ -65,13 +101,7 @@ int exec_echo(struct ast *ast)
     while (i < cmd->argc - 1)
     {
         const char *content = cmd->argv[i];
-        if (!strcmp(content, "-e"))
-            interpret_bslash = true;
-        else if (!strcmp(content, "-E"))
-            interpret_bslash = false;
-        else if (!strcmp(content, "-n"))
-            print_nline = false;
-        else
+        if (!set_option_echo(content, &interpret_bslash, &print_nline))
             break;
         i++;
     }
