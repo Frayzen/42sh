@@ -30,8 +30,6 @@ int dup_fd(int fd)
 
 bool redirect(struct sh_command *cmd, int from, int to)
 {
-    if (get_env_flag()->verbose)
-        printf(" [REDIRECT] %d -> %d\n", from, to);
     if (from < 3)
     {
         cmd->redirs_fds[from] = to;
@@ -74,7 +72,7 @@ void build_redir(struct ast *ast, struct redir *redir)
 
 int get_flag(struct redir *redir, bool left)
 {
-    int flag = O_CREAT;
+    int flag = 0;
     switch (redir->dir)
     {
     case BOTH_WAY:
@@ -85,10 +83,10 @@ int get_flag(struct redir *redir, bool left)
         break;
     case LEFT_TO_RIGHT:
         flag |= (left ? O_RDONLY : O_WRONLY);
+        flag |= O_CREAT;
+        flag |= (redir->append) ? O_APPEND : O_TRUNC;
         break;
     }
-    if (redir->append)
-        flag |= O_APPEND;
     return flag;
 }
 
@@ -101,6 +99,7 @@ bool apply_redirection(struct sh_command *cmd, struct ast *redir_ast)
     int to = create_fd(redir.right, redir.is_io, get_flag(&redir, false));
     if (from == -1 || to == -1)
         return false;
+    DBG_PIPE("Created redirection from (%d) to (%d)\n", from, to);
     if (redir.dup)
         to = dup(to);
     if (redir.dir == RIGHT_TO_LEFT)

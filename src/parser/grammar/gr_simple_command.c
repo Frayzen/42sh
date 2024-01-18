@@ -12,8 +12,6 @@ prefix { prefix }
 { prefix } WORD { element }
 ;
 */
-// read prefix -> set bool 1
-// execute 2nd cant read WORD chck bool
 enum status gr_simple_command(struct ast **ast)
 {
     struct ast *ast_cmd = init_ast(AST_COMMAND, NULL);

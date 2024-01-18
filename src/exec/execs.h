@@ -11,9 +11,11 @@ struct sh_command
     int argc;
 };
 
+struct sh_command *build_command(struct ast *ast);
+
 /***
  * executes the command ast
- * @param ast the AST_COMMAND to execute
+ * @param ast the AST_CMD tree to execute
  */
 int exec_command(struct ast *ast);
 
@@ -41,4 +43,21 @@ int exec_condition(struct ast *ast);
  */
 int exec_negate(struct ast *ast);
 
+/***
+ * executes the pipe ast
+ * @param ast tree to execute
+ */
+int exec_pipe(struct ast *ast);
+
+/***
+ * executes the while ast
+ * @param ast tree to execute
+ */
+int exec_while(struct ast *ast);
+
+/***
+ * executes the until ast
+ * @param ast tree to execute
+ */
+int exec_until(struct ast *ast);
 #endif /* EXECS_H */

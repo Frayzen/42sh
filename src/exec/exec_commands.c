@@ -19,6 +19,7 @@
 void print_echo(struct sh_command *cmd, int i, bool interpret_bslash,
                 bool print_nline)
 {
+    DBG_PIPE("Echo command [OUT] %d\n", cmd->redirs_fds[1]);
     for (; i < cmd->argc; i++)
     {
         const char *content = cmd->argv[i];
@@ -79,11 +80,11 @@ bool set_flag_echo(const char *content, bool *interpret_bslash,
     return true;
 }
 
-int exec_echo(struct sh_command *cmd)
+int exec_echo(struct ast *ast)
 {
-    struct ast *ast = cmd->root;
     assert(ast && ast->type == AST_COMMAND
            && ast->children[0]->token->type == ECHO);
+    struct sh_command *cmd = build_command(ast);
     int i = 1;
     bool print_nline = true;
     bool interpret_bslash = false;
@@ -95,15 +96,25 @@ int exec_echo(struct sh_command *cmd)
         i++;
     }
     print_echo(cmd, i, interpret_bslash, print_nline);
+    free(cmd->argv);
     fflush(NULL);
     return 0;
 }
 
-int external_bin(struct sh_command *cmd)
+int external_bin(struct ast *ast)
 {
     int pid = fork();
+    if (pid == -1)
+    {
+        print_error(FORK_ERROR);
+        return 1;
+    }
     if (pid == 0)
     {
+        struct sh_command *cmd = build_command(ast);
+        DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n",
+                 cmd->argv[0], cmd->redirs_fds[0], cmd->redirs_fds[1],
+                 cmd->redirs_fds[2]);
         for (int i = 0; i < 3; i++)
             dup2(cmd->redirs_fds[i], i);
         execvp(cmd->argv[0], cmd->argv);
@@ -114,63 +125,60 @@ int external_bin(struct sh_command *cmd)
     int code = 0;
     if (WIFEXITED(returncode))
         code = WEXITSTATUS(returncode);
+    if (code == 127)
+        print_error(FORK_ERROR);
     fflush(stdout);
     return code;
 }
 
-int execute(struct sh_command *command)
+// true if everything is fine
+struct sh_command *build_command(struct ast *ast)
 {
-    struct token *token = command->root->children[0]->token;
-    int ret;
+    assert(ast && ast->type == AST_COMMAND);
+    assert(ast->nb_children != 0);
+    static struct sh_command cmd = { 0 };
+    cmd.root = ast, cmd.redirs_fds[0] = STDIN;
+    cmd.redirs_fds[1] = STDOUT;
+    cmd.redirs_fds[2] = 2;
+    cmd.argv = calloc(ast->nb_children + 1, sizeof(char *));
+    cmd.argc = 0;
+    for (int i = 0; i < ast->nb_children; i++)
+    {
+        if (ast->children[i]->type == AST_REDIR)
+        {
+            if (!apply_redirection(&cmd, ast->children[i]))
+            {
+                print_error(BAD_REDIRECTION);
+                return NULL;
+            }
+        }
+        else
+            cmd.argv[cmd.argc++] = ast->children[i]->token->value;
+    }
+    return &cmd;
+}
+
+int exec_sh_command(struct ast *ast)
+{
+    struct token *token = ast->children[0]->token;
     switch (token->type)
     {
     case ECHO:
-        return exec_echo(command);
+        return exec_echo(ast);
     case T_TRUE:
         return 0;
     case T_FALSE:
         return 1;
     default:
-        ret = external_bin(command);
-        if (ret)
-            print_error(FORK_ERROR);
-        return ret;
+        return external_bin(ast);
     }
-}
-
-// true if everything is fine
-bool build_command(struct sh_command *cmd)
-{
-    struct ast *ast = cmd->root;
-    cmd->argv = calloc(ast->nb_children + 1, sizeof(char *));
-    cmd->argc = 0;
-    for (int i = 0; i < ast->nb_children; i++)
-    {
-        if (ast->children[i]->type == AST_REDIR)
-        {
-            if (!apply_redirection(cmd, ast->children[i]))
-            {
-                print_error(BAD_REDIRECTION);
-                return false;
-            }
-        }
-        else
-            cmd->argv[cmd->argc++] = ast->children[i]->token->value;
-    }
-    return true;
 }
 
 int exec_command(struct ast *ast)
 {
     assert(ast && ast->type == AST_COMMAND);
     assert(ast->nb_children != 0);
-    struct sh_command command = { 0 };
-    for (int i = 0; i < 3; i++)
-        command.redirs_fds[i] = i;
-    command.root = ast;
-    if (!build_command(&command))
-        return 1;
-    int ret = execute(&command);
-    free(command.argv);
+    int ret = 1;
+    ret = exec_sh_command(ast);
     return ret;
 }
