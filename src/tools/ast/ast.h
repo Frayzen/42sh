@@ -11,7 +11,8 @@ enum ast_type
     AST_LIST,
     AST_IF,
     AST_REDIR,
-    AST_ASS
+    AST_ASS,
+    AST_NEGATE,
 };
 
 struct ast

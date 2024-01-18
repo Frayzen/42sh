@@ -20,6 +20,7 @@ enum token_type
     EQUAL,
     // wildcard
     QUOTE,
+    NEGATION,
 
     // WORDABLES UNDER
 

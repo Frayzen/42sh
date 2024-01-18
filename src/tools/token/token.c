@@ -141,7 +141,7 @@ const char **toktype_lookup(void)
         [NEWLINE] = "\n",      [QUOTE] = "'",       [ECHO] = "echo",
         [T_TRUE] = "true",     [T_FALSE] = "false", [BSZERO] = "\0",
         [CHEVRON] = "CHEVRON", [IO_NUMBER] = "NB",  [EQUAL] = "=",
-        [WORD] = NULL,
+        [NEGATION] = "!",  [WORD] = NULL,
     };
     return lookup_table;
 }

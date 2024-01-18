@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <stdio.h>
 
 #include "execs.h"
 #include "exit/error_handler.h"
@@ -12,6 +11,9 @@ int exec_list(struct ast *ast)
     for (int i = 0; i < ast->nb_children; i++)
         switch (ast->children[i]->type)
         {
+        case AST_NEGATE:
+            ret = exec_negate(ast->children[i]);
+            break;
         case AST_COMMAND:
             ret = exec_command(ast->children[i]);
             break;
