@@ -1,8 +1,13 @@
 #include <assert.h>
-#include <stdio.h>
 
 #include "execs.h"
 #include "tools/ast/ast.h"
+
+int exec_negate(struct ast *ast)
+{
+    assert(ast && ast->type == AST_NEGATE && ast->nb_children == 1);
+    return !exec_command(ast->children[0]);
+}
 
 int exec_condition(struct ast *ast)
 {
