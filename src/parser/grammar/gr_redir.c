@@ -43,7 +43,7 @@ enum status gr_redir(struct ast **ast)
     struct ast *chevron = init_ast(AST_TOKEN, token);
     redir_ast = add_child(redir_ast, chevron);
     token = tok_peek();
-    CHECK_GOTO(IS_WORDABLE(token), error);
+    CHECK_GOTO(!IS_WORDABLE(token), error);
     struct ast *new_ast = init_ast(AST_TOKEN, token);
     tok_pop();
     redir_ast = add_child(redir_ast, new_ast);
