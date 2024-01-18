@@ -68,6 +68,18 @@ echo -E -e -E \\\\\\\\\\\\\\\\
 ###Two echos
 echo first; echo second
 
+###Non flag dash 
+echo -a
+
+###Dash with other char
+echo -neEnneEEnea 42\nsh\\\\
+
+###Non setting dash and setting dash
+echo -neEnnEeen -nef 42sh\n\\\\
+
+###Double flag set
+echo -nEEennneE -nnneee 42sh\n\\\\
+
 ###Quoted tricky one
 echo toto ';' ls
 

@@ -64,14 +64,18 @@ bool set_flag_echo(const char *content, bool *interpret_bslash,
         return false;
     for (int i = 1; content[i] != '\0'; i++)
     {
-        if (content[i] == 'n')
-            *print_nline = false;
-        else if (content[i] == 'e')
-            *interpret_bslash = true;
-        else if (content[i] == 'E')
-            *interpret_bslash = false;
-        else
+        switch (content[i])
         {
+        case 'n':
+            *print_nline = false;
+            break;
+        case 'e':
+            *interpret_bslash = true;
+            break;
+        case 'E':
+            *interpret_bslash = false;
+            break;
+        default:
             *print_nline = init_print;
             *interpret_bslash = init_bslash;
             return false;
