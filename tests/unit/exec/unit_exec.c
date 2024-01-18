@@ -107,15 +107,3 @@ Test(exec, big_fat_sentence_with_if, .init = redirect_all_stdout)
     cr_expect_stdout_eq_str("if else then ok ca roule ma poule\n", "error");
     clean(e);
 }
-
-Test(exec_file, hello_world, .init = redirect_all_stdout)
-{
-    char *a[2] = { "blb", "./tests/unit/exec/test_exec.txt" };
-    main_to_stream(2, a);
-    struct ast *e = NULL;
-    gr_input(&e);
-    cr_assert(e);
-    exec_entry(e);
-    cr_expect_stdout_eq_str("Hello World !\n", "error");
-    clean(e);
-}

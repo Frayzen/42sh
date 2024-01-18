@@ -12,7 +12,7 @@
 void check_ast_str(struct ast *ast, const char *str)
 {
     char *gen = ast_to_str(ast);
-    cr_expect_str_eq(gen, str);
+    cr_expect_str_eq(gen, str, "Expected %s but got %s", str, gen);
     clean(ast);
 }
 
@@ -49,7 +49,8 @@ Test(easy_rules, long_list)
 {
     io_push(
         "echo toto; echo tata; echo titi; echo foo; echo bar; echo baz; //    "
-        "echo   biz    ; echo yipee yep; echo hello world !; echo 1 2 3 4 5 6");
+        "echo   biz    ; echo yipee yep; echo hello world \\!; echo 1 2 3 4 5 "
+        "6");
     struct ast *ast = NULL;
     cr_expect_eq(gr_input(&ast), OK);
     cr_expect_not_null(ast);

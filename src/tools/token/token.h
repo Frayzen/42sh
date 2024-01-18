@@ -20,7 +20,6 @@ enum token_type
     EQUAL,
     // wildcard
     QUOTE,
-    NEGATION,
 
     // WORDABLES UNDER
 
@@ -30,6 +29,8 @@ enum token_type
     ELIF,
     ELSE,
     FI,
+
+    NEGATION,
 
     IO_NUMBER,
     // builtins /!\ leave T_TRUE as first one and ECHO as last one
