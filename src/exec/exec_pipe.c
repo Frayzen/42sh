@@ -7,7 +7,6 @@
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 
-// return the result of the function and update out
 int exec_piped(struct ast *ast, int in, int out)
 {
     int ret;
