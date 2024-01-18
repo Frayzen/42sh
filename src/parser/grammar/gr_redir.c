@@ -17,22 +17,19 @@ enum status gr_redir(struct ast **ast)
     if (tok_peek()->type == IO_NUMBER)
     {
         tok_pop();
-        struct ast *optional = init_ast(AST_TOKEN, token);
-        redir_ast = add_child(redir_ast, optional);
+        redir_ast = add_child(redir_ast, init_ast(AST_TOKEN, token));
     }
 
     token = tok_peek();
     CHECK_GOTO(token->type != CHEVRON, error);
     tok_pop();
-    struct ast *chevron = init_ast(AST_TOKEN, token);
-    redir_ast = add_child(redir_ast, chevron);
+    redir_ast = add_child(redir_ast, init_ast(AST_TOKEN, token));
 
     token = tok_peek();
     CHECK_GOTO(!IS_WORDABLE(token), error);
-    struct ast *new_ast = init_ast(AST_TOKEN, token);
     tok_pop();
 
-    redir_ast = add_child(redir_ast, new_ast);
+    redir_ast = add_child(redir_ast, init_ast(AST_TOKEN, token));
     *ast = add_child(*ast, redir_ast);
     return OK;
 error:
