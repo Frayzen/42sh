@@ -98,7 +98,7 @@ execute() {
 
 parallelize_entry() {
     cd ..
-    tmp_folder=$(mktemp -d XXXXXX)
+    tmp_folder=$(mktemp -d .XXXXXX)
     cd $tmp_folder
     entry=$1
     file_id=$2
