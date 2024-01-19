@@ -56,9 +56,9 @@ char *ast_to_str(struct ast *ast);
 int ast_rebuild(struct ast *ast, char *buffer, int i);
 
 /***
-* Prints all three (pretty_print ast_to_str ast_rebuild) and print them
-* @param ast the ast to debug print
-*/
+ * Prints all three (pretty_print ast_to_str ast_rebuild) and print them
+ * @param ast the ast to debug print
+ */
 void debug_pretty_print(struct ast *ast);
 
 #endif // AST_UTILS_H

@@ -14,6 +14,8 @@ enum ast_type
     AST_ASS,
     AST_NEGATE,
     AST_PIPE,
+    AST_WHILE,
+    AST_UNTIL,
 };
 
 struct ast

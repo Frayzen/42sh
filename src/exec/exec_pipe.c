@@ -8,7 +8,6 @@
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 
-// return the result of the function and update out
 int exec_piped(struct ast *ast, int in, int out)
 {
     int ret;
@@ -25,6 +24,13 @@ int exec_piped(struct ast *ast, int in, int out)
     case AST_IF:
         ret = exec_condition(ast);
         break;
+    case AST_WHILE:
+        ret = exec_while(ast);
+        break;
+    case AST_UNTIL:
+        ret = exec_until(ast);
+        break;
+
     default:
         print_error(PIPE_NOT_FOUND);
         ret = 1;

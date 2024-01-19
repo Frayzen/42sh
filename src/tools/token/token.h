@@ -24,6 +24,7 @@ enum token_type
 
     // WORDABLES UNDER
 
+    IO_NUMBER,
     // condition
     IF,
     THEN,
@@ -31,9 +32,13 @@ enum token_type
     ELSE,
     FI,
 
+    WHILE,
+    UNTIL,
+    DO,
+    DONE,
+
     NEGATION,
 
-    IO_NUMBER,
     // builtins /!\ leave T_TRUE as first one and ECHO as last one
     T_TRUE,
     T_FALSE,

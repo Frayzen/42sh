@@ -49,4 +49,15 @@ int exec_negate(struct ast *ast);
  */
 int exec_pipe(struct ast *ast);
 
+/***
+ * executes the while ast
+ * @param ast tree to execute
+ */
+int exec_while(struct ast *ast);
+
+/***
+ * executes the until ast
+ * @param ast tree to execute
+ */
+int exec_until(struct ast *ast);
 #endif /* EXECS_H */

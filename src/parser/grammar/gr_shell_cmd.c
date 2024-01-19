@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <stdio.h>
 
 #include "lexer/token_saver.h"
 #include "rules.h"
@@ -7,5 +8,12 @@
 
 enum status gr_shell_cmd(struct ast **ast)
 {
-    return gr_if(ast);
+    if (gr_if(ast) == OK)
+        return OK;
+    if (gr_while(ast) == OK)
+        return OK;
+    if (gr_until(ast) == OK)
+        return OK;
+
+    return ERROR;
 }
