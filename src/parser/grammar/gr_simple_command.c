@@ -22,6 +22,7 @@ enum status gr_simple_command(struct ast_list *list)
         goto error;
     // WORLD
     append_arg(cmd, tok_word->value);
+    cmd->type = tok_word->type;
     tok_pop();
 
     // {element}

@@ -2,6 +2,7 @@
 #define AST_H
 #include <fcntl.h>
 #include <stdbool.h>
+#include "tools/token/token.h"
 
 #define AST_ROOT (set_ast_root(NULL))
 
@@ -70,6 +71,7 @@ struct ast_redir
 struct ast_cmd
 {
     struct ast redirs;
+    enum token_type type;
     char **argv;
     int argc;
 };

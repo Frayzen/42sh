@@ -44,14 +44,9 @@ int exec_condition(struct ast_if *ast);
 int exec_pipe(struct ast_pipe *ast);
 
 /***
- * executes the while ast
+ * executes the loop ast (either WHILE or UNTIL)
  * @param ast tree to execute
  */
-int exec_while(struct ast_loop *ast);
+int exec_loop(struct ast_loop *ast);
 
-/***
- * executes the until ast
- * @param ast tree to execute
- */
-int exec_until(struct ast_loop *ast);
 #endif /* EXECS_H */

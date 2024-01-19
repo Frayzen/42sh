@@ -25,6 +25,6 @@ struct redir
  * @param cmd the command
  * @param redir the redirection ast to apply
  */
-bool apply_redirection(struct sh_command *cmd, struct ast *redir);
+bool apply_redirection(struct sh_command *cmd, struct ast_redir *redir_ast);
 
 #endif /* !REDIRS_H */
