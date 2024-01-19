@@ -18,8 +18,8 @@
 void print_echo(struct ast_cmd *cmd, int i, bool interpret_bslash,
                 bool print_nline)
 {
-    /* DBG_PIPE("Echo command [OUT] %d\n", cmd->redirs_fds[1]); */
-    for (; i < cmd->argc - 1; i++)
+    DBG_PIPE("Echo command [OUT] %d\n", STDOUT);
+    for (; i < cmd->argc; i++)
     {
         const char *content = cmd->argv[i];
         int id = 0;
@@ -117,11 +117,10 @@ int external_bin(struct ast_cmd *cmd)
     }
     if (pid == 0)
     {
-        /* DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n", */
-        /*          cmd->argv[0], cmd->redirs_fds[0], cmd->redirs_fds[1], */
-        /*          cmd->redirs_fds[2]); */
-        /* for (int i = 0; i < 3; i++) */
-        /*     dup2(cmd->redirs_fds[i], i); */
+        DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n",
+                 cmd->argv[0], STDIN, STDOUT, 2);
+        dup2(STDIN, 0);
+        dup2(STDOUT, 1);
         execvp(cmd->argv[0], cmd->argv);
         exit(127);
     }
