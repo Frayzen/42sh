@@ -66,12 +66,14 @@ int *setup_redirs(struct ast_redir *ast)
         }
         if (redir->type & RT_MASK_IN)
         {
-            DBG_PIPE("[REDIR] Close and set FD[%d] to %d (IN)\n", fd_left, fd_right);
+            DBG_PIPE("[REDIR] Close and set FD[%d] to %d (IN)\n", fd_left,
+                     fd_right);
             dup2(fd_left, FDS[fd_right]);
         }
         else
         {
-            DBG_PIPE("[REDIR] Close and set FD[%d] to %d (OUT)\n", fd_right, fd_left);
+            DBG_PIPE("[REDIR] Close and set FD[%d] to %d (OUT)\n", fd_right,
+                     fd_left);
             dup2(fd_right, FDS[fd_left]);
         }
     }

@@ -1,6 +1,7 @@
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
+#include "tools/gr_tools.h"
 #include "tools/gr_utils.h"
 #include "tools/token/token.h"
 // rule_if = 'if' compound_list 'then' compound_list [else_clause] 'fi' ;

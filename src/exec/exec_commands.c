@@ -1,5 +1,4 @@
 #define _POSIX_C_SOURCE 200809L
-#include "tools/redirection/redirection.h"
 #include <assert.h>
 #include <fcntl.h>
 #include <stdbool.h>
@@ -14,6 +13,7 @@
 #include "execs.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
+#include "tools/redirection/redirection.h"
 #include "tools/token/token.h"
 
 void print_echo(struct ast_cmd *cmd, int i, bool interpret_bslash,
@@ -105,7 +105,6 @@ int exec_echo(struct ast_cmd *cmd)
     }
     print_echo(cmd, i, interpret_bslash, print_nline);
     fflush(NULL);
-    close_redirs(cmd);
     return 0;
 }
 
@@ -125,7 +124,7 @@ int external_bin(struct ast_cmd *cmd)
         for (int i = 0; i < 3; i++)
         {
             dup2(FDS[i], i);
-            close(FDS[i]); 
+            close(FDS[i]);
         }
         execvp(cmd->argv[0], cmd->argv);
         exit(127);
