@@ -92,7 +92,7 @@ bool set_option_echo(const char *content, bool *interpret_bslash,
 
 int exec_echo(struct ast *ast)
 {
-    assert(ast && ast->type == AST_COMMAND
+    assert(ast && ast->type == AST_CMD
            && ast->children[0]->token->type == ECHO);
     struct sh_command *cmd = build_command(ast);
     int i = 1;
@@ -144,7 +144,7 @@ int external_bin(struct ast *ast)
 // true if everything is fine
 struct sh_command *build_command(struct ast *ast)
 {
-    assert(ast && ast->type == AST_COMMAND);
+    assert(ast && ast->type == AST_CMD);
     assert(ast->nb_children != 0);
     static struct sh_command cmd = { 0 };
     cmd.root = ast, cmd.redirs_fds[0] = STDIN;
@@ -186,7 +186,7 @@ int exec_sh_command(struct ast *ast)
 
 int exec_command(struct ast *ast)
 {
-    assert(ast && ast->type == AST_COMMAND);
+    assert(ast && ast->type == AST_CMD);
     assert(ast->nb_children != 0);
     int ret = 1;
     ret = exec_sh_command(ast);

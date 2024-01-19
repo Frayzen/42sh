@@ -1,6 +1,3 @@
-#include <stddef.h>
-#include <stdio.h>
-
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
@@ -10,12 +7,12 @@
 compound_list =
 {'\n'} and_or { ( ';' | '\n' ) {'\n'} and_or } [';'] {'\n'} ;
 */
-enum status gr_compound_list(struct ast **ast)
+enum status gr_compound_list(struct ast_list **ast)
 {
     while (tok_peek()->type == NEWLINE)
         tok_pop_clean();
-    struct ast *ls_ast = init_ast(AST_LIST, NULL);
-    enum status state = gr_and_or(&ls_ast);
+    struct ast_list *ls_ast = init_ast(AST_LIST);
+    enum status state = gr_and_or(ls_ast);
     CHECK_GOTO(state == ERROR, error);
     while (state == OK)
     {
@@ -33,7 +30,7 @@ enum status gr_compound_list(struct ast **ast)
     while (tok_peek()->type == NEWLINE)
         tok_pop_clean();
 
-    *ast = add_child(*ast, ls_ast);
+    *ast = ls_ast;
     return OK;
 
 error:

@@ -10,26 +10,11 @@
 #include "ast_utils.h"
 
 char *g_ast_types[] = {
-    [AST_COMMAND] = "CMD", [AST_LIST] = "LST",  [AST_TOKEN] = "",
+    [AST_CMD] = "CMD", [AST_LIST] = "LST",  [AST_TOKEN] = "",
     [AST_IF] = "IF",       [AST_REDIR] = "RDR", [AST_NEGATE] = "NOT",
     [AST_PIPE] = "PIPE",   [AST_WHILE] = "WHL", [AST_UNTIL] = "UTL",
     [AST_AND] = "AND",     [AST_OR] = "OR",
 };
-
-struct ast *add_child(struct ast *parent, struct ast *child)
-{
-    if (!parent)
-        return child;
-    parent->children = realloc(parent->children,
-                               sizeof(struct ast) * (parent->nb_children + 1));
-    if (!parent->children)
-    {
-        exit_gracefully(ADD_CHILD_ERROR);
-    }
-    parent->children[parent->nb_children] = child;
-    parent->nb_children++;
-    return parent;
-}
 
 int node_to_str(char *buf, struct ast *ast_root)
 {

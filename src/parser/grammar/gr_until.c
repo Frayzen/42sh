@@ -13,7 +13,7 @@
 
 enum status gr_until(struct ast **ast)
 {
-    struct ast *utl_ast = init_ast(AST_UNTIL, NULL);
+    struct ast *utl_ast = init_ast(AST_UNTIL);
 
     CHECK_GOTO(tok_peek()->type != UNTIL, error);
     tok_pop_clean();

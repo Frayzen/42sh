@@ -1,8 +1,3 @@
-
-#include <stdio.h>
-
-#include "env/env.h"
-#include "exit/error_handler.h"
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"

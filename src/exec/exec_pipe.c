@@ -17,7 +17,7 @@ int exec_piped(struct ast *ast, int in, int out)
     DBG_PIPE("[PIPE] New stdin=%d | stdout=%d\n", STDIN, STDOUT);
     switch (ast->type)
     {
-    case AST_COMMAND:
+    case AST_CMD:
         ret = exec_command(ast);
         break;
     case AST_IF:

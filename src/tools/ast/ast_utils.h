@@ -2,13 +2,6 @@
 #define AST_UTILS_H
 #include "tools/ast/ast.h"
 
-/***
- * add_child: add a token to a tree
- * @param parent: the parent tree that is receiving the child
- * @param child: the child tree that will be appended
- * @return the parent tree with child tree as child
- */
-struct ast *add_child(struct ast *parent, struct ast *child);
 
 /***
  * Prints the AST
@@ -46,5 +39,4 @@ void pretty_print_ast(struct ast *ast);
  * @return the unique malloced string associated with the AST
  */
 char *ast_to_str(struct ast *ast);
-
 #endif // AST_UTILS_H

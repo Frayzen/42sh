@@ -11,7 +11,7 @@
 
 enum status gr_while(struct ast **ast)
 {
-    struct ast *wh_ast = init_ast(AST_WHILE, NULL);
+    struct ast *wh_ast = init_ast(AST_WHILE);
 
     CHECK_GOTO(tok_peek()->type != WHILE, error);
     tok_pop_clean();
