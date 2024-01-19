@@ -3,14 +3,18 @@
 
 #include "tools/ast/ast.h"
 
+// THE OUT ARE ALWAYS EVEN AND THE IN ARE ODDS
 enum redir_type
 {
-    RT_REDIR_OUT, // > and >|
-    RT_REDIR_IN, // <
-    RT_DUP_OUT_FD, // >&
-    RT_DUP_IN_FD, // <&
-    RT_APPEND_OUT, // >>
-    RT_READ_WRITE, // <>
+    RT_MASK_IN = 1,
+
+    RT_REDIR_OUT = 2, // > and >|
+    RT_REDIR_IN = 3, // <
+    RT_APPEND_OUT = 4, // >>
+    RT_READ_WRITE = 5, // <>
+    RT_MASK_DUP = 8,
+    RT_DUP_IN_FD = 9, // <&
+    RT_DUP_OUT_FD = 10, // >&
 };
 
 struct redirection

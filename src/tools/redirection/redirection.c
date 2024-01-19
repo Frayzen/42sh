@@ -5,6 +5,12 @@
 #include <unistd.h>
 #include "env/env.h"
 
+int get_to_fd(struct redirection *redir)
+{
+    if (redir->type & RT_MASK_DUP && is_number(redir->to))
+
+}
+
 int *setup_redirs(struct ast_redir *ast)
 {
     static int saved[3];
@@ -12,8 +18,9 @@ int *setup_redirs(struct ast_redir *ast)
         saved[i] = dup(FDS[i]);
     for (int i = 0; i < ast->redir_nb; i++)
     {
+
         struct redirection* redir = ast->redirs[i];
-        
+        int 
     }
     return saved;
 }
