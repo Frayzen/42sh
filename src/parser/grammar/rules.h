@@ -138,6 +138,6 @@ enum status gr_until(struct ast_list *ast);
  * @param ast: the tree to be updated
  * @return enum that tells the status
  */
-enum status gr_for(struct ast **ast);
+enum status gr_for(struct ast_list **ast);
 
 #endif /* !RULES_H */
