@@ -135,26 +135,21 @@ int external_bin(struct ast_cmd *cmd)
     return code;
 }
 
-int exec_sh_command(struct ast_cmd *ast)
-{
-    switch (ast->type)
-    {
-    case ECHO:
-        return exec_echo(ast);
-    case T_TRUE:
-        return 0;
-    case T_FALSE:
-        return 1;
-    default:
-        return external_bin(ast);
-    }
-}
-
 int exec_command(struct ast_cmd *ast)
 {
     assert(ast && AST(ast)->type == AST_CMD);
     assert(ast->argc != 0);
-    int ret = 1;
-    ret = exec_sh_command(ast);
-    return ret;
+    int fds * = setup_redirs(ast);
+    switch (ast->type)
+    {
+    case ECHO:
+        ret = exec_echo(ast);
+    case T_TRUE:
+        ret = 0;
+    case T_FALSE:
+        ret = 1;
+    default:
+        ret = external_bin(ast);
+    }
+    close_redirs(ast, fds);
 }
