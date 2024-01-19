@@ -26,7 +26,7 @@ struct ast *add_child(struct ast *parent, struct ast *child)
 
 int node_to_str(char *buf, struct ast *ast_root)
 {
-    char *ast_types[] = {
+    static const char *ast_types[] = {
         [AST_COMMAND] = "CMD", [AST_LIST] = "LST",  [AST_TOKEN] = "",
         [AST_IF] = "IF",       [AST_REDIR] = "RDR", [AST_NEGATE] = "NOT",
         [AST_PIPE] = "PIPE"
@@ -126,18 +126,18 @@ int write_buf(char *buffer, char *str, int i)
 {
     int size = strlen(str);
     memcpy(buffer + i, str, size);
-    i += size;
-    return i;
+    return i + size;
 }
 
 int each_child(struct ast *ast, char *buffer, int i, char *between)
 {
-    for (int j = 0; j < ast->nb_children - 1; j++)
+    int j = 0;
+    for (; j < ast->nb_children - 1; j++)
     {
         i = ast_rebuild(ast->children[j], buffer, i);
         i = write_buf(buffer, between, i);
     }
-    i = ast_rebuild(ast->children[ast->nb_children - 1], buffer, i);
+    i = ast_rebuild(ast->children[j], buffer, i);
     return i;
 }
 
