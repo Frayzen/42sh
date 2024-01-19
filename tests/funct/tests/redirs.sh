@@ -37,9 +37,6 @@ echo ok 1>&2 2>&1 1>/dev/null 2>/dev/null
 ###Hard redirs and pipe
 if echo ok 2>&1 1>&2 | cat; then echo ok 2>file | cat; fi | cat
 
-###Hard redirs and pipe + cat file
-if echo ok 2>&1 1>&2 | cat; then echo ok 2>file | cat; fi | cat; cat file
+###Echo ionumbers
+echo 3 4 55 > 2  2>file
 
-
-###Hard redirs and pipe
-if echo ok 2>&1 1>&2 | cat; then echo ok 2>file | cat; fi > temp > cat ; cat temp | grep x

@@ -1,42 +1,41 @@
-#include <stddef.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "tools/ast/ast_utils.h"
-#include "tools/gr_tools.h"
+#include "tools/redirection/redirection.h"
 #include "tools/token/token.h"
 /*
 redirection =
 |[IONUMBER] ( '>' | '<' | '>>' | '>&' | '<&' | '>|' | '<>' )
 |WORD ;
 */
-enum status gr_redir(struct ast **ast)
+enum status gr_redir(struct ast_redir *ast)
 {
-    GR_DBG_START(Redir);
-    struct ast *redir_ast = init_ast(AST_REDIR, NULL);
-    struct token *token = tok_peek();
+    struct redirection *redir = calloc(1, sizeof(struct redirection));
 
+    struct token *token = tok_peek();
     if (tok_peek()->type == IO_NUMBER)
     {
-        tok_pop();
-        redir_ast = add_child(redir_ast, init_ast(AST_TOKEN, token));
+        redir->io_number = atoi(token->value);
+        tok_pop_clean();
     }
+    else
+        redir->io_number = -1;
 
     token = tok_peek();
     CHECK_GOTO(token->type != CHEVRON, error);
-    tok_pop();
-    redir_ast = add_child(redir_ast, init_ast(AST_TOKEN, token));
+    redir->type = get_redir_type(token->value);
+    tok_pop_clean();
 
     token = tok_peek();
     CHECK_GOTO(!IS_WORDABLE(token), error);
+    redir->to = token->value;
     tok_pop();
 
-    redir_ast = add_child(redir_ast, init_ast(AST_TOKEN, token));
-    *ast = add_child(*ast, redir_ast);
-    GR_DBG_RET(OK);
+    append_redir(ast, redir);
+    return OK;
 error:
-    destroy_ast(redir_ast);
-    GR_DBG_RET(ERROR);
+    free(redir);
+    return ERROR;
 }
