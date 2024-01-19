@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -39,7 +40,6 @@ int exec_piped(struct ast *ast, int in, int out)
 
 int exec_pipe(struct ast_pipe *ast)
 {
-
     DBG_PIPE("[PIPE] START -----\n");
     assert(AST(ast)->type == AST_PIPE);
     struct ast_list *list = AST_LIST(ast);
