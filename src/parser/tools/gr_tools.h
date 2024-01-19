@@ -2,7 +2,8 @@
 #define GR_TOOLS_H
 
 #include "grammar/rules.h"
-struct gr_state{
+struct gr_state
+{
     struct gr_state *prev;
     char *name;
     int id;
@@ -27,4 +28,3 @@ enum status gr_debug_end(enum status status);
 #define GR_DBG_RET(Value) return gr_debug_end(Value);
 
 #endif /* !GR_TOOLS_H */
-
