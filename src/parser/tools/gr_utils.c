@@ -31,8 +31,10 @@ struct ast **get_children(struct ast *ast)
     int i = 0;
     switch (ast->type)
     {
+    case AST_PIPE:
     case AST_LIST:
-        memcpy(ret, AST_LIST(ast)->children, AST_LIST(ast)->nb_children);
+        for (int i = 0; i < AST_LIST(ast)->nb_children; i++)
+            ret[i] = AST_LIST(ast)->children[i];
         break;
     case AST_IF:
         ret[i++] = AST(AST_IF(ast)->cond);

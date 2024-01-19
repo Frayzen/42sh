@@ -4,7 +4,6 @@
 #define _POSIX_C_SOURCE 200809L
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "ast_utils.h"
@@ -17,7 +16,7 @@ char *g_ast_types[] = {
 
 int node_to_str(char *buf, struct ast *ast_root)
 {
-    if (ast_root == NULL)
+    if (!ast_root)
     {
         strcpy(buf, "[NULL]");
         return 6;

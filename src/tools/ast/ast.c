@@ -20,7 +20,7 @@ void *init_ast(enum ast_type type)
         [AST_PIPE] = sizeof(struct ast_pipe),
         [AST_WHILE] = sizeof(struct ast_loop),
         [AST_UNTIL] = sizeof(struct ast_loop),
-        //TODO later
+        // TODO later
         [AST_ASS] = sizeof(struct ast),
         [AST_AND] = sizeof(struct ast),
         [AST_OR] = sizeof(struct ast),
@@ -37,13 +37,16 @@ void destroy_ast(void *ast)
     switch (AST(ast)->type)
     {
     case AST_CMD:
+        for (int i = 0; i < AST_CMD(ast)->argc; i++)
+            free(AST_CMD(ast)->argv[i]);
         free(AST_CMD(ast)->argv);
         break;
     case AST_IF:
-            destroy_ast(AST_IF(ast)->cond);
-            destroy_ast(AST_IF(ast)->then);
-            destroy_ast(AST_IF(ast)->fallback);
+        destroy_ast(AST_IF(ast)->cond);
+        destroy_ast(AST_IF(ast)->then);
+        destroy_ast(AST_IF(ast)->fallback);
         break;
+    case AST_PIPE:
     case AST_LIST:
         for (int i = 0; i < AST_LIST(ast)->nb_children; i++)
             destroy_ast(AST_LIST(ast)->children[i]);
