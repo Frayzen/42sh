@@ -5,6 +5,7 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
+#include "tools/gr_tools.h"
 
 /*
 simple_command =
@@ -14,6 +15,7 @@ prefix { prefix }
 */
 enum status gr_simple_command(struct ast **ast)
 {
+    GR_DBG_START(SimpleCmd);
     struct ast *ast_cmd = init_ast(AST_COMMAND, NULL);
     // {prefix}
     int nb_prefix = 0;
@@ -33,9 +35,9 @@ enum status gr_simple_command(struct ast **ast)
         continue;
 
     *ast = add_child(*ast, ast_cmd);
-    return OK;
+    GR_DBG_RET(OK);
 error:
     destroy_ast(ast_cmd);
 
-    return ERROR;
+    GR_DBG_RET(ERROR);
 }

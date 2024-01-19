@@ -6,11 +6,13 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
+#include "tools/gr_tools.h"
 
 // rule_while = 'while' compound_list 'do' compound_list 'done' ;
 
 enum status gr_while(struct ast **ast)
 {
+    GR_DBG_START(While);
     struct ast *wh_ast = init_ast(AST_WHILE, NULL);
 
     CHECK_GOTO(tok_peek()->type != WHILE, error);
@@ -26,8 +28,8 @@ enum status gr_while(struct ast **ast)
     tok_pop_clean();
 
     *ast = add_child(*ast, wh_ast);
-    return OK;
+    GR_DBG_RET(OK);
 error:
     destroy_ast(wh_ast);
-    return ERROR;
+    GR_DBG_RET(ERROR);
 }

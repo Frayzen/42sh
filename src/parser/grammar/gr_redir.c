@@ -5,6 +5,7 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
+#include "tools/gr_tools.h"
 #include "tools/token/token.h"
 /*
 redirection =
@@ -13,6 +14,7 @@ redirection =
 */
 enum status gr_redir(struct ast **ast)
 {
+    GR_DBG_START(Redir);
     struct ast *redir_ast = init_ast(AST_REDIR, NULL);
     struct token *token = tok_peek();
 
@@ -33,8 +35,8 @@ enum status gr_redir(struct ast **ast)
 
     redir_ast = add_child(redir_ast, init_ast(AST_TOKEN, token));
     *ast = add_child(*ast, redir_ast);
-    return OK;
+    GR_DBG_RET(OK);
 error:
     destroy_ast(redir_ast);
-    return ERROR;
+    GR_DBG_RET(ERROR);
 }
