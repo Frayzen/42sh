@@ -1,12 +1,11 @@
 #ifndef AST_UTILS_H
 #define AST_UTILS_H
 #include "tools/ast/ast.h"
-
 /***
  * Prints the AST
  * @param ast AST to be printed
  */
-void pretty_print_ast(struct ast *ast);
+void debug_pretty_print(struct ast *ast);
 
 /*
  * For the following AST :

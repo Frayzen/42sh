@@ -105,7 +105,6 @@ int exec_echo(struct ast_cmd *cmd)
     }
     print_echo(cmd, i, interpret_bslash, print_nline);
     fflush(NULL);
-    close_redirs(cmd);
     return 0;
 }
 
