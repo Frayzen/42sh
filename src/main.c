@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
         {
             ast = NULL;
             print_error(GRAMMAR_ERROR_ENTRY);
+            ret = 2;
             continue;
         }
         if (get_env_flag()->pretty_print)

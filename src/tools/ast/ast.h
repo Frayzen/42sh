@@ -16,6 +16,8 @@ enum ast_type
     AST_PIPE,
     AST_WHILE,
     AST_UNTIL,
+    AST_AND,
+    AST_OR
 };
 
 struct ast

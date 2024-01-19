@@ -6,6 +6,7 @@
 
 #define IS_WORDABLE(t) ((t)->type >= IF)
 #define IS_COMMAND(t) ((t)->type >= T_TRUE)
+#define IS_OPERATOR(t) ((t)->type == AND || (t)->type == OR)
 
 // /!\ Do not add gaps inside of this enum (see TOK_TYPES_LT)
 enum token_type
@@ -22,9 +23,11 @@ enum token_type
     // wildcard
     QUOTE,
 
+    IO_NUMBER,
+    AND,
+    OR,
     // WORDABLES UNDER
 
-    IO_NUMBER,
     // condition
     IF,
     THEN,
