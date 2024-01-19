@@ -2,8 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "parser/tools/redirection.h"
+#include "tools/redirection/redirection.h"
 
 struct ast **set_ast_root(struct ast **ast)
 {

@@ -2,6 +2,8 @@ lib_LIBRARIES = libtools.a
 
 libtools_a_SOURCES = \
 	ring_buffer/ring_buffer.c ring_buffer/ring_buffer.h\
+	redirection/redirection.h \
+	redirection/redirection.c \
 	token/token.c token/token.h\
 	ast/ast.c ast/ast.h\
 	ast/ast_utils.c ast/ast_utils.h\

@@ -18,8 +18,6 @@ libparser_a_SOURCES = \
 	grammar/gr_until.c \
 	tools/gr_utils.c \
 	tools/gr_utils.h \
-	tools/redirection.h \
-	tools/redirection.c \
 	grammar/rules.h
 libparser_a_CPPFLAGS = -I$(top_srcdir)/src
 libparser_a_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic

@@ -3,7 +3,7 @@
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "tools/redirection.h"
+#include "tools/redirection/redirection.h"
 #include "tools/token/token.h"
 /*
 redirection =
@@ -25,8 +25,8 @@ enum status gr_redir(struct ast_redir *ast)
 
     token = tok_peek();
     CHECK_GOTO(token->type != CHEVRON, error);
-    redir->redir = token->value;
-    tok_pop();
+    redir->type = get_redir_type(token->value);
+    tok_pop_clean();
 
     token = tok_peek();
     CHECK_GOTO(!IS_WORDABLE(token), error);

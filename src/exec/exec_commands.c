@@ -118,9 +118,13 @@ int external_bin(struct ast_cmd *cmd)
     if (pid == 0)
     {
         DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n",
-                 cmd->argv[0], STDIN, STDOUT, 2);
-        dup2(STDIN, 0);
-        dup2(STDOUT, 1);
+                 cmd->argv[0], STDIN, STDOUT, STDERR);
+        // Apply the file descriptors before executing
+        for (int i = 0; i < 3; i++)
+        {
+            dup2(FDS[i], i);
+            close(FDS[i]); 
+        }
         execvp(cmd->argv[0], cmd->argv);
         exit(127);
     }
@@ -139,7 +143,8 @@ int exec_command(struct ast_cmd *ast)
 {
     assert(ast && AST(ast)->type == AST_CMD);
     assert(ast->argc != 0);
-    int fds * = setup_redirs(ast);
+    int *fds = setup_redirs(AST_REDIR(ast));
+    int ret = 1;
     switch (ast->type)
     {
     case ECHO:
@@ -151,5 +156,6 @@ int exec_command(struct ast_cmd *ast)
     default:
         ret = external_bin(ast);
     }
-    close_redirs(ast, fds);
+    close_redirs(AST_REDIR(ast), fds);
+    return ret;
 }
