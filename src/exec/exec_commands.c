@@ -122,7 +122,12 @@ int external_bin(struct ast_cmd *cmd)
                  cmd->argv[0], STDIN, STDOUT, STDERR);
         // Apply the file descriptors before executing
         for (int i = 0; i < 3; i++)
+        {
             dup2(FDS[i], i);
+            // Do not close if STDOUT = STOUD_FILENO
+            if (i != FDS[i])
+                close(FDS[i]);
+        }
         dprintf(STDERR_FILENO, "This is an error\n");
         execvp(cmd->argv[0], cmd->argv);
         exit(127);
