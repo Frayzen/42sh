@@ -1,3 +1,4 @@
+#include "tools/str/string.h"
 #define _XOPEN_SOURCE 700
 #include "token.h"
 
@@ -39,18 +40,6 @@ bool chevron_type(const struct string *str)
     if (!strcmp("<>", str->value))
         return 1;
     return 0;
-}
-
-bool is_number(char *val)
-{
-    int i = 0;
-    while (val[i])
-    {
-        if (val[i] > '9' || val[i] < '0')
-            return false;
-        i++;
-    }
-    return true;
 }
 
 int get_type(const struct string *str)

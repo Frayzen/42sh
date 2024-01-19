@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "tools/redirection/redirection.h"
 #include <assert.h>
 #include <fcntl.h>
 #include <stdbool.h>
@@ -144,18 +145,24 @@ int exec_command(struct ast_cmd *ast)
     assert(ast && AST(ast)->type == AST_CMD);
     assert(ast->argc != 0);
     int *fds = setup_redirs(AST_REDIR(ast));
+    if (!fds)
+        return 1;
     int ret = 1;
     switch (ast->type)
     {
     case ECHO:
         ret = exec_echo(ast);
+        break;
     case T_TRUE:
         ret = 0;
+        break;
     case T_FALSE:
         ret = 1;
+        break;
     default:
         ret = external_bin(ast);
+        break;
     }
-    close_redirs(AST_REDIR(ast), fds);
+    close_redirs(fds);
     return ret;
 }

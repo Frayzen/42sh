@@ -14,7 +14,7 @@ int exec_piped(struct ast *ast, int in, int out)
     int oldout = STDIN;
     STDIN = in;
     STDOUT = out;
-    DBG_PIPE("[PIPE] New stdin=%d | stdout=%d\n", STDIN, STDOUT);
+    DBG_PIPE("[PIPE] New stdin=%d | stdout=%d\n\n", STDIN, STDOUT);
     switch (ast->type)
     {
     case AST_CMD:
@@ -38,11 +38,13 @@ int exec_piped(struct ast *ast, int in, int out)
 
 int exec_pipe(struct ast_pipe *ast)
 {
+
+    DBG_PIPE("[PIPE] START -----\n");
     assert(AST(ast)->type == AST_PIPE);
     struct ast_list *list = AST_LIST(ast);
     int ret = 1;
     int last_read = dup(STDIN);
-    DBG_PIPE("Duplicate %d in %d\n", STDIN, last_read);
+    DBG_PIPE("[PIPE] Duplicate %d in %d\n", STDIN, last_read);
     int i = 0;
     for (; i < list->nb_children - 1; i++)
     {
@@ -63,5 +65,6 @@ int exec_pipe(struct ast_pipe *ast)
     fflush(NULL);
     if (ast->negated)
         ret = !ret;
+    DBG_PIPE("[PIPE] ------ END\n\n");
     return ret;
 }

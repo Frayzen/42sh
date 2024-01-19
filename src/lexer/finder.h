@@ -2,15 +2,9 @@
 #define FINDER_H
 
 #include <stdbool.h>
-#include <stddef.h>
+#include "tools/str/string.h"
 
 #define IS_BLANK(Pending) ((Pending)->blank)
-
-struct string
-{
-    char *value;
-    size_t size;
-};
 
 struct pending
 {
