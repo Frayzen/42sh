@@ -5,12 +5,14 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
+#include "tools/gr_tools.h"
 #include "tools/token/token.h"
 // rule_if = 'if' compound_list 'then' compound_list [else_clause] 'fi' ;
 enum status gr_if(struct ast **ast)
 {
+    GR_DBG_START(If);
     if (tok_peek()->type != IF)
-        return ERROR;
+        GR_DBG_RET(ERROR);
     tok_pop_clean();
     struct ast *if_ast = init_ast(AST_IF, NULL);
 
@@ -25,9 +27,9 @@ enum status gr_if(struct ast **ast)
 
     tok_pop_clean();
     *ast = add_child(*ast, if_ast);
-    return OK;
+    GR_DBG_RET(OK);
 
 error:
     destroy_ast(if_ast);
-    return ERROR;
+    GR_DBG_RET(ERROR);
 }

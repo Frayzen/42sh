@@ -5,6 +5,7 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
+#include "tools/gr_tools.h"
 #include "tools/token/token.h"
 /*
 compound_list =
@@ -12,6 +13,7 @@ compound_list =
 */
 enum status gr_compound_list(struct ast **ast)
 {
+    GR_DBG_START(CompoundList);
     while (tok_peek()->type == NEWLINE)
         tok_pop_clean();
     struct ast *ls_ast = init_ast(AST_LIST, NULL);
@@ -34,9 +36,9 @@ enum status gr_compound_list(struct ast **ast)
         tok_pop_clean();
 
     *ast = add_child(*ast, ls_ast);
-    return OK;
+    GR_DBG_RET(OK);
 
 error:
     destroy_ast(ls_ast);
-    return ERROR;
+    GR_DBG_RET(ERROR);
 }

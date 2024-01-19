@@ -6,22 +6,20 @@
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
+#include "tools/gr_tools.h"
 #include "tools/token/token.h"
 
 enum status gr_input(struct ast **ast)
 {
-    if (tok_peek()->terminal)
-    {
-        tok_pop_clean();
-        return OK;
-    }
-    CHECK_GOTO(gr_list(ast) == ERROR, error);
-    CHECK_GOTO(!tok_peek()->terminal, error);
-
+    GR_DBG_START(Input);
+    gr_list(ast);
+    struct token *trm = tok_peek();
     tok_pop_clean();
-    return OK;
+    if (!trm->terminal)
+        goto error;
+    GR_DBG_RET(OK);
 error:
     comsume_all();
     destroy_ast(*ast);
-    return ERROR;
+    GR_DBG_RET(ERROR);
 }

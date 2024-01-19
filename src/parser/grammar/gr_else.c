@@ -5,6 +5,7 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
+#include "tools/gr_tools.h"
 /***
  else_clause =
 'else' compound_list
@@ -13,14 +14,15 @@
 ***/
 enum status gr_else(struct ast **ast)
 {
+    GR_DBG_START(Else);
     struct token *token = tok_peek();
     if (token->type == ELSE)
     {
         tok_pop_clean();
-        return gr_compound_list(ast);
+        GR_DBG_RET(gr_compound_list(ast));
     }
     if (token->type != ELIF)
-        return ERROR;
+        GR_DBG_RET(ERROR);
     tok_pop_clean();
     struct ast *elif_ast = init_ast(AST_IF, NULL);
     CHECK_GOTO(gr_compound_list(&elif_ast) == ERROR, error);
@@ -29,8 +31,8 @@ enum status gr_else(struct ast **ast)
     CHECK_GOTO(gr_compound_list(&elif_ast) == ERROR, error);
     gr_else(&elif_ast);
     *ast = add_child(*ast, elif_ast);
-    return OK;
+    GR_DBG_RET(OK);
 error:
     destroy_ast(elif_ast);
-    return ERROR;
+    GR_DBG_RET(ERROR);
 }

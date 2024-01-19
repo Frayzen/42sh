@@ -20,6 +20,8 @@ enum status
     ERROR,
 };
 
+typedef enum status (*gr_rule)(struct ast **ast);
+
 /***
  * Grammar rule for element
  * @param ast: the tree to be updated
