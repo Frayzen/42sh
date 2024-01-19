@@ -124,8 +124,11 @@ int external_bin(struct ast_cmd *cmd)
         for (int i = 0; i < 3; i++)
         {
             dup2(FDS[i], i);
-            close(FDS[i]);
+            // Do not close if STDOUT = STOUD_FILENO
+            if (i != FDS[i])
+                close(FDS[i]);
         }
+        dprintf(STDERR_FILENO, "This is an error\n");
         execvp(cmd->argv[0], cmd->argv);
         exit(127);
     }
@@ -136,7 +139,7 @@ int external_bin(struct ast_cmd *cmd)
         code = WEXITSTATUS(returncode);
     if (code == 127)
         print_error(FORK_ERROR);
-    fflush(stdout);
+    fflush(NULL);
     return code;
 }
 

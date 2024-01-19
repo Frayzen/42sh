@@ -1,3 +1,5 @@
+
+#define _POSIX_C_SOURCE 200809L
 #include "redirection.h"
 
 #include <assert.h>
@@ -132,4 +134,14 @@ void destroy_redir(struct ast_redir *ast)
         free(ast->redirs[i]);
     }
     free(ast->redirs);
+}
+
+void setup_debug_fds(void)
+{
+    dup2(STDOUT_FILENO, DBG_OUT);
+}
+
+void clean_debug_fds(void)
+{
+    close(DBG_OUT);
 }
