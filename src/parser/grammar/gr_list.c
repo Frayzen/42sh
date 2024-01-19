@@ -1,6 +1,3 @@
-#include <stddef.h>
-#include <stdio.h>
-
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
@@ -9,7 +6,7 @@
 /*
 list = and_or { ';' and_or } [ ';' ] ;
 */
-enum status gr_list(void)
+enum status gr_list(struct ast **new_list)
 {
     struct ast_list *list = init_ast(AST_LIST);
     CHECK_GOTO(gr_and_or(list) == ERROR, error);
@@ -23,6 +20,7 @@ enum status gr_list(void)
     }
     if (tok_peek()->type == SEMI_COLON)
         tok_pop_clean();
+    *new_list = AST(list);
     return OK;
 error:
     destroy_ast(list);

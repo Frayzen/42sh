@@ -12,10 +12,10 @@ enum ast_type
     AST_LIST,
     AST_IF,
     AST_ASS,
-    AST_NEGATE,
     AST_PIPE,
     AST_WHILE,
     AST_UNTIL,
+    //NOT USED
     AST_AND,
     AST_OR
 };
@@ -56,7 +56,6 @@ struct ast_loop
     struct ast base;
     struct ast_list *cond;
     struct ast_list *exec;
-    bool negate_cond;
 };
 
 #define AST_REDIR(Base) ((struct ast_redir *)(Base))

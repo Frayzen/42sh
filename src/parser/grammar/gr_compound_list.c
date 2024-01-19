@@ -1,7 +1,6 @@
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "tools/ast/ast_utils.h"
 #include "tools/token/token.h"
 /*
 compound_list =
@@ -21,7 +20,7 @@ enum status gr_compound_list(struct ast_list **ast)
         tok_pop_clean();
         while (tok_peek()->type == NEWLINE)
             tok_pop_clean();
-        state = gr_and_or(&ls_ast);
+        state = gr_and_or(ls_ast);
     }
 
     if (tok_peek()->type == SEMI_COLON)

@@ -1,4 +1,3 @@
-#include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
 /*
@@ -14,7 +13,8 @@ enum status gr_command(struct ast_pipe *pipe)
         return OK;
     if (gr_shell_cmd(list) == ERROR)
         return ERROR;
-    while (gr_redir(ast) == OK)
+    struct ast_sh* sh = AST_SH(list->children[list->nb_children]);
+    while (gr_redir(AST_REDIR(sh)) == OK)
         ;
     return OK;
 }

@@ -1,6 +1,3 @@
-#include <stddef.h>
-#include <stdio.h>
-
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"

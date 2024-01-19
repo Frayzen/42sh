@@ -184,7 +184,7 @@ int exec_sh_command(struct ast *ast)
     }
 }
 
-int exec_command(struct ast *ast)
+int exec_command(struct ast_cmd *ast)
 {
     assert(ast && ast->type == AST_CMD);
     assert(ast->nb_children != 0);

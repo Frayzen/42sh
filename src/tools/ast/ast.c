@@ -17,11 +17,11 @@ void *init_ast(enum ast_type type)
         [AST_IF] = sizeof(struct ast_if),
         [AST_LIST] = sizeof(struct ast_list),
         [AST_CMD] = sizeof(struct ast_cmd),
-        [AST_ASS] = sizeof(struct ast),
-        [AST_NEGATE] = sizeof(struct ast),
         [AST_PIPE] = sizeof(struct ast_pipe),
-        [AST_WHILE] = sizeof(struct ast),
-        [AST_UNTIL] = sizeof(struct ast),
+        [AST_WHILE] = sizeof(struct ast_loop),
+        [AST_UNTIL] = sizeof(struct ast_loop),
+        //TODO later
+        [AST_ASS] = sizeof(struct ast),
         [AST_AND] = sizeof(struct ast),
         [AST_OR] = sizeof(struct ast),
     };

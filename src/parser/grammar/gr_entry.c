@@ -10,7 +10,7 @@ enum status gr_input(struct ast **ast)
         tok_pop_clean();
         return OK;
     }
-    CHECK_GOTO(gr_list(ast) == ERROR, error);
+    CHECK_GOTO(gr_list() == ERROR, error);
     CHECK_GOTO(!tok_peek()->terminal, error);
 
     tok_pop_clean();

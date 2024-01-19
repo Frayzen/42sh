@@ -67,10 +67,10 @@ enum status gr_and_or(struct ast_list *list);
 
 /***
  * Grammar rule for list
+ * @param new_list the pointer that will be filled by the new list
  * @return enum that tells the status
  */
-
-enum status gr_list(void);
+enum status gr_list(struct ast **new_list);
 
 /***
  * Grammar rule for compound lists
@@ -90,18 +90,18 @@ enum status gr_else(struct ast_if *ast);
 
 /***
  * Grammar rule for if
- * @param ast: the tree to be updated
+ * @param list: the list to be updated
  * @return enum that tells the status
  */
 
-enum status gr_if(struct ast **ast);
+enum status gr_if(struct ast_list *ast);
 
 /***
  * Grammar rule for shell comand
- * @param ast: the tree to be updated
+ * @param list: the list to be updated
  * @return enum that tells the status
  */
-enum status gr_shell_cmd(struct ast **ast);
+enum status gr_shell_cmd(struct ast_list *list);
 
 /***
  * Grammar rule for redirection
@@ -119,15 +119,16 @@ enum status gr_prefix(struct ast_cmd *cmd);
 
 /***
  * Grammar rule for while
- * @param ast: the tree to be updated
+ * @param list: the list to be updated
  * @return enum that tells the status
  */
-enum status gr_while(struct ast **ast);
+enum status gr_while(struct ast_list *ast);
 
 /***
  * Grammar rule for until
- * @param ast: the tree to be updated
+ * @param list: the list to be updated
  * @return enum that tells the status
  */
-enum status gr_until(struct ast **ast);
+enum status gr_until(struct ast_list *ast);
+
 #endif /* !RULES_H */

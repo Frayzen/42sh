@@ -18,4 +18,11 @@ void append_arg(struct ast_cmd *cmd, char *arg);
  */
 void add_child(struct ast_list *list, struct ast *child);
 
+/***
+ * Retrieve the children from any kind of ast
+ * /!\ This function is for DEBUG purposes only
+ * @return a static allocated array to the ast pointers
+ */
+struct ast** get_children(struct ast *ast);
+
 #endif /* !GR_UTILS_H */
