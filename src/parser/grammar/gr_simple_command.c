@@ -28,7 +28,9 @@ enum status gr_simple_command(struct ast_list *list)
     // {element}
     while (gr_element(cmd) != ERROR)
         continue;
-
+    // To make sure argv is null terminated
+    append_arg(cmd, NULL);
+    cmd->argc--;
     add_child(list, AST(cmd));
     return OK;
 error:

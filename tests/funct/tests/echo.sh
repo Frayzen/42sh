@@ -101,3 +101,9 @@ echo 3 4 55 > 2  2>file
 
 ###Lots of dash option
 echo -n -n -e -e -n -n -n -e 42'\nsh'
+
+###Empties n
+echo -n
+echo -e
+echo -E
+echo -Een

@@ -95,7 +95,7 @@ int exec_echo(struct ast_cmd *cmd)
     int i = 1;
     bool print_nline = true;
     bool interpret_bslash = false;
-    while (i < cmd->argc - 1)
+    while (i < cmd->argc)
     {
         const char *content = cmd->argv[i];
         if (!set_option_echo(content, &interpret_bslash, &print_nline))
