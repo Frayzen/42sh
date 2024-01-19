@@ -2,6 +2,7 @@
 #define AST_H
 #include <fcntl.h>
 #include <stdbool.h>
+
 #include "tools/token/token.h"
 
 #define AST_ROOT (set_ast_root(NULL))
@@ -16,7 +17,7 @@ enum ast_type
     AST_PIPE,
     AST_WHILE,
     AST_UNTIL,
-    //NOT USED
+    // NOT USED
     AST_AND,
     AST_OR
 };
@@ -36,7 +37,8 @@ struct ast_list
 };
 
 #define AST_PIPE(Base) ((struct ast_pipe *)(Base))
-struct ast_pipe{
+struct ast_pipe
+{
     struct ast_list list;
     bool negated;
 };
@@ -63,7 +65,7 @@ struct ast_loop
 struct ast_redir
 {
     struct ast base;
-    struct redirection** redirs;
+    struct redirection **redirs;
     int redir_nb;
 };
 

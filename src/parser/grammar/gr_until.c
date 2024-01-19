@@ -22,7 +22,7 @@ enum status gr_until(struct ast_list *ast)
     CHECK_GOTO(tok_peek()->type != DONE, error);
     tok_pop_clean();
 
-     add_child(ast, AST(utl_ast));
+    add_child(ast, AST(utl_ast));
     return OK;
 error:
     destroy_ast(utl_ast);

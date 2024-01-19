@@ -1,4 +1,5 @@
 #include <stdlib.h>
+
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
@@ -11,14 +12,15 @@ redirection =
 */
 enum status gr_redir(struct ast_redir *ast)
 {
-    struct redirection* redir = calloc(1, sizeof(struct redirection));
+    struct redirection *redir = calloc(1, sizeof(struct redirection));
 
     struct token *token = tok_peek();
     if (tok_peek()->type == IO_NUMBER)
     {
         redir->io_number = atoi(token->value);
         tok_pop();
-    }else
+    }
+    else
         redir->io_number = -1;
 
     token = tok_peek();

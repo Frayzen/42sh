@@ -2,7 +2,6 @@
 #define AST_UTILS_H
 #include "tools/ast/ast.h"
 
-
 /***
  * Prints the AST
  * @param ast AST to be printed

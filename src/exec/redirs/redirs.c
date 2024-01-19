@@ -94,7 +94,7 @@ bool apply_redirection(struct sh_command *cmd, struct ast_redir *redir_ast)
 {
     cmd = cmd + 1;
     redir_ast = redir_ast + 1;
-    //TODO
+    // TODO
     /* assert(redir_ast->type == AST_REDIR && redir_ast->nb_children >= 2); */
     /* struct redir redir = { 0 }; */
     /* build_redir(redir_ast, &redir); */
