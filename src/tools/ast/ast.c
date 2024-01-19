@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "parser/tools/redirection.h"
 
 struct ast **set_ast_root(struct ast **ast)
 {
@@ -40,6 +41,9 @@ void destroy_ast(void *ast)
         for (int i = 0; i < AST_CMD(ast)->argc; i++)
             free(AST_CMD(ast)->argv[i]);
         free(AST_CMD(ast)->argv);
+        /* FALLTHROUGH */
+    case AST_SH:
+        destroy_redir(AST_REDIR(ast));
         break;
     case AST_IF:
         destroy_ast(AST_IF(ast)->cond);

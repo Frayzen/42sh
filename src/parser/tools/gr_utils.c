@@ -1,5 +1,6 @@
 #include "gr_utils.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -8,8 +9,10 @@
 
 void append_arg(struct ast_cmd *cmd, char *arg)
 {
-    cmd->argv = realloc(cmd->argv, ++cmd->argc * (sizeof(char *)));
+    cmd->argv = realloc(cmd->argv, (++cmd->argc + 1) * (sizeof(char *)));
     cmd->argv[cmd->argc - 1] = arg;
+    // To make sure argv is null terminated
+    cmd->argv[cmd->argc] = NULL;
 }
 
 void add_child(struct ast_list *list, struct ast *child)

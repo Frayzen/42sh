@@ -72,7 +72,7 @@ struct ast_redir
 #define AST_CMD(Base) ((struct ast_cmd *)(Base))
 struct ast_cmd
 {
-    struct ast redirs;
+    struct ast_redir redirs;
     enum token_type type;
     char **argv;
     int argc;

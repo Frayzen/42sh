@@ -18,7 +18,7 @@ enum status gr_redir(struct ast_redir *ast)
     if (tok_peek()->type == IO_NUMBER)
     {
         redir->io_number = atoi(token->value);
-        tok_pop();
+        tok_pop_clean();
     }
     else
         redir->io_number = -1;

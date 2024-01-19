@@ -16,7 +16,6 @@ enum status gr_simple_command(struct ast_list *list)
     int nb_prefix = 0;
     while (gr_prefix(cmd) != ERROR)
         nb_prefix++;
-
     struct token *tok_word = tok_peek();
     if (!IS_COMMAND(tok_word) && nb_prefix == 0)
         goto error;
@@ -24,13 +23,10 @@ enum status gr_simple_command(struct ast_list *list)
     append_arg(cmd, tok_word->value);
     cmd->type = tok_word->type;
     tok_pop();
-
     // {element}
     while (gr_element(cmd) != ERROR)
         continue;
-    // To make sure argv is null terminated
-    append_arg(cmd, NULL);
-    cmd->argc--;
+    // {element}
     add_child(list, AST(cmd));
     return OK;
 error:

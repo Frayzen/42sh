@@ -19,7 +19,7 @@ void print_echo(struct ast_cmd *cmd, int i, bool interpret_bslash,
                 bool print_nline)
 {
     /* DBG_PIPE("Echo command [OUT] %d\n", cmd->redirs_fds[1]); */
-    for (; i < cmd->argc; i++)
+    for (; i < cmd->argc - 1; i++)
     {
         const char *content = cmd->argv[i];
         int id = 0;
