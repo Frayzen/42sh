@@ -16,6 +16,8 @@ enum status gr_shell_cmd(struct ast **ast)
         GR_DBG_RET(OK);
     if (gr_until(ast) == OK)
         GR_DBG_RET(OK);
+    if (gr_for(ast) == OK)
+        GR_DBG_RET(OK);
 
     GR_DBG_RET(ERROR);
 }

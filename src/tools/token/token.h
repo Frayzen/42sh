@@ -37,6 +37,7 @@ enum token_type
 
     WHILE,
     UNTIL,
+    FOR,
     DO,
     DONE,
 

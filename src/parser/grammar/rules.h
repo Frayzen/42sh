@@ -134,4 +134,12 @@ enum status gr_while(struct ast **ast);
  * @return enum that tells the status
  */
 enum status gr_until(struct ast **ast);
+
+/***
+ * Grammar rule for for
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_for(struct ast **ast);
+
 #endif /* !RULES_H */
