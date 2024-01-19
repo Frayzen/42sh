@@ -103,7 +103,6 @@ int exec_echo(struct ast_cmd *cmd)
         i++;
     }
     print_echo(cmd, i, interpret_bslash, print_nline);
-    free(cmd->argv);
     fflush(NULL);
     return 0;
 }

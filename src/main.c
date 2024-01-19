@@ -30,9 +30,9 @@ int main(int argc, char *argv[])
         }
         if (get_env_flag()->pretty_print)
             pretty_print_ast(ast);
-        /* ret = exec_entry(ast); */
-        /* assert(DICT->nb_entries == 0); */
-        /* fflush(NULL); */
+        ret = exec_entry(ast);
+        assert(DICT->nb_entries == 0);
+        fflush(NULL);
         destroy_ast(ast);
         ast = NULL;
     } while (!get_env_flag()->null_received);
