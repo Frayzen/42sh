@@ -33,8 +33,9 @@ enum error_type
 void clean(struct ast *ast);
 
 /***
- * Cleans the tree, prints the message associatedto the error type and exits
- * with the value associated to the error type
+ * Cleans the tree, prints the message associated to the error type and exits
+ * with the value associated to the error type IF the shell is NOT interactive
+ * Do NOT expect this function to exit the program
  * @param type of the error
  */
 void exit_gracefully(enum error_type type);

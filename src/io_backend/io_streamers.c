@@ -71,6 +71,7 @@ void io_streamer_string(int argc, char **argv)
 
 void io_streamer_stdin(void)
 {
+    get_env_flag()->is_interactive = true;
     set_fd(stdin);
 }
 

@@ -18,11 +18,12 @@ struct pending
     bool force_word;
     bool backslashed;
     bool blank;
+    bool error;
 };
 
 /***
  * finder: gets character by character and return the string token
- * @return a string struct
+ * @return a string struct or NULL on error
  * @see struct string
  */
 const struct pending *finder(void);

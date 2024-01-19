@@ -7,6 +7,7 @@ struct env *get_env_flag(void)
     static struct env flag = { .pretty_print = false,
                                .verbose = false,
                                .debug_pipe = false,
+                               .is_interactive = false,
                                .null_received = false };
     return &flag;
 }

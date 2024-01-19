@@ -96,6 +96,23 @@ bool chevron(struct pending *p, char c)
 }
 
 // return true if finished
+bool quotes(struct pending *p, char c)
+{
+    p->blank = false;
+    p->force_word = true;
+    io_pop();
+    skip_until(p, c, APPEND_CHARS);
+    if (!io_peek())
+    {
+        p->error = true;
+        exit_gracefully(UNEXPECTED_EOF);
+        return true;
+    }
+    io_pop();
+    return false;
+}
+
+// return true if finished
 bool consume(struct pending *p, char c)
 {
     // Any external function in the switch should handle every pop involved
@@ -106,14 +123,7 @@ bool consume(struct pending *p, char c)
         break;
     case '\'':
     case '"':
-        p->blank = false;
-        p->force_word = true;
-        io_pop();
-        skip_until(p, c, APPEND_CHARS);
-        if (!io_peek())
-            exit_gracefully(UNEXPECTED_EOF);
-        io_pop();
-        return false;
+        return quotes(p, c);
     case '#':
         if (IS_BLANK(p))
         {
@@ -167,6 +177,11 @@ const struct pending *finder(void)
     memset(&p, 0, sizeof(struct pending));
     p.blank = true;
     consumer(&p);
+    if (p.error)
+    {
+        free(p.str.value);
+        return NULL;
+    }
     append_char(&p, '\0');
     p.str.size--;
     return &p;

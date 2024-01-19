@@ -1,6 +1,8 @@
 #ifndef ENV_H
 #define ENV_H
 
+#include <sys/wait.h>
+
 #include "tools/token/token.h"
 extern char **environ;
 // need to add the default value in the get_env_flag function for each new flag
@@ -22,6 +24,7 @@ struct env
     bool pretty_print;
     bool verbose;
     bool debug_pipe;
+    bool is_interactive;
     int fds[2];
 };
 
