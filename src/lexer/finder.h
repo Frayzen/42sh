@@ -2,6 +2,7 @@
 #define FINDER_H
 
 #include <stdbool.h>
+
 #include "tools/str/string.h"
 
 #define IS_BLANK(Pending) ((Pending)->blank)

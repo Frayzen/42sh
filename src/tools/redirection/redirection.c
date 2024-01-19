@@ -1,3 +1,5 @@
+
+#define _POSIX_C_SOURCE 200809L
 #include "redirection.h"
 
 #include <assert.h>
@@ -66,12 +68,14 @@ int *setup_redirs(struct ast_redir *ast)
         }
         if (redir->type & RT_MASK_IN)
         {
-            DBG_PIPE("[REDIR] Close and set FD[%d] to %d (IN)\n", fd_left, fd_right);
+            DBG_PIPE("[REDIR] Close and set FD[%d] to %d (IN)\n", fd_left,
+                     fd_right);
             dup2(fd_left, FDS[fd_right]);
         }
         else
         {
-            DBG_PIPE("[REDIR] Close and set FD[%d] to %d (OUT)\n", fd_right, fd_left);
+            DBG_PIPE("[REDIR] Close and set FD[%d] to %d (OUT)\n", fd_right,
+                     fd_left);
             dup2(fd_right, FDS[fd_left]);
         }
     }
@@ -130,4 +134,14 @@ void destroy_redir(struct ast_redir *ast)
         free(ast->redirs[i]);
     }
     free(ast->redirs);
+}
+
+void setup_debug_fds(void)
+{
+    dup2(STDOUT_FILENO, DBG_OUT);
+}
+
+void clean_debug_fds(void)
+{
+    close(DBG_OUT);
 }

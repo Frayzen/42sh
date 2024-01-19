@@ -31,7 +31,7 @@ struct ast
 #define AST_LIST(Base) ((struct ast_list *)(Base))
 struct ast_list
 {
-    struct ast *base;
+    struct ast base;
     int nb_children;
     struct ast **children;
 };
