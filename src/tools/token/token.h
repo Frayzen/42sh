@@ -49,6 +49,8 @@ enum token_type
     ECHO,
     // terminals
     WORD,
+
+    ASSIGNMENT_WORD,
 };
 
 #define TOK_TYPES_LT (toktype_lookup())
