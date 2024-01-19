@@ -3,14 +3,6 @@
 #include "tools/ast/ast.h"
 
 /***
- * add_child: add a token to a tree
- * @param parent: the parent tree that is receiving the child
- * @param child: the child tree that will be appended
- * @return the parent tree with child tree as child
- */
-struct ast *add_child(struct ast *parent, struct ast *child);
-
-/***
  * Prints the AST
  * @param ast AST to be printed
  */
@@ -46,19 +38,4 @@ void pretty_print_ast(struct ast *ast);
  * @return the unique malloced string associated with the AST
  */
 char *ast_to_str(struct ast *ast);
-
-/***
- * Rebuild the instruction from the ast
- * @param ast the ast to recreate the instruction from
- * @param buffer a buffer large enough
- * @param i 0 initially
- */
-int ast_rebuild(struct ast *ast, char *buffer, int i);
-
-/***
- * Prints all three (pretty_print ast_to_str ast_rebuild) and print them
- * @param ast the ast to debug print
- */
-void debug_pretty_print(struct ast *ast);
-
 #endif // AST_UTILS_H

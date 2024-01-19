@@ -2,8 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "token/token.h"
+#include "tools/redirection/redirection.h"
 
 struct ast **set_ast_root(struct ast **ast)
 {
@@ -13,24 +12,57 @@ struct ast **set_ast_root(struct ast **ast)
     return ast_root;
 }
 
-struct ast *init_ast(enum ast_type type, struct token *token)
+void *init_ast(enum ast_type type)
 {
-    struct ast *ast = calloc(1, sizeof(struct ast));
+    static const size_t ast_size[] = {
+        [AST_IF] = sizeof(struct ast_if),
+        [AST_LIST] = sizeof(struct ast_list),
+        [AST_CMD] = sizeof(struct ast_cmd),
+        [AST_PIPE] = sizeof(struct ast_pipe),
+        [AST_WHILE] = sizeof(struct ast_loop),
+        [AST_UNTIL] = sizeof(struct ast_loop),
+        // TODO later
+        [AST_ASS] = sizeof(struct ast),
+        [AST_AND] = sizeof(struct ast),
+        [AST_OR] = sizeof(struct ast),
+    };
+    struct ast *ast = calloc(1, ast_size[type]);
     ast->type = type;
-    ast->token = token;
     return ast;
 }
 
-void destroy_ast(struct ast *ast)
+void destroy_ast(void *ast)
 {
     if (!ast)
         return;
-    if (ast->token)
-        destroy_token(ast->token);
-    for (int i = 0; i < ast->nb_children; i++)
+    // might be usefull to switch to get_children but need refacto of the fn
+    switch (AST(ast)->type)
     {
-        destroy_ast(ast->children[i]);
+    case AST_CMD:
+        for (int i = 0; i < AST_CMD(ast)->argc; i++)
+            free(AST_CMD(ast)->argv[i]);
+        free(AST_CMD(ast)->argv);
+        /* FALLTHROUGH */
+    case AST_SH:
+        destroy_redir(AST_REDIR(ast));
+        break;
+    case AST_IF:
+        destroy_ast(AST_IF(ast)->cond);
+        destroy_ast(AST_IF(ast)->then);
+        destroy_ast(AST_IF(ast)->fallback);
+        break;
+    case AST_PIPE:
+    case AST_LIST:
+        for (int i = 0; i < AST_LIST(ast)->nb_children; i++)
+            destroy_ast(AST_LIST(ast)->children[i]);
+        free(AST_LIST(ast)->children);
+        break;
+    case AST_WHILE:
+    case AST_UNTIL:
+        destroy_ast(AST_LOOP(ast)->cond);
+        destroy_ast(AST_LOOP(ast)->exec);
+    default:
+        break;
     }
-    free(ast->children);
     free(ast);
 }

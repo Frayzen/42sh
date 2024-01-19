@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "tools/redirection/redirection.h"
 #include <assert.h>
 #include <fcntl.h>
 #include <stdbool.h>
@@ -10,16 +11,15 @@
 #include <unistd.h>
 
 #include "env/env.h"
-#include "exec/redirs/redirs.h"
 #include "execs.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
 
-void print_echo(struct sh_command *cmd, int i, bool interpret_bslash,
+void print_echo(struct ast_cmd *cmd, int i, bool interpret_bslash,
                 bool print_nline)
 {
-    DBG_PIPE("[COMMAND] Echo command [OUT] %d\n", cmd->redirs_fds[1]);
+    DBG_PIPE("Echo command [OUT] %d\n", STDOUT);
     for (; i < cmd->argc; i++)
     {
         const char *content = cmd->argv[i];
@@ -32,27 +32,27 @@ void print_echo(struct sh_command *cmd, int i, bool interpret_bslash,
                 switch (content[id])
                 {
                 case 'n':
-                    dprintf(cmd->redirs_fds[1], "\n");
+                    dprintf(STDOUT, "\n");
                     break;
                 case '\\':
-                    dprintf(cmd->redirs_fds[1], "\\");
+                    dprintf(STDOUT, "\\");
                     break;
                 case 't':
-                    dprintf(cmd->redirs_fds[1], "\t");
+                    dprintf(STDOUT, "\t");
                     break;
                 default:
                     continue;
                 }
             }
             else
-                dprintf(cmd->redirs_fds[1], "%c", content[id]);
+                dprintf(STDOUT, "%c", content[id]);
             id++;
         }
         if (cmd->argc - 1 != i)
-            dprintf(cmd->redirs_fds[1], " ");
+            dprintf(STDOUT, " ");
     }
     if (print_nline)
-        dprintf(cmd->redirs_fds[1], "\n");
+        dprintf(STDOUT, "\n");
 }
 
 /***
@@ -90,15 +90,13 @@ bool set_option_echo(const char *content, bool *interpret_bslash,
     return true;
 }
 
-int exec_echo(struct ast *ast)
+int exec_echo(struct ast_cmd *cmd)
 {
-    assert(ast && ast->type == AST_COMMAND
-           && ast->children[0]->token->type == ECHO);
-    struct sh_command *cmd = build_command(ast);
+    assert(cmd && cmd->type == ECHO);
     int i = 1;
     bool print_nline = true;
     bool interpret_bslash = false;
-    while (i < cmd->argc - 1)
+    while (i < cmd->argc)
     {
         const char *content = cmd->argv[i];
         if (!set_option_echo(content, &interpret_bslash, &print_nline))
@@ -106,13 +104,12 @@ int exec_echo(struct ast *ast)
         i++;
     }
     print_echo(cmd, i, interpret_bslash, print_nline);
-    free(cmd->argv);
     fflush(NULL);
     close_redirs(cmd);
     return 0;
 }
 
-int external_bin(struct ast *ast)
+int external_bin(struct ast_cmd *cmd)
 {
     int pid = fork();
     if (pid == -1)
@@ -122,12 +119,14 @@ int external_bin(struct ast *ast)
     }
     if (pid == 0)
     {
-        struct sh_command *cmd = build_command(ast);
-        DBG_PIPE("[COMMAND] %s fds are [IN] %d | [OUT] %d | [ERR] %d\n",
-                 cmd->argv[0], cmd->redirs_fds[0], cmd->redirs_fds[1],
-                 cmd->redirs_fds[2]);
+        DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n",
+                 cmd->argv[0], STDIN, STDOUT, STDERR);
+        // Apply the file descriptors before executing
         for (int i = 0; i < 3; i++)
-            dup2(cmd->redirs_fds[i], i);
+        {
+            dup2(FDS[i], i);
+            close(FDS[i]); 
+        }
         execvp(cmd->argv[0], cmd->argv);
         exit(127);
     }
@@ -142,56 +141,29 @@ int external_bin(struct ast *ast)
     return code;
 }
 
-// true if everything is fine
-struct sh_command *build_command(struct ast *ast)
+int exec_command(struct ast_cmd *ast)
 {
-    assert(ast && ast->type == AST_COMMAND);
-    assert(ast->nb_children != 0);
-    static struct sh_command cmd = { 0 };
-    cmd.root = ast, cmd.redirs_fds[0] = STDIN;
-    cmd.redirs_fds[1] = STDOUT;
-    cmd.redirs_fds[2] = 2;
-    cmd.argv = calloc(ast->nb_children + 1, sizeof(char *));
-    cmd.argc = 0;
-    for (int i = 0; i < ast->nb_children; i++)
-    {
-        if (ast->children[i]->type == AST_REDIR)
-        {
-            DBG_PIPE("[BEGIN REDIRECTION] =\n");
-            if (!apply_redirection(&cmd, ast->children[i]))
-            {
-                print_error(BAD_REDIRECTION);
-                return NULL;
-            }
-            DBG_PIPE("[END REDIRECTION] =\n\n");
-        }
-        else
-            cmd.argv[cmd.argc++] = ast->children[i]->token->value;
-    }
-    return &cmd;
-}
-
-int exec_sh_command(struct ast *ast)
-{
-    struct token *token = ast->children[0]->token;
-    switch (token->type)
+    assert(ast && AST(ast)->type == AST_CMD);
+    assert(ast->argc != 0);
+    int *fds = setup_redirs(AST_REDIR(ast));
+    if (!fds)
+        return 1;
+    int ret = 1;
+    switch (ast->type)
     {
     case ECHO:
-        return exec_echo(ast);
+        ret = exec_echo(ast);
+        break;
     case T_TRUE:
-        return 0;
+        ret = 0;
+        break;
     case T_FALSE:
-        return 1;
+        ret = 1;
+        break;
     default:
-        return external_bin(ast);
+        ret = external_bin(ast);
+        break;
     }
-}
-
-int exec_command(struct ast *ast)
-{
-    assert(ast && ast->type == AST_COMMAND);
-    assert(ast->nb_children != 0);
-    int ret = 1;
-    ret = exec_sh_command(ast);
+    close_redirs(fds);
     return ret;
 }

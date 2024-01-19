@@ -1,3 +1,4 @@
+#include "tools/str/string.h"
 #define _XOPEN_SOURCE 700
 #include "token.h"
 

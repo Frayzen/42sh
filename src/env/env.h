@@ -14,6 +14,8 @@ extern char **environ;
 
 #define STDIN (get_env_flag()->fds[0])
 #define STDOUT (get_env_flag()->fds[1])
+#define STDERR (get_env_flag()->fds[2])
+#define FDS (get_env_flag()->fds)
 
 struct env
 {
@@ -23,7 +25,7 @@ struct env
     bool verbose;
     bool debug_grammar;
     bool debug_pipe;
-    int fds[2];
+    int fds[1024];
 };
 
 /***
