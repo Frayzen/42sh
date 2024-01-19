@@ -16,8 +16,9 @@ enum status gr_input(struct ast **ast)
         return OK;
     }
     CHECK_GOTO(gr_list(ast) == ERROR, error);
-    tok_pop_clean();
     CHECK_GOTO(!tok_peek()->terminal, error);
+
+    tok_pop_clean();
     return OK;
 error:
     comsume_all();
