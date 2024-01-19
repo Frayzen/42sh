@@ -24,4 +24,3 @@ error:
     destroy_ast(*ast);
     return ERROR;
 }
-
