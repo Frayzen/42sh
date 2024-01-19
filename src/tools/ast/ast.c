@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "parser/tools/redirection.h"
 
 struct ast **set_ast_root(struct ast **ast)
@@ -35,6 +36,7 @@ void destroy_ast(void *ast)
 {
     if (!ast)
         return;
+    // might be usefull to switch to get_children but need refacto of the fn
     switch (AST(ast)->type)
     {
     case AST_CMD:
@@ -56,6 +58,10 @@ void destroy_ast(void *ast)
             destroy_ast(AST_LIST(ast)->children[i]);
         free(AST_LIST(ast)->children);
         break;
+    case AST_WHILE:
+    case AST_UNTIL:
+        destroy_ast(AST_LOOP(ast)->cond);
+        destroy_ast(AST_LOOP(ast)->exec);
     default:
         break;
     }

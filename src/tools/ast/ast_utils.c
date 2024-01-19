@@ -1,4 +1,5 @@
 #include <stdlib.h>
+
 #include "parser/tools/gr_utils.h"
 #include "tools/ast/ast.h"
 
@@ -54,7 +55,8 @@ void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
         return;
     int i = 0;
     while (children[i])
-    {        struct ast *child = children[i++];
+    {
+        struct ast *child = children[i++];
         if (child)
         {
             if (!depth)

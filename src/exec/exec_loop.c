@@ -9,7 +9,8 @@ int exec_loop(struct ast_loop *ast)
     assert(ast && ast->cond && ast->exec);
     bool negate = AST(ast)->type == AST_UNTIL;
     int ret = exec_list(ast->cond);
-    while (negate ? !ret : ret)
+    //! ret for 0
+    while (negate ? ret : !ret)
     {
         exec_list(ast->exec);
         ret = exec_list(ast->cond);
