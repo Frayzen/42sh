@@ -25,10 +25,11 @@ int main(int argc, char *argv[])
         {
             ast = NULL;
             print_error(GRAMMAR_ERROR_ENTRY);
+            ret = 2;
             continue;
         }
         if (get_env_flag()->pretty_print)
-            pretty_print_ast(ast);
+            debug_pretty_print(ast);
         ret = exec_entry(ast);
         assert(DICT->nb_entries == 0);
         fflush(NULL);

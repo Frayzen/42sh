@@ -1,7 +1,7 @@
 #ifndef REDIRS_H
 #define REDIRS_H
 
-#include "execs.h"
+#include "exec/execs.h"
 #include "tools/ast/ast.h"
 
 enum direction
@@ -15,9 +15,10 @@ struct redir
     enum direction dir;
     char *left;
     char *right;
+    // if redir is >>
     bool append;
-    bool dup;
-    bool is_io;
+    // is redir is (>&) or (<&) AND the right member is an io_nb
+    bool dup_io;
 };
 
 /*
@@ -26,5 +27,10 @@ struct redir
  * @param redir the redirection ast to apply
  */
 bool apply_redirection(struct sh_command *cmd, struct ast *redir);
+/*
+ * Close all redirection after the command
+ * @param cmd the shell command structure
+ */
+void close_redirs(struct sh_command *cmd);
 
 #endif /* !REDIRS_H */

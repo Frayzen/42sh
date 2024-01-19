@@ -41,18 +41,6 @@ bool chevron_type(const struct string *str)
     return 0;
 }
 
-bool is_number(char *val)
-{
-    int i = 0;
-    while (val[i])
-    {
-        if (val[i] > '9' || val[i] < '0')
-            return false;
-        i++;
-    }
-    return true;
-}
-
 int get_type(const struct string *str)
 {
     if (!str || str->size == 0)
@@ -145,7 +133,7 @@ const char **toktype_lookup(void)
         [CHEVRON] = "CHEVRON", [IO_NUMBER] = "NB",  [EQUAL] = "=",
         [NEGATION] = "!",      [PIPE] = "|",        [WORD] = NULL,
         [WHILE] = "while",     [DO] = "do",         [DONE] = "done",
-        [UNTIL] = "until",
+        [UNTIL] = "until",     [OR] = "||",         [AND] = "&&",
     };
     return lookup_table;
 }

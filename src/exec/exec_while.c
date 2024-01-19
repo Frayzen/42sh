@@ -12,5 +12,5 @@ int exec_while(struct ast *ast)
         exec_list(ast->children[1]);
         exec_while(ast);
     }
-    return 1;
+    return 0;
 }

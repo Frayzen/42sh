@@ -6,6 +6,7 @@ LIBS = $(addprefix $(top_builddir)/src/, @LIB_LIST@)
 
 unit_SOURCES =\
 			  exec/unit_exec.c\
+			  exec/unit_redirs.c\
 			  io_backend/unit_streamers.c \
 			  token/unit_token.c \
 			  parser/grules/unit_easy.c \

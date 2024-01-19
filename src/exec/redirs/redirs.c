@@ -9,7 +9,6 @@
 
 #include "env/env.h"
 #include "execs.h"
-#include "tools/fd_manager/fd_dictionnary.h"
 
 int create_fd(char *str, bool is_io, int flags)
 {
@@ -21,23 +20,36 @@ int create_fd(char *str, bool is_io, int flags)
     return ret;
 }
 
-int dup_fd(int fd)
+bool redirect(struct sh_command *cmd, int from, int to, bool dup_io)
 {
-    int new = dup(fd);
-    dict_push(fd, new);
-    return new;
-}
-
-bool redirect(struct sh_command *cmd, int from, int to)
-{
+    int newto = to;
+    if (dup_io)
+    {
+        if (to < 3)
+        {
+            DBG_PIPE("Replace %d by its stored value : %d\n", to,
+                     cmd->redirs_fds[to]);
+            to = cmd->redirs_fds[to];
+        }
+        newto = dup(to);
+        DBG_PIPE("Duplicate %d in %d\n", to, newto);
+    }
     if (from < 3)
     {
-        cmd->redirs_fds[from] = to;
+        if (cmd->redirs_fds[from] >= 3)
+        {
+            DBG_PIPE("Closing %d before storing | ", cmd->redirs_fds[from]);
+            close(cmd->redirs_fds[from]);
+        }
+        DBG_PIPE("Storing %d in fd[%d]\n", newto, from);
+        cmd->redirs_fds[from] = newto;
         return true;
     }
-    return dup2(from, to) != -1;
+    DBG_PIPE("Redirect (%d) to (%d)\n", from, newto);
+    return dup2(from, newto) != -1;
 }
 
+// ast is the redir ast and redir is the redir struct
 void build_redir(struct ast *ast, struct redir *redir)
 {
     int i = 0;
@@ -62,11 +74,9 @@ void build_redir(struct ast *ast, struct redir *redir)
         redir->dir = sec_char == '>' ? BOTH_WAY : RIGHT_TO_LEFT;
     else
         assert(false);
-    if (sec_char == '&')
-        redir->dup = true;
     token = ast->children[i++]->token;
     // PARSE TO
-    redir->is_io = token->type == IO_NUMBER;
+    redir->dup_io = sec_char == '&' && is_number(token->value);
     redir->right = token->value;
 }
 
@@ -96,21 +106,33 @@ bool apply_redirection(struct sh_command *cmd, struct ast *redir_ast)
     struct redir redir = { 0 };
     build_redir(redir_ast, &redir);
     int from = create_fd(redir.left, true, get_flag(&redir, true));
-    int to = create_fd(redir.right, redir.is_io, get_flag(&redir, false));
+    int to = create_fd(redir.right, redir.dup_io, get_flag(&redir, false));
     if (from == -1 || to == -1)
         return false;
-    DBG_PIPE("Created redirection from (%d) to (%d)\n", from, to);
-    if (redir.dup)
-        to = dup(to);
+    DBG_PIPE("Creating redirection from (%d) to (%d)...\n", from, to);
     if (redir.dir == RIGHT_TO_LEFT)
     {
         int tmp_fd = from;
         from = to;
         to = tmp_fd;
     }
-    if (!redirect(cmd, from, to))
+    if (!redirect(cmd, from, to, redir.dup_io))
         return false;
-    if (redir.dir == BOTH_WAY && !redirect(cmd, to, from))
+    if (redir.dir == BOTH_WAY && !redirect(cmd, to, from, false))
         return false;
     return true;
+}
+
+void close_redirs(struct sh_command *cmd)
+{
+    DBG_PIPE("[REDIR] Cleaning, closing fds: ");
+    for (int i = 0; i < 3; i++)
+    {
+        if (cmd->redirs_fds[i] >= 3)
+        {
+            close(cmd->redirs_fds[i]);
+            DBG_PIPE("%d ", cmd->redirs_fds[i]);
+        }
+    }
+    DBG_PIPE("\n");
 }
