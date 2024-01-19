@@ -21,7 +21,7 @@ void add_child(struct ast_list *list, struct ast *child);
 /***
  * Retrieve the children from any kind of ast
  * /!\ This function is for DEBUG purposes only
- * @return a static allocated array to the ast pointers
+ * @return an allocated array to the last pointers or NULL if no children
  */
 struct ast **get_children(struct ast *ast);
 

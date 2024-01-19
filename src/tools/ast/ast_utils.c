@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "parser/tools/gr_utils.h"
 #include "tools/ast/ast.h"
 
@@ -49,11 +50,12 @@ void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
     node_to_str(buf, ast_root);
     printf("%s$\n", buf);
     struct ast **children = get_children(ast_root);
+    if (!children)
+        return;
     int i = 0;
     while (children[i])
-    {
-        struct ast *child = children[i++];
-        if (!children[i])
+    {        struct ast *child = children[i++];
+        if (child)
         {
             if (!depth)
                 last_of_first = true;
@@ -63,6 +65,7 @@ void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
             is_last_child = false;
         pretty_print_ast_help(child, depth + 1, is_last_child, last_of_first);
     }
+    free(children);
 }
 
 void pretty_print_ast(struct ast *ast)
@@ -79,7 +82,7 @@ void ast_to_str_rec(struct ast *ast, char *buf, size_t *id)
 {
     *id += node_to_str(buf + *id, ast);
     struct ast **children = get_children(ast);
-    if (!children[0])
+    if (children)
         return;
     buf[(*id)++] = '{';
     int i = 0;
@@ -87,6 +90,7 @@ void ast_to_str_rec(struct ast *ast, char *buf, size_t *id)
         ast_to_str_rec(children[i++], buf, id);
     buf[*id++] = '}';
     buf[++*id] = '\0';
+    free(children);
 }
 
 char *ast_to_str(struct ast *ast)

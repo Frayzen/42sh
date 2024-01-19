@@ -20,17 +20,16 @@ void add_child(struct ast_list *list, struct ast *child)
     if (!list)
         return;
     list->children =
-        realloc(list->children, sizeof(struct ast) * (list->nb_children + 1));
+        realloc(list->children, sizeof(struct ast *) * (++list->nb_children));
     if (!list->children)
         exit_gracefully(ADD_CHILD_ERROR);
-    list->children[list->nb_children] = child;
-    list->nb_children++;
+    list->children[list->nb_children - 1] = child;
 }
 
+#define CHILDREN_SIZE 1024
 struct ast **get_children(struct ast *ast)
 {
-    static struct ast *ret[1024];
-    memset(ret, 0, 1024 * sizeof(struct ast *));
+    struct ast **ret = calloc(CHILDREN_SIZE, sizeof(struct ast *));
     int i = 0;
     switch (ast->type)
     {
@@ -50,7 +49,8 @@ struct ast **get_children(struct ast *ast)
         ret[i++] = AST(AST_LOOP(ast)->exec);
         break;
     default:
-        break;
+        free(ret);
+        return NULL;
     }
     return ret;
 }
