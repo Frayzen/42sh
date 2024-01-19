@@ -1,7 +1,5 @@
 #include "tools/str/string.h"
 #define _XOPEN_SOURCE 700
-#include "token.h"
-
 #include <ctype.h>
 #include <fnmatch.h>
 #include <stdio.h>
@@ -9,6 +7,7 @@
 #include <string.h>
 
 #include "io_backend/backend_saver.h"
+#include "token.h"
 
 bool is_terminating(struct token *token)
 {

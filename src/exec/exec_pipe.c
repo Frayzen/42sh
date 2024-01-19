@@ -39,7 +39,6 @@ int exec_piped(struct ast *ast, int in, int out)
 
 int exec_pipe(struct ast_pipe *ast)
 {
-
     DBG_PIPE("[PIPE] START -----\n");
     assert(AST(ast)->type == AST_PIPE);
     struct ast_list *list = AST_LIST(ast);
