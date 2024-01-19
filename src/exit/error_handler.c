@@ -8,6 +8,7 @@
 #include "env/env.h"
 #include "tools/ast/ast.h"
 
+// Do NOT expect this function to exit the program
 void exit_gracefully(enum error_type type)
 {
     print_error(type);
