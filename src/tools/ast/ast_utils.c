@@ -29,7 +29,8 @@ int node_to_str(char *buf, struct ast *ast_root)
     static const char *ast_types[] = {
         [AST_COMMAND] = "CMD", [AST_LIST] = "LST",  [AST_TOKEN] = "",
         [AST_IF] = "IF",       [AST_REDIR] = "RDR", [AST_NEGATE] = "NOT",
-        [AST_PIPE] = "PIPE"
+        [AST_PIPE] = "PIPE",   [AST_WHILE] = "WHL", [AST_UNTIL] = "UTL",
+        [AST_AND] = "AND",     [AST_OR] = "OR",
     };
 
     if (ast_root == NULL)
