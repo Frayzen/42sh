@@ -96,9 +96,6 @@ echo echo echo  fi if else elif
 ### negation
 echo   biz    ; echo yipee yep; echo hello world !; echo 1 2 3 4 5 6
 
-### ionumbers
-echo 3 4 55 > 2  2>file
-
 ###Lots of dash option
 echo -n -n -e -e -n -n -n -e 42'\nsh'
 

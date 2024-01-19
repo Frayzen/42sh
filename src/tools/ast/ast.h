@@ -49,7 +49,7 @@ struct ast_if
     struct ast base;
     struct ast_list *cond;
     struct ast_list *then;
-    // might be ast_if OR ast_list
+    // might be ast_if (ELIF) OR ast_list(ELSE) OR NULL
     struct ast *fallback;
 };
 
