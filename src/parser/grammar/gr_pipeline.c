@@ -4,11 +4,13 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
+#include "tools/gr_tools.h"
 /*
 pipeline = ['!'] command { '|' {'\n'} command } ;
 */
 enum status gr_pipeline(struct ast **ast)
 {
+    GR_DBG_START(Pipeline);
     struct ast *parent = *ast;
     struct token *token = tok_peek();
     if (token->type == NEGATION)
@@ -28,8 +30,8 @@ enum status gr_pipeline(struct ast **ast)
         CHECK_GOTO(gr_command(&pipe_ast), error);
     }
     parent = add_child(parent, pipe_ast);
-    return OK;
+    GR_DBG_RET(OK);
 error:
     destroy_ast(pipe_ast);
-    return ERROR;
+    GR_DBG_RET(ERROR);
 }

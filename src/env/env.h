@@ -21,6 +21,7 @@ struct env
     bool null_received;
     bool pretty_print;
     bool verbose;
+    bool debug_grammar;
     bool debug_pipe;
     int fds[2];
 };
