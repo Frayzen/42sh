@@ -10,14 +10,18 @@
 
 enum status gr_input(struct ast **ast)
 {
-    gr_list(ast);
-    struct token *trm = tok_peek();
+    if (tok_peek()->terminal)
+    {
+        tok_pop_clean();
+        return OK;
+    }
+    CHECK_GOTO(gr_list(ast) == ERROR, error);
     tok_pop_clean();
-    if (!trm->terminal)
-        goto error;
+    CHECK_GOTO(!tok_peek()->terminal, error);
     return OK;
 error:
     comsume_all();
     destroy_ast(*ast);
     return ERROR;
 }
+
