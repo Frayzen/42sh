@@ -14,7 +14,7 @@ enum status gr_input(struct ast **ast)
     if (tok_peek()->terminal)
     {
         tok_pop_clean();
-        return OK;
+        GR_DBG_RET(OK);
     }
     GR_DBG_START(Input);
     CHECK_GOTO(gr_list(ast) == ERROR, error);
