@@ -32,4 +32,10 @@ int exec_loop(struct ast_loop *ast);
  */
 int exec_for(struct ast_for *ast);
 
+/***
+ * executes the and_or ast
+ * @param ast tree to execute
+ */
+int exec_and_or(struct ast_and_or *ast);
+
 #endif /* EXECS_H */

@@ -2,6 +2,7 @@ lib_LIBRARIES = libexec.a
 
 libexec_a_SOURCES = \
 	execs.h\
+	exec_and_or.c\
 	commands/exec_commands.c\
 	commands/exec_pipe.c\
 	commands/exec_cmd.h\
