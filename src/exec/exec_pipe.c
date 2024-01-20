@@ -30,6 +30,7 @@ int exec_piped(struct ast *ast, int in, int out)
         ret = exec_loop(AST_LOOP(ast));
         break;
     case AST_FOR:
+        // TODO exec_for
         ret = 0;
         break;
     default:

@@ -15,9 +15,7 @@ enum status gr_else(struct ast_if *ast)
     if (token->type == ELSE)
     {
         tok_pop_clean();
-        struct ast_list *fallback = NULL;
-        enum status ret = gr_compound_list(fallback);
-        ast->fallback = AST(fallback);
+        enum status ret = gr_compound_list(AST_LIST(ast->fallback));
         return ret;
     }
     if (token->type != ELIF)

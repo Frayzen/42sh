@@ -113,6 +113,5 @@ int write_buf(char *buffer, char *str, int i)
 
 void debug_pretty_print(struct ast *ast)
 {
-    /* printf("%s\n", ast_to_str(ast)); */
     pretty_print_ast(ast);
 }
