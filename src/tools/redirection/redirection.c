@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "env/env.h"
@@ -30,7 +31,7 @@ int get_fd(struct redirection *redir)
         DBG_PIPE("considered as a file ");
         int flag = 0;
         if (type == RT_READ_WRITE)
-            flag = O_CREAT | O_TRUNC | O_RDWR;
+            flag = O_CREAT | O_APPEND | O_RDWR;
         if (type & RT_MASK_IN)
             flag |= O_RDONLY;
         else
@@ -93,6 +94,8 @@ int *setup_redirs(struct ast_redir *ast)
         saved[i] = dup(FDS[i]);
         DBG_PIPE("[REDIR] Save FDS[%d] to %d\n", i, saved[i]);
     }
+    for (int i = 3; i < 10; i++)
+        FDS[i] = -1;
     for (int i = 0; i < ast->redir_nb; i++)
     {
         struct redirection *redir = ast->redirs[i];
@@ -112,6 +115,15 @@ void close_redirs(int *saved)
         DBG_PIPE("[REDIR] Restore FDS[%d] to %d\n", i, saved[i]);
         dup2(saved[i], FDS[i]);
         close(saved[i]);
+    }
+    for (int i = 3; i < 10; i++)
+    {
+        if (FDS[i] != -1)
+        {
+            DBG_PIPE("[REDIR] Closing FDS[%d] = %d\n", i, FDS[i]);
+            close(FDS[i]);
+            FDS[i] = -1;
+        }
     }
     DBG_PIPE("[REDIR] END = \n\n");
 }
