@@ -155,6 +155,7 @@ int exec_builtin(struct ast_cmd *ast)
         ret = 1;
         break;
     default:
+        // Should not happen
         assert(false);
         ret = 1;
         break;
