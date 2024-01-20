@@ -49,7 +49,7 @@ enum status gr_for(struct ast_list *ast)
         tok_pop_clean();
     CHECK_GOTO(tok_peek()->type != DO, error);
     tok_pop_clean();
-    if(gr_compound_list(AST_LIST(ast_for)) == ERROR)
+    if (gr_compound_list(AST_LIST(ast_for)) == ERROR)
         goto error;
     CHECK_GOTO(tok_peek()->type != DONE, error);
     tok_pop_clean();
