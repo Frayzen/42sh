@@ -141,4 +141,11 @@ enum status gr_until(struct ast_list *ast);
  */
 enum status gr_for(struct ast_list *ast);
 
+/***
+ * Grammar rule for and_or
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_and_or(struct ast_list *list);
+
 #endif /* !RULES_H */

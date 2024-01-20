@@ -14,14 +14,13 @@ enum ast_type
     AST_CMD,
     AST_SH,
     AST_IF,
-    AST_ASS,
     AST_PIPE,
     AST_WHILE,
     AST_UNTIL,
     AST_FOR,
+    AST_AND_OR,
     // NOT USED
-    AST_AND,
-    AST_OR
+    AST_ASS
 };
 
 #define AST(Base) ((struct ast *)(Base))
@@ -94,6 +93,26 @@ struct ast_for
     char *name;
     int nb_items;
     char **item_list;
+};
+
+enum and_or_type
+{
+    T_AND,
+    T_OR
+};
+
+struct and_or
+{
+    struct and_or *next;
+    enum and_or_type type;
+};
+
+#define AST_AND_OR(Base) ((struct ast_and_or *)(Base))
+struct ast_and_or
+{
+    struct ast_pipe base;
+    int size;
+    struct and_or *list;
 };
 
 /***

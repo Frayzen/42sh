@@ -18,6 +18,10 @@ int exec_list(struct ast_list *ast)
         case AST_PIPE:
             ret = exec_pipe(AST_PIPE(child));
             break;
+        case AST_AND_OR:
+            // TODO exec_and_or
+            ret = 0;
+            break;
         default:
             exit_gracefully(LIST_NOT_FOUND);
             return 1;
