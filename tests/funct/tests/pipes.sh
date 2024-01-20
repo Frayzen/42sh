@@ -17,3 +17,11 @@ cat file | grep 'test'
 echo testoutput > file
 cat file | echo
 cat file | grep 'test'
+
+### Count the number of line in a file
+echo -e "There is \n several lines\n\nHere" > file
+cat file | wc -l | cat
+cat file | wc -c | cat
+
+### Generate random letter
+cat /dev/urandom | tr -dc 'A-Z' | fold -w 1 |head -n 1 | wc -c
