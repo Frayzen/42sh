@@ -30,24 +30,28 @@ void add_child(struct ast_list *list, struct ast *child)
 #define CHILDREN_SIZE 1024
 struct ast **get_children(struct ast *ast)
 {
+    if (!ast)
+        return NULL;
     struct ast **ret = calloc(CHILDREN_SIZE, sizeof(struct ast *));
     int i = 0;
     switch (ast->type)
     {
     case AST_PIPE:
+    case AST_FOR:
     case AST_LIST:
         for (int i = 0; i < AST_LIST(ast)->nb_children; i++)
             ret[i] = AST_LIST(ast)->children[i];
         break;
     case AST_IF:
-        ret[i++] = AST(AST_IF(ast)->cond);
-        ret[i++] = AST(AST_IF(ast)->then);
+        ret[i++] = AST(&AST_IF(ast)->cond);
+        ret[i++] = AST(&AST_IF(ast)->then);
+        // Normal to not take the pointer, fallback already is
         ret[i++] = AST(AST_IF(ast)->fallback);
         break;
     case AST_WHILE:
     case AST_UNTIL:
-        ret[i++] = AST(AST_LOOP(ast)->cond);
-        ret[i++] = AST(AST_LOOP(ast)->exec);
+        ret[i++] = AST(&AST_LOOP(ast)->cond);
+        ret[i++] = AST(&AST_LOOP(ast)->exec);
         break;
     default:
         free(ret);

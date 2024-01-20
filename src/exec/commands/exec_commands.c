@@ -11,7 +11,6 @@
 #include <unistd.h>
 
 #include "env/env.h"
-#include "execs.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 #include "tools/redirection/redirection.h"
@@ -94,7 +93,7 @@ bool set_option_echo(const char *content, bool *interpret_bslash,
     return true;
 }
 
-int exec_echo(struct ast_cmd *cmd)
+void exec_echo(struct ast_cmd *cmd)
 {
     assert(cmd && cmd->type == ECHO);
     int i = 1;
@@ -109,7 +108,6 @@ int exec_echo(struct ast_cmd *cmd)
     }
     print_echo(cmd, i, interpret_bslash, print_nline);
     fflush(NULL);
-    return 0;
 }
 
 // this will include the expansion
@@ -122,9 +120,10 @@ char **expand_args(struct ast_cmd *cmd)
     return args;
 }
 
+// Fork execute the binary and return pid in parent
 int external_bin(struct ast_cmd *cmd)
 {
-    char **args = expand_args(cmd);
+    char **argv = expand_args(cmd);
     int pid = fork();
     if (pid == -1)
     {
@@ -133,43 +132,38 @@ int external_bin(struct ast_cmd *cmd)
     }
     if (pid == 0)
     {
-        DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n", args[0],
-                 STDIN, STDOUT, STDERR);
-
-        // // Apply the file descriptors before executing
-        // for (int i = 0; i < 3; i++)
-        // {
-        //     dup2(FDS[i], i);
-        //     close(FDS[i]);
-        // }
-        execvp(args[0], args);
+        DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n",
+                 argv[0], STDIN, STDOUT, STDERR);
+        // Apply the file descriptors before executing
+        for (int i = 0; i < 3; i++)
+        {
+            dup2(FDS[i], i);
+            // Do not close if STDOUT = STOUD_FILENO
+            if (i != FDS[i])
+                close(FDS[i]);
+        }
+        execvp(argv[0], argv);
         exit(127);
     }
-    free(args);
-    int returncode;
-    waitpid(pid, &returncode, 0);
-    int code = 0;
-    if (WIFEXITED(returncode))
-        code = WEXITSTATUS(returncode);
-    if (code == 127)
-        print_error(FORK_ERROR);
-    fflush(stdout);
-    return code;
+    free(argv);
+    return pid;
 }
 
-int exec_command(struct ast_cmd *ast)
+// Execute the builtin and return the return value
+int exec_builtin(struct ast_cmd *ast)
 {
     assert(ast && AST(ast)->type == AST_CMD);
-    assert(ast->argc != 0);
+    assert(ast->argc != 0 && ast->is_builtin);
     int *fds = setup_redirs(AST_REDIR(ast));
 
     if (!fds)
         return 1;
-    int ret = 1;
+    int ret;
     switch (ast->type)
     {
     case ECHO:
-        ret = exec_echo(ast);
+        exec_echo(ast);
+        ret = 0;
         break;
     case T_TRUE:
         ret = 0;
@@ -178,9 +172,24 @@ int exec_command(struct ast_cmd *ast)
         ret = 1;
         break;
     default:
-        ret = external_bin(ast);
+        // Should not happen
+        assert(false);
+        ret = 1;
         break;
     }
+    close_redirs(fds);
+    return ret;
+}
+
+// Execute the binary and return the pid
+int exec_bin(struct ast_cmd *ast)
+{
+    assert(ast && AST(ast)->type == AST_CMD);
+    assert(ast->argc != 0 && !ast->is_builtin);
+    int *fds = setup_redirs(AST_REDIR(ast));
+    if (!fds)
+        return -1;
+    int ret = external_bin(ast);
     close_redirs(fds);
     return ret;
 }

@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 200809L
 #include "redirection.h"
 
 #include <assert.h>
@@ -6,6 +7,7 @@
 #include <unistd.h>
 
 #include "env/env.h"
+#include "exit/error_handler.h"
 #include "tools/str/string.h"
 
 // Return the file descriptor ready to be used
@@ -15,28 +17,29 @@ int get_fd(struct redirection *redir)
 {
     int fd = -1;
     DBG_PIPE("[REDIR] '%s' has been ", redir->to);
-    if (redir->type & RT_MASK_DUP && is_number(redir->to))
+    int type = redir->type;
+    if (type & RT_MASK_DUP && is_number(redir->to))
     {
         fd = atoi(redir->to);
-        DBG_PIPE("interpreted as %d and duplicated from %d\n", fd, FDS[fd]);
-        return dup(FDS[fd]);
+        int ret = dup(FDS[fd]);
+        DBG_PIPE("duplicated as %d and from %d\n", ret, FDS[fd]);
+        return ret;
     }
     else
     {
         DBG_PIPE("considered as a file ");
         int flag = 0;
-        if (flag & RT_MASK_IN)
+        if (type & RT_MASK_IN)
             flag |= O_RDONLY;
         else
         {
             flag |= O_WRONLY | O_CREAT;
-            if (flag == RT_APPEND_OUT)
+            if (type == RT_APPEND_OUT)
                 flag |= O_APPEND;
             else
                 flag |= O_TRUNC;
         }
-        if (redir->type)
-            fd = open(redir->to, flag, 0644);
+        fd = open(redir->to, flag, 0644);
         DBG_PIPE("in %d\n", fd);
         return fd;
     }
@@ -62,19 +65,22 @@ int *setup_redirs(struct ast_redir *ast)
         {
             // An error happened
             close_redirs(saved);
+            print_error(BAD_FD);
             return NULL;
         }
         if (redir->type & RT_MASK_IN)
         {
-            DBG_PIPE("[REDIR] Close and set FD[%d] to %d (IN)\n", fd_left,
+            DBG_PIPE("[REDIR] Close and copy %d in FD[%d] IN)\n", fd_left,
                      fd_right);
             dup2(fd_left, FDS[fd_right]);
+            close(fd_left);
         }
         else
         {
-            DBG_PIPE("[REDIR] Close and set FD[%d] to %d (OUT)\n", fd_right,
+            DBG_PIPE("[REDIR] Close and copy %d in FD[%d] OUT)\n", fd_right,
                      fd_left);
             dup2(fd_right, FDS[fd_left]);
+            close(fd_right);
         }
     }
     return saved;
@@ -132,4 +138,15 @@ void destroy_redir(struct ast_redir *ast)
         free(ast->redirs[i]);
     }
     free(ast->redirs);
+}
+
+void setup_debug_fds(void)
+{
+    dup2(STDOUT_FILENO, DBG_OUT);
+    fcntl(DBG_OUT, F_SETFD, FD_CLOEXEC);
+}
+
+void clean_debug_fds(void)
+{
+    close(DBG_OUT);
 }

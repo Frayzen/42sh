@@ -1,0 +1,2 @@
+SUBDIRS=funct\
+		unit

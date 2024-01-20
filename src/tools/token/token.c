@@ -136,6 +136,7 @@ const char **toktype_lookup(void)
         [NEGATION] = "!",      [PIPE] = "|",        [WORD] = NULL,
         [WHILE] = "while",     [DO] = "do",         [DONE] = "done",
         [UNTIL] = "until",     [OR] = "||",         [AND] = "&&",
+        [FOR] = "for",         [IN] = "in",
     };
     return lookup_table;
 }

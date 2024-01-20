@@ -7,13 +7,12 @@
 compound_list =
 {'\n'} and_or { ( ';' | '\n' ) {'\n'} and_or } [';'] {'\n'} ;
 */
-enum status gr_compound_list(struct ast_list **ast)
+enum status gr_compound_list(struct ast_list *list_ast)
 {
     GR_DBG_START(CompoundList);
     while (tok_peek()->type == NEWLINE)
         tok_pop_clean();
-    struct ast_list *ls_ast = init_ast(AST_LIST);
-    enum status state = gr_and_or(ls_ast);
+    enum status state = gr_and_or(list_ast);
     CHECK_GOTO(state == ERROR, error);
     while (state == OK)
     {
@@ -22,7 +21,7 @@ enum status gr_compound_list(struct ast_list **ast)
         tok_pop_clean();
         while (tok_peek()->type == NEWLINE)
             tok_pop_clean();
-        state = gr_and_or(ls_ast);
+        state = gr_and_or(list_ast);
     }
 
     if (tok_peek()->type == SEMI_COLON)
@@ -31,10 +30,7 @@ enum status gr_compound_list(struct ast_list **ast)
     while (tok_peek()->type == NEWLINE)
         tok_pop_clean();
 
-    *ast = ls_ast;
     return OK;
-
 error:
-    destroy_ast(ls_ast);
     GR_DBG_RET(ERROR);
 }

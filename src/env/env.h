@@ -1,16 +1,17 @@
 #ifndef ENV_H
 #define ENV_H
 
+#include "tools/redirection/redirection.h"
 #include "tools/token/token.h"
 extern char **environ;
 // need to add the default value in the get_env_flag function for each new flag
 
 #define DBG_PIPE(...)                                                          \
     if (get_env_flag()->debug_pipe)                                            \
-        printf(__VA_ARGS__);
+        dprintf(DBG_OUT, __VA_ARGS__);
 #define VERBOSE(...)                                                           \
     if (get_env_flag()->verbose)                                               \
-        printf(__VA_ARGS__);
+        dprintf(DBG_OUT, __VA_ARGS__);
 
 #define STDIN (get_env_flag()->fds[0])
 #define STDOUT (get_env_flag()->fds[1])

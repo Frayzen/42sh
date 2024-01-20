@@ -9,14 +9,16 @@
 
 enum ast_type
 {
+    // Leave it to zero for nested lists to have their type set
+    AST_LIST = 0,
     AST_CMD,
     AST_SH,
-    AST_LIST,
     AST_IF,
     AST_ASS,
     AST_PIPE,
     AST_WHILE,
     AST_UNTIL,
+    AST_FOR,
     // NOT USED
     AST_AND,
     AST_OR
@@ -31,7 +33,7 @@ struct ast
 #define AST_LIST(Base) ((struct ast_list *)(Base))
 struct ast_list
 {
-    struct ast *base;
+    struct ast base;
     int nb_children;
     struct ast **children;
 };
@@ -47,8 +49,8 @@ struct ast_pipe
 struct ast_if
 {
     struct ast base;
-    struct ast_list *cond;
-    struct ast_list *then;
+    struct ast_list cond;
+    struct ast_list then;
     // might be ast_if (ELIF) OR ast_list(ELSE) OR NULL
     struct ast *fallback;
 };
@@ -57,8 +59,8 @@ struct ast_if
 struct ast_loop
 {
     struct ast base;
-    struct ast_list *cond;
-    struct ast_list *exec;
+    struct ast_list cond;
+    struct ast_list exec;
 };
 
 #define AST_REDIR(Base) ((struct ast_redir *)(Base))
@@ -73,6 +75,7 @@ struct ast_redir
 struct ast_cmd
 {
     struct ast_redir redirs;
+    bool is_builtin;
     enum token_type type;
     struct string **str;
     int argc;
@@ -85,6 +88,15 @@ struct ast_sh
 {
     struct ast_redir redirs;
     struct ast *sh_cmd;
+};
+
+#define AST_FOR(Base) ((struct ast_for *)(Base))
+struct ast_for
+{
+    struct ast_list cmds;
+    char *name;
+    int nb_items;
+    char **item_list;
 };
 
 /***

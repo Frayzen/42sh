@@ -13,7 +13,7 @@
 char *g_ast_types[] = {
     [AST_CMD] = "CMD",   [AST_LIST] = "LST",  [AST_IF] = "IF",
     [AST_PIPE] = "PIPE", [AST_WHILE] = "WHL", [AST_UNTIL] = "UTL",
-    [AST_SH] = "SH",     [AST_ASS] = "ASS",
+    [AST_SH] = "SH",     [AST_ASS] = "ASS",   [AST_FOR] = "FOR",
 };
 
 int node_to_str(char *buf, struct ast *ast_root)
@@ -84,14 +84,14 @@ void ast_to_str_rec(struct ast *ast, char *buf, size_t *id)
 {
     *id += node_to_str(buf + *id, ast);
     struct ast **children = get_children(ast);
-    if (children)
+    if (!children)
         return;
     buf[(*id)++] = '{';
     int i = 0;
     while (children[i])
         ast_to_str_rec(children[i++], buf, id);
-    buf[*id++] = '}';
-    buf[++*id] = '\0';
+    buf[(*id)++] = '}';
+    buf[*id] = '\0';
     free(children);
 }
 
@@ -113,9 +113,6 @@ int write_buf(char *buffer, char *str, int i)
 
 void debug_pretty_print(struct ast *ast)
 {
-    char buffer[2048];
-    if (ast)
-        printf("%s\n", buffer);
     printf("%s\n", ast_to_str(ast));
     pretty_print_ast(ast);
 }

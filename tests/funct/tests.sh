@@ -31,6 +31,7 @@ execute() {
     printf '%s' "$code" > $script
     $path_42sh $script 1> $ours 2> $ours_err
     ours_ret=$?
+    rm -rf *
     bash --posix $script 1> $theirs 2> $theirs_err
     theirs_ret=$?
     dif=$(diff -q $ours $theirs)

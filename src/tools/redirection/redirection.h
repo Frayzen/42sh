@@ -3,6 +3,9 @@
 
 #include "tools/ast/ast.h"
 
+#define DBG_OUT 666
+#define DBG_ERR 667
+
 // THE OUT ARE ALWAYS EVEN AND THE IN ARE ODDS
 enum redir_type
 {
@@ -56,4 +59,15 @@ int *setup_redirs(struct ast_redir *ast);
  * @param fds the saved file descriptors
  */
 void close_redirs(int *saved);
+
+/***
+ * Setup the file descriptor to debug
+ */
+void setup_debug_fds(void);
+
+/***
+ * Close the file descriptor to debug
+ */
+void clean_debug_fds(void);
+
 #endif /* !REDIRECTION_H */

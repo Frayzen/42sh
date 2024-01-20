@@ -1,10 +1,6 @@
 # Init the 42sh project
 AC_INIT([42sh], [1.0], [42sh@assistants.epita.fr])
 
-LIB_LIST="$(top_builddir)exec/libexec.a $(top_builddir)parser/libparser.a $(top_builddir)lexer/liblexer.a $(top_builddir)io_backend/libiobackend.a $(top_builddir)exit/libexit.a $(top_builddir)env/libenv.a $(top_builddir)tools/libtools.a"
-
-AC_SUBST(LIB_LIST)
-
 # Setup automake
 AM_INIT_AUTOMAKE([subdir-objects] [foreign])
 
@@ -34,6 +30,8 @@ AC_CONFIG_FILES([
                     src/exec/Makefile
                     src/exit/Makefile
                     src/env/Makefile
+                    tests/Makefile
+                    tests/funct/Makefile
                     tests/unit/Makefile
                 ])
 AC_OUTPUT

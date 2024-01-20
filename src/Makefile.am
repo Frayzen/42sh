@@ -6,9 +6,11 @@ SUBDIRS = \
 		  tools\
 		  exec\
 		  exit\
-		  env
+		  env\
+		  .
 
-LIBS = @LIB_LIST@
+TOP_BD=$(top_builddir)
+LIBS=$(addprefix $(TOP_BD)/src/, $(LIB_LIST))
 
 bin_PROGRAMS = 42sh
 

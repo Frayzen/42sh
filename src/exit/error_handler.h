@@ -14,6 +14,7 @@ enum error_type
     FD_DICO_FULL,
     UNEXPECTED_EOF,
     BAD_REDIRECTION,
+    BAD_FD,
     // Misuse of shell built-ins -> 2
     ARG_ERROR,
     GRAMMAR_ERROR_ENTRY,
