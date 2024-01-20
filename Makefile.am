@@ -9,11 +9,11 @@ export LIB_LIST=exec/libexec.a \
 		 env/libenv.a \
 		 tools/libtools.a
 
-funct_errors: src/42sh
+funct_errors: all
 	chmod +x ./tests/funct/*.sh
 	./tests/funct/launch.sh errors
 
-funct: src/42sh
+funct: all 
 	chmod +x ./tests/funct/*.sh
 	./tests/funct/launch.sh all
 
