@@ -9,29 +9,14 @@ export LIB_LIST=exec/libexec.a \
 		 env/libenv.a \
 		 tools/libtools.a
 
-# all:42sh
+funct_errors: src/42sh
+	chmod +x ./tests/funct/*.sh
+	./tests/funct/launch.sh errors
 
-# 42sh: src/42sh
+funct: src/42sh
+	chmod +x ./tests/funct/*.sh
+	./tests/funct/launch.sh all
 
-# src/42sh: .FORCE
-# 	make -C src
+check-local: funct
 
-# unit: src/42sh .FORCE
-# 	make -C tests/unit
-# 	mv tests/unit/unit .
-# 	./unit --verbose
-
-# funct_errors: 42sh .FORCE
-# 	chmod +x ./tests/funct/*.sh
-# 	./tests/funct/launch.sh errors
-
-# funct: 42sh .FORCE
-# 	chmod +x ./tests/funct/*.sh
-# 	./tests/funct/launch.sh all
-
-
-# clean-local:
-# 	$(RM) src/42sh unit
-# .FORCE:
-
-# .phony: unit funct 42sh .FORCE check
+.phony: funct funct_errors check
