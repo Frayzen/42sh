@@ -23,11 +23,10 @@ char *append_char(struct pending *p, char c, bool expand)
 {
     // if (p-> == NULL)
     // printf("fuck\n");
-    struct string *str = &(p->str);
+    struct string *str = &p->str;
     str->value = realloc(str->value, ++str->size);
     str->value[str->size - 1] = c;
     str->expand = realloc(str->expand, sizeof(int) * str->size);
-
     str->expand[str->size - 1] = expand;
     p->blank = false;
     return str->value;

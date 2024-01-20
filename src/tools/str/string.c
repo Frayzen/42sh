@@ -28,17 +28,23 @@ void string_destory(struct string *str)
 {
     if (!str)
         return;
-    free(str->value);
-    free(str->expand);
-    free((void *)str);
+    if (str->value)
+        free(str->value);
+    if (str->expand)
+        free(str->expand);
+    free(str);
 }
 
 struct string *dup_str(struct string *str)
 {
     struct string *res = calloc(1, sizeof(struct string));
-    res->value = malloc(sizeof(char) *str->size + 1);
     res->size = str->size;
-    for(size_t i = 0 ; i < str->size + 1; i++)
+    res->value = malloc(sizeof(char) * str->size + 1);
+    for (size_t i = 0; i < str->size + 1; i++)
         res->value[i] = str->value[i];
+    res->expand = malloc(sizeof(char) * str->size + 1);
+    for (size_t i = 0; i < str->size; i++)
+        res->expand[i] = str->expand[i];
+
     return res;
 }

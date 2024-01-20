@@ -76,9 +76,8 @@ struct ast_cmd
     enum token_type type;
     struct string **str_argv;
     int str_argc;
-    char **argv;
-    int argc;
-    
+    // char **argv;
+    // int argc;
 };
 
 #define AST_SH(Base) ((struct ast_sh *)(Base))

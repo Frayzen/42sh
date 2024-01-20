@@ -1,3 +1,4 @@
+#include "tools/str/string.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
@@ -20,13 +21,12 @@ void print_echo(struct ast_cmd *cmd, int i, bool interpret_bslash,
                 bool print_nline)
 {
     DBG_PIPE("Echo command [OUT] %d\n", STDOUT);
-    for (; i < cmd->argc; i++)
+    for (; i < cmd->str_argc; i++)
     {
         // printf("arg = %s\n", cmd->str_argv[i]->value);
         // const char *content = cmd->str_argv[i]->value;
         // printf("arg = %s\n", cmd->argv[i]);
         const char *content = cmd->str_argv[i]->value;
-
         int id = 0;
         while (content[id])
         {
@@ -52,7 +52,7 @@ void print_echo(struct ast_cmd *cmd, int i, bool interpret_bslash,
                 dprintf(STDOUT, "%c", content[id]);
             id++;
         }
-        if (cmd->argc - 1 != i)
+        if (cmd->str_argc - 1 != i)
             dprintf(STDOUT, " ");
     }
     if (print_nline)
@@ -100,7 +100,7 @@ int exec_echo(struct ast_cmd *cmd)
     int i = 1;
     bool print_nline = true;
     bool interpret_bslash = false;
-    while (i < cmd->argc)
+    while (i < cmd->str_argc)
     {
         const char *content = cmd->str_argv[i]->value;
         if (!set_option_echo(content, &interpret_bslash, &print_nline))
@@ -112,8 +112,23 @@ int exec_echo(struct ast_cmd *cmd)
     return 0;
 }
 
+// this will inclue the expandsion
+char **expand_args(struct ast_cmd *cmd)
+{
+    char **args = calloc(1, sizeof(char *) * cmd->str_argc + 1);
+    for (int i = 0; i < cmd->str_argc; i++)
+    {
+        args[i] = cmd->str_argv[i]->value;
+        // free(cmd->str_argv[i]->expand);
+        // cmd->str_argv[i]->value = NULL;
+    }
+    args[cmd->str_argc] = NULL;
+    return args;
+}
+
 int external_bin(struct ast_cmd *cmd)
 {
+    char **args = expand_args(cmd);
     int pid = fork();
     if (pid == -1)
     {
@@ -122,17 +137,19 @@ int external_bin(struct ast_cmd *cmd)
     }
     if (pid == 0)
     {
-        DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n",
-                 cmd->argv[0], STDIN, STDOUT, STDERR);
-        // Apply the file descriptors before executing
-        for (int i = 0; i < 3; i++)
-        {
-            dup2(FDS[i], i);
-            close(FDS[i]);
-        }
-        execvp(cmd->argv[0], cmd->argv);
+        DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n", args[0],
+                 STDIN, STDOUT, STDERR);
+
+        // // Apply the file descriptors before executing
+        // for (int i = 0; i < 3; i++)
+        // {
+        //     dup2(FDS[i], i);
+        //     close(FDS[i]);
+        // }
+        execvp(args[0], args);
         exit(127);
     }
+    free(args);
     int returncode;
     waitpid(pid, &returncode, 0);
     int code = 0;
@@ -147,7 +164,7 @@ int external_bin(struct ast_cmd *cmd)
 int exec_command(struct ast_cmd *ast)
 {
     assert(ast && AST(ast)->type == AST_CMD);
-    assert(ast->argc != 0);
+    assert(ast->str_argc != 0);
     int *fds = setup_redirs(AST_REDIR(ast));
 
     if (!fds)

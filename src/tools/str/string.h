@@ -10,7 +10,7 @@ struct string
 {
     char *value;
     size_t size;
-    int *expand;
+    char *expand;
 };
 void print_string(struct string *str);
 void string_destory(struct string *str);

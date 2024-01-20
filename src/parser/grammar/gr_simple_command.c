@@ -20,7 +20,7 @@ enum status gr_simple_command(struct ast_list *list)
     if (!IS_COMMAND(tok_word) && nb_prefix == 0)
         goto error;
     // WORLD
-    append_arg(cmd, tok_word->str->value);
+    // append_arg(cmd, tok_word->str->value);
     append_arg_str(cmd, tok_word->str);
 
     cmd->type = tok_word->type;

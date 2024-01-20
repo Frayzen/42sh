@@ -40,9 +40,13 @@ void destroy_ast(void *ast)
     switch (AST(ast)->type)
     {
     case AST_CMD:
-        for (int i = 0; i < AST_CMD(ast)->argc; i++)
-            free(AST_CMD(ast)->argv[i]);
-        free(AST_CMD(ast)->argv);
+        // for (int i = 0; i < AST_CMD(ast)->argc; i++)
+        //     free(AST_CMD(ast)->argv[i]);
+
+        for (int i = 0; i < AST_CMD(ast)->str_argc; i++)
+            string_destory(AST_CMD(ast)->str_argv[i]);
+
+        free(AST_CMD(ast)->str_argv);
         /* FALLTHROUGH */
     case AST_SH:
         destroy_redir(AST_REDIR(ast));

@@ -9,8 +9,7 @@
 struct token *next_token(void)
 {
     struct pending *pending = finder();
-    struct string *str = dup_str(&pending->str);
-    struct token *result = init_token(str);
+    struct token *result = init_token(&pending->str);
     if (pending->force_word)
     {
         result->terminal = false;
