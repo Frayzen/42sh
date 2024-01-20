@@ -1,6 +1,7 @@
 #include "finder.h"
 
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -20,22 +21,26 @@
 // return the p->value
 char *append_char(struct pending *p, char c, bool expand)
 {
-    struct string *str = &p->str;
+    // if (p-> == NULL)
+        // printf("fuck\n");
+    struct string *str = &(p->str);
     str->value = realloc(str->value, ++str->size);
     str->value[str->size - 1] = c;
+    str->expand = realloc(str->expand, sizeof(int) *str->size);
+
     str->expand[str->size - 1] = expand;
     p->blank = false;
     return str->value;
 }
 
 // Append every char until limit is found (limit excluded)
-void skip_until(struct pending *p, char limit, bool append)
+void skip_until(struct pending *p, char limit, bool append, bool expand)
 {
     char c = io_peek();
     while (c && c != limit)
     {
         if (append)
-            append_char(p, c, false);
+            append_char(p, c, expand);
         io_pop();
         c = io_peek();
     }
@@ -102,6 +107,8 @@ bool check_next(void)
 {
     switch (io_peek())
     {
+        case '\'':
+        case '\0':
         case '$':
         SPACE_CASES:
             return false;
@@ -109,17 +116,21 @@ bool check_next(void)
         return true;
     }
 }
+
 bool handle_dollar(struct pending *p)
 {
+
+    io_pop();
     char next = io_peek();
     switch (next)
     {
-        SPACE_CASES:    
+        case '\'': 
+        case '\0':
+        SPACE_CASES:
             append_char(p, '$', false);
-            io_pop();
             return false;
+
         case ('{'):
-            io_pop();
             io_pop();
             char ch = io_peek();
             while(ch != '\0' && ch != '}')
@@ -128,13 +139,12 @@ bool handle_dollar(struct pending *p)
                 io_pop();
             }
             return false; 
+
         default:
             append_char(p, '$', true);
-            io_pop();
             if (io_peek() == '$')
             {    
                 append_char(p, '$', true);
-                io_pop();
                 return false;
             }
             while (check_next())
@@ -159,10 +169,8 @@ bool consume(struct pending *p, char c)
     case '"':
         p->blank = false;
         p->force_word = true;
-        p->in_quote = true;
         io_pop();
-        skip_until(p, c, APPEND_CHARS);
-        p->in_quote = false;
+        skip_until(p, c, APPEND_CHARS,);
         if (!io_peek())
             exit_gracefully(UNEXPECTED_EOF);
         io_pop();
@@ -183,8 +191,6 @@ bool consume(struct pending *p, char c)
             goto append;
         return true;
     case '$':
-        if (p->in_quote)
-            goto append;
         return handle_dollar(p);
     SPACE_CASES:
     case '\n':

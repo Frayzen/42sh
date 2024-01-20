@@ -7,12 +7,12 @@
 struct token *next_token(void)
 {
     const struct pending *pending = finder();
-    // print_string(&pending->str);
-    // const struct pending *pending2 = finder();
-    // print_string(pending2->str);
+    print_string(&pending->str);
+    const struct pending *pending2 = finder();
+    print_string(&pending2->str);
     // const struct pending *pending3 = finder();
     // print_string(pending3->str);
-    // exit(0);
+    exit(0);
     struct token *result = init_token(&pending->str);
     if (pending->force_word)
     {

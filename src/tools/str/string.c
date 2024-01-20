@@ -19,6 +19,7 @@ void print_string(const struct string *str)
         return;
     for(size_t i = 0; i < str->size; i++)
         printf("|%c|", str->value[i]);
+    printf("\n");
     for(size_t i = 0; i < str->size; i++)
         printf("|%d|", str->expand[i]);
     printf("\n\n");
