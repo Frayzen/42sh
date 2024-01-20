@@ -13,6 +13,7 @@ struct pending
     bool force_word;
     bool backslashed;
     bool blank;
+    bool in_quote;
 };
 
 /***

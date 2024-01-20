@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#include <threads.h>
 
 #include "exit/error_handler.h"
 #include "io_backend/backend_saver.h"
@@ -17,11 +18,12 @@
     case '\v'
 
 // return the p->value
-char *append_char(struct pending *p, char c)
+char *append_char(struct pending *p, char c, bool expand)
 {
     struct string *str = &p->str;
     str->value = realloc(str->value, ++str->size);
     str->value[str->size - 1] = c;
+    str->expand[str->size - 1] = expand;
     p->blank = false;
     return str->value;
 }
@@ -33,7 +35,7 @@ void skip_until(struct pending *p, char limit, bool append)
     while (c && c != limit)
     {
         if (append)
-            append_char(p, c);
+            append_char(p, c, false);
         io_pop();
         c = io_peek();
     }
@@ -52,7 +54,7 @@ bool special_char(struct pending *p)
     case '=':
         if (IS_BLANK(p))
         {
-            append_char(p, c);
+            append_char(p, c, false);
             io_pop();
         }
         return true;
@@ -70,7 +72,7 @@ bool special_char(struct pending *p)
 // return true if the chevron is accepted
 bool chevron(struct pending *p, char c)
 {
-    append_char(p, c);
+    append_char(p, c, false);
     io_pop();
     char next = io_peek();
     switch (c)
@@ -78,14 +80,14 @@ bool chevron(struct pending *p, char c)
     case '>':
         if (next == '>' || next == '&' || next == '|')
         {
-            append_char(p, next);
+            append_char(p, next, false);
             io_pop();
         }
         break;
     case '<':
         if (next == '&' || next == '>')
         {
-            append_char(p, next);
+            append_char(p, next, false);
             io_pop();
         }
         break;
@@ -93,6 +95,55 @@ bool chevron(struct pending *p, char c)
         return false;
     }
     return true;
+}
+
+
+bool check_next(void)
+{
+    switch (io_peek())
+    {
+        case '$':
+        SPACE_CASES:
+            return false;
+        default:
+        return true;
+    }
+}
+bool handle_dollar(struct pending *p)
+{
+    char next = io_peek();
+    switch (next)
+    {
+        SPACE_CASES:    
+            append_char(p, '$', false);
+            io_pop();
+            return false;
+        case ('{'):
+            io_pop();
+            io_pop();
+            char ch = io_peek();
+            while(ch != '\0' && ch != '}')
+            {
+                append_char(p, io_peek(), true);
+                io_pop();
+            }
+            return false; 
+        default:
+            append_char(p, '$', true);
+            io_pop();
+            if (io_peek() == '$')
+            {    
+                append_char(p, '$', true);
+                io_pop();
+                return false;
+            }
+            while (check_next())
+            {
+                append_char(p, io_peek(), true);
+                io_pop();
+            }
+            return false;
+    }
 }
 
 // return true if finished
@@ -108,8 +159,10 @@ bool consume(struct pending *p, char c)
     case '"':
         p->blank = false;
         p->force_word = true;
+        p->in_quote = true;
         io_pop();
         skip_until(p, c, APPEND_CHARS);
+        p->in_quote = false;
         if (!io_peek())
             exit_gracefully(UNEXPECTED_EOF);
         io_pop();
@@ -129,6 +182,10 @@ bool consume(struct pending *p, char c)
         if (IS_BLANK(p) && !chevron(p, c))
             goto append;
         return true;
+    case '$':
+        if (p->in_quote)
+            goto append;
+        return handle_dollar(p);
     SPACE_CASES:
     case '\n':
     case '\0':
@@ -137,7 +194,7 @@ bool consume(struct pending *p, char c)
         return special_char(p);
     default:
     append:
-        append_char(p, c);
+        append_char(p, c, false);
         break;
     }
     io_pop();
@@ -152,7 +209,7 @@ void consumer(struct pending *p)
         if (p->backslashed)
         {
             p->backslashed = false;
-            append_char(p, c);
+            append_char(p, c, false);
             io_pop();
         }
         else if (consume(p, c))
@@ -166,8 +223,9 @@ const struct pending *finder(void)
     // reset the pending structure
     memset(&p, 0, sizeof(struct pending));
     p.blank = true;
+    p.in_quote = false;
     consumer(&p);
-    append_char(&p, '\0');
+    append_char(&p, '\0', false);
     p.str.size--;
     return &p;
 }

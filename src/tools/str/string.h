@@ -10,6 +10,8 @@ struct string
 {
     char *value;
     size_t size;
+    int *expand;
 };
+void print_string(const struct string *str);
 
 #endif /* !STRING_H */
