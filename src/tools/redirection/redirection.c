@@ -29,6 +29,8 @@ int get_fd(struct redirection *redir)
     {
         DBG_PIPE("considered as a file ");
         int flag = 0;
+        if (type == RT_READ_WRITE)
+            flag = O_CREAT | O_TRUNC | O_RDWR;
         if (type & RT_MASK_IN)
             flag |= O_RDONLY;
         else
@@ -45,6 +47,43 @@ int get_fd(struct redirection *redir)
     }
 }
 
+// return true if everything has been fine
+bool setup_redir(struct redirection *redir)
+{
+    int fd_left = redir->io_number;
+    if (fd_left == -1)
+        fd_left = redir->type & RT_MASK_IN ? STDIN_FILENO : STDOUT_FILENO;
+    int fd_right = get_fd(redir);
+    if (fd_right == -1)
+    {
+        // An error happened
+        print_error(BAD_FD);
+        return false;
+    }
+    if (redir->type == RT_READ_WRITE)
+    {
+        DBG_PIPE("[REDIR] Close and copy %d in FD[%d] BOTH)\n", fd_right,
+                 fd_left);
+        dup2(fd_right, FDS[fd_left]);
+        close(fd_right);
+    }
+    else if (redir->type & RT_MASK_IN)
+    {
+        DBG_PIPE("[REDIR] Close and copy %d in FD[%d] IN)\n", fd_left,
+                 fd_right);
+        dup2(fd_left, FDS[fd_right]);
+        close(fd_left);
+    }
+    else
+    {
+        DBG_PIPE("[REDIR] Close and copy %d in FD[%d] OUT)\n", fd_right,
+                 fd_left);
+        dup2(fd_right, FDS[fd_left]);
+        close(fd_right);
+    }
+    return true;
+}
+
 int *setup_redirs(struct ast_redir *ast)
 {
     DBG_PIPE("[REDIR] START\n");
@@ -57,30 +96,10 @@ int *setup_redirs(struct ast_redir *ast)
     for (int i = 0; i < ast->redir_nb; i++)
     {
         struct redirection *redir = ast->redirs[i];
-        int fd_left = redir->io_number;
-        if (fd_left == -1)
-            fd_left = redir->type & RT_MASK_IN ? STDIN_FILENO : STDOUT_FILENO;
-        int fd_right = get_fd(redir);
-        if (fd_right == -1)
+        if (!setup_redir(redir))
         {
-            // An error happened
             close_redirs(saved);
-            print_error(BAD_FD);
             return NULL;
-        }
-        if (redir->type & RT_MASK_IN)
-        {
-            DBG_PIPE("[REDIR] Close and copy %d in FD[%d] IN)\n", fd_left,
-                     fd_right);
-            dup2(fd_left, FDS[fd_right]);
-            close(fd_left);
-        }
-        else
-        {
-            DBG_PIPE("[REDIR] Close and copy %d in FD[%d] OUT)\n", fd_right,
-                     fd_left);
-            dup2(fd_right, FDS[fd_left]);
-            close(fd_right);
         }
     }
     return saved;
