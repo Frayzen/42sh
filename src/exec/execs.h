@@ -49,4 +49,10 @@ int exec_pipe(struct ast_pipe *ast);
  */
 int exec_loop(struct ast_loop *ast);
 
+/***
+ * executes the for ast
+ * @param ast tree to execute
+ */
+int exec_for(struct ast_for *ast);
+
 #endif /* EXECS_H */
