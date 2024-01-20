@@ -128,7 +128,6 @@ int external_bin(struct ast_cmd *cmd)
             if (i != FDS[i])
                 close(FDS[i]);
         }
-        dprintf(STDERR_FILENO, "This is an error\n");
         execvp(cmd->argv[0], cmd->argv);
         exit(127);
     }
