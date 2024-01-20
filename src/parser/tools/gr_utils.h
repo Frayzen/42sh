@@ -8,8 +8,7 @@
  * @param cmd the command ast
  * @param arg the new argument to append
  */
-void append_arg(struct ast_cmd *cmd, char *arg);
-void append_arg_str(struct ast_cmd *cmd, struct string *arg);
+void append_arg(struct ast_cmd *cmd, struct string *arg);
 
 /***
  * add_child: add an ast to a tree list

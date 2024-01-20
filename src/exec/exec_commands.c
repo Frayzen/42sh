@@ -21,12 +21,12 @@ void print_echo(struct ast_cmd *cmd, int i, bool interpret_bslash,
                 bool print_nline)
 {
     DBG_PIPE("Echo command [OUT] %d\n", STDOUT);
-    for (; i < cmd->str_argc; i++)
+    for (; i < cmd->argc; i++)
     {
-        // printf("arg = %s\n", cmd->str_argv[i]->value);
-        // const char *content = cmd->str_argv[i]->value;
+        // printf("arg = %s\n", cmd->str[i]->value);
+        // const char *content = cmd->str[i]->value;
         // printf("arg = %s\n", cmd->argv[i]);
-        const char *content = cmd->str_argv[i]->value;
+        const char *content = cmd->str[i]->value;
         int id = 0;
         while (content[id])
         {
@@ -52,7 +52,7 @@ void print_echo(struct ast_cmd *cmd, int i, bool interpret_bslash,
                 dprintf(STDOUT, "%c", content[id]);
             id++;
         }
-        if (cmd->str_argc - 1 != i)
+        if (cmd->argc - 1 != i)
             dprintf(STDOUT, " ");
     }
     if (print_nline)
@@ -100,9 +100,9 @@ int exec_echo(struct ast_cmd *cmd)
     int i = 1;
     bool print_nline = true;
     bool interpret_bslash = false;
-    while (i < cmd->str_argc)
+    while (i < cmd->argc)
     {
-        const char *content = cmd->str_argv[i]->value;
+        const char *content = cmd->str[i]->value;
         if (!set_option_echo(content, &interpret_bslash, &print_nline))
             break;
         i++;
@@ -112,17 +112,13 @@ int exec_echo(struct ast_cmd *cmd)
     return 0;
 }
 
-// this will inclue the expandsion
+// this will include the expansion
 char **expand_args(struct ast_cmd *cmd)
 {
-    char **args = calloc(1, sizeof(char *) * cmd->str_argc + 1);
-    for (int i = 0; i < cmd->str_argc; i++)
-    {
-        args[i] = cmd->str_argv[i]->value;
-        // free(cmd->str_argv[i]->expand);
-        // cmd->str_argv[i]->value = NULL;
-    }
-    args[cmd->str_argc] = NULL;
+    char **args = calloc(1, sizeof(char *) * cmd->argc + 1);
+    for (int i = 0; i < cmd->argc; i++)
+        args[i] = cmd->str[i]->value;
+    args[cmd->argc] = NULL;
     return args;
 }
 
@@ -164,7 +160,7 @@ int external_bin(struct ast_cmd *cmd)
 int exec_command(struct ast_cmd *ast)
 {
     assert(ast && AST(ast)->type == AST_CMD);
-    assert(ast->str_argc != 0);
+    assert(ast->argc != 0);
     int *fds = setup_redirs(AST_REDIR(ast));
 
     if (!fds)

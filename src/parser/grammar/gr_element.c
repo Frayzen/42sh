@@ -17,8 +17,7 @@ enum status gr_element(struct ast_cmd *cmd)
     struct token *token = tok_peek();
     if (IS_WORDABLE(token))
     {
-        // append_arg(cmd, token->str->value);
-        append_arg_str(cmd, token->str);
+        append_arg(cmd, token->str);
 
         tok_pop();
         GR_DBG_RET(OK);

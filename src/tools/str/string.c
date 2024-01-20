@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 bool is_number(char *val)
 {
@@ -37,14 +38,15 @@ void string_destory(struct string *str)
 
 struct string *dup_str(struct string *str)
 {
+    // str is taken from the pending struct so we dont need to free it
+    // there is probably a better way to do it ;)
     struct string *res = calloc(1, sizeof(struct string));
     res->size = str->size;
-    res->value = malloc(sizeof(char) * str->size + 1);
-    for (size_t i = 0; i < str->size + 1; i++)
-        res->value[i] = str->value[i];
-    res->expand = malloc(sizeof(char) * str->size + 1);
-    for (size_t i = 0; i < str->size; i++)
-        res->expand[i] = str->expand[i];
-
+    res->value = malloc(sizeof(char) * (str->size + 1));
+    memcpy(res->value, str->value, sizeof(char) * (str->size + 1));
+    res->expand = malloc(sizeof(char) * str->size);
+    memcpy(res->expand, str->expand, sizeof(char) * str->size);
+    free(str->expand);
+    free(str->value);
     return res;
 }

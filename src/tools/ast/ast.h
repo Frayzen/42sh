@@ -74,8 +74,8 @@ struct ast_cmd
 {
     struct ast_redir redirs;
     enum token_type type;
-    struct string **str_argv;
-    int str_argc;
+    struct string **str;
+    int argc;
     // char **argv;
     // int argc;
 };
