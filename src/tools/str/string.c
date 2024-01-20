@@ -25,7 +25,7 @@ void print_string(struct string *str)
     printf("\n");
 }
 
-void string_destory(struct string *str)
+void string_destroy(struct string *str)
 {
     if (!str)
         return;

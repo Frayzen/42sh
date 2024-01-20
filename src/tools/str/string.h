@@ -17,7 +17,7 @@ void print_string(struct string *str);
  * Frees a string struct
  * param @ str : the string to free
  ***/
-void string_destory(struct string *str);
+void string_destroy(struct string *str);
 /***
  *  allaocted a struct string copying the data from a static str
  *  it then frees the vaule and expand

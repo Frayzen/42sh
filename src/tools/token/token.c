@@ -82,10 +82,10 @@ struct token *init_token(struct string *str)
 
 void destroy_token(struct token *token)
 {
-    if (!token)
+    print_string(token->str);
         return;
     if (token->str)
-        string_destory(token->str);
+        string_destroy(token->str);
     free(token);
 }
 

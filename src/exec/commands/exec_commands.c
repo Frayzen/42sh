@@ -22,9 +22,6 @@ void print_echo(struct ast_cmd *cmd, int i, bool interpret_bslash,
     DBG_PIPE("Echo command [OUT] %d\n", STDOUT);
     for (; i < cmd->argc; i++)
     {
-        // printf("arg = %s\n", cmd->str[i]->value);
-        // const char *content = cmd->str[i]->value;
-        // printf("arg = %s\n", cmd->argv[i]);
         const char *content = cmd->str[i]->value;
         int id = 0;
         while (content[id])
