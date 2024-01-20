@@ -34,13 +34,13 @@ char *append_char(struct pending *p, char c, bool expand)
 }
 
 // Append every char until limit is found (limit excluded)
-void skip_until(struct pending *p, char limit, bool append, bool expand)
+void skip_until(struct pending *p, char limit, bool append)
 {
     char c = io_peek();
     while (c && c != limit)
     {
         if (append)
-            append_char(p, c, expand);
+            append_char(p, c, false);
         io_pop();
         c = io_peek();
     }
@@ -170,7 +170,7 @@ bool consume(struct pending *p, char c)
         p->blank = false;
         p->force_word = true;
         io_pop();
-        skip_until(p, c, APPEND_CHARS,);
+        skip_until(p, c, APPEND_CHARS);
         if (!io_peek())
             exit_gracefully(UNEXPECTED_EOF);
         io_pop();
