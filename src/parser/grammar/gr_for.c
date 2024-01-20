@@ -11,9 +11,11 @@
 void add_to_item_list(struct ast_for *ast)
 {
     struct token *item = tok_peek();
+    // tok_pop();
+    ast->item_list =
+        realloc(ast->item_list, ++ast->nb_items * sizeof(struct string *));
+    ast->item_list[ast->nb_items - 1] = item->str;
     tok_pop();
-    ast->item_list = realloc(ast->item_list, ++ast->nb_items * sizeof(char *));
-    ast->item_list[ast->nb_items - 1] = item->str->value;
 }
 
 /* rule_for ='for' WORD ( [';'] | [ {'\n'} 'in' { WORD } ( ';' | '\n' ) ] )
@@ -28,7 +30,7 @@ enum status gr_for(struct ast_list *ast)
         return ERROR;
     struct ast_for *ast_for = init_ast(AST_FOR);
     ast_for->name = tok_peek()->str->value;
-    tok_peek()->str = NULL;
+    tok_peek()->str->value = NULL;
     tok_pop_clean();
     if (tok_peek()->type == SEMI_COLON)
         tok_pop_clean();

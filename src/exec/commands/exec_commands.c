@@ -129,8 +129,8 @@ int external_bin(struct ast_cmd *cmd)
     }
     if (pid == 0)
     {
-        DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n",
-                 argv[0], STDIN, STDOUT, STDERR);
+        DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n", argv[0],
+                 STDIN, STDOUT, STDERR);
         // Apply the file descriptors before executing
         for (int i = 0; i < 3; i++)
         {

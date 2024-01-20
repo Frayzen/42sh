@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "str/string.h"
 #include "tools/redirection/redirection.h"
 
 struct ast **set_ast_root(struct ast **ast)
@@ -72,7 +73,7 @@ void destroy_ast(void *ast)
         if (AST_FOR(ast)->item_list)
         {
             for (int i = 0; i < AST_FOR(ast)->nb_items; i++)
-                free(AST_FOR(ast)->item_list[i]);
+                string_destroy(AST_FOR(ast)->item_list[i]);
             free(AST_FOR(ast)->item_list);
         }
         /* FALLTHROUGH */

@@ -19,7 +19,7 @@ enum status gr_element(struct ast_cmd *cmd)
     {
         append_arg(cmd, token->str);
 
-        tok_pop(); 
+        tok_pop();
         GR_DBG_RET(OK);
     }
     return gr_redir(AST_REDIR(cmd));
