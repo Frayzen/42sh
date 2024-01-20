@@ -140,21 +140,27 @@ int exec_builtin(struct ast_cmd *ast)
     assert(ast->argc != 0 && ast->is_builtin);
     int *fds = setup_redirs(AST_REDIR(ast));
     if (!fds)
-        return false;
+        return 1;
+    int ret;
     switch (ast->type)
     {
     case ECHO:
         exec_echo(ast);
-        return 0;
+        ret = 0;
+        break;
     case T_TRUE:
-        return 0;
+        ret = 0;
+        break;
     case T_FALSE:
-        return 1;
+        ret = 1;
+        break;
     default:
         assert(false);
-        return 1;
+        ret = 1;
+        break;
     }
     close_redirs(fds);
+    return ret;
 }
 
 // Execute the binary and return the pid
@@ -164,7 +170,7 @@ int exec_bin(struct ast_cmd *ast)
     assert(ast->argc != 0 && !ast->is_builtin);
     int *fds = setup_redirs(AST_REDIR(ast));
     if (!fds)
-        return false;
+        return -1;
     int ret = external_bin(ast);
     close_redirs(fds);
     return ret;

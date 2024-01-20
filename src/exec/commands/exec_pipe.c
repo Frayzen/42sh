@@ -58,6 +58,8 @@ int exec_piped(struct ast *ast, int in, int out, int *pid)
 // if pid is negative, handle the builtin
 int wait_for(int pid)
 {
+    if (pid == -1)
+        return 1;
     int returncode;
     waitpid(pid, &returncode, 0);
     int retval = 0;
