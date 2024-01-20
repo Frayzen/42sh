@@ -29,6 +29,10 @@ int exec_piped(struct ast *ast, int in, int out)
     case AST_UNTIL:
         ret = exec_loop(AST_LOOP(ast));
         break;
+    case AST_FOR:
+        // TODO exec_for
+        ret = 0;
+        break;
     default:
         print_error(PIPE_NOT_FOUND);
         ret = 1;
