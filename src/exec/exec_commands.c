@@ -148,7 +148,7 @@ int exec_command(struct ast_cmd *ast)
     assert(ast->argc != 0);
     int *fds = setup_redirs(AST_REDIR(ast));
     if (!fds)
-        return 1;
+        return 2;
     int ret = 1;
     switch (ast->type)
     {
