@@ -6,14 +6,13 @@
 int exec_loop(struct ast_loop *ast)
 {
     assert(AST(ast)->type == AST_WHILE || AST(ast)->type == AST_UNTIL);
-    assert(ast && ast->cond && ast->exec);
     bool negate = AST(ast)->type == AST_UNTIL;
-    int ret = exec_list(ast->cond);
+    int ret = exec_list(&ast->cond);
     //! ret for 0
     while (negate ? ret : !ret)
     {
-        exec_list(ast->exec);
-        ret = exec_list(ast->cond);
+        exec_list(&ast->exec);
+        ret = exec_list(&ast->cond);
     }
     return 0;
 }

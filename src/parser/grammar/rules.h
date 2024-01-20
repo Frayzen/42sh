@@ -76,10 +76,12 @@ enum status gr_list(struct ast **new_list);
 
 /***
  * Grammar rule for coumpound_list, fill the provided ast (needs to exists)
- * @param ls_ast the ast to be filled
+ * /!\ If error is returned, the list_ast need to be freed by the calling
+ * function
+ * @param list_ast the ast to be filled
  * @return enum that tells the status
  */
-enum status gr_compound_list(struct ast_list *ls_ast);
+enum status gr_compound_list(struct ast_list *list_ast);
 
 /***
  * Grammar rule for elif

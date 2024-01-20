@@ -40,14 +40,15 @@ struct ast **get_children(struct ast *ast)
             ret[i] = AST_LIST(ast)->children[i];
         break;
     case AST_IF:
-        ret[i++] = AST(AST_IF(ast)->cond);
-        ret[i++] = AST(AST_IF(ast)->then);
+        ret[i++] = AST(&AST_IF(ast)->cond);
+        ret[i++] = AST(&AST_IF(ast)->then);
+        // Normal to not take the pointer, fallback already is
         ret[i++] = AST(AST_IF(ast)->fallback);
         break;
     case AST_WHILE:
     case AST_UNTIL:
-        ret[i++] = AST(AST_LOOP(ast)->cond);
-        ret[i++] = AST(AST_LOOP(ast)->exec);
+        ret[i++] = AST(&AST_LOOP(ast)->cond);
+        ret[i++] = AST(&AST_LOOP(ast)->exec);
         break;
     default:
         free(ret);

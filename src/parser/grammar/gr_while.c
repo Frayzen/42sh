@@ -12,12 +12,12 @@ enum status gr_while(struct ast_list *list)
 
     CHECK_GOTO(tok_peek()->type != WHILE, error);
     tok_pop_clean();
-    CHECK_GOTO(gr_compound_list(wh_ast->cond) == ERROR, error);
+    CHECK_GOTO(gr_compound_list(AST_LIST(&wh_ast->cond)) == ERROR, error);
 
     CHECK_GOTO(tok_peek()->type != DO, error);
 
     tok_pop_clean();
-    CHECK_GOTO(gr_compound_list(wh_ast->exec) == ERROR, error);
+    CHECK_GOTO(gr_compound_list(AST_LIST(&wh_ast->exec)) == ERROR, error);
 
     CHECK_GOTO(tok_peek()->type != DONE, error);
     tok_pop_clean();
