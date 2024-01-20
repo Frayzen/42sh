@@ -63,10 +63,12 @@ void destroy_ast(void *ast)
     case AST_UNTIL:
         destroy_ast(AST_LOOP(ast)->cond);
         destroy_ast(AST_LOOP(ast)->exec);
+        break;
     case AST_FOR:
-        destroy_ast(AST_FOR(ast)->cmds);
+        // destroy_ast(AST_FOR(ast)->cmds);
         if (AST_FOR(ast)->item_list)
             free(AST_FOR(ast)->item_list);
+        break;
     default:
         break;
     }

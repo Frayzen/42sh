@@ -90,6 +90,7 @@ struct ast_sh
 struct ast_for
 {
     struct ast_list cmds;
+    char *name;
     int nb_items;
     char **item_list;
 };
