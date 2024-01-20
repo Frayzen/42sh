@@ -26,17 +26,19 @@ int exec_and_or(struct ast_and_or *ast)
     assert(AST(ast)->type == AST_AND_OR);
     struct ast_list *list = AST_LIST(ast);
     assert(list && list->nb_children > 0);
-    int i = 0;
-    for (; i < list->nb_children - 1; i++)
+    int prev = exec_and_or_child(list->children[0]);
+    for (int i = 1; i < list->nb_children; i++)
     {
         struct ast *child = list->children[i];
-        int ret = exec_and_or_child(child);
-        if (ret == -1)
+        // PREVIOUS ONE
+        enum token_type type = ast->types[i - 1];
+        if (type == AND && prev != SUCCESS)
+            continue;
+        if (type == OR && prev == SUCCESS)
+            continue;
+        prev = exec_and_or_child(child);
+        if (prev == -1)
             return 1;
-        if (ast->types[i] == AND && ret != SUCCESS)
-            return ret;
-        if (ast->types[i] == OR && ret == SUCCESS)
-            return ret;
     }
-    return exec_and_or_child(list->children[i]);
+    return prev;
 }
