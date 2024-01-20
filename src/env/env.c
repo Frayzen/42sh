@@ -2,17 +2,14 @@
 
 #include <stdbool.h>
 
-#include "tools/token/token.h"
-
-struct env_flag *get_env_flag(void)
+struct env *get_env_flag(void)
 {
-    static struct env_flag flag = { .print = false,
-                                    .verbose = false,
-                                    .null_received = false };
+    static struct env flag = {
+        .pretty_print = false,
+        .verbose = false,
+        .debug_pipe = false,
+        .null_received = false,
+        .fds = { 0, 1, 2, -1 },
+    };
     return &flag;
-}
-
-void verbose(struct token *token)
-{
-    print_token(token);
 }

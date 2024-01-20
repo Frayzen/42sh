@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "lexer/tokenizer.h"
 #include "tools/ring_buffer/ring_buffer.h"
@@ -41,7 +42,17 @@ bool tok_pop_clean(void)
 
 bool tok_pop(void)
 {
-    return rb_pop(get_buffer());
+    struct token *tok = tok_peek();
+    int ret = rb_pop(get_buffer());
+    free(tok);
+    return ret;
+}
+
+void comsume_all(void)
+{
+    while (!tok_peek()->terminal)
+        tok_pop_clean();
+    tok_pop_clean();
 }
 
 void clean_token_saver(void)
