@@ -17,7 +17,7 @@ enum status gr_redir(struct ast_redir *ast)
     struct token *token = tok_peek();
     if (tok_peek()->type == IO_NUMBER)
     {
-        redir->io_number = atoi(token->value);
+        redir->io_number = atoi(token->str->value);
         tok_pop_clean();
     }
     else
@@ -25,12 +25,12 @@ enum status gr_redir(struct ast_redir *ast)
 
     token = tok_peek();
     CHECK_GOTO(token->type != CHEVRON, error);
-    redir->type = get_redir_type(token->value);
+    redir->type = get_redir_type(token->str->value);
     tok_pop_clean();
 
     token = tok_peek();
     CHECK_GOTO(!IS_WORDABLE(token), error);
-    redir->to = token->value;
+    redir->to = token->str->value;
     tok_pop();
 
     append_redir(ast, redir);

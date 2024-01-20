@@ -22,11 +22,11 @@
 char *append_char(struct pending *p, char c, bool expand)
 {
     // if (p-> == NULL)
-        // printf("fuck\n");
+    // printf("fuck\n");
     struct string *str = &(p->str);
     str->value = realloc(str->value, ++str->size);
     str->value[str->size - 1] = c;
-    str->expand = realloc(str->expand, sizeof(int) *str->size);
+    str->expand = realloc(str->expand, sizeof(int) * str->size);
 
     str->expand[str->size - 1] = expand;
     p->blank = false;
@@ -102,57 +102,55 @@ bool chevron(struct pending *p, char c)
     return true;
 }
 
-
 bool check_next(void)
 {
     switch (io_peek())
     {
-        case '\'':
-        case '\0':
-        case '$':
-        SPACE_CASES:
-            return false;
-        default:
+    case '\'':
+    case '\0':
+    case '$':
+    SPACE_CASES:
+        return false;
+    default:
         return true;
     }
 }
 
 bool handle_dollar(struct pending *p)
 {
-
     io_pop();
     char next = io_peek();
     switch (next)
     {
-        case '\'': 
-        case '\0':
-        SPACE_CASES:
-            append_char(p, '$', false);
-            return false;
+    case '\'':
+    case '\0':
+    SPACE_CASES:
+        append_char(p, '$', false);
+        return false;
 
-        case ('{'):
+    case ('{'):
+        io_pop();
+        char ch = io_peek();
+        while (ch != '\0' && ch != '}')
+        {
+            append_char(p, io_peek(), true);
             io_pop();
-            char ch = io_peek();
-            while(ch != '\0' && ch != '}')
-            {
-                append_char(p, io_peek(), true);
-                io_pop();
-            }
-            return false; 
+        }
+        return false;
 
-        default:
+    default:
+        append_char(p, '$', true);
+        if (io_peek() == '$')
+        {
             append_char(p, '$', true);
-            if (io_peek() == '$')
-            {    
-                append_char(p, '$', true);
-                return false;
-            }
-            while (check_next())
-            {
-                append_char(p, io_peek(), true);
-                io_pop();
-            }
             return false;
+        }
+        while (check_next())
+        {
+            append_char(p, io_peek(), true);
+            io_pop();
+        }
+        return false;
     }
 }
 
@@ -223,7 +221,7 @@ void consumer(struct pending *p)
     }
 }
 
-const struct pending *finder(void)
+struct pending *finder(void)
 {
     static struct pending p;
     // reset the pending structure

@@ -15,7 +15,7 @@ extern void build_redir(struct ast *ast, struct redir *redir);
 
 struct ast *create_ast_token(char *c)
 {
-    const struct string str = {
+    struct string str = {
         .value = strdup(c),
         .size = strlen(c),
     };

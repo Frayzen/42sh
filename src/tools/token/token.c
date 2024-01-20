@@ -1,5 +1,7 @@
-#include "tools/str/string.h"
 #define _XOPEN_SOURCE 700
+
+#include "token.h"
+
 #include <ctype.h>
 #include <fnmatch.h>
 #include <stdio.h>
@@ -7,7 +9,7 @@
 #include <string.h>
 
 #include "io_backend/backend_saver.h"
-#include "token.h"
+#include "tools/str/string.h"
 
 bool is_terminating(struct token *token)
 {
@@ -69,11 +71,11 @@ int get_type(const struct string *str)
     return i;
 }
 
-struct token *init_token(const struct string *str)
+struct token *init_token(struct string *str)
 {
     struct token *tok = malloc(sizeof(struct token));
     tok->type = get_type(str);
-    tok->value = str->value;
+    tok->str = str;
     tok->terminal = is_terminating(tok);
     return tok;
 }
@@ -82,8 +84,8 @@ void destroy_token(struct token *token)
 {
     if (!token)
         return;
-    if (token->value)
-        free(token->value);
+    // if (token->str)
+        // string_destory(token->str);
     free(token);
 }
 
@@ -111,13 +113,13 @@ void print_token(struct token *token)
         const char *type_token = tok_type[token->type];
         char *type = to_upper(type_token);
         if (!type)
-            printf(" |%s|%s| ", "WORD", token->value);
+            printf(" |%s|%s| ", "WORD", token->str->value);
         else if (!strcmp(type, "\n"))
             printf(" |%s|%s| ", "NEWLINE", "\\n");
         else if (!strcmp(type, "\0"))
             printf(" |%s|%s| ", "BSZERO", "\\0");
         else
-            printf(" |%s|%s| ", type, token->value);
+            printf(" |%s|%s| ", type, token->str->value);
         free(type);
     }
     printf("\n");

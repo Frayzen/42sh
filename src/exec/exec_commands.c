@@ -22,7 +22,11 @@ void print_echo(struct ast_cmd *cmd, int i, bool interpret_bslash,
     DBG_PIPE("Echo command [OUT] %d\n", STDOUT);
     for (; i < cmd->argc; i++)
     {
-        const char *content = cmd->argv[i];
+        // printf("arg = %s\n", cmd->str_argv[i]->value);
+        // const char *content = cmd->str_argv[i]->value;
+        // printf("arg = %s\n", cmd->argv[i]);
+        const char *content = cmd->str_argv[i]->value;
+
         int id = 0;
         while (content[id])
         {
@@ -98,7 +102,7 @@ int exec_echo(struct ast_cmd *cmd)
     bool interpret_bslash = false;
     while (i < cmd->argc)
     {
-        const char *content = cmd->argv[i];
+        const char *content = cmd->str_argv[i]->value;
         if (!set_option_echo(content, &interpret_bslash, &print_nline))
             break;
         i++;
@@ -145,6 +149,7 @@ int exec_command(struct ast_cmd *ast)
     assert(ast && AST(ast)->type == AST_CMD);
     assert(ast->argc != 0);
     int *fds = setup_redirs(AST_REDIR(ast));
+
     if (!fds)
         return 1;
     int ret = 1;

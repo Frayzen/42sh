@@ -21,5 +21,5 @@ struct pending
  * @return a string struct
  * @see struct string
  */
-const struct pending *finder(void);
+struct pending *finder(void);
 #endif /* FINDER_H */
