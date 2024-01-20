@@ -15,3 +15,7 @@ echo ok && echo ok && ls && pwd && cat file && echo ok
 
 ### Tst no space
 echo OK&&echo ok||echo no
+
+### Example SCL
+false && echo foo || echo bar
+true || echo foo && echo bar
