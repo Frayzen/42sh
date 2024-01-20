@@ -33,6 +33,7 @@ void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
 {
     if (!ast_root)
         return;
+    printf("TYPE IS %d\n", ast_root->type);
     for (int i = 0; i < depth - 1; i++)
     {
         if (last_of_first)
@@ -113,9 +114,6 @@ int write_buf(char *buffer, char *str, int i)
 
 void debug_pretty_print(struct ast *ast)
 {
-    char buffer[2048];
-    if (ast)
-        printf("%s\n", buffer);
-    printf("%s\n", ast_to_str(ast));
+    /* printf("%s\n", ast_to_str(ast)); */
     pretty_print_ast(ast);
 }

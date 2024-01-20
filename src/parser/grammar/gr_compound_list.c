@@ -7,7 +7,7 @@
 compound_list =
 {'\n'} and_or { ( ';' | '\n' ) {'\n'} and_or } [';'] {'\n'} ;
 */
-enum status gr_compound_list(struct ast_list **ast)
+enum status gr_compound_list(struct ast_list *ast)
 {
     GR_DBG_START(CompoundList);
     while (tok_peek()->type == NEWLINE)

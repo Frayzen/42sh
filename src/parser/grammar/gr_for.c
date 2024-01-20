@@ -4,7 +4,6 @@
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "tools/ast/ast_utils.h"
 #include "tools/gr_tools.h"
 #include "tools/gr_utils.h"
 #include "tools/token/token.h"
@@ -28,6 +27,7 @@ enum status gr_for(struct ast_list *ast)
     if (!IS_WORDABLE(tok_peek()))
         return ERROR;
     struct ast_for *ast_for = init_ast(AST_FOR);
+    printf("bef APPENDING AST TYPE %d\n", AST(ast_for)->type);
     ast_for->name = tok_peek()->value;
     tok_pop();
     if (tok_peek()->type == SEMI_COLON)
@@ -50,13 +50,11 @@ enum status gr_for(struct ast_list *ast)
         tok_pop_clean();
     CHECK_GOTO(tok_peek()->type != DO, error);
     tok_pop_clean();
-    struct ast_list *cmds = NULL;
-    enum status ret = gr_compound_list(&cmds);
-    if (ret == ERROR)
+    if(gr_compound_list((struct ast_list**)&ast_for))
         goto error;
-    ast_for->cmds = *cmds;
     CHECK_GOTO(tok_peek()->type != DONE, error);
     tok_pop_clean();
+    printf("APPENDING AST TYPE %d\n", AST(ast_for)->type);
     add_child(ast, AST(ast_for));
     GR_DBG_RET(OK);
 error:
