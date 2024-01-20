@@ -29,6 +29,8 @@ void add_child(struct ast_list *list, struct ast *child)
 #define CHILDREN_SIZE 1024
 struct ast **get_children(struct ast *ast)
 {
+    if (!ast)
+        return NULL;
     struct ast **ret = calloc(CHILDREN_SIZE, sizeof(struct ast *));
     int i = 0;
     switch (ast->type)
