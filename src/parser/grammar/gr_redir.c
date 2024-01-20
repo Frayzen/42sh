@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 200809L
 #include <stdlib.h>
 
 #include "lexer/token_saver.h"
@@ -31,7 +32,8 @@ enum status gr_redir(struct ast_redir *ast)
     token = tok_peek();
     CHECK_GOTO(!IS_WORDABLE(token), error);
     redir->to = token->str->value;
-    tok_pop();
+    token->str->value = NULL;
+    tok_pop_clean();
 
     append_redir(ast, redir);
     return OK;
