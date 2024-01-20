@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <stdio.h>
 
 #include "commands/execs_cmd.h"
 #include "execs.h"
@@ -18,6 +17,9 @@ int exec_list(struct ast_list *ast)
         {
         case AST_PIPE:
             ret = exec_pipe(AST_PIPE(child));
+            break;
+        case AST_AND_OR:
+            ret = exec_and_or(AST_AND_OR(child));
             break;
         default:
             exit_gracefully(LIST_NOT_FOUND);
