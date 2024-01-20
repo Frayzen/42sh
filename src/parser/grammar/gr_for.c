@@ -12,7 +12,7 @@
 void add_to_item_list(struct ast_for *ast)
 {
     struct token *item = tok_peek();
-    tok_pop_clean();
+    tok_pop();
     ast->item_list = realloc(ast->item_list, ++ast->nb_items * sizeof(char *));
     ast->item_list[ast->nb_items - 1] = item->value;
 }
@@ -22,12 +22,14 @@ void add_to_item_list(struct ast_for *ast)
  */
 enum status gr_for(struct ast_list *ast)
 {
-    CHECK_GOTO(tok_peek()->type != FOR, error)
+    if (tok_peek()->type != FOR)
+        return ERROR;
     tok_pop_clean();
-    CHECK_GOTO(!IS_WORDABLE(tok_peek()), error);
+    if (!IS_WORDABLE(tok_peek()))
+        return ERROR;
     struct ast_for *ast_for = init_ast(AST_FOR);
     ast_for->name = tok_peek()->value;
-    tok_pop_clean();
+    tok_pop();
     if (tok_peek()->type == SEMI_COLON)
         tok_pop_clean();
     else
@@ -58,5 +60,6 @@ enum status gr_for(struct ast_list *ast)
     add_child(ast, AST(ast_for));
     GR_DBG_RET(OK);
 error:
+    destroy_ast(AST_FOR(ast_for));
     GR_DBG_RET(ERROR);
 }

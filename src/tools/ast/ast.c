@@ -53,6 +53,15 @@ void destroy_ast(void *ast)
         destroy_ast(AST_IF(ast)->then);
         destroy_ast(AST_IF(ast)->fallback);
         break;
+    case AST_FOR:
+        free(AST_FOR(ast)->name);
+        if (AST_FOR(ast)->item_list)
+        {
+            for (int i = 0; i < AST_FOR(ast)->nb_items; i++)
+                free(AST_FOR(ast)->item_list[i]);
+            free(AST_FOR(ast)->item_list);
+        }
+        /* FALLTHROUGH */
     case AST_PIPE:
     case AST_LIST:
         for (int i = 0; i < AST_LIST(ast)->nb_children; i++)
@@ -63,11 +72,6 @@ void destroy_ast(void *ast)
     case AST_UNTIL:
         destroy_ast(AST_LOOP(ast)->cond);
         destroy_ast(AST_LOOP(ast)->exec);
-        break;
-    case AST_FOR:
-        // destroy_ast(AST_FOR(ast)->cmds);
-        if (AST_FOR(ast)->item_list)
-            free(AST_FOR(ast)->item_list);
         break;
     default:
         break;
