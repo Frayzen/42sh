@@ -3,6 +3,7 @@ lib_LIBRARIES = libexec.a
 libexec_a_SOURCES = \
 	execs.h\
 	exec_commands.c\
+	exec_and_or.c\
 	exec_entry.c\
 	exec_list.c \
 	exec_condition.c\

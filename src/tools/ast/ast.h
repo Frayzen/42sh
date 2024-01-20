@@ -95,14 +95,14 @@ struct ast_for
     char **item_list;
 };
 
-//BEGIN AND OR
+// BEGIN AND OR
 #define AST_AND_OR(Base) ((struct ast_and_or *)(Base))
 struct ast_and_or
 {
     struct ast_list list;
     enum token_type *types;
 };
-//END AND OR
+// END AND OR
 
 /***
  * Set or gets the pointer to the ast root

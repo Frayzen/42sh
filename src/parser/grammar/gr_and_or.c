@@ -1,15 +1,17 @@
+#include <assert.h>
 #include <stdlib.h>
+
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/gr_utils.h"
 #include "tools/token/token.h"
-#include <assert.h>
 
 void append_ao_type(struct ast_and_or *ao, enum token_type type)
 {
     assert(type == AND || type == OR);
-    ao->types = realloc(ao->types, sizeof(enum token_type) * AST_LIST(ao)->nb_children);
+    ao->types =
+        realloc(ao->types, sizeof(enum token_type) * AST_LIST(ao)->nb_children);
     ao->types[AST_LIST(ao)->nb_children - 1] = type;
 }
 
