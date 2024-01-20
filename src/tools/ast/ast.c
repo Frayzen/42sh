@@ -66,6 +66,10 @@ void destroy_ast(void *ast)
         destroy_list(&AST_IF(ast)->then);
         destroy_ast(AST_IF(ast)->fallback);
         break;
+    case AST_AND_OR:
+            free(AST_AND_OR(ast)->types);
+        goto destroy_list;
+        break;
     case AST_FOR:
         free(AST_FOR(ast)->name);
         if (AST_FOR(ast)->item_list)
@@ -77,12 +81,8 @@ void destroy_ast(void *ast)
         /* FALLTHROUGH */
     case AST_PIPE:
     case AST_LIST:
+destroy_list:
         destroy_list(AST_LIST(ast));
-        break;
-    case AST_AND_OR:
-        // destroy_ast(AST_PIPE(ast));
-        if(AST_AND_OR(ast)->size)
-            free(AST_AND_OR(ast)->list);
         break;
     default:
         break;
