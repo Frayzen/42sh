@@ -11,12 +11,14 @@
 #include "exit/error_handler.h"
 #include "tools/str/string.h"
 
+#define NO_FD -1
+
 // Return the file descriptor ready to be used
 // If we have 1>&2, it duplicates FD[2]
 // If we have 2<&1, it duplicates FD[1]
 int get_fd(struct redirection *redir)
 {
-    int fd = -1;
+    int fd = NO_FD;
     DBG_PIPE("[REDIR] '%s' has been ", redir->to);
     int type = redir->type;
     if (type & RT_MASK_DUP && is_number(redir->to))
@@ -52,10 +54,10 @@ int get_fd(struct redirection *redir)
 bool setup_redir(struct redirection *redir)
 {
     int fd_left = redir->io_number;
-    if (fd_left == -1)
+    if (fd_left == NO_FD)
         fd_left = redir->type & RT_MASK_IN ? STDIN_FILENO : STDOUT_FILENO;
     int fd_right = get_fd(redir);
-    if (fd_right == -1)
+    if (fd_right == NO_FD)
     {
         // An error happened
         print_error(BAD_FD);
@@ -95,7 +97,7 @@ int *setup_redirs(struct ast_redir *ast)
         DBG_PIPE("[REDIR] Save FDS[%d] to %d\n", i, saved[i]);
     }
     for (int i = 3; i < 10; i++)
-        FDS[i] = -1;
+        FDS[i] = NO_FD;
     for (int i = 0; i < ast->redir_nb; i++)
     {
         struct redirection *redir = ast->redirs[i];
@@ -118,11 +120,11 @@ void close_redirs(int *saved)
     }
     for (int i = 3; i < 10; i++)
     {
-        if (FDS[i] != -1)
+        if (FDS[i] != NO_FD)
         {
             DBG_PIPE("[REDIR] Closing FDS[%d] = %d\n", i, FDS[i]);
             close(FDS[i]);
-            FDS[i] = -1;
+            FDS[i] = NO_FD;
         }
     }
     DBG_PIPE("[REDIR] END = \n\n");
