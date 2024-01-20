@@ -50,6 +50,7 @@ bool special_char(struct pending *p)
     case '\0':
     case ';':
     case '=':
+    case '|':
         if (IS_BLANK(p))
         {
             append_char(p, c);
@@ -134,6 +135,7 @@ bool consume(struct pending *p, char c)
     case '\0':
     case ';':
     case '=':
+    case '|':
         return special_char(p);
     default:
     append:
