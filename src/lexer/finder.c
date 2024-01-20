@@ -40,6 +40,7 @@ void skip_until(struct pending *p, char limit, bool append)
     }
 }
 
+//TODO redo that to make it readable
 void handle_and_or(struct pending *p, char c)
 {
     if (IS_BLANK(p))
