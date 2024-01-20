@@ -75,6 +75,7 @@ struct ast_redir
 struct ast_cmd
 {
     struct ast_redir redirs;
+    bool is_builtin;
     enum token_type type;
     char **argv;
     int argc;

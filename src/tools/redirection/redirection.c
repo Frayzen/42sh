@@ -143,6 +143,7 @@ void destroy_redir(struct ast_redir *ast)
 void setup_debug_fds(void)
 {
     dup2(STDOUT_FILENO, DBG_OUT);
+    fcntl(DBG_OUT, F_SETFD, FD_CLOEXEC);
 }
 
 void clean_debug_fds(void)

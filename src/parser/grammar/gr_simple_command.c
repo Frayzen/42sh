@@ -2,6 +2,20 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/gr_utils.h"
+#include "tools/token/token.h"
+
+bool is_builtin(enum token_type type)
+{
+    switch (type)
+    {
+    case ECHO:
+    case T_TRUE:
+    case T_FALSE:
+        return true;
+    default:
+        return false;
+    }
+}
 
 /*
 simple_command =
@@ -21,6 +35,7 @@ enum status gr_simple_command(struct ast_list *list)
         goto error;
     // WORLD
     append_arg(cmd, tok_word->value);
+    cmd->is_builtin = is_builtin(tok_word->type);
     cmd->type = tok_word->type;
     tok_pop();
     // {element}
