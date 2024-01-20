@@ -50,6 +50,13 @@ int get_fd(struct redirection *redir)
     }
 }
 
+void apply_redir(int from, int to, char *dbg_msg)
+{
+    DBG_PIPE(dbg_msg, from, to);
+    dup2(from, FDS[to]);
+    close(from);
+}
+
 // return true if everything has been fine
 bool setup_redir(struct redirection *redir)
 {
@@ -63,27 +70,12 @@ bool setup_redir(struct redirection *redir)
         print_error(BAD_FD);
         return false;
     }
-    if (redir->type == RT_READ_WRITE)
-    {
-        DBG_PIPE("[REDIR] Close and copy %d in FD[%d] BOTH)\n", fd_right,
-                 fd_left);
-        dup2(fd_right, FDS[fd_left]);
-        close(fd_right);
-    }
-    else if (redir->type & RT_MASK_IN)
-    {
-        DBG_PIPE("[REDIR] Close and copy %d in FD[%d] IN)\n", fd_left,
-                 fd_right);
-        dup2(fd_left, FDS[fd_right]);
-        close(fd_left);
-    }
+    if (redir->type == RT_READ_WRITE || !(redir->type & RT_MASK_IN))
+        apply_redir(fd_right, fd_left,
+                    "[REDIR] Close and copy %d in FD[%d] OUT)\n");
     else
-    {
-        DBG_PIPE("[REDIR] Close and copy %d in FD[%d] OUT)\n", fd_right,
-                 fd_left);
-        dup2(fd_right, FDS[fd_left]);
-        close(fd_right);
-    }
+        apply_redir(fd_left, fd_right,
+                    "[REDIR] Close and copy %d in FD[%d] IN)\n");
     return true;
 }
 
