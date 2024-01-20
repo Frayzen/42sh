@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 
 #include "execs.h"
 #include "exit/error_handler.h"
@@ -6,7 +7,8 @@
 
 int exec_list(struct ast_list *ast)
 {
-    assert(ast && AST(ast)->type == AST_LIST && ast->nb_children > 0);
+    assert(AST(ast)->type == AST_LIST || AST(ast)->type == AST_FOR);
+    assert(ast && ast->nb_children > 0);
     int ret = -1;
     for (int i = 0; i < ast->nb_children; i++)
     {
