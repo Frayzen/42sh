@@ -2,7 +2,6 @@
 
 # bin_PROGRAMS = unit
 
-# LIBS = $(addprefix $(top_builddir)/src/, @LIB_LIST@)
 TOP_BD=$(top_builddir)
 LIBS=$(addprefix $(TOP_BD)/src/, $(LIB_LIST))
 
