@@ -13,9 +13,10 @@
 #include "ast_utils.h"
 
 char *g_ast_types[] = {
-    [AST_CMD] = "CMD",   [AST_LIST] = "LST",  [AST_IF] = "IF",
-    [AST_PIPE] = "PIPE", [AST_WHILE] = "WHL", [AST_UNTIL] = "UTL",
-    [AST_SH] = "SH",     [AST_ASS] = "ASS",   [AST_FOR] = "FOR",
+    [AST_CMD] = "CMD",       [AST_LIST] = "LST",  [AST_IF] = "IF",
+    [AST_PIPE] = "PIPE",     [AST_WHILE] = "WHL", [AST_UNTIL] = "UTL",
+    [AST_SH] = "SH",         [AST_ASS] = "ASS",   [AST_FOR] = "FOR",
+    [AST_AND_OR] = "AND_OR",
 };
 
 void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
@@ -58,9 +59,10 @@ void print_ast_list(struct ast_list *ast, int depth, bool is_last_child,
         }
         else
             is_last_child = false;
-        pretty_print_ast_help(child, AST(child)->type, depth + 1, is_last_child,
+        pretty_print_ast_help(child, AST(child)->type, depth + 2, is_last_child,
                               last_of_first);
     }
+    free(children);
 }
 
 void print_ast_pipe(struct ast_pipe *ast, int depth, bool last_of_first)
@@ -77,6 +79,7 @@ void print_ast_pipe(struct ast_pipe *ast, int depth, bool last_of_first)
         pretty_print_ast_help(child, child->type, depth + 1, false,
                               last_of_first);
     }
+    free(children);
     char *neg = ast->negated ? "neg = true" : "neg = false";
     align(depth + 1, true, last_of_first);
     printf("%s\n", neg);
@@ -135,7 +138,8 @@ void print_ast_sh(struct ast_sh *ast, int depth, bool last_of_first)
 {
     printf("SH\n");
     align(depth, true, last_of_first);
-    pretty_print_ast_help(ast->sh_cmd, AST(ast->sh_cmd)->type, depth + 1, true, last_of_first);
+    pretty_print_ast_help(ast->sh_cmd, AST(ast->sh_cmd)->type, depth + 1, true,
+                          last_of_first);
 }
 
 void print_ast_for(struct ast_for *ast, int depth, bool last_of_first)
@@ -144,10 +148,12 @@ void print_ast_for(struct ast_for *ast, int depth, bool last_of_first)
     align(depth, false, last_of_first);
     if (!ast->item_list)
     {
-        pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth + 1, true, last_of_first);
+        pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth + 1, true,
+                              last_of_first);
         return;
     }
-    pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth + 1, false, last_of_first);
+    pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth + 1, false,
+                          last_of_first);
 }
 
 void print_ast_and_or(struct ast_and_or *ast, int depth, bool last_of_first)
@@ -162,10 +168,11 @@ void print_ast_and_or(struct ast_and_or *ast, int depth, bool last_of_first)
         {
             align(depth + 2, !ast->types[i + 1], last_of_first);
             printf("%s\n", ast->types[i] == AND ? "and" : "or");
-            i++; 
+            i++;
         }
     }
-    pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth + 1, true, last_of_first);
+    pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth + 1, true,
+                          last_of_first);
 }
 
 void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
@@ -262,6 +269,6 @@ int write_buf(char *buffer, char *str, int i)
 
 void debug_pretty_print(struct ast *ast)
 {
-    // printf("%s\n", ast_to_str(ast));
+    printf("%s\n", ast_to_str(ast));
     pretty_print_ast(ast);
 }
