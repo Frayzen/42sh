@@ -17,6 +17,7 @@ enum ast_type
     AST_PIPE,
     AST_WHILE,
     AST_UNTIL,
+    AST_FOR,
     // NOT USED
     AST_AND,
     AST_OR
@@ -83,6 +84,15 @@ struct ast_sh
 {
     struct ast_redir redirs;
     struct ast *sh_cmd;
+};
+
+#define AST_FOR(Base) ((struct ast_for *)(Base))
+struct ast_for
+{
+    struct ast_list cmds;
+    char *name;
+    int nb_items;
+    char **item_list;
 };
 
 /***

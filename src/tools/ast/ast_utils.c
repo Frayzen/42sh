@@ -13,7 +13,7 @@
 char *g_ast_types[] = {
     [AST_CMD] = "CMD",   [AST_LIST] = "LST",  [AST_IF] = "IF",
     [AST_PIPE] = "PIPE", [AST_WHILE] = "WHL", [AST_UNTIL] = "UTL",
-    [AST_SH] = "SH",     [AST_ASS] = "ASS",
+    [AST_SH] = "SH",     [AST_ASS] = "ASS",   [AST_FOR] = "FOR",
 };
 
 int node_to_str(char *buf, struct ast *ast_root)
@@ -113,9 +113,5 @@ int write_buf(char *buffer, char *str, int i)
 
 void debug_pretty_print(struct ast *ast)
 {
-    char buffer[2048];
-    if (ast)
-        printf("%s\n", buffer);
-    printf("%s\n", ast_to_str(ast));
     pretty_print_ast(ast);
 }

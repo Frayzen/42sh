@@ -22,6 +22,7 @@ void *init_ast(enum ast_type type)
         [AST_PIPE] = sizeof(struct ast_pipe),
         [AST_WHILE] = sizeof(struct ast_loop),
         [AST_UNTIL] = sizeof(struct ast_loop),
+        [AST_FOR] = sizeof(struct ast_for),
         // TODO later
         [AST_ASS] = sizeof(struct ast),
         [AST_AND] = sizeof(struct ast),
@@ -52,6 +53,15 @@ void destroy_ast(void *ast)
         destroy_ast(AST_IF(ast)->then);
         destroy_ast(AST_IF(ast)->fallback);
         break;
+    case AST_FOR:
+        free(AST_FOR(ast)->name);
+        if (AST_FOR(ast)->item_list)
+        {
+            for (int i = 0; i < AST_FOR(ast)->nb_items; i++)
+                free(AST_FOR(ast)->item_list[i]);
+            free(AST_FOR(ast)->item_list);
+        }
+        /* FALLTHROUGH */
     case AST_PIPE:
     case AST_LIST:
         for (int i = 0; i < AST_LIST(ast)->nb_children; i++)
@@ -62,6 +72,7 @@ void destroy_ast(void *ast)
     case AST_UNTIL:
         destroy_ast(AST_LOOP(ast)->cond);
         destroy_ast(AST_LOOP(ast)->exec);
+        break;
     default:
         break;
     }

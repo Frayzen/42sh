@@ -10,6 +10,8 @@ enum status gr_shell_cmd(struct ast_list *list)
         return OK;
     if (gr_until(list) == OK)
         return OK;
+    if (gr_for(list) == OK)
+        return OK;
 
     GR_DBG_RET(ERROR);
 }

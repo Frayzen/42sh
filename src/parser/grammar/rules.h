@@ -75,12 +75,11 @@ enum status gr_and_or(struct ast_list *list);
 enum status gr_list(struct ast **new_list);
 
 /***
- * Grammar rule for compound lists
- * @param ast: the tree to be set to the read compound list
+ * Grammar rule for coumpound_list, fill the provided ast (needs to exists)
+ * @param ls_ast the ast to be filled
  * @return enum that tells the status
  */
-
-enum status gr_compound_list(struct ast_list **new_compound);
+enum status gr_compound_list(struct ast_list *ls_ast);
 
 /***
  * Grammar rule for elif
@@ -132,5 +131,12 @@ enum status gr_while(struct ast_list *ast);
  * @return enum that tells the status
  */
 enum status gr_until(struct ast_list *ast);
+
+/***
+ * Grammar rule for for
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_for(struct ast_list *ast);
 
 #endif /* !RULES_H */

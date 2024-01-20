@@ -34,6 +34,7 @@ struct ast **get_children(struct ast *ast)
     switch (ast->type)
     {
     case AST_PIPE:
+    case AST_FOR:
     case AST_LIST:
         for (int i = 0; i < AST_LIST(ast)->nb_children; i++)
             ret[i] = AST_LIST(ast)->children[i];

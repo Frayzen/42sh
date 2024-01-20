@@ -16,6 +16,7 @@ libparser_a_SOURCES = \
 	grammar/gr_prefix.c \
 	grammar/gr_while.c \
 	grammar/gr_until.c \
+	grammar/gr_for.c \
 	tools/gr_utils.c \
 	tools/gr_utils.h \
 	tools/gr_tools.c \
