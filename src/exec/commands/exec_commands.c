@@ -1,4 +1,3 @@
-#include "tools/str/string.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
@@ -14,6 +13,7 @@
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 #include "tools/redirection/redirection.h"
+#include "tools/str/string.h"
 #include "tools/token/token.h"
 
 void print_echo(struct ast_cmd *cmd, int i, bool interpret_bslash,
@@ -107,7 +107,7 @@ void exec_echo(struct ast_cmd *cmd)
     fflush(NULL);
 }
 
-// this will include the expansion
+// TODO this will include the expansion
 char **expand_args(struct ast_cmd *cmd)
 {
     char **args = calloc(1, sizeof(char *) * cmd->argc + 1);
@@ -120,6 +120,7 @@ char **expand_args(struct ast_cmd *cmd)
 // Fork execute the binary and return pid in parent
 int external_bin(struct ast_cmd *cmd)
 {
+    // TODO expand args
     char **argv = expand_args(cmd);
     int pid = fork();
     if (pid == -1)

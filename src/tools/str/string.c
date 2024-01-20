@@ -38,7 +38,7 @@ void string_destroy(struct string *str)
 
 struct string *dup_str(struct string *str)
 {
-    // str is taken from the pending struct so we dont need to free it
+    // str is provided from the pending struct so we dont need to free it
     // there is probably a better way to do it ;)
     struct string *res = calloc(1, sizeof(struct string));
     res->size = str->size;

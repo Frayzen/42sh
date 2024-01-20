@@ -15,14 +15,14 @@ struct string
 void print_string(struct string *str);
 /***
  * Frees a string struct
- * param @ str : the string to free
+ * @param str : the string to free
  ***/
 void string_destroy(struct string *str);
 /***
- *  allaocted a struct string copying the data from a static str
+ *  allocated a struct string copying the data from a static str
  *  it then frees the vaule and expand
  *  See finder(), pending has a non allaocted str
- * param @ str : static string
+ * @param str : static string
  ***/
 struct string *dup_str(struct string *str);
 

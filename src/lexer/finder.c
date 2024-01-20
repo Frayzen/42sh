@@ -21,8 +21,6 @@
 // return the p->value
 char *append_char(struct pending *p, char c, bool expand)
 {
-    // if (p-> == NULL)
-    // printf("fuck\n");
     struct string *str = &p->str;
     str->value = realloc(str->value, ++str->size);
     str->value[str->size - 1] = c;
