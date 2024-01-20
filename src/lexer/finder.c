@@ -1,6 +1,7 @@
 #include "finder.h"
 
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -39,6 +40,20 @@ void skip_until(struct pending *p, char limit, bool append)
     }
 }
 
+void handle_and_or(struct pending *p, char c)
+{
+    if (IS_BLANK(p))
+    {
+        append_char(p, c);
+        io_pop();
+        if (io_peek() == c)
+        {
+            append_char(p, c);
+            io_pop();
+        }
+    }
+}
+
 // Special are \n \0 space and ;
 // return true if pending is over
 bool special_char(struct pending *p)
@@ -50,7 +65,6 @@ bool special_char(struct pending *p)
     case '\0':
     case ';':
     case '=':
-    case '|':
         if (IS_BLANK(p))
         {
             append_char(p, c);
@@ -62,6 +76,10 @@ bool special_char(struct pending *p)
             return true;
         io_pop();
         break;
+    case '|':
+    case '&':
+        handle_and_or(p, c);
+        return true;
     default:
         break;
     }
@@ -136,6 +154,7 @@ bool consume(struct pending *p, char c)
     case ';':
     case '=':
     case '|':
+    case '&':
         return special_char(p);
     default:
     append:

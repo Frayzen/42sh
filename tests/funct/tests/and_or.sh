@@ -12,3 +12,6 @@ echo ok || echo ok
 
 ### Long and
 echo ok && echo ok && ls && pwd && cat file && echo ok
+
+### Tst no space
+echo OK&&echo ok||echo no

@@ -1,5 +1,6 @@
 #include <assert.h>
 
+#include "exec/commands/execs_cmd.h"
 #include "execs.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
