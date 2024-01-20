@@ -1,30 +1,22 @@
 SUBDIRS = src \
-		  tests/unit
+		  tests
 
-all:42sh
+export LIB_LIST=exec/libexec.a \
+		 parser/libparser.a\
+		 lexer/liblexer.a \
+		 io_backend/libiobackend.a \
+		 exit/libexit.a \
+		 env/libenv.a \
+		 tools/libtools.a
 
-42sh: src/42sh
-
-src/42sh: .FORCE
-	make -C src
-
-unit: src/42sh .FORCE
-	make -C tests/unit
-	mv tests/unit/unit .
-	./unit --verbose
-
-funct_errors: 42sh .FORCE
+funct_errors: src/42sh
 	chmod +x ./tests/funct/*.sh
 	./tests/funct/launch.sh errors
 
-funct: 42sh .FORCE
+funct: src/42sh
 	chmod +x ./tests/funct/*.sh
 	./tests/funct/launch.sh all
 
-check: unit funct
+check-local: funct
 
-clean-local:
-	$(RM) src/42sh unit
-.FORCE:
-
-.phony: unit funct 42sh .FORCE check
+.phony: funct funct_errors check

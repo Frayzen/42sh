@@ -84,14 +84,14 @@ void ast_to_str_rec(struct ast *ast, char *buf, size_t *id)
 {
     *id += node_to_str(buf + *id, ast);
     struct ast **children = get_children(ast);
-    if (children)
+    if (!children)
         return;
     buf[(*id)++] = '{';
     int i = 0;
     while (children[i])
         ast_to_str_rec(children[i++], buf, id);
-    buf[*id++] = '}';
-    buf[++*id] = '\0';
+    buf[(*id)++] = '}';
+    buf[*id] = '\0';
     free(children);
 }
 
@@ -113,5 +113,6 @@ int write_buf(char *buffer, char *str, int i)
 
 void debug_pretty_print(struct ast *ast)
 {
+    printf("%s\n", ast_to_str(ast));
     pretty_print_ast(ast);
 }
