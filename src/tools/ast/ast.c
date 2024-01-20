@@ -35,6 +35,8 @@ void *init_ast(enum ast_type type)
 
 void destroy_list(struct ast_list *list)
 {
+    if (!list)
+        return;
     for (int i = 0; i < list->nb_children; i++)
         destroy_ast(list->children[i]);
     free(list->children);
