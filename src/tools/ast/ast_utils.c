@@ -150,6 +150,24 @@ void print_ast_for(struct ast_for *ast, int depth, bool last_of_first)
     pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth + 1, false, last_of_first);
 }
 
+void print_ast_and_or(struct ast_and_or *ast, int depth, bool last_of_first)
+{
+    printf("AND_OR\n");
+    if (ast->types)
+    {
+        align(depth + 1, false, last_of_first);
+        printf("and_or\n");
+        int i = 0;
+        while (ast->types[i])
+        {
+            align(depth + 2, !ast->types[i + 1], last_of_first);
+            printf("%s\n", ast->types[i] == AND ? "and" : "or");
+            i++; 
+        }
+    }
+    pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth + 1, true, last_of_first);
+}
+
 void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
                            bool is_last_child, bool last_of_first)
 {
@@ -178,9 +196,12 @@ void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
     case AST_FOR:
         print_ast_for(AST_FOR(ast), depth, last_of_first);
         break;
+    case AST_AND_OR:
+        print_ast_and_or(AST_AND_OR(ast), depth, last_of_first);
+        break;
     default:
         // Should not happend
-        // assert(false);
+        assert(false);
         break;
     }
 }
@@ -241,6 +262,6 @@ int write_buf(char *buffer, char *str, int i)
 
 void debug_pretty_print(struct ast *ast)
 {
-    printf("%s\n", ast_to_str(ast));
+    // printf("%s\n", ast_to_str(ast));
     pretty_print_ast(ast);
 }
