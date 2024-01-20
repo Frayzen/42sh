@@ -33,6 +33,13 @@ void *init_ast(enum ast_type type)
     return ast;
 }
 
+void destroy_list(struct ast_list *list)
+{
+    for (int i = 0; i < list->nb_children; i++)
+        destroy_ast(list->children[i]);
+    free(list->children);
+}
+
 void destroy_ast(void *ast)
 {
     if (!ast)
@@ -48,9 +55,14 @@ void destroy_ast(void *ast)
     case AST_SH:
         destroy_redir(AST_REDIR(ast));
         break;
+    case AST_WHILE:
+    case AST_UNTIL:
+        destroy_list(&AST_LOOP(ast)->cond);
+        destroy_list(&AST_LOOP(ast)->exec);
+        break;
     case AST_IF:
-        destroy_ast(AST_IF(ast)->cond);
-        destroy_ast(AST_IF(ast)->then);
+        destroy_list(&AST_IF(ast)->cond);
+        destroy_list(&AST_IF(ast)->then);
         destroy_ast(AST_IF(ast)->fallback);
         break;
     case AST_FOR:
@@ -64,14 +76,7 @@ void destroy_ast(void *ast)
         /* FALLTHROUGH */
     case AST_PIPE:
     case AST_LIST:
-        for (int i = 0; i < AST_LIST(ast)->nb_children; i++)
-            destroy_ast(AST_LIST(ast)->children[i]);
-        free(AST_LIST(ast)->children);
-        break;
-    case AST_WHILE:
-    case AST_UNTIL:
-        destroy_ast(AST_LOOP(ast)->cond);
-        destroy_ast(AST_LOOP(ast)->exec);
+        destroy_list(AST_LIST(ast));
         break;
     default:
         break;

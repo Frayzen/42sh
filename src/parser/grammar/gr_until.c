@@ -12,12 +12,12 @@ enum status gr_until(struct ast_list *ast)
 
     CHECK_GOTO(tok_peek()->type != UNTIL, error);
     tok_pop_clean();
-    CHECK_GOTO(gr_compound_list(utl_ast->cond) == ERROR, error);
+    CHECK_GOTO(gr_compound_list(AST_LIST(&utl_ast->cond)) == ERROR, error);
 
     CHECK_GOTO(tok_peek()->type != DO, error);
 
     tok_pop_clean();
-    CHECK_GOTO(gr_compound_list(utl_ast->exec) == ERROR, error);
+    CHECK_GOTO(gr_compound_list(AST_LIST(&utl_ast->exec)) == ERROR, error);
 
     CHECK_GOTO(tok_peek()->type != DONE, error);
     tok_pop_clean();

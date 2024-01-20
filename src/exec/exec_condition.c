@@ -6,9 +6,8 @@
 int exec_condition(struct ast_if *ast)
 {
     assert(ast && AST(ast)->type == AST_IF);
-    assert(ast->then && ast->cond);
-    if (!exec_list(ast->cond))
-        return exec_list(ast->then);
+    if (!exec_list(&ast->cond))
+        return exec_list(&ast->then);
     if (!ast->fallback)
         return 0;
     if (ast->fallback->type == AST_LIST)
