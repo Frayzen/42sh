@@ -1,5 +1,4 @@
 #define _POSIX_C_SOURCE 200809L
-#include "exit/error_handler.h"
 #include "redirection.h"
 
 #include <assert.h>
@@ -8,6 +7,7 @@
 #include <unistd.h>
 
 #include "env/env.h"
+#include "exit/error_handler.h"
 #include "tools/str/string.h"
 
 // Return the file descriptor ready to be used
