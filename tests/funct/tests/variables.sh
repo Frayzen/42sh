@@ -37,6 +37,15 @@ a=1
 echo hehe >$a
 cat $a<$a
 
+###Test with functioni
+a='echo    ok;'
+$a
+
+###Test variable quotes
+toto=Hello World
+echo 'this is $toto hehe' "This is the real $toto$" "Hello \$toto" >"$$"
+cat <$$
+
 ###Hard expansions
 a='sh    42'
 echo 42"$a"sh 42$a\sh $a 42$a

@@ -9,7 +9,7 @@
 
 struct pending
 {
-    struct string str;
+    struct exp_str str;
     bool force_word;
     bool backslashed;
     bool blank;
@@ -19,7 +19,7 @@ struct pending
 /***
  * finder: gets character by character and return the string token
  * @return a string struct
- * @see struct string
+ * @see struct exp_str
  */
 struct pending *finder(void);
 #endif /* FINDER_H */

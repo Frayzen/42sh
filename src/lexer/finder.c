@@ -21,7 +21,7 @@
 // return the p->value
 char *append_char(struct pending *p, char c, bool expand)
 {
-    struct string *str = &p->str;
+    struct exp_str *str = &p->str;
     str->value = realloc(str->value, ++str->size);
     str->value[str->size - 1] = c;
     str->expand = realloc(str->expand, sizeof(int) * str->size);

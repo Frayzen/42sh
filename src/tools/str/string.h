@@ -6,24 +6,24 @@
 
 bool is_number(char *val);
 
-struct string
+struct exp_str
 {
     char *value;
     size_t size;
     bool *expand;
 };
-void print_string(struct string *str);
+void print_string(struct exp_str *str);
 /***
  * Frees a string struct
  * @param str : the string to free
  ***/
-void string_destroy(struct string *str);
+void string_destroy(struct exp_str *str);
 /***
- *  allocated a struct string copying the data from a static str
+ *  allocated a struct exp_str copying the data from a static str
  *  it then frees the vaule and expand
  *  See finder(), pending has a non allaocted str
  * @param str : static string
  ***/
-struct string *dup_str(struct string *str);
+struct exp_str *dup_str(struct exp_str *str);
 
 #endif /* !STRING_H */

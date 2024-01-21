@@ -24,7 +24,7 @@ bool is_terminating(struct token *token)
     }
 }
 
-bool chevron_type(const struct string *str)
+bool chevron_type(const struct exp_str *str)
 {
     if (!strcmp(">", str->value))
         return 1;
@@ -43,7 +43,7 @@ bool chevron_type(const struct string *str)
     return 0;
 }
 
-int get_type(const struct string *str)
+int get_type(const struct exp_str *str)
 {
     if (!str || str->size == 0)
         return WORD;
@@ -71,7 +71,7 @@ int get_type(const struct string *str)
     return i;
 }
 
-struct token *init_token(struct string *str)
+struct token *init_token(struct exp_str *str)
 {
     struct token *tok = malloc(sizeof(struct token));
     tok->type = get_type(str);

@@ -4,13 +4,6 @@
 #include "tools/ast/ast.h"
 
 /***
- * append_arg: append the argument to the end of the current in command
- * @param cmd the command ast
- * @param arg the new argument to append
- */
-void append_arg(struct ast_cmd *cmd, struct string *arg);
-
-/***
  * add_child: add an ast to a tree list
  * @param parent: the parent tree that is receiving the child
  * @param child: the child tree that will be appended

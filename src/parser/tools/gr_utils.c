@@ -6,15 +6,6 @@
 
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
-#include "tools/str/string.h"
-
-void append_arg(struct ast_cmd *cmd, struct string *arg)
-{
-    cmd->str = realloc(cmd->str, (++cmd->argc + 1) * (sizeof(struct string *)));
-    cmd->str[cmd->argc - 1] = arg;
-    // To make sure str is null terminated
-    cmd->str[cmd->argc] = NULL;
-}
 
 void add_child(struct ast_list *list, struct ast *child)
 {

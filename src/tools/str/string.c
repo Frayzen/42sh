@@ -16,7 +16,7 @@ bool is_number(char *val)
     return true;
 }
 
-void print_string(struct string *str)
+void print_string(struct exp_str *str)
 {
     if (!str || str->size == 0)
         return;
@@ -25,7 +25,7 @@ void print_string(struct string *str)
     printf("\n");
 }
 
-void string_destroy(struct string *str)
+void string_destroy(struct exp_str *str)
 {
     if (!str)
         return;
@@ -36,11 +36,11 @@ void string_destroy(struct string *str)
     free(str);
 }
 
-struct string *dup_str(struct string *str)
+struct exp_str *dup_str(struct exp_str *str)
 {
     // str is provided from the pending struct so we dont need to free it
     // there is probably a better way to do it ;)
-    struct string *res = calloc(1, sizeof(struct string));
+    struct exp_str *res = calloc(1, sizeof(struct exp_str));
     res->size = str->size;
     res->value = malloc(sizeof(char) * (str->size + 1));
     memcpy(res->value, str->value, sizeof(char) * (str->size + 1));

@@ -1,6 +1,8 @@
 lib_LIBRARIES = libparser.a
 
 libparser_a_SOURCES = \
+	command/arg.c \
+	command/arg.h \
 	grammar/gr_element.c \
 	grammar/gr_entry.c \
 	grammar/gr_simple_command.c \
