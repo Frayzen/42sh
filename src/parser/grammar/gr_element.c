@@ -1,8 +1,8 @@
+#include "command/args.h"
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/gr_tools.h"
-#include "tools/gr_utils.h"
 #include "tools/token/token.h"
 
 /*
@@ -18,7 +18,6 @@ enum status gr_element(struct ast_cmd *cmd)
     if (IS_WORDABLE(token))
     {
         parse_arg(cmd, token->str);
-
         tok_pop();
         GR_DBG_RET(OK);
     }

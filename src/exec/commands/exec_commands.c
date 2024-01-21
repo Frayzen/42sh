@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "commands/execs_cmd.h"
 #include <assert.h>
 #include <fcntl.h>
 #include <stdbool.h>
@@ -11,18 +12,16 @@
 
 #include "env/env.h"
 #include "exit/error_handler.h"
+#include "parser/command/args.h"
 #include "tools/ast/ast.h"
 #include "tools/redirection/redirection.h"
-#include "tools/str/string.h"
-#include "tools/token/token.h"
 
-void print_echo(struct ast_cmd *cmd, int i, bool interpret_bslash,
-                bool print_nline)
+void print_echo(char **argv, int i, bool interpret_bslash, bool print_nline)
 {
     DBG_PIPE("Echo command [OUT] %d\n", STDOUT);
-    for (; i < cmd->argc; i++)
+    for (; argv[i]; i++)
     {
-        const char *content = cmd->str[i]->value;
+        const char *content = argv[i];
         int id = 0;
         while (content[id])
         {
@@ -48,7 +47,7 @@ void print_echo(struct ast_cmd *cmd, int i, bool interpret_bslash,
                 dprintf(STDOUT, "%c", content[id]);
             id++;
         }
-        if (cmd->argc - 1 != i)
+        if (argv[i + 1])
             dprintf(STDOUT, " ");
     }
     if (print_nline)
@@ -92,36 +91,26 @@ bool set_option_echo(const char *content, bool *interpret_bslash,
 
 void exec_echo(struct ast_cmd *cmd)
 {
-    assert(cmd && cmd->type == ECHO);
+    assert(cmd);
+    char **argv = build_argv(&cmd->arglist);
     int i = 1;
     bool print_nline = true;
     bool interpret_bslash = false;
-    while (i < cmd->argc)
+    while (argv[i])
     {
-        const char *content = cmd->str[i]->value;
+        const char *content = argv[i];
         if (!set_option_echo(content, &interpret_bslash, &print_nline))
             break;
         i++;
     }
-    print_echo(cmd, i, interpret_bslash, print_nline);
+    print_echo(argv, i, interpret_bslash, print_nline);
     fflush(NULL);
 }
 
-// TODO this will include the expansion
-char **expand_args(struct ast_cmd *cmd)
-{
-    char **args = calloc(1, sizeof(char *) * cmd->argc + 1);
-    for (int i = 0; i < cmd->argc; i++)
-        args[i] = cmd->str[i]->value;
-    args[cmd->argc] = NULL;
-    return args;
-}
-
 // Fork execute the binary and return pid in parent
-int external_bin(struct ast_cmd *cmd)
+int exec_prog(char **argv)
 {
     // TODO expand args
-    char **argv = expand_args(cmd);
     int pid = fork();
     if (pid == -1)
     {
@@ -147,47 +136,30 @@ int external_bin(struct ast_cmd *cmd)
     return pid;
 }
 
-// Execute the builtin and return the return value
-int exec_builtin(struct ast_cmd *ast)
+int exec_cmd(struct ast_cmd *ast, int *pid)
 {
     assert(ast && AST(ast)->type == AST_CMD);
-    assert(ast->argc != 0 && ast->is_builtin);
     int *fds = setup_redirs(AST_REDIR(ast));
 
     if (!fds)
         return 1;
-    int ret;
-    switch (ast->type)
+    int ret = 2;
+    char **argv = build_argv(&ast->arglist);
+    *pid = PID_SET;
+    if (!strcmp(argv[0], "echo"))
     {
-    case ECHO:
         exec_echo(ast);
         ret = 0;
-        break;
-    case T_TRUE:
-        ret = 0;
-        break;
-    case T_FALSE:
-        ret = 1;
-        break;
-    default:
-        // Should not happen
-        assert(false);
-        ret = 1;
-        break;
     }
-    close_redirs(fds);
-    return ret;
-}
-
-// Execute the binary and return the pid
-int exec_bin(struct ast_cmd *ast)
-{
-    assert(ast && AST(ast)->type == AST_CMD);
-    assert(ast->argc != 0 && !ast->is_builtin);
-    int *fds = setup_redirs(AST_REDIR(ast));
-    if (!fds)
-        return -1;
-    int ret = external_bin(ast);
+    else if (!strcmp(argv[0], "true"))
+        ret = 0;
+    else if (!strcmp(argv[0], "false"))
+        ret = 1;
+    else
+    {
+        *pid = exec_prog(argv);
+        ret = -1;
+    }
     close_redirs(fds);
     return ret;
 }

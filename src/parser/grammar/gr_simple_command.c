@@ -36,8 +36,6 @@ enum status gr_simple_command(struct ast_list *list)
         goto error;
     // WORLD
     parse_arg(cmd, tok_word->str);
-    cmd->is_builtin = is_builtin(tok_word->type);
-    cmd->type = tok_word->type;
     tok_pop();
     // {element}
     while (gr_element(cmd) != ERROR)

@@ -75,7 +75,7 @@ struct token *init_token(struct exp_str *str)
 {
     struct token *tok = malloc(sizeof(struct token));
     tok->type = get_type(str);
-    tok->str = dup_str(str);
+    tok->str = dup_exp_str(str);
     tok->terminal = is_terminating(tok);
     return tok;
 }
@@ -85,7 +85,7 @@ void destroy_token(struct token *token)
     if (!token)
         return;
     if (token->str)
-        string_destroy(token->str);
+        destroy_exp_str(token->str);
     free(token);
 }
 

@@ -11,4 +11,11 @@
  */
 void parse_arg(struct ast_cmd *cmd, struct exp_str *arg);
 
+/***
+ * Build the argv from the arg_list
+ * @param list the arg_list structure
+ * @return the argv expanded
+ */
+char **build_argv(struct arglist *args);
+
 #endif /* !ARGS_H */

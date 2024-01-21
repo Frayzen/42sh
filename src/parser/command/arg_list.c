@@ -1,60 +1,53 @@
+#include "arg_list.h"
+
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "arg_list.h"
 
 struct arglist *arglist_init(void)
 {
     struct arglist *r = calloc(sizeof(struct arglist), 1);
     return r;
 }
-int arglist_push_front(struct arglist *list, char* value)
-{
-    struct arg *e = calloc(sizeof(struct arg), 1);
-    if (!e)
-        return 0;
-    e->content = value;
-    if (list->size++ == 0)
-        list->tail = e;
-    else
-    {
-        e->next = list->head;
-        e->prev = NULL;
-        list->head->prev = e;
-    }
-    list->head = e;
-    return 1;
-}
+
 void arglist_print(const struct arglist *list)
 {
     struct arg *e = list->head;
     for (size_t i = 0; i < list->size; i++)
     {
-        printf("%d\n", e->content);
+        printf("[%s] '%s' %c\n", e->type == VAR ? "VAR" : "WRD",
+               e->content, e->link_next ? '|' : '=');
         e = e->next;
     }
 }
-int arglist_push_back(struct arglist *list, char* value)
+bool arglist_push_back(struct arglist *list, bool link_next, char *content,
+                       enum arg_type type)
 {
-    if (value < 0)
-        return 0;
     struct arg *e = calloc(sizeof(struct arg), 1);
-    if (e == 0)
-        return 0;
-    e->content = value;
+    if (!e)
+        return false;
+    e->content = content;
+    e->link_next = link_next;
+    e->type = type;
     if (list->size++ == 0)
         list->head = e;
     else
     {
         e->next = NULL;
-        e->prev = list->tail;
         list->tail->next = e;
     }
     list->tail = e;
-    return 1;
+    return true;
 }
-size_t arglist_size(const struct arglist *list)
+
+void clean_arglist(struct arglist *list)
 {
-    return list->size;
+    struct arg *a = list->head;
+    for (size_t i = 0; i < list->size; i++)
+    {
+        struct arg *n = a->next;
+        free(a->content);
+        free(a);
+        a = n;
+    }
 }

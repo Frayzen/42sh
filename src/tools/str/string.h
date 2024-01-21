@@ -12,18 +12,18 @@ struct exp_str
     size_t size;
     bool *expand;
 };
-void print_string(struct exp_str *str);
+void print_exp_str(struct exp_str *str);
 /***
  * Frees a string struct
  * @param str : the string to free
  ***/
-void string_destroy(struct exp_str *str);
+void destroy_exp_str(struct exp_str *str);
 /***
  *  allocated a struct exp_str copying the data from a static str
  *  it then frees the vaule and expand
  *  See finder(), pending has a non allaocted str
  * @param str : static string
  ***/
-struct exp_str *dup_str(struct exp_str *str);
+struct exp_str *dup_exp_str(struct exp_str *str);
 
 #endif /* !STRING_H */

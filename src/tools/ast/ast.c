@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "parser/command/arg_list.h"
 #include "str/string.h"
 #include "tools/redirection/redirection.h"
 
@@ -51,9 +52,7 @@ void destroy_ast(void *ast)
     switch (AST(ast)->type)
     {
     case AST_CMD:
-        for (int i = 0; i < AST_CMD(ast)->argc; i++)
-            string_destroy(AST_CMD(ast)->str[i]);
-        free(AST_CMD(ast)->str);
+        clean_arglist(&AST_CMD(ast)->arglist);
         /* FALLTHROUGH */
     case AST_SH:
         destroy_redir(AST_REDIR(ast));
@@ -73,7 +72,7 @@ void destroy_ast(void *ast)
         if (AST_FOR(ast)->item_list)
         {
             for (int i = 0; i < AST_FOR(ast)->nb_items; i++)
-                string_destroy(AST_FOR(ast)->item_list[i]);
+                destroy_exp_str(AST_FOR(ast)->item_list[i]);
             free(AST_FOR(ast)->item_list);
         }
         /* FALLTHROUGH */

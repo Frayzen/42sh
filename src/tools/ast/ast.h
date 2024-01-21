@@ -74,8 +74,7 @@ struct ast_redir
 struct ast_cmd
 {
     struct ast_redir redirs;
-    struct arglist args;
-    int argc;
+    struct arglist arglist;
 };
 
 #define AST_SH(Base) ((struct ast_sh *)(Base))
