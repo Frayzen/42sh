@@ -113,14 +113,23 @@ void print_token(struct token *token)
         const char *type_token = tok_type[token->type];
         char *type = to_upper(type_token);
         if (!type)
-            printf(" |%s|%s| ", "WORD", token->str->value);
+        {
+            printf(" |%s|%s| \n", "WORD", token->str->value);
+            printf("       ");
+            for (size_t i = 0; i < token->str->size; i++)
+                printf("%c", token->str->expand[i] ? '^' : ' ');
+        }
         else if (!strcmp(type, "\n"))
             printf(" |%s|%s| ", "NEWLINE", "\\n");
         else if (!strcmp(type, "\0"))
             printf(" |%s|%s| ", "BSZERO", "\\0");
         else
             printf(" |%s|%s| ", type, token->str->value);
-        free(type);
+        if (type)
+        {
+            printf("\n");
+            free(type);
+        }
     }
     printf("\n");
 }

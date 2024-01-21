@@ -10,7 +10,7 @@ struct string
 {
     char *value;
     size_t size;
-    char *expand;
+    bool *expand;
 };
 void print_string(struct string *str);
 /***
