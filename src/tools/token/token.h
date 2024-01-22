@@ -41,14 +41,14 @@ enum token_type
 
     NEGATION,
 
-    ASSIGNMENT_WORD,
-
     // builtins /!\ leave T_TRUE as first one and ECHO as last one
     T_TRUE,
     T_FALSE,
     ECHO,
     // terminals
     WORD,
+    ASSIGNMENT_WORD,
+
 
 };
 
