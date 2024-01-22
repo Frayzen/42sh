@@ -7,7 +7,7 @@
 
 #define IS_BLANK(Pending) ((Pending)->blank)
 
-#define append_ioS true
+#define APPEND_CHARS true
 
 #define SPECIAL_PARAMETERS "0123456789@*#?-$!0"
 
@@ -47,6 +47,7 @@ struct pending
     bool backslashed;
     bool blank;
     bool expanding;
+    bool in_quote;
 };
 
 // In this file, understand 'current character' as the one returned by io_peek

@@ -73,6 +73,7 @@ char *to_upper(const char *type)
     return str;
 }
 
+#define UNDER_EXPAND_CHAR(Type) ((Type) != STR_LITTERAL ? '^' : ' ')
 void print_token(struct token *token)
 {
     if (!token)
@@ -87,7 +88,7 @@ void print_token(struct token *token)
             printf(" |%s|%s| \n", "WORD", token->str->value);
             printf("       ");
             for (size_t i = 0; i < token->str->size; i++)
-                printf("%c", token->str->expand[i] ? '^' : ' ');
+                printf("%c", UNDER_EXPAND_CHAR(token->str->expand[i]));
         }
         else if (!strcmp(type, "\n"))
             printf(" |%s|%s| ", "NEWLINE", "\\n");

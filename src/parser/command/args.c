@@ -11,18 +11,18 @@
 // Append the var arg to the cmd command list
 //@param i is the id of the first char
 //@return the next id that is not part of the var name
-int append(enum arg_type type, struct ast_cmd *cmd, struct exp_str *arg,
+int append(enum expand_type type, struct ast_cmd *cmd, struct exp_str *arg,
            size_t begin)
 {
     size_t end = begin;
-    if (type == VAR)
+    if (type == STR_LITTERAL)
     {
-        while (end < arg->size && arg->expand[end] && arg->value[end] != '$')
+        while (end < arg->size && arg->expand[end] == type)
             end++;
     }
     else
     {
-        while (end < arg->size && !arg->expand[end])
+        while (end < arg->size && arg->expand[end] == type && arg->value[end] != '$')
             end++;
     }
     size_t size = end - begin;
@@ -37,10 +37,10 @@ void parse_arg(struct ast_cmd *cmd, struct exp_str *arg)
     size_t i = 0;
     while (i < arg->size)
     {
-        if (arg->value[i] == '$' && arg->expand[i])
-            i = append(VAR, cmd, arg, i + 1);
-        else
-            i = append(STR, cmd, arg, i);
+        // Skip the dollar if needed
+        if (arg->value[i] == '$' && arg->expand[i] != STR_LITTERAL)
+            i++;
+        i = append(arg->expand[i], cmd, arg, i);
     }
     destroy_exp_str(arg);
 }

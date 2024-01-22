@@ -4,24 +4,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "tools/str/string.h"
+
 struct arglist *arglist_init(void)
 {
     struct arglist *r = calloc(sizeof(struct arglist), 1);
     return r;
 }
-
 void arglist_print(const struct arglist *list)
 {
+    static const char *exp_type_lt[] = {
+        [UNQUOTED_VAR] = "UNQOTD_VAR",
+        [QUOTED_VAR] = "QUOTED_VAR",
+        [STR_LITTERAL] = "STR_LITTRL",
+    };
     struct arg *e = list->head;
     for (size_t i = 0; i < list->size; i++)
     {
-        printf("[%s] '%s' %c\n", e->type == VAR ? "VAR" : "WRD",
-               e->content, e->link_next ? '|' : '=');
+        printf("[%s] '%s' %c\n", exp_type_lt[e->type], e->content,
+               e->link_next ? '|' : '=');
         e = e->next;
     }
 }
 bool arglist_push_back(struct arglist *list, bool link_next, char *content,
-                       enum arg_type type)
+                       enum expand_type type)
 {
     struct arg *e = calloc(sizeof(struct arg), 1);
     if (!e)

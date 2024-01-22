@@ -44,8 +44,8 @@ struct exp_str *dup_exp_str(struct exp_str *str)
     res->size = str->size;
     res->value = malloc(sizeof(char) * (str->size + 1));
     memcpy(res->value, str->value, sizeof(char) * (str->size + 1));
-    res->expand = malloc(sizeof(char) * str->size);
-    memcpy(res->expand, str->expand, sizeof(char) * str->size);
+    res->expand = malloc(sizeof(enum expand_type) * str->size);
+    memcpy(res->expand, str->expand, sizeof(enum expand_type) * str->size);
     free(str->expand);
     free(str->value);
     return res;
