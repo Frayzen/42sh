@@ -39,3 +39,11 @@ char *retrieve_var(char *pair)
     return value;
 }
 
+void destroy_ass_list(struct ass_list * ass_list)
+{
+    ass_list
+    for (size_t i = 0; i < ass_list->size; i++)
+    {
+        if () 
+    }
+}

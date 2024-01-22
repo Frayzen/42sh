@@ -16,7 +16,7 @@ ASSIGNMENT_WORD
 enum status gr_prefix(struct ast_cmd *cmd)
 {
     struct token *token = tok_peek();
-    if (token->type == ASSIGNMENT_WORD)
+    if (token->type == ASSIGNMENT_WORD || token->type == WORD)
     {
         append_ass(&cmd->ass_list, token->str);
         tok_pop();
