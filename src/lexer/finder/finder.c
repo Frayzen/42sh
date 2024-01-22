@@ -7,19 +7,18 @@
 #include <threads.h>
 
 #include "exit/error_handler.h"
-#include "finder/finder_tools.h"
+#include "lexer/finder/finder_tools.h"
 #include "io_backend/backend_saver.h"
-
 
 void consume_comment(struct pending *p)
 {
     if (IS_BLANK(p))
     {
         io_pop();
-        skip_until(p, '\n', !APPEND_CHARS);
+        skip_until(p, '\n', !append_ioS);
     }
     else
-        append_char(p);
+        append_io(p);
 }
 
 // return true if pending is finished
@@ -31,11 +30,11 @@ void consume_quote(struct pending *p)
         p->backslashed = true;
         return;
     }
-    append_char(p);
-    skip_until(p, c, APPEND_CHARS);
+    append_io(p);
+    skip_until(p, c, append_ioS);
     if (!io_peek())
         exit_gracefully(UNEXPECTED_EOF);
-    append_char(p);
+    append_io(p);
 }
 
 bool check_next(void)
@@ -54,18 +53,34 @@ bool check_next(void)
 
 void consume_variable(struct pending *p)
 {
-    append_char(p);
+    io_pop();
     char c = io_peek();
+    // If the dollar is not followed by any var
+    if (c != '{' && !is_name_char(c))
+    {
+        append_char(p, '$');
+        return;
+    }
+    // Enable expanding and begin the consumption of the name
     p->expanding = true;
+    append_char(p, '$');
     if (c == '{')
-        skip_until(p, '}', APPEND_CHARS);
+    {
+        io_pop();
+        skip_until(p, '}', append_ioS);
+        io_pop();
+    }
     else
     {
-        while (is_portable_char(c))
-        {
-            append_char(p);
-            c = io_peek();
-        }
+        // Check if the variable is a special parameter
+        if (strchr(SPECIAL_PARAMETERS, c))
+            append_io(p);
+        else
+            while (is_name_char(c))
+            {
+                append_io(p);
+                c = io_peek();
+            }
     }
     p->expanding = false;
 }
@@ -78,7 +93,7 @@ bool consume(struct pending *p, char c)
     {
     case '\0':
         if (IS_BLANK(p))
-            append_char(p);
+            append_io(p);
         return true;
     OPERATORS_CASES:
         consume_operators(p);
@@ -95,7 +110,7 @@ bool consume(struct pending *p, char c)
         io_pop();
         break;
     default:
-        append_char(p);
+        append_io(p);
         break;
     }
     return false;
@@ -109,7 +124,7 @@ void consumer(struct pending *p)
         if (p->backslashed)
         {
             p->backslashed = false;
-            append_char(p);
+            append_io(p);
         }
         else if (consume(p, c))
             return;

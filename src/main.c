@@ -4,7 +4,6 @@
 #include <unistd.h>
 
 #include "env/env.h"
-#include "exec/execs.h"
 #include "exit/error_handler.h"
 #include "io_backend/io_streamers.h"
 #include "parser/grammar/rules.h"

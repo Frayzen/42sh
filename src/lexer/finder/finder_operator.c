@@ -1,22 +1,22 @@
 #include "finder.h"
-#include "finder/finder_tools.h"
+#include "lexer/finder/finder_tools.h"
 #include "io_backend/backend_saver.h"
 
 void consume_redir_op(struct pending *p)
 {
     char c = io_peek();
     // Append the first < or >
-    append_char(p);
+    append_io(p);
     char next = io_peek();
     switch (c)
     {
     case '>':
         if (next == '>' || next == '&' || next == '|')
-            append_char(p);
+            append_io(p);
         break;
     case '<':
         if (next == '&' || next == '>')
-            append_char(p);
+            append_io(p);
         break;
     }
 }
@@ -27,13 +27,13 @@ void consume_control_op(struct pending *p)
     switch (c)
     {
     AND_OR_CASES:
-        append_char(p);
+        append_io(p);
         if (io_peek() == c)
-            append_char(p);
+            append_io(p);
         break;
     case ';':
     case '\n':
-        append_char(p);
+        append_io(p);
         break;
     }
 }

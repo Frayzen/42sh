@@ -40,13 +40,15 @@ bool chevron_type(const struct exp_str *str)
     return 0;
 }
 
-bool is_portable_char(char c)
+bool is_name_char(char c)
 {
-    if (c == '\0')
+    if (c == '_')
         return true;
-    if (c >= '\a' && c <= '\r')
+    if (c >= '0' && c <= '9')
         return true;
-    if (c >= ' ' && c <= '~')
+    if (c >= 'a' && c <= 'z')
+        return true;
+    if (c >= 'A' && c <= 'Z')
         return true;
     return false;
 }
@@ -57,7 +59,7 @@ bool is_name(char *str, size_t size)
     {
         char c = str[i];
         // Check if c is in the portable character set
-        if (is_portable_char(c))
+        if (is_name_char(c))
             continue;
         return false;
     }
@@ -74,16 +76,21 @@ bool assignment_word(const struct exp_str *str)
     return is_name(begin, size);
 }
 
-// Also pop
-void append_char(struct pending *p)
+void append_char(struct pending *p, char c)
 {
     struct exp_str *str = &p->str;
     str->value = realloc(str->value, ++str->size);
-    str->value[str->size - 1] = io_peek();
+    str->value[str->size - 1] = c;
     str->expand = realloc(str->expand, str->size);
     str->expand[str->size - 1] = p->expanding;
-    io_pop();
     p->blank = false;
+}
+
+// Also pop
+void append_io(struct pending *p)
+{
+    append_char(p, io_peek());
+    io_pop();
 }
 
 // Append every char until limit is found (limit excluded)
@@ -96,7 +103,8 @@ void skip_until(struct pending *p, char limit, bool append)
         {
             if (limit == '"' && c == '$')
                 consume_variable(p);
-            append_char(p);
+            else
+                append_io(p);
         }
         else
             io_pop();

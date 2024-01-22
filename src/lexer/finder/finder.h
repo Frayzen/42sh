@@ -7,7 +7,9 @@
 
 #define IS_BLANK(Pending) ((Pending)->blank)
 
-#define APPEND_CHARS true
+#define append_ioS true
+
+#define SPECIAL_PARAMETERS "0123456789@*#?-$!0"
 
 #define SPACE_CASES                                                            \
 case ' ':                                                                      \

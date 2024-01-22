@@ -35,14 +35,21 @@ void skip_until(struct pending *p, char limit, bool append);
 /***
  * append a char to the pending, pop it as well
  * @param p the pending structure
+ * @param c the char to append
  */
-void append_char(struct pending *p);
+void append_char(struct pending *p, char c);
+
 /***
- * Check if the char is part of the portable character set
- * @param c the char to test
- * @return true if the char is
+ * append a char to the pending, pop it as well
+ * @param p the pending structure
  */
-bool is_portable_char(char c);
+void append_io(struct pending *p);
+/***
+ * Check if the char could be part of a name
+ * @param c the char to test
+ * @return true if the char might be in a name
+ */
+bool is_name_char(char c);
 
 #endif /* !FINDER_TOOLS_H */
 
