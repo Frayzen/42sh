@@ -1,11 +1,11 @@
 #define _POSIX_C_SOURCE 200809L
-#include "env/env.h"
 #include "args.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "env/env.h"
 #include "parser/command/arg_list.h"
 #include "tools/ast/ast.h"
 #include "tools/str/string.h"
@@ -64,16 +64,16 @@ char *expand(char *var_name)
 
 void append_to_argv(struct arg_builder *builder)
 {
-    //Append null char to current to terminate it
+    // Append null char to current to terminate it
     builder->current =
         realloc(builder->current, ++(builder->cur_length) * sizeof(char));
     builder->current[builder->cur_length - 1] = '\0';
 
     VERBOSE("'%s' is appended as a new argument\n", builder->current);
-    //Append current to argv
+    // Append current to argv
     builder->argv = realloc(builder->argv, ++(builder->argc) * sizeof(char *));
     builder->argv[builder->argc - 1] = builder->current;
-    //Reset values of current
+    // Reset values of current
     builder->current = NULL;
     builder->cur_length = 0;
 }

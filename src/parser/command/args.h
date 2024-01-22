@@ -5,7 +5,8 @@
 
 #include "tools/ast/ast.h"
 
-struct arg_builder{
+struct arg_builder
+{
     char **argv;
     int argc;
     char *current;
@@ -26,7 +27,8 @@ void parse_arg(struct ast_cmd *cmd, struct exp_str *arg);
  */
 char **build_argv(struct arglist *args);
 /***
- * Free the arguments in argv and argv itself, should be called with the return value of build_argv
+ * Free the arguments in argv and argv itself, should be called with the return
+ * value of build_argv
  * @param argv the arguments allocated
  */
 void destroy_argv(char **argv);
