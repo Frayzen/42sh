@@ -1,6 +1,6 @@
 #include "finder.h"
-#include "lexer/finder/finder_tools.h"
 #include "io_backend/backend_saver.h"
+#include "lexer/finder/finder_tools.h"
 
 void consume_redir_op(struct pending *p)
 {

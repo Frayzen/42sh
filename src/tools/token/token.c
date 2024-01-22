@@ -1,7 +1,6 @@
 #define _XOPEN_SOURCE 700
 #include "token/token.h"
-#include "lexer/finder/finder_tools.h"
-#include "tools/str/string.h"
+
 #include <ctype.h>
 #include <fnmatch.h>
 #include <stdio.h>
@@ -9,6 +8,7 @@
 #include <string.h>
 
 #include "io_backend/backend_saver.h"
+#include "lexer/finder/finder_tools.h"
 #include "tools/str/string.h"
 
 int get_type(const struct exp_str *str)

@@ -6,7 +6,8 @@
 
 bool is_number(char *val);
 
-enum expand_type{
+enum expand_type
+{
     STR_LITTERAL = 0,
     QUOTED_VAR,
     UNQUOTED_VAR,

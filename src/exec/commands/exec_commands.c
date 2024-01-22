@@ -1,5 +1,4 @@
 #define _POSIX_C_SOURCE 200809L
-#include "commands/execs_cmd.h"
 #include <assert.h>
 #include <fcntl.h>
 #include <stdbool.h>
@@ -10,6 +9,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include "commands/execs_cmd.h"
 #include "env/env.h"
 #include "exit/error_handler.h"
 #include "parser/command/args.h"
@@ -110,7 +110,6 @@ void exec_echo(struct ast_cmd *cmd)
 // Fork execute the binary and return pid in parent
 int exec_prog(char **argv)
 {
-    // TODO expand args
     int pid = fork();
     if (pid == -1)
     {
@@ -160,6 +159,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         *pid = exec_prog(argv);
         ret = -1;
     }
+    destroy_argv(argv);
     close_redirs(fds);
     return ret;
 }

@@ -1,8 +1,8 @@
 #ifndef FINDER_TOOLS_H
 #define FINDER_TOOLS_H
 
-
 #include <stdbool.h>
+
 #include "lexer/finder/finder.h"
 #include "tools/str/string.h"
 #include "tools/token/token.h"
@@ -52,4 +52,3 @@ void append_io(struct pending *p);
 bool is_name_char(char c);
 
 #endif /* !FINDER_TOOLS_H */
-
