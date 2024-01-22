@@ -3,7 +3,7 @@
 #include <fcntl.h>
 #include <stdbool.h>
 
-#include "parser/command/arg_list.h"
+#include "parser/command/expansion.h"
 #include "tools/token/token.h"
 
 #define AST_ROOT (set_ast_root(NULL))
@@ -75,7 +75,7 @@ struct ast_redir
 struct ast_cmd
 {
     struct ast_redir redirs;
-    struct arglist arglist;
+    struct expansion args_expansion;
 };
 
 #define AST_SH(Base) ((struct ast_sh *)(Base))
@@ -91,7 +91,7 @@ struct ast_for
     struct ast_list cmds;
     char *name;
     int nb_items;
-    struct exp_str **item_list;
+    struct lex_str **item_list;
 };
 
 // BEGIN AND OR

@@ -18,13 +18,13 @@ bool is_terminating(enum token_type type);
  * @param str the string to check
  * @return true if the string matches
  */
-bool chevron_type(const struct exp_str *str);
+bool chevron_type(const struct lex_str *str);
 /***
  * Check if a string could be an assignment word
  * @param str the string to check
  * @return true if could
  */
-bool assignment_word(const struct exp_str *str);
+bool assignment_word(const struct lex_str *str);
 /***
  * pop the chars until the limit is found
  * @param p the pending structure to append char in
