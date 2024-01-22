@@ -74,7 +74,7 @@ void destroy_ast(void *ast)
         if (AST_FOR(ast)->item_list)
         {
             for (int i = 0; i < AST_FOR(ast)->nb_items; i++)
-                destroy_exp_str(AST_FOR(ast)->item_list[i]);
+                destroy_lex_str(AST_FOR(ast)->item_list[i]);
             free(AST_FOR(ast)->item_list);
         }
         /* FALLTHROUGH */
