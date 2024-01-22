@@ -1,7 +1,7 @@
+#include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/gr_tools.h"
-#include "lexer/token_saver.h"
 int check_compound_token(enum token_type expected_type1,
                          enum token_type expected_type2)
 {
@@ -29,10 +29,10 @@ enum status gr_shell_cmd(struct ast_list *list)
     struct token *token = tok_peek();
     int res = check_compound_token(BRACKET_OPEN, BRACKET_CLOSED);
     if (res == 1 || res == 0)
-        (res == 1) ? GR_DBG_RET(OK) : GR_DBG_RET(ERROR);
+        return (res == 1) ? gr_debug_end(OK) : gr_debug_end(ERROR);
     res = check_compound_token(PARENTHESE_OPEN, PARENTHESE_CLOSED);
     if (res == 1 || res == 0)
-        (res == 1) ? GR_DBG_RET(OK) : GR_DBG_RET(ERROR);
+        return (res == 1) ? gr_debug_end(OK) : gr_debug_end(ERROR);
     if (gr_if(list) == OK)
         GR_DBG_RET(OK);
     if (gr_while(list) == OK)
