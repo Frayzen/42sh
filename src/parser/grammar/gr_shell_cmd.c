@@ -3,9 +3,10 @@
 #include "tools/ast/ast.h"
 #include "tools/gr_tools.h"
 int check_compound_token(enum token_type expected_type1,
-                         enum token_type expected_type2)
+                         enum token_type expected_type2, struct ast_list *list)
 {
-    if (token->type == expected_token1)
+    struct token = tok_peek();
+    if (token->type == expected_type1)
     {
         tok_pop_clean();
         if (gr_list(list) == OK)
@@ -26,11 +27,10 @@ enum status gr_shell_cmd(struct ast_list *list)
 {
     GR_DBG_START(ShellCmd);
 
-    struct token *token = tok_peek();
-    int res = check_compound_token(BRACKET_OPEN, BRACKET_CLOSED);
+    int res = check_compound_token(BRACKET_OPEN, BRACKET_CLOSED, list);
     if (res == 1 || res == 0)
         return (res == 1) ? gr_debug_end(OK) : gr_debug_end(ERROR);
-    res = check_compound_token(PARENTHESE_OPEN, PARENTHESE_CLOSED);
+    res = check_compound_token(PARENTHESE_OPEN, PARENTHESE_CLOSED, list);
     if (res == 1 || res == 0)
         return (res == 1) ? gr_debug_end(OK) : gr_debug_end(ERROR);
     if (gr_if(list) == OK)
