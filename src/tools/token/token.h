@@ -47,7 +47,7 @@ enum token_type
     T_FALSE,
     ECHO,
     // terminals
-    ASSIGNMENT_WORD,
+    ASS_WORD,
     WORD,
 
 };

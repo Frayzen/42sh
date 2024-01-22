@@ -35,7 +35,7 @@ int get_type(const struct exp_str *str)
         return CHEVRON;
     char next = io_peek();
     if (assignment_word(str))
-        return ASSIGNMENT_WORD;
+        return ASS_WORD;
     if ((next == '>' || next == '<') && is_number(str->value))
         return IO_NUMBER;
     return i;
@@ -108,15 +108,15 @@ void print_token(struct token *token)
 const char **toktype_lookup(void)
 {
     static const char *lookup_table[] = {
-        [IF] = "if",         [THEN] = "then",   [ELIF] = "elif",
-        [ELSE] = "else",     [FI] = "fi",       [SEMI_COLON] = ";",
-        [NEWLINE] = "\n",    [ECHO] = "echo",   [T_TRUE] = "true",
-        [T_FALSE] = "false", [BSZERO] = "\0",   [CHEVRON] = "CHEVRON",
-        [IO_NUMBER] = "NB",  [NEGATION] = "!",  [PIPE] = "|",
-        [WORD] = NULL,       [WHILE] = "while", [DO] = "do",
-        [DONE] = "done",     [UNTIL] = "until", [OR] = "||",
-        [AND] = "&&",        [FOR] = "for",     [IN] = "in",
-        [ASSIGNMENT_WORD] = "ASGMT"
+        [IF] = "if",          [THEN] = "then",   [ELIF] = "elif",
+        [ELSE] = "else",      [FI] = "fi",       [SEMI_COLON] = ";",
+        [NEWLINE] = "\n",     [ECHO] = "echo",   [T_TRUE] = "true",
+        [T_FALSE] = "false",  [BSZERO] = "\0",   [CHEVRON] = "CHEVRON",
+        [IO_NUMBER] = "NB",   [NEGATION] = "!",  [PIPE] = "|",
+        [WORD] = NULL,        [WHILE] = "while", [DO] = "do",
+        [DONE] = "done",      [UNTIL] = "until", [OR] = "||",
+        [AND] = "&&",         [FOR] = "for",     [IN] = "in",
+        [ASS_WORD] = "ASGMT",
     };
     return lookup_table;
 }

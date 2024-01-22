@@ -1,14 +1,13 @@
 #include "env/vars/vars.h"
-#include "rules.h"
-#include "tools/ast/ast.h"
-#include "tools/token/token.h"
-#include "tools/gr_tools.h"
-#include "tools/gr_utils.h"
 #include "lexer/token_saver.h"
 #include "rules.h"
+#include "tools/ast/ast.h"
+#include "tools/gr_tools.h"
+#include "tools/gr_utils.h"
+#include "tools/token/token.h"
 /*
 * prefix =
-ASSIGNMENT_WORD
+ASS_WORD
 | redirection
 ;
 */
@@ -16,7 +15,7 @@ ASSIGNMENT_WORD
 enum status gr_prefix(struct ast_cmd *cmd)
 {
     struct token *token = tok_peek();
-    if (token->type == ASSIGNMENT_WORD)
+    if (token->type == ASS_WORD)
     {
         append_ass(&cmd->ass_list, token->str);
         tok_pop();

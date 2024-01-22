@@ -3,9 +3,9 @@
 #include <fcntl.h>
 #include <stdbool.h>
 
+#include "env/vars/vars.h"
 #include "parser/command/arg_list.h"
 #include "tools/token/token.h"
-#include "env/vars/vars.h"
 #define AST_ROOT (set_ast_root(NULL))
 
 enum ast_type
