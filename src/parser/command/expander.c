@@ -43,11 +43,10 @@ int register_expandable(struct expansion *exp, struct lex_str *exp_str,
     return end;
 }
 
-void cmd_register_token(struct ast_cmd *cmd, struct token *tok)
+void register_token(struct expansion *exp, struct token *tok)
 {
     struct lex_str *str = tok->str;
     size_t i = 0;
-    struct expansion *exp = &cmd->args_expansion;
     if (str->size == 0)
     {
         expansion_push_back(exp, expandable_init("", STR_LITTERAL, false));
