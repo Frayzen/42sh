@@ -1,9 +1,10 @@
-#include <cstdlib>
 #define _POSIX_C_SOURCE 200809L
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "command/expansion.h"
+#include "env/env.h"
 #include "tools/ast/ast.h"
 #include "tools/str/string.h"
 
@@ -68,7 +69,7 @@ void cmd_register_token(struct ast_cmd *cmd, struct token *tok)
 char *stringify_expandable(struct expandable *exp)
 {
     if (exp->type == STR_LITTERAL)
-        return exp->content;
+        return strdup(exp->content);
     // TODO return the content of the var
     char *ret = strdup("ech");
     return ret;
@@ -80,7 +81,7 @@ char *stringify_expandable(struct expandable *exp)
  * @param str the string. It is set to NULL if expandable is NULL
  * @return the next expandable
  */
-struct expandable* expand_next(struct expandable *exp, char **str)
+struct expandable *expand_next(struct expandable *exp, char **str)
 {
     if (!exp)
         return 0;
@@ -88,14 +89,15 @@ struct expandable* expand_next(struct expandable *exp, char **str)
     int bsize = 0;
     while (true)
     {
-        //Append the stringify of the current expandable
+        // Append the stringify of the current expandable
         char *str_exp = stringify_expandable(exp);
         int i = 0;
         while (str_exp[i])
         {
             build = realloc(build, sizeof(char) * ++bsize);
             build[bsize - 1] = str_exp[i++];
-        } 
+        }
+        free(str_exp);
         if (!exp->link_next || !exp->next)
             break;
         exp = exp->next;
@@ -111,13 +113,16 @@ char **expand(struct expansion *expansion)
     struct expandable *exp = expansion->head;
     char **argv = NULL;
     char *next = NULL;
-    expand_next(exp, &next);
     int argc = 0;
+    VERBOSE("Expanding...\n");
     do
     {
-        argv = realloc(argv, sizeof(char *) * argc++);
+        argv = realloc(argv, sizeof(char *) * ++argc);
+        exp = expand_next(exp, &next);
         argv[argc - 1] = next;
-        expand_next(exp, &next);
-    } while (next);
+        VERBOSE("[ARG %d] %s\n",argc-1, next);
+    } while (exp);
+    argv = realloc(argv, sizeof(char *) * ++argc);
+    argv[argc - 1] = NULL;
     return argv;
 }
