@@ -8,7 +8,7 @@
 
 enum status gr_while(struct ast_list *list)
 {
-    GR_DBG_START(SimpleCommand);
+    GR_DBG_START(While);
     struct ast_loop *wh_ast = init_ast(AST_WHILE);
 
     CHECK_GOTO(tok_peek()->type != WHILE, error);

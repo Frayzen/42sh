@@ -8,7 +8,7 @@
 
 enum status gr_until(struct ast_list *ast)
 {
-    GR_DBG_START(SimpleCommand);
+    GR_DBG_START(Until);
     struct ast_loop *utl_ast = init_ast(AST_UNTIL);
 
     CHECK_GOTO(tok_peek()->type != UNTIL, error);
