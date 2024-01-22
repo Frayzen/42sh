@@ -58,9 +58,9 @@ char *expand(char *var_name)
     // TODO expand actually the var
     char *val = malloc(sizeof(char) * 7);
     val[0] = 'e';
-    val[1] = 'c';
-    val[2] = 'h';
-    val[3] = 'o';
+    val[1] = ' ';
+    val[2] = ' ';
+    val[3] = 'h';
     val[4] = '\0';
     return val;
 }
