@@ -1,6 +1,5 @@
 #include <stdlib.h>
 
-#include "parser/command/arg_list.h"
 #include "parser/tools/gr_utils.h"
 #include "tools/ast/ast.h"
 
@@ -54,7 +53,7 @@ void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
     printf("%s$\n", buf);
     struct ast **children = get_children(ast_root);
     if (AST(ast_root)->type == AST_CMD)
-        arglist_print(&AST_CMD(ast_root)->arglist);
+        expansion_print(&AST_CMD(ast_root)->args_expansion);
     if (!children)
         return;
     int i = 0;

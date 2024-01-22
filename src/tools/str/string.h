@@ -26,7 +26,7 @@ void print_lex_str(struct lex_str *str);
  ***/
 void destroy_lex_str(struct lex_str *str);
 /***
- *  allocated a struct exp_str copying the data from a static str
+ *  allocated a struct lex_str copying the data from a static str
  *  it then frees the vaule and expand
  *  See finder(), pending has a non allaocted str
  * @param str : static string

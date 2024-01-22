@@ -22,7 +22,7 @@ bool is_terminating(enum token_type type)
     }
 }
 
-bool chevron_type(const struct exp_str *str)
+bool chevron_type(const struct lex_str *str)
 {
     if (!strcmp(">", str->value))
         return 1;
@@ -67,7 +67,7 @@ bool is_name(char *str, size_t size)
     return true;
 }
 
-bool assignment_word(const struct exp_str *str)
+bool assignment_word(const struct lex_str *str)
 {
     char *begin = str->value;
     char *first_eq = strchr(begin, '=');
@@ -79,7 +79,7 @@ bool assignment_word(const struct exp_str *str)
 
 void append_char(struct pending *p, char c)
 {
-    struct exp_str *str = &p->str;
+    struct lex_str *str = &p->str;
     size_t id = str->size++;
     str->value = realloc(str->value, str->size * sizeof(char));
     str->value[id] = c;

@@ -22,7 +22,6 @@ struct expansion
 };
 
 
-
 /***
  * Initialize the expansion
  * @return the expansion

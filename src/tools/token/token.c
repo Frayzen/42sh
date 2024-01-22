@@ -11,7 +11,7 @@
 #include "lexer/finder/finder_tools.h"
 #include "tools/str/string.h"
 
-int get_type(const struct exp_str *str)
+int get_type(const struct lex_str *str)
 {
     if (!str || str->size == 0)
         return WORD;
@@ -41,7 +41,7 @@ int get_type(const struct exp_str *str)
     return i;
 }
 
-struct token *init_token(struct exp_str *str)
+struct token *init_token(struct lex_str *str)
 {
     struct token *tok = malloc(sizeof(struct token));
     tok->type = get_type(str);

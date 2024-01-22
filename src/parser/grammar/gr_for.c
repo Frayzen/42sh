@@ -12,7 +12,7 @@ void add_to_item_list(struct ast_for *ast)
     struct token *item = tok_peek();
     // tok_pop();
     ast->item_list =
-        realloc(ast->item_list, ++ast->nb_items * sizeof(struct exp_str *));
+        realloc(ast->item_list, ++ast->nb_items * sizeof(struct lex_str *));
     ast->item_list[ast->nb_items - 1] = item->str;
     tok_pop();
 }

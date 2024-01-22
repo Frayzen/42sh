@@ -1,5 +1,5 @@
-#include "command/args.h"
 #include "lexer/token_saver.h"
+#include "parser/command/expander.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/gr_tools.h"
@@ -17,7 +17,7 @@ enum status gr_element(struct ast_cmd *cmd)
     struct token *token = tok_peek();
     if (IS_WORDABLE(token))
     {
-        parse_arg(cmd, token->str);
+        cmd_register_token(cmd, token);
         tok_pop();
         GR_DBG_RET(OK);
     }
