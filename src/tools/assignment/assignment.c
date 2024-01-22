@@ -3,7 +3,7 @@
 #include <string.h>
 #include "env/vars/vars.h"
 #include "str/string.h"
-
+//manage the variable assignments using environ to store, restore and update
 
 struct lex_str *extract_value(struct lex_str *str, size_t eq_pos)
 {
@@ -36,7 +36,6 @@ struct assignment *init_assignment(struct lex_str  *str)
     ass->prev = retrieve_var(ass->name);
 
     ass->value = extract_value(str, eq_pos);
-    destroy_lex_str(str);
     return ass;
 
 }

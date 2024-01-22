@@ -12,15 +12,16 @@ struct assignment
 };
 
 /*
- * initializes a assignment struct and sets the previous value if any 
- * @param str lexeme assiciated to the token, will be destroyed
+ * initializes an assignment struct and 
+ * sets the previous value if any otherwise null
+ * @param str lexeme associated to the token
  * returns the allocated assignment structure
  */
 struct assignment *init_assignment(struct lex_str  *str);
 
 /*
  * destroys the assignment structure
- * @param asstignment structure to destory
+ * @param assignment structure to destory
  */
 void destroy_assignment(struct assignment *assignment);
 
