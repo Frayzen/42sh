@@ -1,3 +1,4 @@
+#include "tools/str/string.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <env/env.h>
@@ -19,7 +20,7 @@ int exec_for(struct ast_for *ast)
     for (int i = 0; i < ast->nb_items; i++)
     {
         // TODO variable assignment
-        setenv(ast->name, ast->item_list[i], 1);
+        setenv(ast->name, ast->item_list[i]->value, 1);
         ret = exec_list(AST_LIST(ast));
     }
     return ret;

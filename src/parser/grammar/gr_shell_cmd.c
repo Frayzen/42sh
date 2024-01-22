@@ -4,14 +4,14 @@
 
 enum status gr_shell_cmd(struct ast_list *list)
 {
+    GR_DBG_START(ShellCmd);
     if (gr_if(list) == OK)
-        return OK;
+        GR_DBG_RET(OK);
     if (gr_while(list) == OK)
-        return OK;
+        GR_DBG_RET(OK);
     if (gr_until(list) == OK)
-        return OK;
+        GR_DBG_RET(OK);
     if (gr_for(list) == OK)
-        return OK;
-
+        GR_DBG_RET(OK);
     GR_DBG_RET(ERROR);
 }

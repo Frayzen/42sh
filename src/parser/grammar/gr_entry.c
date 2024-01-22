@@ -6,12 +6,12 @@
 
 enum status gr_input(struct ast **ast)
 {
+    GR_DBG_START(Input);
     if (tok_peek()->terminal)
     {
         tok_pop_clean();
         GR_DBG_RET(OK);
     }
-    GR_DBG_START(Input);
     CHECK_GOTO(gr_list(ast) == ERROR, error);
     struct token *trm = tok_peek();
     tok_pop_clean();

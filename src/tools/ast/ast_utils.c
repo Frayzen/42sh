@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "parser/command/arg_list.h"
 #include "parser/tools/gr_utils.h"
 #include "tools/ast/ast.h"
 
@@ -112,25 +113,17 @@ void print_ast_cmd(struct ast_cmd *ast, int depth, bool last_of_first)
 {
     printf("CMD\n");
     depth++;
-    if (!ast->argc)
+    if (!ast->arglist.size)
         return;
-    align(depth, false, last_of_first);
-    printf("argv\n");
-    depth++;
-    align(depth, false, last_of_first);
-    printf("%s\n", ast->argv[0]);
-    for (int i = 1; i < ast->argc; i++)
+    struct arg *current = ast->arglist.head;
+    for (size_t i = 0; i < ast->arglist.size; i++)
     {
-        if (i == ast->argc - 1)
+        if (i == ast->arglist.size - 1)
             align(depth, true, last_of_first);
-        else
-            align(depth, false, last_of_first);
-        printf("%s\n", ast->argv[i]);
+        printf("%s\n", current->content);
+        current = current->next;
     }
     depth--;
-    align(depth, true, last_of_first);
-    bool is_builtin = ast->type <= ECHO && ast->type >= T_TRUE;
-    printf("builtin %s\n", is_builtin ? "true" : "false");
     return;
 }
 
