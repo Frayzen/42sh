@@ -15,6 +15,10 @@ enum token_type
     NEWLINE,
     BSZERO,
     SEMI_COLON,
+
+    // operators ?
+    PARENTHESE_OPEN,
+    PARENTHESE_CLOSED,
     // redir
     CHEVRON,
     PIPE,

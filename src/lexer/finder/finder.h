@@ -34,42 +34,37 @@ case '|'
 #define CONTROL_OP_CASES                                                       \
 AND_OR_CASES:                                                                  \
 case ';':                                                                      \
+case ')':
+case '(':
 case '\n'
-/* TODO include ( and ) */
 
 #define OPERATORS_CASES                                                        \
 REDIR_OPS_CASES:                                                               \
     CONTROL_OP_CASES
 
-struct pending
-{
-    struct exp_str str;
-    bool backslashed;
-    bool blank;
-    bool expanding;
-    bool in_quote;
-    bool force_str;
-};
+    struct pending{ struct exp_str str; bool backslashed; bool blank;
+                    bool expanding; bool in_quote; bool force_str; };
 
-// In this file, understand 'current character' as the one returned by io_peek
+    // In this file, understand 'current character' as the one returned by
+    // io_peek
 
-/***
- * finder: gets character by character and return the string token
- * @return a string struct
- * @see struct exp_str
- */
-struct pending *finder(void);
+    /***
+     * finder: gets character by character and return the string token
+     * @return a string struct
+     * @see struct exp_str
+     */
+    struct pending * finder(void);
 
-/***
- * Append all the next characters of the variable after the current $
- * @param p the pending struct
- */
-void consume_variable(struct pending *p);
+    /***
+     * Append all the next characters of the variable after the current $
+     * @param p the pending struct
+     */
+    void consume_variable(struct pending * p);
 
-/***
- * Handle the current character knowing it is an operator char
- * @param p the pending struct
- */
-void consume_operators(struct pending *p);
+    /***
+     * Handle the current character knowing it is an operator char
+     * @param p the pending struct
+     */
+    void consume_operators(struct pending * p);
 
 #endif /* FINDER_H */
