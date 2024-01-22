@@ -89,10 +89,8 @@ bool set_option_echo(const char *content, bool *interpret_bslash,
     return true;
 }
 
-void exec_echo(struct ast_cmd *cmd)
+void exec_echo(char **argv)
 {
-    assert(cmd);
-    char **argv = build_argv(&cmd->arglist);
     int i = 1;
     bool print_nline = true;
     bool interpret_bslash = false;
@@ -147,7 +145,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     *pid = PID_SET;
     if (!strcmp(argv[0], "echo"))
     {
-        exec_echo(ast);
+        exec_echo(argv);
         ret = 0;
     }
     else if (!strcmp(argv[0], "true"))

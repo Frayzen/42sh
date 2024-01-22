@@ -53,20 +53,27 @@ char *expand(char *var_name)
 {
     var_name = var_name + 1;
     // TODO expand actually the var
-    char *val = malloc(sizeof(char) * 3);
-    val[0] = 'o';
-    val[1] = 'k';
-    val[2] = '\0';
+    char *val = malloc(sizeof(char) * 7);
+    val[0] = 'e';
+    val[1] = 'c';
+    val[2] = 'h';
+    val[3] = 'o';
+    val[4] = '\0';
     return val;
 }
 
 void append_to_argv(struct arg_builder *builder)
 {
+    //Append null char to current to terminate it
     builder->current =
         realloc(builder->current, ++(builder->cur_length) * sizeof(char));
     builder->current[builder->cur_length - 1] = '\0';
+
+    VERBOSE("'%s' is appended as a new argument\n", builder->current);
+    //Append current to argv
     builder->argv = realloc(builder->argv, ++(builder->argc) * sizeof(char *));
     builder->argv[builder->argc - 1] = builder->current;
+    //Reset values of current
     builder->current = NULL;
     builder->cur_length = 0;
 }
@@ -114,7 +121,8 @@ char **build_argv(struct arglist *args)
         arg = arg->next;
     }
     // Make argv NULL terminated
-    append_to_argv(&builder);
+    builder.argv = realloc(builder.argv, builder.argc * sizeof(char *));
+    builder.argv[builder.argc] = NULL;
     return builder.argv;
 }
 
