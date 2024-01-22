@@ -142,7 +142,6 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         return 1;
     int ret = 2;
     char **argv = build_argv(&ast->arglist);
-    print_ass_list(&ast->ass_list);
     assign_vars(ast->ass_list);
 
     *pid = PID_SET;

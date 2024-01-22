@@ -44,7 +44,6 @@ void assign_vars(struct ass_list ass_list)
     {
         char *value = split_ass_word(ass_list.elements[i]->ass_word, VALUE);
         char *name = split_ass_word(ass_list.elements[i]->ass_word, NAME);
-        printf("setting |%s|   to |%s|\n", name, value);
         setenv(name, value, true);
         free(value);
         free(name);

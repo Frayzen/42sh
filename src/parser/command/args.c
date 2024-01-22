@@ -56,17 +56,8 @@ void parse_arg(struct ast_cmd *cmd, struct exp_str *arg)
 // if discard_spaces is set, remove any extra space from the string
 char *expand(char *var_name)
 {
-    // var_name = var_name + 1;
-    // // TODO expand actually the var
-    // char *val = malloc(sizeof(char) * 7);
-    // val[0] = 'e';
-    // val[1] = ' ';
-    // val[2] = ' ';
-    // val[3] = 'h';
-    // val[4] = '\0';
     char *value = getenv(var_name);
-    printf("value = %s\n", value);
-    return value;
+    return strdup(value);
 }
 
 void append_to_argv(struct arg_builder *builder)
@@ -126,7 +117,8 @@ char **build_argv(struct arglist *args)
         append_to_builder(&builder, value, type);
         if (!arg->link_next)
             append_to_argv(&builder);
-        free(value);
+        if (value)
+            free(value);
         arg = arg->next;
     }
     // Make argv NULL terminated
