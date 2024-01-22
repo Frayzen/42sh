@@ -21,6 +21,7 @@ struct expansion
     struct expandable *tail;
 };
 
+
 /***
  * Initialize the expansion
  * @return the expansion

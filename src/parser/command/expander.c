@@ -59,7 +59,7 @@ void cmd_register_token(struct ast_cmd *cmd, struct token *tok)
             i++;
         i = register_expandable(exp, str, i);
     }
-    destroy_exp_str(str);
+    destroy_lex_str(str);
 }
 
 //
