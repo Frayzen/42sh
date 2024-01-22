@@ -23,7 +23,7 @@ int exec_list(struct ast_list *ast)
             break;
         default:
             exit_gracefully(LIST_NOT_FOUND);
-            return 1;
+            return 2;
         }
     }
     return ret;

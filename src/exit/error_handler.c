@@ -5,14 +5,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "env/env.h"
 #include "tools/ast/ast.h"
 
+// Do NOT expect this function to exit the program
 void exit_gracefully(enum error_type type)
 {
+    print_error(type);
+    if (get_env_flag()->is_interactive)
+        return;
     struct ast **root = AST_ROOT;
     if (root)
         clean(*root);
-    print_error(type);
     switch (type)
     {
     case ARG_ERROR:

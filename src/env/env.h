@@ -1,6 +1,8 @@
 #ifndef ENV_H
 #define ENV_H
 
+#include <sys/wait.h>
+
 #include "tools/redirection/redirection.h"
 #include "tools/token/token.h"
 extern char **environ;
@@ -26,6 +28,7 @@ struct env
     bool verbose;
     bool debug_grammar;
     bool debug_pipe;
+    bool is_interactive;
     int fds[1024];
 };
 
