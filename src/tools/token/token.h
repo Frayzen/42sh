@@ -42,6 +42,9 @@ enum token_type
     DO,
     DONE,
 
+    BRACKET_OPEN,
+    BRACKET_CLOSED,
+
     NEGATION,
 
     // builtins /!\ leave T_TRUE as first one and ECHO as last one
