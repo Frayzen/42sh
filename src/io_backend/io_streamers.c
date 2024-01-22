@@ -86,6 +86,8 @@ void main_to_stream(int argc, char **argv)
             get_env_flag()->verbose = true;
         else if (!strcmp(argv[i], "--debug-pipe") || !strcmp(argv[i], "-d"))
             get_env_flag()->debug_pipe = true;
+        else if (!strcmp(argv[i], "--debug-env") || !strcmp(argv[i], "-e"))
+            get_env_flag()->debug_env = true;
         else if (!strcmp(argv[i], "--debug-grammar") || !strcmp(argv[i], "-g"))
             get_env_flag()->debug_grammar = true;
         else
