@@ -9,7 +9,7 @@ int check_compound_token(enum token_type expected_type1,
     if (token->type == expected_type1)
     {
         tok_pop_clean();
-        if (gr_list(&list) == OK)
+        if (gr_list((struct ast **)&list) == OK)
         {
             token = tok_peek();
             if (token->type != expected_type2)

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <threads.h>
+// #include <threads.h>
 
 #include "env/env.h"
 #include "parser/command/arg_list.h"

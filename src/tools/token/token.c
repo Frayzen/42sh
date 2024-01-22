@@ -135,7 +135,7 @@ const char **toktype_lookup(void)
         [BRACKET_OPEN] = "{",
         [BRACKET_CLOSED] = "}",
         [PARENTHESE_OPEN] = "(",
-        [PARENTHESE_CLOSED] = ')',
+        [PARENTHESE_CLOSED] = ")",
     };
     return lookup_table;
 }
