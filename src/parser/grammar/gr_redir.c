@@ -1,8 +1,10 @@
+#define _POSIX_C_SOURCE 200809L
 #include <stdlib.h>
 
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
+#include "tools/gr_tools.h"
 #include "tools/redirection/redirection.h"
 #include "tools/token/token.h"
 /*
@@ -12,12 +14,13 @@ redirection =
 */
 enum status gr_redir(struct ast_redir *ast)
 {
+    GR_DBG_START(Redir);
     struct redirection *redir = calloc(1, sizeof(struct redirection));
 
     struct token *token = tok_peek();
     if (tok_peek()->type == IO_NUMBER)
     {
-        redir->io_number = atoi(token->value);
+        redir->io_number = atoi(token->str->value);
         tok_pop_clean();
     }
     else
@@ -25,17 +28,18 @@ enum status gr_redir(struct ast_redir *ast)
 
     token = tok_peek();
     CHECK_GOTO(token->type != CHEVRON, error);
-    redir->type = get_redir_type(token->value);
+    redir->type = get_redir_type(token->str->value);
     tok_pop_clean();
 
     token = tok_peek();
     CHECK_GOTO(!IS_WORDABLE(token), error);
-    redir->to = token->value;
-    tok_pop();
+    redir->to = token->str->value;
+    token->str->value = NULL;
+    tok_pop_clean();
 
     append_redir(ast, redir);
-    return OK;
+    GR_DBG_RET(OK);
 error:
     free(redir);
-    return ERROR;
+    GR_DBG_RET(ERROR);
 }

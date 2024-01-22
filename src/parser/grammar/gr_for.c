@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "lexer/token_saver.h"
@@ -11,9 +10,11 @@
 void add_to_item_list(struct ast_for *ast)
 {
     struct token *item = tok_peek();
+    // tok_pop();
+    ast->item_list =
+        realloc(ast->item_list, ++ast->nb_items * sizeof(struct exp_str *));
+    ast->item_list[ast->nb_items - 1] = item->str;
     tok_pop();
-    ast->item_list = realloc(ast->item_list, ++ast->nb_items * sizeof(char *));
-    ast->item_list[ast->nb_items - 1] = item->value;
 }
 
 /* rule_for ='for' WORD ( [';'] | [ {'\n'} 'in' { WORD } ( ';' | '\n' ) ] )
@@ -21,14 +22,16 @@ void add_to_item_list(struct ast_for *ast)
  */
 enum status gr_for(struct ast_list *ast)
 {
+    GR_DBG_START(For);
     if (tok_peek()->type != FOR)
         return ERROR;
     tok_pop_clean();
     if (!IS_WORDABLE(tok_peek()))
         return ERROR;
     struct ast_for *ast_for = init_ast(AST_FOR);
-    ast_for->name = tok_peek()->value;
-    tok_pop();
+    ast_for->name = tok_peek()->str->value;
+    tok_peek()->str->value = NULL;
+    tok_pop_clean();
     if (tok_peek()->type == SEMI_COLON)
         tok_pop_clean();
     else

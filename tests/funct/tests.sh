@@ -20,9 +20,10 @@ execute() {
     modname=$(echo $2)
     id=$3
     unique="$(echo $id)_$file_id"
+    rm -rf *
     theirs="../../theirs$unique"
     theirs_err="../../theirs_err$unique"
-
+    rm -rf *
     ours="../../ours$unique"
     ours_err="../../ours_err$unique"
 
@@ -72,7 +73,7 @@ execute() {
             do
                 print_line "$(echo $difline | head -c $line_size)" 0 $OTHER
             done
-            print_line "= END diffems" 0 $PURPLE
+            print_line "= END differs" 0 $PURPLE
         fi
         if [ $ret_val -ne 0 ]; then
             print_line "RETURN VALUE differs" 0 $PURPLE

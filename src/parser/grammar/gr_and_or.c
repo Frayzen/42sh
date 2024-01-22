@@ -4,6 +4,7 @@
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
+#include "tools/gr_tools.h"
 #include "tools/gr_utils.h"
 #include "tools/token/token.h"
 
@@ -18,6 +19,7 @@ void append_ao_type(struct ast_and_or *ao, enum token_type type)
 // and_or = pipeline { ( '&&' | '||' ) {'\n'} pipeline } ;
 enum status gr_and_or(struct ast_list *list)
 {
+    GR_DBG_START(AndOr);
     struct ast_and_or *ast_ao = init_ast(AST_AND_OR);
     CHECK_GOTO(gr_pipeline(AST_LIST(ast_ao)) == ERROR, error);
     struct token *tok = tok_peek();
