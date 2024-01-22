@@ -1,5 +1,5 @@
-#include "command/args.h"
 #include "lexer/token_saver.h"
+#include "parser/command/expander.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/gr_tools.h"
@@ -37,7 +37,7 @@ enum status gr_simple_command(struct ast_list *list)
     if (!IS_COMMAND(tok_word) && nb_prefix == 0)
         goto error;
     // WORLD
-    parse_arg(cmd, tok_word->str);
+    cmd_register_token(cmd, tok_word);
     tok_pop();
     // {element}
     while (gr_element(cmd) != ERROR)

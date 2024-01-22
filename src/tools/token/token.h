@@ -58,7 +58,7 @@ enum token_type
 struct token
 {
     enum token_type type;
-    struct exp_str *str;
+    struct lex_str *str;
     bool terminal;
 };
 
@@ -67,7 +67,7 @@ struct token
  * @param value <- the string passed from the finder
  * @return <- a malloced token structure
  */
-struct token *init_token(struct exp_str *str);
+struct token *init_token(struct lex_str *str);
 
 /***
  * frees a token

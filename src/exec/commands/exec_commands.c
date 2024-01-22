@@ -13,7 +13,7 @@
 #include "env/env.h"
 #include "exec/builtins/builtins.h"
 #include "exit/error_handler.h"
-#include "parser/command/args.h"
+#include "parser/command/expander.h"
 #include "tools/ast/ast.h"
 #include "tools/redirection/redirection.h"
 
@@ -44,6 +44,14 @@ int exec_prog(char **argv)
     return pid;
 }
 
+void destroy_argv(char **argv)
+{
+    int i = 0;
+    while (argv[i])
+        free(argv[i++]);
+    free(argv);
+}
+
 int exec_cmd(struct ast_cmd *ast, int *pid)
 {
     assert(ast && AST(ast)->type == AST_CMD);
@@ -51,7 +59,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     if (!fds)
         return 1;
     int ret = 2;
-    char **argv = build_argv(&ast->arglist);
+    char **argv = expand(&ast->args_expansion);
     *pid = PID_SET;
     if (!strcmp(argv[0], "echo"))
     {
