@@ -1,4 +1,5 @@
 #include "vars.h"
+
 #include <stdlib.h>
 
 char *assign(char *name, char *value)
@@ -9,12 +10,10 @@ char *assign(char *name, char *value)
         return old;
     setenv(name, value, 1);
     return old;
-
 }
 
 char *retrieve(char *name)
 {
-
     DBG_VAR("attemp retrieving |%s|\n", name);
     if (!name)
         return NULL;
@@ -22,4 +21,3 @@ char *retrieve(char *name)
     DBG_VAR("|%s|=|%s|\n", name, value);
     return value;
 }
-

@@ -28,6 +28,7 @@ struct env
     bool verbose;
     bool debug_grammar;
     bool debug_pipe;
+    bool debug_env;
     bool is_interactive;
     int fds[1024];
 };
