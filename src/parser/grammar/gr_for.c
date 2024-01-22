@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "lexer/token_saver.h"
@@ -21,6 +20,7 @@ void add_to_item_list(struct ast_for *ast)
  */
 enum status gr_for(struct ast_list *ast)
 {
+    GR_DBG_START(For);
     if (tok_peek()->type != FOR)
         return ERROR;
     tok_pop_clean();

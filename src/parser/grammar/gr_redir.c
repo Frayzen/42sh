@@ -3,6 +3,7 @@
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
+#include "tools/gr_tools.h"
 #include "tools/redirection/redirection.h"
 #include "tools/token/token.h"
 /*
@@ -12,6 +13,7 @@ redirection =
 */
 enum status gr_redir(struct ast_redir *ast)
 {
+    GR_DBG_START(Redir);
     struct redirection *redir = calloc(1, sizeof(struct redirection));
 
     struct token *token = tok_peek();
@@ -34,8 +36,8 @@ enum status gr_redir(struct ast_redir *ast)
     tok_pop();
 
     append_redir(ast, redir);
-    return OK;
+    GR_DBG_RET(OK);
 error:
     free(redir);
-    return ERROR;
+    GR_DBG_RET(ERROR);
 }

@@ -8,8 +8,10 @@
 
 #include "exit/error_handler.h"
 #include "io_backend/backend_saver.h"
+#include "lexer_tools.h"
 
 #define APPEND_CHARS true
+
 #define SPACE_CASES                                                            \
     case ' ':                                                                  \
     case '\f':                                                                 \
@@ -17,44 +19,33 @@
     case '\t':                                                                 \
     case '\v'
 
-#define CHEVRON_CASES                                                          \
+#define QUOTE_CASES                                                            \
+    case '\'':                                                                 \
+    case '"':                                                                  \
+    case '\\'
+
+#define REDIR_OPS_CASES                                                        \
     case '<':                                                                  \
     case '>'
+
 #define AND_OR_CASES                                                           \
     case '&':                                                                  \
     case '|'
-#define OPERATORS                                                              \
-    CHEVRON_CASES:                                                             \
+
+#define CONTROL_OP_CASES                                                       \
     AND_OR_CASES:                                                              \
-    case ';'
+    case ';':                                                                  \
+    case '\n'
+/* TODO include ( and ) */
 
-// Also pop
-void append_char(struct pending *p)
-{
-    struct string *str = &p->str;
-    str->value = realloc(str->value, ++str->size);
-    str->value[str->size - 1] = io_peek();
-    io_pop();
-    p->blank = false;
-}
-
-// Append every char until limit is found (limit excluded)
-void skip_until(struct pending *p, char limit, bool append)
-{
-    char c = io_peek();
-    while (c && c != limit)
-    {
-        if (append)
-            append_char(p);
-        else
-            io_pop();
-        c = io_peek();
-    }
-}
+#define OPERATORS_CASES                                                        \
+    REDIR_OPS_CASES:                                                           \
+    CONTROL_OP_CASES
 
 // TODO redo that to make it readable
-void handle_and_or(struct pending *p, char c)
+void consume_and_or(struct pending *p, char c)
 {
+    append_char(p);
     if (IS_BLANK(p))
     {
         append_char(p);
@@ -67,10 +58,8 @@ void handle_and_or(struct pending *p, char c)
     }
 }
 
-void consume_chevron(struct pending *p)
+void consume_redir_op(struct pending *p)
 {
-    if (!IS_BLANK(p))
-        return;
     char c = io_peek();
     // Append the first < or >
     append_char(p);
@@ -88,34 +77,62 @@ void consume_chevron(struct pending *p)
     }
 }
 
-// return true if pending is over
-bool consume_operators(struct pending *p)
+void consume_control_op(struct pending *p)
 {
     char c = io_peek();
     switch (c)
     {
-    CHEVRON_CASES:
-        consume_chevron(p);
-        return true;
-    case '\n':
-    case ';':
-    case '=':
-        if (IS_BLANK(p))
-            append_char(p);
-        return true;
-    SPACE_CASES:
-        if (!IS_BLANK(p))
-            return true;
-        io_pop();
+    AND_OR_CASES:
+        consume_and_or(p, c);
         break;
-    case '|':
-    case '&':
-        handle_and_or(p, c);
-        return true;
-    default:
+    case ';':
+    case '\n':
+        append_char(p);
         break;
     }
-    return false;
+}
+
+void consume_operators(struct pending *p)
+{
+    if (!IS_BLANK(p))
+        return;
+    char c = io_peek();
+    switch (c)
+    {
+    REDIR_OPS_CASES:
+        consume_redir_op(p);
+        break;
+    CONTROL_OP_CASES:
+        consume_control_op(p);
+        break;
+    }
+}
+
+void consume_comment(struct pending *p)
+{
+    if (IS_BLANK(p))
+    {
+        io_pop();
+        skip_until(p, '\n', !APPEND_CHARS);
+    }
+    else
+        append_char(p);
+}
+
+// return true if pending is finished
+void consume_quote(struct pending *p)
+{
+    char c = io_peek();
+    if (c == '\\')
+    {
+        p->backslashed = true;
+        return;
+    }
+    append_char(p);
+    skip_until(p, c, APPEND_CHARS);
+    if (!io_peek())
+        exit_gracefully(UNEXPECTED_EOF);
+    append_char(p);
 }
 
 // return true if finished
@@ -125,40 +142,24 @@ bool consume(struct pending *p, char c)
     switch (c)
     {
     case '\0':
-        if (!IS_BLANK(p))
+        if (IS_BLANK(p))
             append_char(p);
         return true;
-    case '\\':
-        p->backslashed = true;
-        io_pop();
-        break;
-    case '\'':
-    case '"':
-        p->blank = false;
-        p->force_word = true;
-        io_pop();
-        skip_until(p, c, APPEND_CHARS);
-        if (!io_peek())
-            exit_gracefully(UNEXPECTED_EOF);
-        io_pop();
+    OPERATORS_CASES:
+        consume_operators(p);
+        return true;
+    QUOTE_CASES:
+        consume_quote(p);
         return false;
     case '#':
-        if (IS_BLANK(p))
-        {
-            io_pop();
-            skip_until(p, '\n', !APPEND_CHARS);
-            io_pop();
-        }
-        else
-            goto append;
+        consume_comment(p);
         return false;
     SPACE_CASES:
-    case '\n':
-    case '=':
-    OPERATORS:
-        return consume_operators(p);
+        if (!IS_BLANK(p))
+            return true;
+        io_pop();
+        break;
     default:
-    append:
         append_char(p);
         break;
     }
@@ -173,8 +174,7 @@ void consumer(struct pending *p)
         if (p->backslashed)
         {
             p->backslashed = false;
-            append_char(p, c);
-            io_pop();
+            append_char(p);
         }
         else if (consume(p, c))
             return;
@@ -188,7 +188,9 @@ const struct pending *finder(void)
     memset(&p, 0, sizeof(struct pending));
     p.blank = true;
     consumer(&p);
-    append_char(&p, '\0');
-    p.str.size--;
+    // Append the null terminating char
+    struct string *str = &p.str;
+    str->value = realloc(str->value, str->size + 1);
+    str->value[str->size] = '\0';
     return &p;
 }

@@ -8,6 +8,7 @@
 
 enum status gr_while(struct ast_list *list)
 {
+    GR_DBG_START(SimpleCommand);
     struct ast_loop *wh_ast = init_ast(AST_WHILE);
 
     CHECK_GOTO(tok_peek()->type != WHILE, error);
@@ -23,7 +24,7 @@ enum status gr_while(struct ast_list *list)
     tok_pop_clean();
 
     add_child(list, AST(wh_ast));
-    return OK;
+    GR_DBG_RET(OK);
 error:
     destroy_ast(wh_ast);
     GR_DBG_RET(ERROR);

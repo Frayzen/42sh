@@ -10,7 +10,6 @@
 struct pending
 {
     struct string str;
-    bool force_word;
     bool backslashed;
     bool blank;
 };

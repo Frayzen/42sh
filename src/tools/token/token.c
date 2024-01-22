@@ -33,7 +33,7 @@ int get_type(const struct string *str)
     if (chevron_type(str))
         return CHEVRON;
     char next = io_peek();
-    if (assigment_word(str))
+    if (assignment_word(str))
         return ASSIGNMENT_WORD;
     if ((next == '>' || next == '<') && is_number(str->value))
         return IO_NUMBER;

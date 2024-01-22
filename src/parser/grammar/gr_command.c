@@ -9,6 +9,7 @@ simple_command
 */
 enum status gr_command(struct ast_pipe *pipe)
 {
+    GR_DBG_START(Command);
     struct ast_list *list = AST_LIST(pipe);
     if (gr_simple_command(list) == OK)
         return OK;

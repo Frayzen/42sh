@@ -1,5 +1,8 @@
 #include "lexer_tools.h"
+#include <stdlib.h>
 #include <string.h>
+#include "finder.h"
+#include "io_backend/backend_saver.h"
 #include "tools/str/string.h"
 #include "tools/token/token.h"
 
@@ -52,7 +55,7 @@ bool is_name(char *str, size_t size)
     return true;
 }
 
-bool assigment_word(const struct string *str)
+bool assignment_word(const struct string *str)
 {
     char *begin = str->value;
     char* first_eq = strchr(begin, '=');
@@ -61,3 +64,28 @@ bool assigment_word(const struct string *str)
     size_t size = first_eq - begin + 1;
     return is_name(begin, size);
 }
+
+// Also pop
+void append_char(struct pending *p)
+{
+    struct string *str = &p->str;
+    str->value = realloc(str->value, ++str->size);
+    str->value[str->size - 1] = io_peek();
+    io_pop();
+    p->blank = false;
+}
+
+// Append every char until limit is found (limit excluded)
+void skip_until(struct pending *p, char limit, bool append)
+{
+    char c = io_peek();
+    while (c && c != limit)
+    {
+        if (append)
+            append_char(p);
+        else
+            io_pop();
+        c = io_peek();
+    }
+}
+

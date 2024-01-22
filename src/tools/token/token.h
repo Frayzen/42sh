@@ -1,6 +1,7 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 #include <stdbool.h>
+#include "tools/str/string.h"
 
 #define IS_WORDABLE(t) ((t)->type >= IF) // Easy to test, just do echo <input>
 #define IS_COMMAND(t) ((t)->type >= T_TRUE)
