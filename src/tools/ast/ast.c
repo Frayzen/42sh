@@ -25,10 +25,9 @@ void *init_ast(enum ast_type type)
         [AST_WHILE] = sizeof(struct ast_loop),
         [AST_UNTIL] = sizeof(struct ast_loop),
         [AST_FOR] = sizeof(struct ast_for),
+        [AST_AND_OR] = sizeof(struct ast_and_or),
         // TODO later
         [AST_ASS] = sizeof(struct ast),
-        [AST_AND] = sizeof(struct ast),
-        [AST_OR] = sizeof(struct ast),
     };
     struct ast *ast = calloc(1, ast_size[type]);
     ast->type = type;
@@ -67,6 +66,10 @@ void destroy_ast(void *ast)
         destroy_list(&AST_IF(ast)->then);
         destroy_ast(AST_IF(ast)->fallback);
         break;
+    case AST_AND_OR:
+        free(AST_AND_OR(ast)->types);
+        goto destroy_list;
+        break;
     case AST_FOR:
         free(AST_FOR(ast)->name);
         if (AST_FOR(ast)->item_list)
@@ -78,6 +81,7 @@ void destroy_ast(void *ast)
         /* FALLTHROUGH */
     case AST_PIPE:
     case AST_LIST:
+    destroy_list:
         destroy_list(AST_LIST(ast));
         break;
     default:

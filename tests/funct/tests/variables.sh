@@ -49,3 +49,31 @@ cat <$$
 ###Hard expansions
 a='sh    42'
 echo 42"$a"sh 42$a\sh $a 42$a
+
+###Double equal
+how=varname=value
+echo "We print variable like that : $how"
+
+
+###Errors
+te\}st=ok
+
+test=ok
+\{test=ok
+
+'test'=ok
+
+tes\t=ok
+
+${ok}=ok
+
+${test}=ok
+
+test=a
+$a=ok
+
+$test=ok
+
+${test}=ok
+
+${test}=ok

@@ -30,6 +30,7 @@ struct ast **get_children(struct ast *ast)
     case AST_PIPE:
     case AST_FOR:
     case AST_LIST:
+    case AST_AND_OR:
         for (int i = 0; i < AST_LIST(ast)->nb_children; i++)
             ret[i] = AST_LIST(ast)->children[i];
         break;

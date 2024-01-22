@@ -2,6 +2,7 @@
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
+#include "tools/gr_tools.h"
 #include "tools/gr_utils.h"
 #include "tools/token/token.h"
 
@@ -26,6 +27,7 @@ prefix { prefix }
 */
 enum status gr_simple_command(struct ast_list *list)
 {
+    GR_DBG_START(SimpleCommand);
     struct ast_cmd *cmd = init_ast(AST_CMD);
     // {prefix}
     int nb_prefix = 0;
@@ -42,8 +44,8 @@ enum status gr_simple_command(struct ast_list *list)
         continue;
     // {element}
     add_child(list, AST(cmd));
-    return OK;
+    GR_DBG_RET(OK);
 error:
     destroy_ast(cmd);
-    return ERROR;
+    GR_DBG_RET(ERROR);
 }

@@ -8,6 +8,7 @@
 
 enum status gr_until(struct ast_list *ast)
 {
+    GR_DBG_START(Until);
     struct ast_loop *utl_ast = init_ast(AST_UNTIL);
 
     CHECK_GOTO(tok_peek()->type != UNTIL, error);
@@ -23,7 +24,7 @@ enum status gr_until(struct ast_list *ast)
     tok_pop_clean();
 
     add_child(ast, AST(utl_ast));
-    return OK;
+    GR_DBG_RET(OK);
 error:
     destroy_ast(utl_ast);
     GR_DBG_RET(ERROR);

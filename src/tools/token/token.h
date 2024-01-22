@@ -1,10 +1,9 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 #include <stdbool.h>
+#include "tools/str/string.h"
 
-#include "lexer/finder.h"
-
-#define IS_WORDABLE(t) ((t)->type >= IF)
+#define IS_WORDABLE(t) ((t)->type >= IF) // Easy to test, just do echo <input>
 #define IS_COMMAND(t) ((t)->type >= T_TRUE)
 #define IS_OPERATOR(t) ((t)->type == AND || (t)->type == OR)
 
@@ -19,11 +18,9 @@ enum token_type
     CHEVRON,
     PIPE,
     // numbers
-    EQUAL,
-    // wildcard
-    QUOTE,
-
     IO_NUMBER,
+
+    // wildcard
     AND,
     OR,
     // WORDABLES UNDER
@@ -50,8 +47,9 @@ enum token_type
     ECHO,
     // terminals
     WORD,
-
     ASSIGNMENT_WORD,
+
+
 };
 
 #define TOK_TYPES_LT (toktype_lookup())

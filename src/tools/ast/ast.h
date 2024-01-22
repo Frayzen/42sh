@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <stdbool.h>
 #include "parser/command/arg_list.h"
+#include "tools/token/token.h"
 
 #define AST_ROOT (set_ast_root(NULL))
 
@@ -13,14 +14,13 @@ enum ast_type
     AST_CMD,
     AST_SH,
     AST_IF,
-    AST_ASS,
     AST_PIPE,
     AST_WHILE,
     AST_UNTIL,
     AST_FOR,
+    AST_AND_OR,
     // NOT USED
-    AST_AND,
-    AST_OR
+    AST_ASS
 };
 
 #define AST(Base) ((struct ast *)(Base))
@@ -92,6 +92,15 @@ struct ast_for
     int nb_items;
     struct exp_str **item_list;
 };
+
+// BEGIN AND OR
+#define AST_AND_OR(Base) ((struct ast_and_or *)(Base))
+struct ast_and_or
+{
+    struct ast_list list;
+    enum token_type *types;
+};
+// END AND OR
 
 /***
  * Set or gets the pointer to the ast root

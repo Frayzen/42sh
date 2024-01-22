@@ -48,6 +48,6 @@ void parse_arg(struct ast_cmd *cmd, struct exp_str *arg)
 char **build_argv(struct arglist *args)
 {
     args = args + 1;
-    // TODO
+    // TODO check that each var name is a valid name
     return NULL;
 }
