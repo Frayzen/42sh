@@ -19,3 +19,9 @@ fi
 if ! echo ok; then
     echo double
 fi
+
+### Negate return builtin
+! echo ok
+
+### Negate return builtin
+! ls

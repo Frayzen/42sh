@@ -1,23 +1,25 @@
 #include <assert.h>
 
+#include "commands/execs_cmd.h"
 #include "execs.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 
-int exec_list(struct ast *ast)
+int exec_list(struct ast_list *ast)
 {
-    assert(ast && ast->type == AST_LIST && ast->nb_children > 0);
+    assert(AST(ast)->type == AST_LIST || AST(ast)->type == AST_FOR);
+    assert(ast && ast->nb_children > 0);
     int ret = -1;
     for (int i = 0; i < ast->nb_children; i++)
     {
         struct ast *child = ast->children[i];
         switch (child->type)
         {
-        case AST_NEGATE:
-            ret = exec_negate(child);
-            break;
         case AST_PIPE:
-            ret = exec_pipe(child);
+            ret = exec_pipe(AST_PIPE(child));
+            break;
+        case AST_AND_OR:
+            ret = exec_and_or(AST_AND_OR(child));
             break;
         default:
             exit_gracefully(LIST_NOT_FOUND);

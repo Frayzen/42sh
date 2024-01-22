@@ -20,9 +20,10 @@ execute() {
     modname=$(echo $2)
     id=$3
     unique="$(echo $id)_$file_id"
+    rm -rf *
     theirs="../../theirs$unique"
     theirs_err="../../theirs_err$unique"
-
+    rm -rf *
     ours="../../ours$unique"
     ours_err="../../ours_err$unique"
 
@@ -31,6 +32,7 @@ execute() {
     printf '%s' "$code" > $script
     $path_42sh $script 1> $ours 2> $ours_err
     ours_ret=$?
+    rm -rf *
     bash --posix $script 1> $theirs 2> $theirs_err
     theirs_ret=$?
     dif=$(diff -q $ours $theirs)
@@ -71,7 +73,7 @@ execute() {
             do
                 print_line "$(echo $difline | head -c $line_size)" 0 $OTHER
             done
-            print_line "= END diffems" 0 $PURPLE
+            print_line "= END differs" 0 $PURPLE
         fi
         if [ $ret_val -ne 0 ]; then
             print_line "RETURN VALUE differs" 0 $PURPLE
@@ -98,7 +100,7 @@ execute() {
 
 parallelize_entry() {
     cd ..
-    tmp_folder=$(mktemp -d XXXXXX)
+    tmp_folder=$(mktemp -d .XXXXXX)
     cd $tmp_folder
     entry=$1
     file_id=$2

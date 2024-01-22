@@ -1,6 +1,10 @@
 lib_LIBRARIES = libparser.a
 
 libparser_a_SOURCES = \
+	command/args.c \
+	command/args.h \
+	command/arg_list.c \
+	command/arg_list.h \
 	grammar/gr_element.c \
 	grammar/gr_entry.c \
 	grammar/gr_simple_command.c \
@@ -16,6 +20,11 @@ libparser_a_SOURCES = \
 	grammar/gr_prefix.c \
 	grammar/gr_while.c \
 	grammar/gr_until.c \
+	grammar/gr_for.c \
+	tools/gr_utils.c \
+	tools/gr_utils.h \
+	tools/gr_tools.c \
+	tools/gr_tools.h \
 	grammar/rules.h
 libparser_a_CPPFLAGS = -I$(top_srcdir)/src
 libparser_a_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic

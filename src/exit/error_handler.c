@@ -57,6 +57,7 @@ void print_error(enum error_type type)
         [EXECVP_FAILED] = "Command not found",
         [UNEXPECTED_EOF] = "Unexpected end of file",
         [BAD_REDIRECTION] = "Bad redirection",
+        [BAD_FD] = "The file descriptor couldn't be open",
     };
     dprintf(STDERR_FILENO, "%s\n", error_names[type]);
 }

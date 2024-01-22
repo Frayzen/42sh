@@ -16,6 +16,9 @@ echo efnienfuen iunfeiu neifun eifun ieunfi ue    fieunfiune iun iu neif
 ###Echo reserved
 echo if fi then echo ifa fia thena;
 
+###Echo true false
+echo true || echo false && ! echo other && echo flo
+
 ###Paraph echo
 echo Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras commodo lobortis tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut euismod imperdiet nulla vel ornare. In cursus vel lectus nec scelerisque. Integer vestibulum tellus eu vehicula pharetra. Praesent porttitor libero id justo commodo consequat. Nunc nisi quam, interdum eu leo a, placerat tempor orci. Morbi nec dui vitae nisi molestie condimentum et scelerisque elit. Proin eget tempus ex, et sagittis ligula.
 
@@ -96,8 +99,14 @@ echo echo echo  fi if else elif
 ### negation
 echo   biz    ; echo yipee yep; echo hello world !; echo 1 2 3 4 5 6
 
-### ionumbers
-echo 3 4 55 > 2  2>file
-
 ###Lots of dash option
 echo -n -n -e -e -n -n -n -e 42'\nsh'
+
+###Empties n
+echo -n
+echo -e
+echo -E
+echo -Een
+
+###Long command list
+echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto; echo toto ;echo toto;

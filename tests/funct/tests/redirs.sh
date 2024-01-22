@@ -36,3 +36,18 @@ echo ok 1>&2 2>&1 1>/dev/null 2>/dev/null
 
 ###Hard redirs and pipe
 if echo ok 2>&1 1>&2 | cat; then echo ok 2>file | cat; fi | cat
+
+###Echo ionumbers
+echo 3 4 55 > 2  2>file
+
+###Two ways on cat
+echo "Hey" > first
+cat <>first | wc -c
+echo "Test" 2<>file
+cat <>file
+
+###Two ways on ls
+ls 2<>hello 1>&2
+
+###Two ways tricky
+ls 4<>hello 1>&4 | cat <&4

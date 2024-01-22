@@ -3,11 +3,11 @@
 #include <stdlib.h>
 
 #include "env/env.h"
-#include "lexer/finder.h"
+#include "finder/finder.h"
 #include "tools/token/token.h"
 struct token *next_token(void)
 {
-    const struct pending *pending = finder();
+    struct pending *pending = finder();
     if (!pending)
     {
         struct token *ret = calloc(1, sizeof(struct token));
@@ -15,10 +15,10 @@ struct token *next_token(void)
         return ret;
     }
     struct token *result = init_token(&pending->str);
-    if (pending->force_word)
+    if (pending->force_str)
     {
-        result->terminal = false;
         result->type = WORD;
+        result->terminal = false;
     }
     if (result->type == BSZERO)
         get_env_flag()->null_received = true;
