@@ -5,7 +5,7 @@
 
 #include "parser/command/arg_list.h"
 #include "tools/token/token.h"
-
+#include "env/vars/vars.h"
 #define AST_ROOT (set_ast_root(NULL))
 
 enum ast_type
@@ -76,6 +76,7 @@ struct ast_cmd
 {
     struct ast_redir redirs;
     struct arglist arglist;
+    struct ass_list ass_list;
 };
 
 #define AST_SH(Base) ((struct ast_sh *)(Base))
