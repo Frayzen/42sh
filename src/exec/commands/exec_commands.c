@@ -125,7 +125,7 @@ int exec_prog(char **argv)
             dup2(FDS[i], i);
             // Do not close if STDOUT = STOUD_FILENO
             if (i != FDS[i])
-                close(FDS[i]);      
+                close(FDS[i]);
         }
         execvp(argv[0], argv);
         exit(127);
@@ -146,7 +146,13 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     assign_vars(ast->ass_list);
 
     *pid = PID_SET;
-    if (!strcmp(argv[0], "echo"))
+    if (ast->arglist.size == 0)
+    {
+        close_redirs(fds);
+        destroy_argv(argv);
+        return 0;
+    }
+    else if (!strcmp(argv[0], "echo"))
     {
         exec_echo(argv);
         ret = 0;
@@ -155,11 +161,6 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         ret = 0;
     else if (!strcmp(argv[0], "false"))
         ret = 1;
-    else if (ast->arglist.size == 0)
-    {   
-        printf("heree\n");
-        return 0;
-    }
     else
     {
         *pid = exec_prog(argv);
