@@ -25,10 +25,13 @@ void consume_comment(struct pending *p)
 // return true if pending is finished
 void consume_quote(struct pending *p)
 {
+    p->blank = false;
+    p->force_str = true;
     char c = io_peek();
     if (c == '\\')
     {
         p->backslashed = true;
+        io_pop();
         return;
     }
     p->in_quote = true;

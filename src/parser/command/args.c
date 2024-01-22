@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <threads.h>
 
 #include "env/env.h"
 #include "parser/command/arg_list.h"
@@ -38,6 +39,8 @@ int append(enum expand_type type, struct ast_cmd *cmd, struct exp_str *arg,
 void parse_arg(struct ast_cmd *cmd, struct exp_str *arg)
 {
     size_t i = 0;
+    if (arg->size == 0)
+        append(STR_LITTERAL, cmd, arg, 0);
     while (i < arg->size)
     {
         // Skip the dollar if needed
