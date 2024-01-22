@@ -10,4 +10,11 @@
  */
 void cmd_register_token(struct ast_cmd *cmd, struct token *tok);
 
+/***
+ * Expand the expansion
+ * @param expansion the expansion
+ * @return the string list
+ */
+char **expand(struct expansion *expansion);
+
 #endif /* !EXPANDER_H */

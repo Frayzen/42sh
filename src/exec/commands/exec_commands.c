@@ -1,5 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
+#include "parser/command/expander.h"
 #include <fcntl.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -139,7 +140,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     if (!fds)
         return 1;
     int ret = 2;
-    char **argv = cmd_expand(ast);
+    char **argv = expand(&ast->args_expansion);
     *pid = PID_SET;
     if (!strcmp(argv[0], "echo"))
     {

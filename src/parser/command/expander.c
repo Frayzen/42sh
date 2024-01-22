@@ -106,9 +106,9 @@ struct expandable* expand_next(struct expandable *exp, char **str)
     return exp->next;
 }
 
-char **cmd_expand(struct ast_cmd *cmd)
+char **expand(struct expansion *expansion)
 {
-    struct expandable *exp = cmd->args_expansion.head;
+    struct expandable *exp = expansion->head;
     char **argv = NULL;
     char *next = NULL;
     expand_next(exp, &next);
