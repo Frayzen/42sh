@@ -16,9 +16,9 @@ char *split_ass_word(char *ass_word, bool name)
         return NULL;
     if (name)
     {
-
+        size_t len = equalSign - ass_word;
         char *ret = strdup(ass_word);
-        *equalSign = '\0';
+        ret[len] = '\0';
         return ret;
     }
     char *ret = strdup(equalSign + 1);
@@ -47,11 +47,24 @@ void assign_vars(struct ass_list ass_list)
     {
         char *value = split_ass_word(ass_list.elements[i]->ass_word, VALUE);
         char *name = split_ass_word(ass_list.elements[i]->ass_word, NAME);
+        printf("setting |%s|   to |%s|\n", name, value);
         setenv(name, value, true);
         free(value);
         free(name);
     }
 }
+//
+// void assign_vars(struct ass_list ass_list)
+// {
+//     for(size_t i = 0; i < ass_list.size; i++)
+//     {
+//         char *value = split_ass_word(ass_list.elements[i]->ass_word, VALUE);
+//         char *name = split_ass_word(ass_list.elements[i]->ass_word, NAME);
+//         setenv(name, value, true);
+//         free(value);
+//         free(name);
+//     }
+// }
 
 
 void print_ass_element(struct ass_element *elm)

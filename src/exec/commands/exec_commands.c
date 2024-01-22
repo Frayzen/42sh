@@ -155,6 +155,11 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         ret = 0;
     else if (!strcmp(argv[0], "false"))
         ret = 1;
+    else if (ast->arglist.size == 0)
+    {   
+        printf("heree\n");
+        return 0;
+    }
     else
     {
         *pid = exec_prog(argv);

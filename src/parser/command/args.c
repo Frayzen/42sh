@@ -1,3 +1,4 @@
+#include "env/vars/vars.h"
 #define _POSIX_C_SOURCE 200809L
 #include "args.h"
 
@@ -56,15 +57,17 @@ void parse_arg(struct ast_cmd *cmd, struct exp_str *arg)
 // if discard_spaces is set, remove any extra space from the string
 char *expand(char *var_name)
 {
-    var_name = var_name + 1;
-    // TODO expand actually the var
-    char *val = malloc(sizeof(char) * 7);
-    val[0] = 'e';
-    val[1] = ' ';
-    val[2] = ' ';
-    val[3] = 'h';
-    val[4] = '\0';
-    return val;
+    // var_name = var_name + 1;
+    // // TODO expand actually the var
+    // char *val = malloc(sizeof(char) * 7);
+    // val[0] = 'e';
+    // val[1] = ' ';
+    // val[2] = ' ';
+    // val[3] = 'h';
+    // val[4] = '\0';
+    char *value = getenv(var_name);
+        printf("value = %s\n", value);
+    return value;
 }
 
 void append_to_argv(struct arg_builder *builder)
