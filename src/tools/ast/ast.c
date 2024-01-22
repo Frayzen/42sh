@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "env/vars/vars.h"
 #include "parser/command/arg_list.h"
 #include "str/string.h"
 #include "tools/redirection/redirection.h"
@@ -52,6 +53,7 @@ void destroy_ast(void *ast)
     {
     case AST_CMD:
         clean_arglist(&AST_CMD(ast)->arglist);
+        destroy_ass_list(&AST_CMD(ast)->ass_list);
         /* FALLTHROUGH */
     case AST_SH:
         destroy_redir(AST_REDIR(ast));

@@ -1,3 +1,4 @@
+#include "env/vars/vars.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
@@ -124,7 +125,7 @@ int exec_prog(char **argv)
             dup2(FDS[i], i);
             // Do not close if STDOUT = STOUD_FILENO
             if (i != FDS[i])
-                close(FDS[i]);
+                close(FDS[i]);      
         }
         execvp(argv[0], argv);
         exit(127);
@@ -141,6 +142,9 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         return 1;
     int ret = 2;
     char **argv = build_argv(&ast->arglist);
+    print_ass_list(&ast->ass_list);
+    assign_vars(ast->ass_list);
+
     *pid = PID_SET;
     if (!strcmp(argv[0], "echo"))
     {

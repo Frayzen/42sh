@@ -71,9 +71,10 @@ bool assignment_word(const struct exp_str *str)
 {
     char *begin = str->value;
     char *first_eq = strchr(begin, '=');
-    if (!first_eq)
+    // If no equal has been found or equal is the first char
+    if (!first_eq && first_eq != str->value)
         return false;
-    size_t size = first_eq - begin + 1;
+    size_t size = first_eq - begin;
     return is_name(begin, size);
 }
 
