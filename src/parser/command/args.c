@@ -1,12 +1,11 @@
 #include "env/vars/vars.h"
 #define _POSIX_C_SOURCE 200809L
-#include "args.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <threads.h>
 
+#include "args.h"
 #include "env/env.h"
 #include "parser/command/arg_list.h"
 #include "tools/ast/ast.h"
@@ -66,7 +65,7 @@ char *expand(char *var_name)
     // val[3] = 'h';
     // val[4] = '\0';
     char *value = getenv(var_name);
-        printf("value = %s\n", value);
+    printf("value = %s\n", value);
     return value;
 }
 
