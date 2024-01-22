@@ -4,7 +4,6 @@
 #include <unistd.h>
 
 #include "env/env.h"
-#include "exec/execs.h"
 #include "exit/error_handler.h"
 #include "io_backend/io_streamers.h"
 #include "parser/grammar/rules.h"
@@ -31,7 +30,7 @@ int main(int argc, char *argv[])
         }
         if (get_env_flag()->pretty_print)
             debug_pretty_print(ast);
-        ret = exec_entry(ast);
+        /* ret = exec_entry(ast); */
         assert(DICT->nb_entries == 0);
         fflush(NULL);
         destroy_ast(ast);

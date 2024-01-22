@@ -1,14 +1,14 @@
-#include <stdio.h>
-
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
+#include "tools/gr_tools.h"
 #include "tools/gr_utils.h"
 /*
 pipeline = ['!'] command { '|' {'\n'} command } ;
 */
 enum status gr_pipeline(struct ast_list *list)
 {
+    GR_DBG_START(Pipeline);
     struct ast_pipe *pipe = init_ast(AST_PIPE);
     struct token *token = tok_peek();
     if (token->type == NEGATION)
@@ -25,8 +25,8 @@ enum status gr_pipeline(struct ast_list *list)
         CHECK_GOTO(gr_command(pipe), error);
     }
     add_child(list, AST(pipe));
-    return OK;
+    GR_DBG_RET(OK);
 error:
     destroy_ast(pipe);
-    return ERROR;
+    GR_DBG_RET(ERROR);
 }

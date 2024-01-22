@@ -13,8 +13,6 @@
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 
-#define PID_SET -1
-
 // either set the pid and return PID_SET or return the value
 int exec_piped(struct ast *ast, int in, int out, int *pid)
 {
@@ -27,13 +25,7 @@ int exec_piped(struct ast *ast, int in, int out, int *pid)
     switch (ast->type)
     {
     case AST_CMD:
-        if (AST_CMD(ast)->is_builtin)
-            ret = exec_builtin(AST_CMD(ast));
-        else
-        {
-            ret = PID_SET;
-            *pid = exec_bin(AST_CMD(ast));
-        }
+        ret = exec_cmd(AST_CMD(ast), pid);
         break;
     case AST_IF:
         ret = exec_condition(AST_IF(ast));

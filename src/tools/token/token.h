@@ -2,9 +2,9 @@
 #define TOKEN_H
 #include <stdbool.h>
 
-#include "lexer/finder.h"
+#include "tools/str/string.h"
 
-#define IS_WORDABLE(t) ((t)->type >= IF)
+#define IS_WORDABLE(t) ((t)->type >= IF) // Easy to test, just do echo <input>
 #define IS_COMMAND(t) ((t)->type >= T_TRUE)
 #define IS_OPERATOR(t) ((t)->type == AND || (t)->type == OR)
 
@@ -19,11 +19,9 @@ enum token_type
     CHEVRON,
     PIPE,
     // numbers
-    EQUAL,
-    // wildcard
-    QUOTE,
-
     IO_NUMBER,
+
+    // wildcard
     AND,
     OR,
     // WORDABLES UNDER
@@ -50,8 +48,8 @@ enum token_type
     ECHO,
     // terminals
     WORD,
-
     ASSIGNMENT_WORD,
+
 };
 
 #define TOK_TYPES_LT (toktype_lookup())
@@ -59,7 +57,7 @@ enum token_type
 struct token
 {
     enum token_type type;
-    char *value;
+    struct exp_str *str;
     bool terminal;
 };
 
@@ -68,7 +66,7 @@ struct token
  * @param value <- the string passed from the finder
  * @return <- a malloced token structure
  */
-struct token *init_token(const struct string *str);
+struct token *init_token(struct exp_str *str);
 
 /***
  * frees a token

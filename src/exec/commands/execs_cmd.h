@@ -3,21 +3,15 @@
 
 #include "tools/ast/ast.h"
 
-/***
- * execute a builtin command
- * @param ast the AST_CMD tree to execute
- * @return the return value
- * @see exec_bin for other commands execution
- */
-int exec_builtin(struct ast_cmd *ast);
+#define PID_SET -1
 
 /***
- * fork the program and executes the command
+ * execute a command
  * @param ast the AST_CMD tree to execute
- * @return the pid or -1 in case of error
- * @see exec_builtin for builtin execution
+ * @param pid a pointer to the pid to be set in case of fork
+ * @return either set the pid and return PID_SET or return the value
  */
-int exec_bin(struct ast_cmd *ast);
+int exec_cmd(struct ast_cmd *ast, int *pid);
 
 /***
  * executes the pipe ast

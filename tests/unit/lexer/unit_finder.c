@@ -10,7 +10,7 @@
 void assert_and_clear(const char *val)
 {
     const struct pending *pending = finder();
-    struct string str = pending->str;
+    struct exp_str str = pending->str;
     cr_assert_str_eq(str.value, val);
     free(str.value);
 }
