@@ -1,5 +1,6 @@
 #define _XOPEN_SOURCE 700
-#include "lexer/lexer_tools.h"
+#include "token/token.h"
+#include "lexer/finder/finder_tools.h"
 #include "tools/str/string.h"
 #include <ctype.h>
 #include <fnmatch.h>
@@ -45,7 +46,7 @@ struct token *init_token(struct exp_str *str)
     struct token *tok = malloc(sizeof(struct token));
     tok->type = get_type(str);
     tok->str = dup_exp_str(str);
-    tok->terminal = is_terminating(tok);
+    tok->terminal = is_terminating(tok->type);
     return tok;
 }
 

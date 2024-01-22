@@ -2,7 +2,7 @@
 
 
 #include "env/env.h"
-#include "lexer/finder.h"
+#include "finder/finder.h"
 #include "tools/token/token.h"
 struct token *next_token(void)
 {

@@ -3,7 +3,7 @@
 
 
 #include <stdbool.h>
-#include "finder/finder.h"
+#include "lexer/finder/finder.h"
 #include "tools/str/string.h"
 #include "tools/token/token.h"
 
