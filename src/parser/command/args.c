@@ -11,27 +11,29 @@
 #include "tools/ast/ast.h"
 #include "tools/str/string.h"
 
-// Append the var arg to the cmd command list
-//@param i is the id of the first char
-//@return the next id that is not part of the var name
-int append(enum expand_type type, struct ast_cmd *cmd, struct exp_str *arg,
+// Append the next arg found in exp_str to cmd considering its type and begin
+//@param type the type of the arg
+//@param cmd the command to append the new arg to
+//@param exp_str the expand string to read from
+//@return the begin of the next
+int append(enum expand_type type, struct ast_cmd *cmd, struct exp_str *exp_str,
            size_t begin)
 {
     size_t end = begin;
     if (type == STR_LITTERAL)
     {
-        while (end < arg->size && arg->expand[end] == type)
+        while (end < exp_str->size && exp_str->expand[end] == type)
             end++;
     }
     else
     {
-        while (end < arg->size && arg->expand[end] == type
-               && arg->value[end] != '$')
+        while (end < exp_str->size && exp_str->expand[end] == type
+               && exp_str->value[end] != '$')
             end++;
     }
     size_t size = end - begin;
-    bool is_last = arg->size == end;
-    char *str = strndup(arg->value + begin, size);
+    bool is_last = exp_str->size == end;
+    char *str = strndup(exp_str->value + begin, size);
     arglist_push_back(&cmd->arglist, !is_last, str, type);
     return end;
 }
@@ -85,19 +87,21 @@ void append_to_builder(struct arg_builder *builder, char *val,
                        enum expand_type type)
 {
     int i = 0;
-    bool last_space = false;
+    char last = '\0';
     while (val[i])
     {
-        if (type == UNQUOTED_VAR && val[i] == ' ' && !last_space)
+        if (val[i] == ' ' && type == UNQUOTED_VAR)
         {
-            last_space = true;
-            append_to_argv(builder);
-            continue;
+            if (last != ' ')
+                append_to_argv(builder);
         }
-        last_space = false;
-        builder->current =
-            realloc(builder->current, ++(builder->cur_length) * sizeof(char));
-        builder->current[builder->cur_length - 1] = val[i];
+        else
+        {
+            builder->current = realloc(builder->current,
+                                       ++(builder->cur_length) * sizeof(char));
+            builder->current[builder->cur_length - 1] = val[i];
+        }
+        last = val[i];
         i++;
     }
 }
