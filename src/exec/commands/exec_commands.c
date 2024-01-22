@@ -129,7 +129,6 @@ int exec_prog(char **argv)
         execvp(argv[0], argv);
         exit(127);
     }
-    free(argv);
     return pid;
 }
 
