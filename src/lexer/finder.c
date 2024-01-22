@@ -17,14 +17,25 @@
     case '\t':                                                                 \
     case '\v'
 
-// return the p->value
-char *append_char(struct pending *p, char c)
+#define CHEVRON_CASES                                                          \
+    case '<':                                                                  \
+    case '>'
+#define AND_OR_CASES                                                           \
+    case '&':                                                                  \
+    case '|'
+#define OPERATORS                                                              \
+    CHEVRON_CASES:                                                             \
+    AND_OR_CASES:                                                              \
+    case ';'
+
+// Also pop
+void append_char(struct pending *p)
 {
     struct string *str = &p->str;
     str->value = realloc(str->value, ++str->size);
-    str->value[str->size - 1] = c;
+    str->value[str->size - 1] = io_peek();
+    io_pop();
     p->blank = false;
-    return str->value;
 }
 
 // Append every char until limit is found (limit excluded)
@@ -34,8 +45,9 @@ void skip_until(struct pending *p, char limit, bool append)
     while (c && c != limit)
     {
         if (append)
-            append_char(p, c);
-        io_pop();
+            append_char(p);
+        else
+            io_pop();
         c = io_peek();
     }
 }
@@ -45,32 +57,51 @@ void handle_and_or(struct pending *p, char c)
 {
     if (IS_BLANK(p))
     {
-        append_char(p, c);
+        append_char(p);
         io_pop();
         if (io_peek() == c)
         {
-            append_char(p, c);
+            append_char(p);
             io_pop();
         }
     }
 }
 
-// Special are \n \0 space and ;
+void consume_chevron(struct pending *p)
+{
+    if (!IS_BLANK(p))
+        return;
+    char c = io_peek();
+    // Append the first < or >
+    append_char(p);
+    char next = io_peek();
+    switch (c)
+    {
+    case '>':
+        if (next == '>' || next == '&' || next == '|')
+            append_char(p);
+        break;
+    case '<':
+        if (next == '&' || next == '>')
+            append_char(p);
+        break;
+    }
+}
+
 // return true if pending is over
-bool special_char(struct pending *p)
+bool consume_operators(struct pending *p)
 {
     char c = io_peek();
     switch (c)
     {
+    CHEVRON_CASES:
+        consume_chevron(p);
+        return true;
     case '\n':
-    case '\0':
     case ';':
     case '=':
         if (IS_BLANK(p))
-        {
-            append_char(p, c);
-            io_pop();
-        }
+            append_char(p);
         return true;
     SPACE_CASES:
         if (!IS_BLANK(p))
@@ -87,42 +118,19 @@ bool special_char(struct pending *p)
     return false;
 }
 
-// return true if the chevron is accepted
-bool chevron(struct pending *p, char c)
-{
-    append_char(p, c);
-    io_pop();
-    char next = io_peek();
-    switch (c)
-    {
-    case '>':
-        if (next == '>' || next == '&' || next == '|')
-        {
-            append_char(p, next);
-            io_pop();
-        }
-        break;
-    case '<':
-        if (next == '&' || next == '>')
-        {
-            append_char(p, next);
-            io_pop();
-        }
-        break;
-    default:
-        return false;
-    }
-    return true;
-}
-
 // return true if finished
 bool consume(struct pending *p, char c)
 {
     // Any external function in the switch should handle every pop involved
     switch (c)
     {
+    case '\0':
+        if (!IS_BLANK(p))
+            append_char(p);
+        return true;
     case '\\':
         p->backslashed = true;
+        io_pop();
         break;
     case '\'':
     case '"':
@@ -144,25 +152,16 @@ bool consume(struct pending *p, char c)
         else
             goto append;
         return false;
-    case '>':
-    case '<':
-        if (IS_BLANK(p) && !chevron(p, c))
-            goto append;
-        return true;
     SPACE_CASES:
     case '\n':
-    case '\0':
-    case ';':
     case '=':
-    case '|':
-    case '&':
-        return special_char(p);
+    OPERATORS:
+        return consume_operators(p);
     default:
     append:
-        append_char(p, c);
+        append_char(p);
         break;
     }
-    io_pop();
     return false;
 }
 

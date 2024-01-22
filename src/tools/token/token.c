@@ -1,5 +1,6 @@
-#include "tools/str/string.h"
 #define _XOPEN_SOURCE 700
+#include "lexer/lexer_tools.h"
+#include "tools/str/string.h"
 #include <ctype.h>
 #include <fnmatch.h>
 #include <stdio.h>
@@ -8,38 +9,6 @@
 
 #include "io_backend/backend_saver.h"
 #include "token.h"
-
-bool is_terminating(struct token *token)
-{
-    switch (token->type)
-    {
-    case NEWLINE:
-    case SEMI_COLON:
-    case BSZERO:
-        return true;
-    default:
-        return false;
-    }
-}
-
-bool chevron_type(const struct string *str)
-{
-    if (!strcmp(">", str->value))
-        return 1;
-    if (!strcmp("<", str->value))
-        return 1;
-    if (!strcmp(">>", str->value))
-        return 1;
-    if (!strcmp(">&", str->value))
-        return 1;
-    if (!strcmp("<&", str->value))
-        return 1;
-    if (!strcmp(">|", str->value))
-        return 1;
-    if (!strcmp("<>", str->value))
-        return 1;
-    return 0;
-}
 
 int get_type(const struct string *str)
 {
@@ -64,6 +33,8 @@ int get_type(const struct string *str)
     if (chevron_type(str))
         return CHEVRON;
     char next = io_peek();
+    if (assigment_word(str))
+        return ASSIGNMENT_WORD;
     if ((next == '>' || next == '<') && is_number(str->value))
         return IO_NUMBER;
     return i;
@@ -126,15 +97,14 @@ void print_token(struct token *token)
 const char **toktype_lookup(void)
 {
     static const char *lookup_table[] = {
-        [IF] = "if",           [THEN] = "then",     [ELIF] = "elif",
-        [ELSE] = "else",       [FI] = "fi",         [SEMI_COLON] = ";",
-        [NEWLINE] = "\n",      [QUOTE] = "'",       [ECHO] = "echo",
-        [T_TRUE] = "true",     [T_FALSE] = "false", [BSZERO] = "\0",
-        [CHEVRON] = "CHEVRON", [IO_NUMBER] = "NB",  [EQUAL] = "=",
-        [NEGATION] = "!",      [PIPE] = "|",        [WORD] = NULL,
-        [WHILE] = "while",     [DO] = "do",         [DONE] = "done",
-        [UNTIL] = "until",     [OR] = "||",         [AND] = "&&",
-        [FOR] = "for",         [IN] = "in",
+        [IF] = "if",         [THEN] = "then",   [ELIF] = "elif",
+        [ELSE] = "else",     [FI] = "fi",       [SEMI_COLON] = ";",
+        [NEWLINE] = "\n",    [ECHO] = "echo",   [T_TRUE] = "true",
+        [T_FALSE] = "false", [BSZERO] = "\0",   [CHEVRON] = "CHEVRON",
+        [IO_NUMBER] = "NB",  [NEGATION] = "!",  [PIPE] = "|",
+        [WORD] = NULL,       [WHILE] = "while", [DO] = "do",
+        [DONE] = "done",     [UNTIL] = "until", [OR] = "||",
+        [AND] = "&&",        [FOR] = "for",     [IN] = "in",
     };
     return lookup_table;
 }
