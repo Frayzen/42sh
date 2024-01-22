@@ -1,5 +1,6 @@
-#include <stdlib.h>
+#include <cstdlib>
 #define _POSIX_C_SOURCE 200809L
+#include <stdlib.h>
 #include <string.h>
 
 #include "command/expansion.h"
@@ -61,25 +62,62 @@ void cmd_register_token(struct ast_cmd *cmd, struct token *tok)
 }
 
 //
-//EXPANSION
+// EXPANSION
 //
 
-char *expand_next(struct expandable *exp)
+char *stringify_expandable(struct expandable *exp)
 {
-    
+    if (exp->type == STR_LITTERAL)
+        return exp->content;
+    // TODO return the content of the var
+    char *ret = strdup("ech");
+    return ret;
+}
+
+/***
+ * Expand the expandable and return the size of the new str
+ * @param exp the expandable
+ * @param str the string. It is set to NULL if expandable is NULL
+ * @return the next expandable
+ */
+struct expandable* expand_next(struct expandable *exp, char **str)
+{
+    if (!exp)
+        return 0;
+    char *build = NULL;
+    int bsize = 0;
+    while (true)
+    {
+        //Append the stringify of the current expandable
+        char *str_exp = stringify_expandable(exp);
+        int i = 0;
+        while (str_exp[i])
+        {
+            build = realloc(build, sizeof(char) * ++bsize);
+            build[bsize - 1] = str_exp[i++];
+        } 
+        if (!exp->link_next || !exp->next)
+            break;
+        exp = exp->next;
+    }
+    build = realloc(build, sizeof(char) * ++bsize);
+    build[bsize - 1] = '\0';
+    *str = build;
+    return exp->next;
 }
 
 char **cmd_expand(struct ast_cmd *cmd)
 {
     struct expandable *exp = cmd->args_expansion.head;
     char **argv = NULL;
-    char *next = expand_next(exp);
+    char *next = NULL;
+    expand_next(exp, &next);
     int argc = 0;
     do
     {
         argv = realloc(argv, sizeof(char *) * argc++);
-        argv[argc-1] = next;
-        next = expand_next(exp);
+        argv[argc - 1] = next;
+        expand_next(exp, &next);
     } while (next);
     return argv;
 }
