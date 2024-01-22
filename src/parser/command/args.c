@@ -57,7 +57,10 @@ void parse_arg(struct ast_cmd *cmd, struct exp_str *arg)
 char *expand(char *var_name)
 {
     char *value = getenv(var_name);
-    return strdup(value);
+    if (value)
+        return strdup(value);
+    else
+        return strdup("");
 }
 
 void append_to_argv(struct arg_builder *builder)
