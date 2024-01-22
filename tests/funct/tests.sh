@@ -20,9 +20,10 @@ execute() {
     modname=$(echo $2)
     id=$3
     unique="$(echo $id)_$file_id"
+    rm -rf *
     theirs="../../theirs$unique"
     theirs_err="../../theirs_err$unique"
-
+    rm -rf *
     ours="../../ours$unique"
     ours_err="../../ours_err$unique"
 

@@ -6,11 +6,18 @@
 
 bool is_number(char *val);
 
+enum expand_type
+{
+    STR_LITTERAL = 0,
+    QUOTED_VAR,
+    UNQUOTED_VAR,
+};
+
 struct exp_str
 {
     char *value;
     size_t size;
-    bool *expand;
+    enum expand_type *expand;
 };
 void print_exp_str(struct exp_str *str);
 /***

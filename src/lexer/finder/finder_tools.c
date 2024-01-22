@@ -1,5 +1,6 @@
 #include "finder_tools.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -79,10 +80,16 @@ bool assignment_word(const struct exp_str *str)
 void append_char(struct pending *p, char c)
 {
     struct exp_str *str = &p->str;
-    str->value = realloc(str->value, ++str->size);
-    str->value[str->size - 1] = c;
-    str->expand = realloc(str->expand, str->size);
-    str->expand[str->size - 1] = p->expanding;
+    size_t id = str->size++;
+    str->value = realloc(str->value, str->size * sizeof(char));
+    str->value[id] = c;
+    str->expand = realloc(str->expand, str->size * sizeof(enum expand_type));
+    if (!p->expanding)
+        str->expand[id] = STR_LITTERAL;
+    else if (p->in_quote)
+        str->expand[id] = QUOTED_VAR;
+    else
+        str->expand[id] = UNQUOTED_VAR;
     p->blank = false;
 }
 

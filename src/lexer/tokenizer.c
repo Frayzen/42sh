@@ -7,6 +7,11 @@ struct token *next_token(void)
 {
     struct pending *pending = finder();
     struct token *result = init_token(&pending->str);
+    if (pending->force_str)
+    {
+        result->type = WORD;
+        result->terminal = false;
+    }
     if (result->type == BSZERO)
         get_env_flag()->null_received = true;
     if (get_env_flag()->verbose)

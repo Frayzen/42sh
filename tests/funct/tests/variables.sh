@@ -77,3 +77,16 @@ $test=ok
 ${test}=ok
 
 ${test}=ok
+
+###Order of assignment
+x="oncex upon" y="time"; echo $x $y
+a="oncea upon" b="ime" && echo $a $b
+p="oncep upon" v="me" echo $p $v
+
+###Check assignment before command
+a=3 b=4 c=5 tot='this is a test' env
+
+###Double alloc at once
+a=3 q=1
+echo $a $q
+a=4 env && env

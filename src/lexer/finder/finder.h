@@ -47,6 +47,8 @@ struct pending
     bool backslashed;
     bool blank;
     bool expanding;
+    bool in_quote;
+    bool force_str;
 };
 
 // In this file, understand 'current character' as the one returned by io_peek

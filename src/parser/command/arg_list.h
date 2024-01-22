@@ -3,11 +3,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-enum arg_type
-{
-    VAR,
-    STR,
-};
+#include "tools/str/string.h"
 
 struct arg
 {
@@ -15,7 +11,7 @@ struct arg
     // If the next element is separated from the current
     bool link_next;
     char *content;
-    enum arg_type type;
+    enum expand_type type;
 };
 
 struct arglist
@@ -40,7 +36,7 @@ struct arglist *arglist_init(void);
  * @return true if everything went fine
  */
 bool arglist_push_back(struct arglist *list, bool link_next, char *content,
-                       enum arg_type type);
+                       enum expand_type type);
 void arglist_print(const struct arglist *list);
 /***
  * Free all of the elements of the arglist (but not the arglist itslef)
