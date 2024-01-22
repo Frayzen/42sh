@@ -37,7 +37,7 @@ enum status gr_simple_command(struct ast_list *list)
     if (!IS_COMMAND(tok_word) && nb_prefix == 0)
         goto error;
     // WORLD
-    cmd_register_token(cmd, tok_word);
+    register_token(&cmd->args_expansion, tok_word);
     tok_pop();
     // {element}
     while (gr_element(cmd) != ERROR)

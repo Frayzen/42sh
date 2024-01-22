@@ -1,7 +1,7 @@
 #ifndef EXPANDER_H
 #define EXPANDER_H
 
-#include "command/expansion.h"
+#include "parser/command/expansion.h"
 #include "tools/token/token.h"
 
 /***
