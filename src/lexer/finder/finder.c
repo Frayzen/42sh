@@ -15,7 +15,7 @@ void consume_comment(struct pending *p)
     if (IS_BLANK(p))
     {
         io_pop();
-        skip_until(p, '\n', !append_ioS);
+        skip_until(p, '\n', !APPEND_CHARS);
     }
     else
         append_io(p);
@@ -31,7 +31,7 @@ void consume_quote(struct pending *p)
         return;
     }
     append_io(p);
-    skip_until(p, c, append_ioS);
+    skip_until(p, c, APPEND_CHARS);
     if (!io_peek())
         exit_gracefully(UNEXPECTED_EOF);
     append_io(p);
@@ -67,7 +67,7 @@ void consume_variable(struct pending *p)
     if (c == '{')
     {
         io_pop();
-        skip_until(p, '}', append_ioS);
+        skip_until(p, '}', APPEND_CHARS);
         io_pop();
     }
     else

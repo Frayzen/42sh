@@ -7,7 +7,7 @@
 
 #define IS_BLANK(Pending) ((Pending)->blank)
 
-#define append_ioS true
+#define APPEND_CHARS true
 
 #define SPECIAL_PARAMETERS "0123456789@*#?-$!0"
 
