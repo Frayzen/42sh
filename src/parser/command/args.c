@@ -8,7 +8,7 @@
 #include "tools/ast/ast.h"
 #include "tools/str/string.h"
 
-//Append the next arg found in exp_str to cmd considering its type and begin
+// Append the next arg found in exp_str to cmd considering its type and begin
 //@param type the type of the arg
 //@param cmd the command to append the new arg to
 //@param exp_str the expand string to read from
@@ -19,7 +19,8 @@ int append(enum arg_type type, struct ast_cmd *cmd, struct exp_str *exp_str,
     size_t end = begin;
     if (type == VAR)
     {
-        while (end < exp_str->size && exp_str->expand[end] && exp_str->value[end] != '$')
+        while (end < exp_str->size && exp_str->expand[end]
+               && exp_str->value[end] != '$')
             end++;
     }
     else

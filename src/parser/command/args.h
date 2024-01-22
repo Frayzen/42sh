@@ -2,6 +2,7 @@
 #define ARGS_H
 
 #include <stdbool.h>
+
 #include "tools/ast/ast.h"
 
 /***

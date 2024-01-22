@@ -2,6 +2,7 @@
 #define AST_H
 #include <fcntl.h>
 #include <stdbool.h>
+
 #include "parser/command/arg_list.h"
 #include "tools/token/token.h"
 

@@ -7,8 +7,8 @@
 #include <threads.h>
 
 #include "exit/error_handler.h"
-#include "lexer/finder/finder_tools.h"
 #include "io_backend/backend_saver.h"
+#include "lexer/finder/finder_tools.h"
 
 void consume_comment(struct pending *p)
 {

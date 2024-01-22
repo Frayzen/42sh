@@ -1,5 +1,4 @@
 #define _POSIX_C_SOURCE 200809L
-#include "commands/execs_cmd.h"
 #include <assert.h>
 #include <fcntl.h>
 #include <stdbool.h>
@@ -10,6 +9,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include "commands/execs_cmd.h"
 #include "env/env.h"
 #include "exit/error_handler.h"
 #include "parser/command/args.h"

@@ -15,8 +15,8 @@ void arglist_print(const struct arglist *list)
     struct arg *e = list->head;
     for (size_t i = 0; i < list->size; i++)
     {
-        printf("[%s] '%s' %c\n", e->type == VAR ? "VAR" : "WRD",
-               e->content, e->link_next ? '|' : '=');
+        printf("[%s] '%s' %c\n", e->type == VAR ? "VAR" : "WRD", e->content,
+               e->link_next ? '|' : '=');
         e = e->next;
     }
 }
