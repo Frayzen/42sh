@@ -120,6 +120,8 @@ void print_ast_cmd(struct ast_cmd *ast, int depth, bool last_of_first)
     {
         if (i == ast->arglist.size - 1)
             align(depth, true, last_of_first);
+        else
+            align(depth, false, last_of_first);
         printf("%s\n", current->content);
         current = current->next;
     }
