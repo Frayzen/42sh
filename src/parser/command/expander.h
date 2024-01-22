@@ -1,14 +1,15 @@
 #ifndef EXPANDER_H
 #define EXPANDER_H
 
-#include "tools/ast/ast.h"
+#include "command/expansion.h"
+#include "tools/token/token.h"
 
 /***
  * Register the token as part of the futur expansion of the command
  * @param cmd the command
  * @param tok the token to register
  */
-void cmd_register_token(struct ast_cmd *cmd, struct token *tok);
+void register_token(struct expansion *exp, struct token *tok);
 
 /***
  * Expand the expansion

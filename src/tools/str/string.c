@@ -4,9 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
-
 bool is_number(char *val)
 {
     int i = 0;

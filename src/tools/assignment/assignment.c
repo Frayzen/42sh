@@ -1,9 +1,11 @@
 #include "assignment.h"
+
 #include <stdlib.h>
 #include <string.h>
+
 #include "env/vars/vars.h"
 #include "str/string.h"
-//manage the variable assignments using environ to store, restore and update
+// manage the variable assignments using environ to store, restore and update
 
 struct lex_str *extract_value(struct lex_str *str, size_t eq_pos)
 {
@@ -17,12 +19,9 @@ struct lex_str *extract_value(struct lex_str *str, size_t eq_pos)
     memcpy(val->expand, str->expand + offset, val_size);
     val->size = val_size;
     return val;
-
-
 }
 
-
-struct assignment *init_assignment(struct lex_str  *str)
+struct assignment *init_assignment(struct lex_str *str)
 {
     char *eq = strchr(str->value, '=');
     if (!eq)
@@ -37,7 +36,6 @@ struct assignment *init_assignment(struct lex_str  *str)
 
     ass->value = extract_value(str, eq_pos);
     return ass;
-
 }
 
 void destroy_assignment(struct assignment *assignment)
