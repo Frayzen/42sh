@@ -120,7 +120,7 @@ char **expand(struct expansion *expansion)
         argv = realloc(argv, sizeof(char *) * ++argc);
         exp = expand_next(exp, &next);
         argv[argc - 1] = next;
-        VERBOSE("[ARG %d] %s\n",argc-1, next);
+        VERBOSE("[ARG %d] %s\n", argc - 1, next);
     } while (exp);
     argv = realloc(argv, sizeof(char *) * ++argc);
     argv[argc - 1] = NULL;

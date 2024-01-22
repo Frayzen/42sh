@@ -1,6 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
-#include "parser/command/expander.h"
 #include <fcntl.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -14,6 +13,7 @@
 #include "env/env.h"
 #include "exec/builtins/builtins.h"
 #include "exit/error_handler.h"
+#include "parser/command/expander.h"
 #include "tools/ast/ast.h"
 #include "tools/redirection/redirection.h"
 
