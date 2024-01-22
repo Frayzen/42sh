@@ -26,6 +26,7 @@ char *split_ass_word(char *ass_word, bool name)
     return ret;
 }
 
+
 void append_ass(struct ass_list *ass_list, struct exp_str *ass_word)
 {
     ass_list->size++;
@@ -49,24 +50,26 @@ void assign_vars(struct ass_list ass_list)
         free(name);
     }
 }
-//
-// void assign_vars(struct ass_list ass_list)
-// {
-//     for(size_t i = 0; i < ass_list.size; i++)
-//     {
-//         char *value = split_ass_word(ass_list.elements[i]->ass_word, VALUE);
-//         char *name = split_ass_word(ass_list.elements[i]->ass_word, NAME);
-//         setenv(name, value, true);
-//         free(value);
-//         free(name);
-//     }
-// }
+
+void restore_vars(struct ass_list ass_list)
+{
+    printf("retsing %ld\n", ass_list.size);
+    for(size_t i = 0; i < ass_list.size; i++)
+    {
+        struct ass_element *elm = ass_list.elements[i];
+        char *name = split_ass_word(elm->ass_word, NAME);
+        printf("name = %s\n", name);
+        unsetenv(name);
+        free(name);
+    }
+}
 
 void print_ass_element(struct ass_element *elm)
 {
     printf("prev = %s\n", elm->prev);
     printf("cur = %s\n", elm->ass_word);
 }
+
 void print_ass_list(struct ass_list *ass_list)
 {
     for (size_t i = 0; i < ass_list->size; i++)

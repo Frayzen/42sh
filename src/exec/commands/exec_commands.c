@@ -148,8 +148,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     if (ast->arglist.size == 0)
     {
         close_redirs(fds);
-        destroy_argv(argv);
-        return 0;
+        ret = 0; 
     }
     else if (!strcmp(argv[0], "echo"))
     {
@@ -165,6 +164,8 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         *pid = exec_prog(argv);
         ret = -1;
     }
+    printf("here\n");
+    restore_vars(ast->ass_list);
     destroy_argv(argv);
     close_redirs(fds);
     return ret;

@@ -16,6 +16,7 @@ struct ass_list
 void append_ass(struct ass_list *ass_list, struct exp_str *ass_word);
 void set_var(char *name, char *value);
 void print_ass_element(struct ass_element *elm);
+void restore_vars(struct ass_list ass_list);
 
 void print_ass_list(struct ass_list *ass_list);
 char *retrieve_var(char *name);
