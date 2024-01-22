@@ -58,8 +58,14 @@ void consume_variable(struct pending *p)
     char c = io_peek();
     p->expanding = true;
     if (c == '{')
-    {
         skip_until(p, '}', APPEND_CHARS);
+    else
+    {
+        while (is_portable_char(c))
+        {
+            append_char(p);
+            c = io_peek();
+        }
     }
     p->expanding = false;
 }
