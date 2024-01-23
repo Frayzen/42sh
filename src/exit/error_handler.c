@@ -1,17 +1,22 @@
 #define _POSIX_C_SOURCE 200809L
+#include "exit/error_handler.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "exit/exit.h"
+#include "env/env.h"
 #include "tools/ast/ast.h"
 
+// Do NOT expect this function to exit the program
 void exit_gracefully(enum error_type type)
 {
+    print_error(type);
+    if (get_env_flag()->is_interactive)
+        return;
     struct ast **root = AST_ROOT;
     if (root)
         clean(*root);
-    print_error(type);
     switch (type)
     {
     case ARG_ERROR:
@@ -38,6 +43,7 @@ void print_error(enum error_type type)
         [RING_BF_FULL] = "Ring buffer is full",
         [ADD_CHILD_ERROR] = "Tried to add a child to an ast with NULL children",
         [LIST_NOT_FOUND] = "The element in the list ast is invalid",
+        [PIPE_NOT_FOUND] = "The element in the pipe ast is invalid",
         [FD_DICO_FULL] = "The file descriptor dictionary is full",
         // Misuse of shell built-ins -> 2
         [ARG_ERROR] = "The arguments did not match",
@@ -50,6 +56,8 @@ void print_error(enum error_type type)
         // Command not found -> 127
         [EXECVP_FAILED] = "Command not found",
         [UNEXPECTED_EOF] = "Unexpected end of file",
+        [BAD_REDIRECTION] = "Bad redirection",
+        [BAD_FD] = "The file descriptor couldn't be open",
     };
     dprintf(STDERR_FILENO, "%s\n", error_names[type]);
 }

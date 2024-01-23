@@ -3,14 +3,14 @@
 #include <criterion/internal/test.h>
 #include <criterion/redirect.h>
 
-#include "exit/exit.h"
+#include "exit/error_handler.h"
 #include "io_backend/backend_saver.h"
 #include "lexer/finder.h"
 
 void assert_and_clear(const char *val)
 {
     const struct pending *pending = finder();
-    struct string str = pending->str;
+    struct lex_str str = pending->str;
     cr_assert_str_eq(str.value, val);
     free(str.value);
 }

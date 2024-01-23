@@ -82,3 +82,27 @@ fi
 
 ###Counpoumd list
 if true; then echo Never; echo Gonna; echo Give; echo You; echo Up; fi
+### shange token
+if false; then echo else; elif true; then echo else; fi
+
+### If else new line
+if echo this
+then
+   echo is
+elif false
+then
+   echo nice
+else
+   echo false
+fi
+
+### If else new line all negated
+if ! echo this
+then
+   ! echo is
+elif ! false
+then
+   ! echo nice
+else
+    ! echo false
+fi

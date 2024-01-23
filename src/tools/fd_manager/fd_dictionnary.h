@@ -1,5 +1,5 @@
-#ifndef FD_MANAGER_H
-#define FD_MANAGER_H
+#ifndef FD_DICTIONNARY_H
+#define FD_DICTIONNARY_H
 
 #define DICT_SIZE 1024
 #define DICT (get_dict())
@@ -55,4 +55,4 @@ void dict_pop(int old_fd);
  */
 void dict_free(void);
 
-#endif /* !FD_MANAGER_H */
+#endif /* !FD_DICTIONNARY_H */

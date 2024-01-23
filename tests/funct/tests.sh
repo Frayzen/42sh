@@ -20,9 +20,10 @@ execute() {
     modname=$(echo $2)
     id=$3
     unique="$(echo $id)_$file_id"
+    rm -rf *
     theirs="../../theirs$unique"
     theirs_err="../../theirs_err$unique"
-
+    rm -rf *
     ours="../../ours$unique"
     ours_err="../../ours_err$unique"
 
@@ -31,6 +32,7 @@ execute() {
     printf '%s' "$code" > $script
     $path_42sh $script 1> $ours 2> $ours_err
     ours_ret=$?
+    rm -rf *
     bash --posix $script 1> $theirs 2> $theirs_err
     theirs_ret=$?
     dif=$(diff -q $ours $theirs)
@@ -54,7 +56,9 @@ execute() {
         error=1
     else
         if [ -n "$ERROR_ONLY" ]; then
-            rm $theirs $ours $ours_err $theirs_err $script
+            if [ $mod_id -eq 0 ]; then
+                rm $theirs $ours $ours_err $theirs_err $script
+            fi
             exit 0
         fi
         toprint="$toprint$(printf '[%b] ' "$PASSED")"
@@ -84,7 +88,9 @@ execute() {
         fi
         print_line "[ = END = ]" 0 $PURPLE
     fi
-    rm $theirs $ours $ours_err $theirs_err $script
+    if [ $mod_id -eq 0 ]; then
+        rm $theirs $ours $ours_err $theirs_err $script
+    fi
     if [ $error -ne 1 ]; then
         exit 0
     else
@@ -93,6 +99,9 @@ execute() {
 }
 
 parallelize_entry() {
+    cd ..
+    tmp_folder=$(mktemp -d .XXXXXX)
+    cd $tmp_folder
     entry=$1
     file_id=$2
     name=$(basename "$entry")
@@ -123,13 +132,11 @@ parallelize_entry() {
                 modname="$(echo $line | cut -c4-)"
                 ;;
             *)
-                if [ $save -eq 0 ]; then
-                    $(line)
-                else
+                if [ $save -ne 0 ]; then
                     build="$build$line timflochaslm"
                 fi
         esac
-    done < $entry
+    done < ../funct/$entry
     if [ $save -eq 1 ]; then
         if [ $mod_id -eq 0 -o $curid -eq $mod_id ]; then
             val=$(execute "$build" "$modname" $curid)
@@ -146,6 +153,8 @@ parallelize_entry() {
         echo ""
         echo "$(echo "$toprint" | sed 's/\\n/\'$'\n''/g')"
     fi
+    cd ..
+    rm -rf $tmp_folder
 }
 
 test_dir=./tests

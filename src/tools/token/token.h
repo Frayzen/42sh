@@ -2,17 +2,30 @@
 #define TOKEN_H
 #include <stdbool.h>
 
-#include "lexer/finder.h"
+#include "tools/str/string.h"
 
-#define IS_BUILTIN(t) ((t)->type >= T_TRUE && (t)->type <= ECHO)
+#define IS_WORDABLE(t) ((t)->type >= IF) // Easy to test, just do echo <input>
+#define IS_COMMAND(t) ((t)->type >= T_TRUE)
+#define IS_OPERATOR(t) ((t)->type == AND || (t)->type == OR)
 
 // /!\ Do not add gaps inside of this enum (see TOK_TYPES_LT)
 enum token_type
 {
+    TOK_ERROR = -1,
     // end of instruction
     NEWLINE,
     BSZERO,
     SEMI_COLON,
+    // redir
+    CHEVRON,
+    PIPE,
+    // numbers
+    IO_NUMBER,
+
+    // wildcard
+    AND,
+    OR,
+    // WORDABLES UNDER
 
     // condition
     IF,
@@ -20,15 +33,24 @@ enum token_type
     ELIF,
     ELSE,
     FI,
+
+    WHILE,
+    UNTIL,
+    FOR,
+    IN,
+    DO,
+    DONE,
+
+    NEGATION,
+
     // builtins /!\ leave T_TRUE as first one and ECHO as last one
     T_TRUE,
     T_FALSE,
     ECHO,
-    // wildcard
-    QUOTE,
-    NEGATION,
     // terminals
     WORD,
+    ASSIGNMENT_WORD,
+
 };
 
 #define TOK_TYPES_LT (toktype_lookup())
@@ -36,7 +58,7 @@ enum token_type
 struct token
 {
     enum token_type type;
-    char *value;
+    struct lex_str *str;
     bool terminal;
 };
 
@@ -45,7 +67,7 @@ struct token
  * @param value <- the string passed from the finder
  * @return <- a malloced token structure
  */
-struct token *init_token(const struct string *str);
+struct token *init_token(struct lex_str *str);
 
 /***
  * frees a token

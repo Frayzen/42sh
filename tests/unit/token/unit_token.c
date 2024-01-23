@@ -7,7 +7,7 @@
 
 #include "tools/token/token.h"
 
-void check_token(struct token *token, struct string *str, enum token_type type)
+void check_token(struct token *token, struct lex_str *str, enum token_type type)
 {
     cr_assert_neq(token, NULL, "token is null");
     cr_assert(strcmp(token->value, str->value) == 0, "incorrect value");
@@ -16,9 +16,9 @@ void check_token(struct token *token, struct string *str, enum token_type type)
     destroy_token(token);
 }
 
-struct string *str_create(char *value)
+struct lex_str *str_create(char *value)
 {
-    static struct string str;
+    static struct lex_str str;
     str.size = strlen(value);
     str.value = strdup(value);
     return &str;
@@ -27,14 +27,14 @@ struct string *str_create(char *value)
 Test(NewlineToken, init_newline_token)
 {
     char *str = "\n";
-    struct string *value = str_create(str);
+    struct lex_str *value = str_create(str);
     struct token *token = init_token(value);
     check_token(token, value, NEWLINE);
 }
 Test(BSZeroToken, init_bszero_token)
 {
     char *str = "\0";
-    struct string *value = str_create(str);
+    struct lex_str *value = str_create(str);
     value->size = 1;
     struct token *token = init_token(value);
     check_token(token, value, BSZERO);
@@ -43,7 +43,7 @@ Test(BSZeroToken, init_bszero_token)
 Test(Token, init_if)
 {
     char *str = "if";
-    struct string *value = str_create(str);
+    struct lex_str *value = str_create(str);
     struct token *token = init_token(value);
     check_token(token, value, IF);
 }
@@ -51,7 +51,7 @@ Test(Token, init_if)
 Test(ThenToken, init_then_token)
 {
     char *str = "then";
-    struct string *value = str_create(str);
+    struct lex_str *value = str_create(str);
     struct token *token = init_token(value);
     check_token(token, value, THEN);
 }
@@ -59,7 +59,7 @@ Test(ThenToken, init_then_token)
 Test(ElifToken, init_elif_token)
 {
     char *str = "elif";
-    struct string *value = str_create(str);
+    struct lex_str *value = str_create(str);
     struct token *token = init_token(value);
     check_token(token, value, ELIF);
 }
@@ -67,7 +67,7 @@ Test(ElifToken, init_elif_token)
 Test(ElseToken, init_else_token)
 {
     char *str = "else";
-    struct string *value = str_create(str);
+    struct lex_str *value = str_create(str);
     struct token *token = init_token(value);
     check_token(token, value, ELSE);
 }
@@ -75,7 +75,7 @@ Test(ElseToken, init_else_token)
 Test(FiToken, init_fi_token)
 {
     char *str = "fi";
-    struct string *value = str_create(str);
+    struct lex_str *value = str_create(str);
     struct token *token = init_token(value);
     check_token(token, value, FI);
 }
@@ -83,7 +83,7 @@ Test(FiToken, init_fi_token)
 Test(SemiColonToken, init_semicolon_token)
 {
     char *str = ";";
-    struct string *value = str_create(str);
+    struct lex_str *value = str_create(str);
     struct token *token = init_token(value);
     check_token(token, value, SEMI_COLON);
 }
@@ -91,7 +91,7 @@ Test(SemiColonToken, init_semicolon_token)
 Test(QuoteToken, init_quote_token)
 {
     char *str = "\'";
-    struct string *value = str_create(str);
+    struct lex_str *value = str_create(str);
     struct token *token = init_token(value);
     check_token(token, value, QUOTE);
 }
@@ -99,7 +99,7 @@ Test(QuoteToken, init_quote_token)
 Test(WordToken, init_word_token)
 {
     char *str = "word";
-    struct string *value = str_create(str);
+    struct lex_str *value = str_create(str);
     struct token *token = init_token(value);
     check_token(token, value, WORD);
 }
@@ -107,7 +107,7 @@ Test(WordToken, init_word_token)
 Test(EchoToken, init_echo_token)
 {
     char *str = "echo";
-    struct string *value = str_create(str);
+    struct lex_str *value = str_create(str);
     struct token *token = init_token(value);
     check_token(token, value, ECHO);
 }
@@ -115,7 +115,7 @@ Test(EchoToken, init_echo_token)
 Test(TrueToken, init_true_token)
 {
     char *str = "true";
-    struct string *value = str_create(str);
+    struct lex_str *value = str_create(str);
     struct token *token = init_token(value);
     check_token(token, value, T_TRUE);
 }
@@ -123,7 +123,7 @@ Test(TrueToken, init_true_token)
 Test(FalseToken, init_false_token)
 {
     char *str = "false";
-    struct string *value = str_create(str);
+    struct lex_str *value = str_create(str);
     struct token *token = init_token(value);
     check_token(token, value, T_FALSE);
 }
