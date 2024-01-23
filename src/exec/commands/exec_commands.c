@@ -1,4 +1,3 @@
-#include "env/vars/vars.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
@@ -63,6 +62,8 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             builtin_echo(argv);
             ret = 0;
         }
+        else if (!strcmp(argv[0], "cd"))
+            builtin_cd(argv);
         else if (!strcmp(argv[0], "exit"))
             builtin_exit(argv);
         else if (!strcmp(argv[0], "true"))

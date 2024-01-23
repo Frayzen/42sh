@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -17,6 +18,8 @@ void builtin_cd(char **argv)
         else
             new = argv[1];
     }
-    chdir(new);
-    assign_var("OLDPWD", assign_var("HOME", new));
+    if (chdir(new) == -1)
+        perror("Error on cd: ");
+    else
+        assign_var("OLDPWD", assign_var("HOME", new));
 }
