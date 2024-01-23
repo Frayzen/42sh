@@ -107,7 +107,6 @@ do
     echo $a
 done
 
-
 ###redir string
 tat=1
 echo ok $tat>tst
@@ -116,5 +115,9 @@ tat=twok
 echo ok $twok>other
 cat other
 
+###Nested echo
+a=3 bash -c 'echo $a'
+
 ###Unexpected EOF Var
 echo ${a
+
