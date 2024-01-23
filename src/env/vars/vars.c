@@ -8,7 +8,7 @@
     if (get_env_flag()->debug_env)                                             \
         dprintf(DBG_OUT, __VA_ARGS__);
 
-char *assign(char *name, char *value)
+char *assign_var(char *name, char *value)
 {
     char *old = getenv(name);
     DBG_VAR("assign |%s| to |%s|, old = |%s|\n", name, value, old);
@@ -18,7 +18,7 @@ char *assign(char *name, char *value)
     return old;
 }
 
-char *retrieve(char *name)
+char *retrieve_var(char *name)
 {
     DBG_VAR("attemp retrieving |%s|\n", name);
     if (!name)
