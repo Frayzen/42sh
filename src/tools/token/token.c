@@ -35,7 +35,7 @@ int get_type(const struct lex_str *str)
         return CHEVRON;
     char next = io_peek();
     if (assignment_word(str))
-        return ASSIGNMENT_WORD;
+        return ASSMT;
     if ((next == '>' || next == '<') && is_number(str->value))
         return IO_NUMBER;
     return i;

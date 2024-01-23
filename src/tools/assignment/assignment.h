@@ -5,10 +5,11 @@
 
 #include "env/vars/vars.h"
 #include "tools/str/string.h"
+#include "parser/command/expander.h"
 struct assignment
 {
     char *name;
-    struct lex_str *value;
+    struct expansion *value;
     char *prev;
 };
 

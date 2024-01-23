@@ -43,9 +43,8 @@ int register_expandable(struct expansion *exp, struct lex_str *exp_str,
     return end;
 }
 
-void register_token(struct expansion *exp, struct token *tok)
+void exp_register_str(struct expansion *exp, struct lex_str *str)
 {
-    struct lex_str *str = tok->str;
     size_t i = 0;
     if (str->size == 0)
     {

@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "env/vars/vars.h"
+#include "parser/command/expansion.h"
 #include "str/string.h"
 // manage the variable assignments using environ to store, restore and update
 
@@ -34,7 +35,10 @@ struct assignment *init_assignment(struct lex_str *str)
 
     ass->prev = retrieve_var(ass->name);
 
-    ass->value = extract_value(str, eq_pos);
+    struct lex_str *value_str = extract_value(str, eq_pos);
+    ass->value = expansion_init();
+   exp_register_str(ass->value, value_str);
+   exp_register_str(ass->value, str);
     return ass;
 }
 

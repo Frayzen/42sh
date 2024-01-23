@@ -2,6 +2,7 @@
 #define EXPANDER_H
 
 #include "parser/command/expansion.h"
+#include "tools/str/string.h"
 #include "tools/token/token.h"
 
 /***
@@ -9,7 +10,7 @@
  * @param cmd the command
  * @param tok the token to register
  */
-void register_token(struct expansion *exp, struct token *tok);
+void exp_register_str(struct expansion *exp, struct lex_str *str);
 
 /***
  * Expand the expansion
