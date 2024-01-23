@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "assignment/assignment.h"
 #include "str/string.h"
 #include "tools/redirection/redirection.h"
 
@@ -51,6 +52,7 @@ void destroy_ast(void *ast)
     {
     case AST_CMD:
         clean_expansion(&AST_CMD(ast)->args_expansion);
+        clean_assignments(&AST_CMD(ast)->assignment_list);
         /* FALLTHROUGH */
     case AST_SH:
         destroy_redir(AST_REDIR(ast));

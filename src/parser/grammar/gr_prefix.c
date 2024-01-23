@@ -3,7 +3,6 @@
 #include "tools/ast/ast.h"
 #include "tools/token/token.h"
 #include "lexer/token_saver.h"
-#include "parser/command/expander.h"
 /*
 *prefix =
 ASSIGNMENT_WORD
@@ -18,8 +17,7 @@ enum status gr_prefix(struct ast_cmd *cmd)
         // exp_register_str(&cmd->args_expansion, token->str);
         struct assignment *ass = init_assignment(token->str);
         ass_list_append(&cmd->assignment_list, ass);
-        
-        tok_pop();
+        tok_pop_clean();
         return OK;
 
     }
