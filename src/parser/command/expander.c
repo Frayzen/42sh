@@ -1,3 +1,4 @@
+#include "env/vars/vars.h"
 #define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
@@ -69,9 +70,10 @@ char *stringify_expandable(struct expandable *exp)
 {
     if (exp->type == STR_LITTERAL)
         return strdup(exp->content);
-    // TODO return the content of the var
-    char *ret = strdup("ech");
-    return ret;
+    char *ret = retrieve_var(exp->content);
+    if (!ret)
+        ret = "";
+    return strdup(ret);
 }
 
 struct expandable *expand_next(struct expandable *exp, char **str)

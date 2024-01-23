@@ -32,8 +32,6 @@ struct assignment *init_assignment(struct lex_str *str)
     str->value[eq_pos] = '\0';
     ass->name = strdup(str->value);
 
-    ass->prev = retrieve_var(ass->name);
-
     struct lex_str *value_str = extract_value(str, eq_pos);
     exp_register_str(&ass->exp, value_str);
     return ass;

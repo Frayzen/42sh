@@ -1,6 +1,7 @@
 #include "vars.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "env/env.h"
 
 
@@ -11,6 +12,8 @@
 char *assign_var(char *name, char *value)
 {
     char *old = getenv(name);
+    if (old)
+        old = strdup(old);
     DBG_VAR("assign |%s| to |%s|, old = |%s|\n", name, value, old);
     if (!name || !value)
         return old;

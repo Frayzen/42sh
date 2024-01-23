@@ -3,7 +3,6 @@
 
 #include "parser/command/expansion.h"
 #include "tools/str/string.h"
-#include "tools/token/token.h"
 
 /***
  * Register the token as part of the futur expansion of the command

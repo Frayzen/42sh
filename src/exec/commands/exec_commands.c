@@ -1,3 +1,4 @@
+#include "env/vars/vars.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
@@ -9,9 +10,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "commands/execs_cmd.h"
 #include "env/env.h"
 #include "exec/builtins/builtins.h"
+#include "exec/commands/execs_cmd.h"
 #include "exit/error_handler.h"
 #include "parser/command/expander.h"
 #include "tools/ast/ast.h"
@@ -52,6 +53,28 @@ void destroy_argv(char **argv)
     free(argv);
 }
 
+void apply_assignments(struct assignment_list *asslist)
+{
+    for (unsigned int i = 0; i < asslist->size; i++)
+    {
+        struct assignment *ass = asslist->ass_list[i];
+        char *val = NULL;
+        assert(expand_next(ass->exp.head, &val) == NULL);
+        assert(val != NULL);
+        ass->prev = assign_var(ass->name, val);
+        free(val);
+    }
+}
+
+void revert_assignments(struct assignment_list *asslist)
+{
+    for (unsigned int i = 0; i < asslist->size; i++)
+    {
+        struct assignment *ass = asslist->ass_list[i];
+        assign_var(ass->name, ass->prev);
+    }
+}
+
 int exec_cmd(struct ast_cmd *ast, int *pid)
 {
     assert(ast && AST(ast)->type == AST_CMD);
@@ -60,22 +83,28 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         return 1;
     int ret = 2;
     char **argv = expand(&ast->args_expansion);
+    apply_assignments(&ast->assignment_list);
+
     *pid = PID_SET;
-    if (!strcmp(argv[0], "echo"))
+    if (argv[0])
     {
-        builtin_echo(argv);
-        ret = 0;
-    }
-    else if (!strcmp(argv[0], "exit"))
-        builtin_exit(argv);
-    else if (!strcmp(argv[0], "true"))
-        ret = 0;
-    else if (!strcmp(argv[0], "false"))
-        ret = 1;
-    else
-    {
-        *pid = exec_prog(argv);
-        ret = -1;
+        if (!strcmp(argv[0], "echo"))
+        {
+            builtin_echo(argv);
+            ret = 0;
+        }
+        else if (!strcmp(argv[0], "exit"))
+            builtin_exit(argv);
+        else if (!strcmp(argv[0], "true"))
+            ret = 0;
+        else if (!strcmp(argv[0], "false"))
+            ret = 1;
+        else
+        {
+            *pid = exec_prog(argv);
+            ret = -1;
+        }
+        revert_assignments(&ast->assignment_list);
     }
     destroy_argv(argv);
     close_redirs(fds);
