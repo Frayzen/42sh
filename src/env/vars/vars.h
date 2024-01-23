@@ -2,7 +2,7 @@
 #define VARS_H
 #define _POSIX_C_SOURCE 200809L
 
-/*
+/***
  * set the variable named name to the value
  * @param name a string following the rules of the scl
  * @param value that is already expanded
@@ -11,7 +11,12 @@
  */
 char *assign_var(char *name, char *value);
 
-/*
+/***
+ * Setup the environment variable required to make the shell function
+ */
+void setup_vars(void);
+
+/***
  * retrieve a value from the env variables
  * @param name the name of the variable
  * returns the string value of the variable otherwise null
