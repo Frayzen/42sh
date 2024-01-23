@@ -9,7 +9,7 @@
 struct assignment
 {
     char *name;
-    struct expansion *value;
+    struct expansion *exp;
     char *prev;
 };
 
