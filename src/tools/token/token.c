@@ -84,8 +84,8 @@ void print_token(struct token *token)
         const char *type_token = tok_type[token->type];
         char *type = to_upper(type_token);
         if (!type)
-            printf(" |%s|%s| ", "WORD", "\\n");
-        if (!strcmp(type, "\n"))
+            printf(" |%s|%s| ", "WORD", token->str->value);
+        else if (!strcmp(type, "\n"))
             printf(" |%s|%s| ", "NEWLINE", "\\n");
         else if (!strcmp(type, "\0"))
             printf(" |%s|%s| ", "BSZERO", "\\0");

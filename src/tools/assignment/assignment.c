@@ -15,8 +15,9 @@ struct lex_str *extract_value(struct lex_str *str, size_t eq_pos)
     size_t val_size = str->size - offset;
     struct lex_str *val = calloc(1, sizeof(struct lex_str));
     val->value = strdup(str->value + offset);
-    val->expand = calloc(1, sizeof(char) * val_size);
-    memcpy(val->expand, str->expand + offset, val_size);
+    val->expand = calloc(1, sizeof(enum expand_type) * val_size);
+    memcpy(val->expand, str->expand + offset,
+           sizeof(enum expand_type) * val_size);
     val->size = val_size;
     return val;
 }

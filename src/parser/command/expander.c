@@ -1,4 +1,3 @@
-#include "env/vars/vars.h"
 #define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,7 +5,7 @@
 
 #include "command/expansion.h"
 #include "env/env.h"
-#include "tools/ast/ast.h"
+#include "env/vars/vars.h"
 #include "tools/str/string.h"
 
 //
@@ -82,8 +81,10 @@ struct expandable *expand_next(struct expandable *exp, char **str)
         return 0;
     char *build = NULL;
     int bsize = 0;
+    VERBOSE("[EXPAND] ");
     while (true)
     {
+        VERBOSE("%s%s ", exp->type == STR_LITTERAL ? "" : "$", exp->content);
         // Append the stringify of the current expandable
         char *str_exp = stringify_expandable(exp);
         int i = 0;
@@ -100,6 +101,7 @@ struct expandable *expand_next(struct expandable *exp, char **str)
     build = realloc(build, sizeof(char) * ++bsize);
     build[bsize - 1] = '\0';
     *str = build;
+    VERBOSE("TO '%s'\n", build);
     return exp->next;
 }
 
@@ -109,13 +111,11 @@ char **expand(struct expansion *expansion)
     char **argv = NULL;
     char *next = NULL;
     int argc = 0;
-    VERBOSE("Expanding...\n");
     do
     {
         argv = realloc(argv, sizeof(char *) * ++argc);
         exp = expand_next(exp, &next);
         argv[argc - 1] = next;
-        VERBOSE("[ARG %d] %s\n", argc - 1, next);
     } while (exp);
     argv = realloc(argv, sizeof(char *) * ++argc);
     argv[argc - 1] = NULL;
