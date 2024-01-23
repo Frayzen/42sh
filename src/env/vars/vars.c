@@ -1,6 +1,12 @@
 #include "vars.h"
-
+#include <stdio.h>
 #include <stdlib.h>
+#include "env/env.h"
+
+
+#define DBG_VAR(...)                                                           \
+    if (get_env_flag()->debug_env)                                             \
+        dprintf(DBG_OUT, __VA_ARGS__);
 
 char *assign(char *name, char *value)
 {
