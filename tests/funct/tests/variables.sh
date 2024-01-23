@@ -118,6 +118,10 @@ cat other
 ###Nested echo
 a=3 bash -c 'echo $a'
 
+###Var redir output file
+a=2
+echo this 2>&$a
+cat $a
+
 ###Unexpected EOF Var
 echo ${a
-
