@@ -1,6 +1,9 @@
 #ifndef VARS_H
 #define VARS_H
 #define _POSIX_C_SOURCE 200809L
+#include "env/env.h"
+
+
 #define DBG_VAR(...)                                                           \
     if (get_env_flag()->debug_env)                                             \
         dprintf(DBG_OUT, __VA_ARGS__);

@@ -3,7 +3,7 @@
 
 #include <sys/wait.h>
 
-#include "tools/redirection/redirection.h"
+// #include "tools/redirection/redirection.h"
 #include "tools/token/token.h"
 extern char **environ;
 // need to add the default value in the get_env_flag function for each new flag

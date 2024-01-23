@@ -5,6 +5,7 @@
 
 #include "parser/command/expansion.h"
 #include "tools/token/token.h"
+#include "tools/assignment/assignment.h"
 
 #define AST_ROOT (set_ast_root(NULL))
 
@@ -76,6 +77,7 @@ struct ast_cmd
 {
     struct ast_redir redirs;
     struct expansion args_expansion;
+    struct assignment_list assignment_list;
 };
 
 #define AST_SH(Base) ((struct ast_sh *)(Base))
