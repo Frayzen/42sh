@@ -7,7 +7,7 @@
 
 /***
  * Register the token as part of the futur expansion of the command
- * @param cmd the command
+ * @param exp the expansion 
  * @param tok the token to register
  */
 void exp_register_str(struct expansion *exp, struct lex_str *str);
@@ -18,5 +18,13 @@ void exp_register_str(struct expansion *exp, struct lex_str *str);
  * @return the string list
  */
 char **expand(struct expansion *expansion);
+
+/***
+ * Expand the expandable and return the size of the new str
+ * @param exp the expandable
+ * @param str the string. It is set to NULL if expandable is NULL
+ * @return the next expandable
+ */
+struct expandable *expand_next(struct expandable *exp, char **str);
 
 #endif /* !EXPANDER_H */

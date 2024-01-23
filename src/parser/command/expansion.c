@@ -58,7 +58,8 @@ void clean_expansion(struct expansion *exp)
     while (e)
     {
         struct expandable *n = e->next;
-        free(e->content);
+        if (e->content)
+            free(e->content);
         free(e);
         e = n;
     }
