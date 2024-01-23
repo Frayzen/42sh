@@ -74,12 +74,6 @@ char *stringify_expandable(struct expandable *exp)
     return ret;
 }
 
-/***
- * Expand the expandable and return the size of the new str
- * @param exp the expandable
- * @param str the string. It is set to NULL if expandable is NULL
- * @return the next expandable
- */
 struct expandable *expand_next(struct expandable *exp, char **str)
 {
     if (!exp)
