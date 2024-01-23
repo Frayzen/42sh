@@ -4,8 +4,8 @@
 #include <stdbool.h>
 
 #include "parser/command/expansion.h"
-#include "tools/token/token.h"
 #include "tools/assignment/assignment.h"
+#include "tools/token/token.h"
 
 #define AST_ROOT (set_ast_root(NULL))
 

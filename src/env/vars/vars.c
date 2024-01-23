@@ -1,9 +1,10 @@
 #include "vars.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "env/env.h"
 
+#include "env/env.h"
 
 #define DBG_VAR(...)                                                           \
     if (get_env_flag()->debug_env)                                             \

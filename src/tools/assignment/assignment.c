@@ -1,7 +1,7 @@
 #include "assignment.h"
 
-#include <stdio.h>
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -89,4 +89,3 @@ void revert_assignments(struct assignment_list *asslist)
         free(assign_var(ass->name, ass->prev));
     }
 }
-

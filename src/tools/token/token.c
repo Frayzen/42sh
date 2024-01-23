@@ -84,23 +84,21 @@ void print_token(struct token *token)
         const char *type_token = tok_type[token->type];
         char *type = to_upper(type_token);
         if (!type)
-        {
-            printf(" |%s|%s| \n", "WORD", token->str->value);
-            printf("       ");
-            for (size_t i = 0; i < token->str->size; i++)
-                printf("%c", UNDER_EXPAND_CHAR(token->str->expand[i]));
-        }
-        else if (!strcmp(type, "\n"))
+            printf(" |%s|%s| ", "WORD", "\\n");
+        if (!strcmp(type, "\n"))
             printf(" |%s|%s| ", "NEWLINE", "\\n");
         else if (!strcmp(type, "\0"))
             printf(" |%s|%s| ", "BSZERO", "\\0");
         else
             printf(" |%s|%s| ", type, token->str->value);
-        if (type)
+        printf("\n");
+        if (token->type == WORD || token->type == ASSMT)
         {
-            printf("\n");
-            free(type);
+            printf("       ");
+            for (size_t i = 0; i < token->str->size; i++)
+                printf("%c", UNDER_EXPAND_CHAR(token->str->expand[i]));
         }
+        free(type);
     }
     printf("\n");
 }
@@ -116,7 +114,7 @@ const char **toktype_lookup(void)
         [WORD] = NULL,       [WHILE] = "while", [DO] = "do",
         [DONE] = "done",     [UNTIL] = "until", [OR] = "||",
         [AND] = "&&",        [FOR] = "for",     [IN] = "in",
-        [ASSMT] = "ASSMT"
+        [ASSMT] = "ASMT",
     };
     return lookup_table;
 }
