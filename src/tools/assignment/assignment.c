@@ -45,8 +45,6 @@ void destroy_assignment(struct assignment *assignment)
     if (assignment->name)
         free(assignment->name);
     clean_expansion(&assignment->exp);
-    if (assignment->prev)
-        free(assignment->prev);
     free(assignment);
 }
 
@@ -87,6 +85,6 @@ void revert_assignments(struct assignment_list *asslist)
     for (unsigned int i = 0; i < asslist->size; i++)
     {
         struct assignment *ass = asslist->ass_list[i];
-        free(assign_var(ass->name, ass->prev));
+        assign_var(ass->name, ass->prev);
     }
 }

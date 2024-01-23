@@ -13,8 +13,6 @@
 char *assign_var(char *name, char *value)
 {
     char *old = getenv(name);
-    if (old)
-        old = strdup(old);
     DBG_VAR("assign |%s| to |%s|, old = |%s|\n", name, value, old);
     if (!name || !value)
         return old;

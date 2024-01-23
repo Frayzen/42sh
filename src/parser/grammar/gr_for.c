@@ -35,7 +35,7 @@ enum status gr_for(struct ast_list *ast)
             while (IS_WORDABLE(tok_peek()))
             {
                 exp_register_str(&ast_for->exp, tok_peek()->str);
-                tok_pop_clean();
+                tok_pop();
             }
             if (tok_peek()->type != SEMI_COLON)
                 CHECK_GOTO(tok_peek()->type != NEWLINE, error);
