@@ -53,28 +53,6 @@ void destroy_argv(char **argv)
     free(argv);
 }
 
-void apply_assignments(struct assignment_list *asslist)
-{
-    for (unsigned int i = 0; i < asslist->size; i++)
-    {
-        struct assignment *ass = asslist->ass_list[i];
-        char *val = NULL;
-        assert(expand_next(ass->exp.head, &val) == NULL);
-        assert(val != NULL);
-        ass->prev = assign_var(ass->name, val);
-        free(val);
-    }
-}
-
-void revert_assignments(struct assignment_list *asslist)
-{
-    for (unsigned int i = 0; i < asslist->size; i++)
-    {
-        struct assignment *ass = asslist->ass_list[i];
-        free(assign_var(ass->name, ass->prev));
-    }
-}
-
 int exec_cmd(struct ast_cmd *ast, int *pid)
 {
     assert(ast && AST(ast)->type == AST_CMD);

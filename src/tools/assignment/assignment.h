@@ -2,8 +2,8 @@
 #define ASSIGNMENT_H
 
 #define _POSIX_C_SOURCE 200809L
-#include "parser/command/expansion.h"
 #include "env/vars/vars.h"
+#include "parser/command/expansion.h"
 #include "tools/str/string.h"
 
 struct assignment
@@ -46,5 +46,16 @@ void ass_list_append(struct assignment_list *assing_list,
  * @param assign_list the assignment list
  */
 void clean_assignments(struct assignment_list *assign_list);
+
+/***
+ * Revert the assignments made by apply_assignments
+ * @param asslist the list of assignment
+ */
+void revert_assignments(struct assignment_list *asslist);
+/***
+ * Apply the assignments contained in apply_assignments
+ * @param asslist the list of assignment
+ */
+void apply_assignments(struct assignment_list *asslist);
 
 #endif // !ASSIGNMENT_H

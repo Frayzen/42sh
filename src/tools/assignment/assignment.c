@@ -1,10 +1,10 @@
 #include "assignment.h"
 
 #include <stdio.h>
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "env/vars/vars.h"
 #include "parser/command/expander.h"
 #include "str/string.h"
 // manage the variable assignments using environ to store, restore and update
@@ -15,7 +15,7 @@ struct lex_str *extract_value(struct lex_str *str, size_t eq_pos)
     size_t val_size = str->size - offset;
     struct lex_str *val = calloc(1, sizeof(struct lex_str));
     val->value = strdup(str->value + offset);
-    val->expand = calloc(1, sizeof(char));
+    val->expand = calloc(1, sizeof(char) * val_size);
     memcpy(val->expand, str->expand + offset, val_size);
     val->size = val_size;
     return val;
@@ -67,3 +67,26 @@ void clean_assignments(struct assignment_list *assign_list)
     }
     free(assign_list->ass_list);
 }
+
+void apply_assignments(struct assignment_list *asslist)
+{
+    for (unsigned int i = 0; i < asslist->size; i++)
+    {
+        struct assignment *ass = asslist->ass_list[i];
+        char *val = NULL;
+        assert(expand_next(ass->exp.head, &val) == NULL);
+        assert(val != NULL);
+        ass->prev = assign_var(ass->name, val);
+        free(val);
+    }
+}
+
+void revert_assignments(struct assignment_list *asslist)
+{
+    for (unsigned int i = 0; i < asslist->size; i++)
+    {
+        struct assignment *ass = asslist->ass_list[i];
+        free(assign_var(ass->name, ass->prev));
+    }
+}
+
