@@ -37,8 +37,7 @@ struct assignment *init_assignment(struct lex_str *str)
 
     struct lex_str *value_str = extract_value(str, eq_pos);
     ass->value = expansion_init();
-   exp_register_str(ass->value, value_str);
-   exp_register_str(ass->value, str);
+    exp_register_str(ass->value, value_str);
     return ass;
 }
 
@@ -49,7 +48,7 @@ void destroy_assignment(struct assignment *assignment)
     if (assignment->name)
         free(assignment->name);
     if (assignment->value)
-        destroy_lex_str(assignment->value);
+        clean_expansion(assignment->value);
     if (assignment->prev)
         free(assignment->prev);
     free(assignment);
