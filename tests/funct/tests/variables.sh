@@ -107,3 +107,6 @@ cat tst
 tat=twok
 echo ok $twok>other
 cat other
+
+###Unexpected EOF Var
+echo ${a

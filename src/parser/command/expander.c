@@ -49,7 +49,8 @@ void register_token(struct expansion *exp, struct token *tok)
     size_t i = 0;
     if (str->size == 0)
     {
-        expansion_push_back(exp, expandable_init("", STR_LITTERAL, false));
+        expansion_push_back(exp,
+                            expandable_init(strdup(""), STR_LITTERAL, false));
     }
     while (i < str->size)
     {
