@@ -24,7 +24,7 @@ char *assign_var(char *name, char *value)
 {
     char *old = getenv(name);
     DBG_VAR("assign |%s| to |%s|, old = |%s|\n", name, value, old);
-    if (!name)
+    if (!name || !value)
         return old;
     setenv(name, value, 1);
     return old;
