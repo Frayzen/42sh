@@ -45,14 +45,6 @@ int exec_prog(char **argv)
     return pid;
 }
 
-void destroy_argv(char **argv)
-{
-    int i = 0;
-    while (argv[i])
-        free(argv[i++]);
-    free(argv);
-}
-
 int exec_cmd(struct ast_cmd *ast, int *pid)
 {
     assert(ast && AST(ast)->type == AST_CMD);
@@ -84,7 +76,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         }
         revert_assignments(&ast->assignment_list);
     }
-    destroy_argv(argv);
+    destroy_expanded(argv);
     close_redirs(fds);
     return ret;
 }

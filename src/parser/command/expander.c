@@ -121,3 +121,11 @@ char **expand(struct expansion *expansion)
     argv[argc - 1] = NULL;
     return argv;
 }
+
+void destroy_expanded(char **argv)
+{
+    int i = 0;
+    while (argv[i])
+        free(argv[i++]);
+    free(argv);
+}

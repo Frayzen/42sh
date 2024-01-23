@@ -26,4 +26,10 @@ char **expand(struct expansion *expansion);
  */
 struct expandable *expand_next(struct expandable *exp, char **str);
 
+/***
+ * Free the arguments and the argv pointer
+ * @param argv the argument list
+ */
+void destroy_expanded(char **argv);
+
 #endif /* !EXPANDER_H */

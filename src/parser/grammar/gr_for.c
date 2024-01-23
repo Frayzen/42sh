@@ -1,21 +1,12 @@
 #include <stdlib.h>
 
 #include "lexer/token_saver.h"
+#include "parser/command/expander.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/gr_tools.h"
 #include "tools/gr_utils.h"
 #include "tools/token/token.h"
-
-void add_to_item_list(struct ast_for *ast)
-{
-    struct token *item = tok_peek();
-    // tok_pop();
-    ast->item_list =
-        realloc(ast->item_list, ++ast->nb_items * sizeof(struct lex_str *));
-    ast->item_list[ast->nb_items - 1] = item->str;
-    tok_pop();
-}
 
 /* rule_for ='for' WORD ( [';'] | [ {'\n'} 'in' { WORD } ( ';' | '\n' ) ] )
  * {'\n'} 'do' compound_list 'done';
@@ -42,7 +33,10 @@ enum status gr_for(struct ast_list *ast)
         {
             tok_pop_clean();
             while (IS_WORDABLE(tok_peek()))
-                add_to_item_list(ast_for);
+            {
+                exp_register_str(&ast_for->exp, tok_peek()->str);
+                tok_pop_clean();
+            }
             if (tok_peek()->type != SEMI_COLON)
                 CHECK_GOTO(tok_peek()->type != NEWLINE, error);
             tok_pop_clean();

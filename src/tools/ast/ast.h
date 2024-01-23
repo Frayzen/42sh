@@ -92,8 +92,7 @@ struct ast_for
 {
     struct ast_list cmds;
     char *name;
-    int nb_items;
-    struct lex_str **item_list;
+    struct expansion exp;
 };
 
 // BEGIN AND OR

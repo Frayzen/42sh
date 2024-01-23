@@ -99,6 +99,15 @@ c='ls -l'
 $c
 
 
+###In for loop
+b=this is a test
+c='this     as     well'
+for a in $b $c "$c"
+do
+    echo $a
+done
+
+
 ###redir string
 tat=1
 echo ok $tat>tst
