@@ -1,5 +1,7 @@
+#include "io_backend/io_streamers.h"
 #define _POSIX_C_SOURCE 200809L
 #include "io_backend/backend_saver.h"
+#include "io_backend/io_streamers.h"
 #include "lexer/token_saver.h"
 #include <linux/limits.h>
 #include <stdio.h>
@@ -61,6 +63,9 @@ int builtin_dot(char **argv)
     struct ringbuffer *old_backend_rb = swap_backend_buffer(new_backend_rb);
     struct ringbuffer *old_token_rb = swap_token_buffer(new_token_rb);
     // TODO build and execute the ast of the path
+    FILE *old_fd = load_file(path); 
+    io_streamer_file(path);
+    
     swap_token_buffer(old_token_rb);
     swap_backend_buffer(old_backend_rb);
     rb_destroy(new_backend_rb);
