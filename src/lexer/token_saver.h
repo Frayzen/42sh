@@ -1,6 +1,7 @@
 #ifndef TOKEN_SAVER_H
 #define TOKEN_SAVER_H
 
+#include "tools/definitions.h"
 #include "tools/token/token.h"
 
 /***
@@ -16,14 +17,14 @@ struct token *tok_peek(void);
  * @return true if the jump happened, false if the buffer is empty
  * @see tok_peek() to get the current token value
  */
-bool tok_pop_clean(void);
+BOOL tok_pop_clean(void);
 
 /***
  * Jump to the next token of the buffer and free the token (but NOT the string)
  * @return true if the jump happened, false if the buffer is empty
  * @see tok_peek() to get the current token value
  */
-bool tok_pop(void);
+BOOL tok_pop(void);
 
 /***
  * Clean the memory saved by the buffer, the buffer is not usable after this

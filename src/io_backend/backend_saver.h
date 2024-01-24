@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include "tools/definitions.h"
+
 #define BACKEND_BUFFER_SIZE 1024
 
 /***
@@ -34,7 +36,8 @@ char io_peek(void);
  * @return true if the jump happened, false if the buffer is empty
  * @see io_get_char() to get the current char value
  */
-bool io_pop(void);
+
+BOOL io_pop(void);
 
 /***
  * Clean the memory saved by the buffer, the buffer is not usable after this

@@ -10,6 +10,7 @@
 #include "exit/error_handler.h"
 #include "io_backend/backend_saver.h"
 #include "lexer/finder/finder_tools.h"
+#include "tools/definitions.h"
 
 void consume_comment(struct pending *p)
 {
@@ -43,7 +44,7 @@ void consume_quote(struct pending *p)
     p->in_quote = false;
 }
 
-bool check_next(void)
+BOOL check_next(void)
 {
     switch (io_peek())
     {

@@ -1,6 +1,7 @@
 lib_LIBRARIES = libtools.a
 
 libtools_a_SOURCES = \
+	definitions.h\
 	ring_buffer/ring_buffer.c ring_buffer/ring_buffer.h\
 	redirection/redirection.h \
 	redirection/redirection.c \

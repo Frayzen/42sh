@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "io_streamers.h"
+#include "tools/definitions.h"
 #include "tools/ring_buffer/ring_buffer.h"
 
 static struct ringbuffer *get_buffer(void)
@@ -42,7 +43,7 @@ char io_peek(void)
     return item->c;
 }
 
-bool io_pop(void)
+BOOL io_pop(void)
 {
     return rb_pop(get_buffer());
 }
