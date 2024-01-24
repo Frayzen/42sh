@@ -10,17 +10,15 @@
 
 #include "env/env.h"
 #include "exit/error_handler.h"
-#include "io_backend/backend_saver.h"
 
-#define IO_FILE (set_fd(NULL))
+static FILE *streamer = NULL;
 
 FILE *set_fd(FILE *new_file)
 {
-    static FILE *file = NULL;
     if (new_file == NULL)
-        return file;
-    file = new_file;
-    return file;
+        return streamer;
+    streamer = new_file;
+    return streamer;
 }
 
 bool is_executable(char *path_to_file)
@@ -52,7 +50,7 @@ void io_streamer_file(char *path_to_file)
         exit_gracefully(NO_EXEC_PERM);
     }
     fseek(file, 0, SEEK_SET);
-    set_fd(file);
+    streamer = file;
 }
 
 void io_streamer_string(int argc, char **argv)
@@ -63,7 +61,7 @@ void io_streamer_string(int argc, char **argv)
         {
             char *buf = argv[i + 1];
             FILE *file = fmemopen(buf, strlen(buf), "r");
-            set_fd(file);
+            streamer = file;
         }
     }
     return;
@@ -72,7 +70,7 @@ void io_streamer_string(int argc, char **argv)
 void io_streamer_stdin(void)
 {
     get_env_flag()->is_interactive = true;
-    set_fd(stdin);
+    streamer = stdin;
 }
 
 void main_to_stream(int argc, char **argv)
@@ -106,17 +104,10 @@ void main_to_stream(int argc, char **argv)
         exit_gracefully(ARG_ERROR);
 }
 
-void stream_input(size_t size)
+char stream_next(void)
 {
-    if (IO_FILE == NULL)
-    {
-        io_push_chars("\0", 1);
-        return;
-    }
-    char *buffer = calloc(size, sizeof(char));
-    if (!fgets(buffer, size, IO_FILE))
-        io_push_chars("\0", 1);
-    else
-        io_push(buffer);
-    free(buffer);
+    char ret = fgetc(streamer);
+    if (ret == -1)
+        ret = '\0';
+    return ret;
 }

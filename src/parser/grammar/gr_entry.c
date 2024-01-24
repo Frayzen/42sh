@@ -19,7 +19,6 @@ enum status gr_input(struct ast **ast)
         goto error;
     GR_DBG_RET(OK);
 error:
-    comsume_all();
     destroy_ast(*ast);
     GR_DBG_RET(ERROR);
 }
