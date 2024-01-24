@@ -20,7 +20,7 @@ LIBS=$(addprefix $(TOP_BD)/src/, $(LIB_LIST))
 
 # unit_CPPFLAGS = -I$(top_srcdir)/src -I.
 
-# unit_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic -Wno-type-limits -fsanitize=address
+# unit_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic -O2 -Wno-type-limits -fsanitize=address
 
 # unit_LDADD =  \
 # 			  $(LIBS) \

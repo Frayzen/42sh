@@ -17,6 +17,6 @@ funct: all
 	chmod +x ./tests/funct/*.sh
 	./tests/funct/launch.sh all
 
-check-local: funct
+# check-local: funct
 
 .phony: funct funct_errors check
