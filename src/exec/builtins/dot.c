@@ -1,19 +1,18 @@
 #define _POSIX_C_SOURCE 200809L
-#include "parser/grammar/rules.h"
-#include "io_backend/io_streamers.h"
-#include "execs.h"
-
-#include "io_backend/backend_saver.h"
-#include "io_backend/io_streamers.h"
-#include "lexer/token_saver.h"
 #include <linux/limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#include "tools/ast/ast_utils.h"
 #include "env/env.h"
+#include "execs.h"
+#include "exit/error_handler.h"
+#include "io_backend/backend_saver.h"
+#include "io_backend/io_streamers.h"
+#include "lexer/token_saver.h"
+#include "parser/grammar/rules.h"
+#include "tools/ast/ast_utils.h"
 #include "tools/ring_buffer/ring_buffer.h"
 
 static char *create_path_from_filename(char *filename, char *path)
@@ -66,25 +65,24 @@ int builtin_dot(char **argv)
     struct ringbuffer *new_token_rb = rb_create(RB_TOKEN, 1);
     struct ringbuffer *old_backend_rb = swap_backend_buffer(new_backend_rb);
     struct ringbuffer *old_token_rb = swap_token_buffer(new_token_rb);
-    FILE *old_fd = load_file(path); 
+    FILE *old_fd = load_file(path);
     io_streamer_file(path);
     struct ast *new_ast = NULL;
     struct ast *old_ast = swap_ast_root(new_ast);
+    int ret = 0;
     if (gr_input(&new_ast) == ERROR)
     {
-      //TODO error handling
-      return 1;
+        new_ast = NULL;
+        print_error(GRAMMAR_ERROR_ENTRY);
+        ret = 2;
     }
-    exec_entry(new_ast);
+    ret = exec_entry(new_ast);
     destroy_ast(new_ast);
-      
-    
-    // TODO build and execute the ast of the path
     swap_fd(old_fd);
     swap_ast_root(old_ast);
     swap_token_buffer(old_token_rb);
     swap_backend_buffer(old_backend_rb);
     rb_destroy(new_backend_rb);
     rb_destroy(new_token_rb);
-    return 0;
+    return ret;
 }

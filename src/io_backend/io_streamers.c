@@ -12,19 +12,18 @@
 #include "exit/error_handler.h"
 #include "io_backend/backend_saver.h"
 
-
 #define IO_FILE (swap_fd(NULL))
 
 FILE *swap_fd(FILE *new_file)
 {
-  static FILE *file = NULL;
-  FILE *old_file = file;
-  if (new_file)
-  { 
-    old_file = file;
-    file = new_file;
-  }
-  return old_file;
+    static FILE *file = NULL;
+    FILE *old_file = file;
+    if (new_file)
+    {
+        old_file = file;
+        file = new_file;
+    }
+    return old_file;
 }
 
 bool is_executable(char *path_to_file)
@@ -41,7 +40,7 @@ bool is_executable(char *path_to_file)
 
 FILE *load_file(char *path_to_file)
 {
-   FILE *file = fopen(path_to_file, "r");
+    FILE *file = fopen(path_to_file, "r");
     if (!file)
     {
         exit_gracefully(INVALID_FILE_PATH);
@@ -62,7 +61,7 @@ void io_streamer_file(char *path_to_file)
     if (access(path_to_file, R_OK))
         exit_gracefully(NO_EXEC_PERM);
     load_file(path_to_file);
- }
+}
 
 void io_streamer_string(int argc, char **argv)
 {

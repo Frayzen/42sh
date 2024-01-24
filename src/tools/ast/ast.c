@@ -8,14 +8,14 @@
 
 struct ast *swap_ast_root(struct ast *new_ast)
 {
-  static struct ast *ast_root = NULL;
-  struct ast *old_root = ast_root;
-  if (new_ast)
-  {
-    old_root = ast_root;
-    ast_root = new_ast;
-  }
-  return old_root;
+    static struct ast *ast_root = NULL;
+    struct ast *old_root = ast_root;
+    if (new_ast)
+    {
+        old_root = ast_root;
+        ast_root = new_ast;
+    }
+    return old_root;
 }
 /*
 struct ast **set_ast_root(struct ast **ast)

@@ -122,13 +122,12 @@ void debug_pretty_print(struct ast *ast)
 
 struct ast *swap_ast(struct ast *new_ast)
 {
-  static struct ast *ast = NULL;
-  struct ast *old_ast = ast;
-  if (new_ast)
-  {
-    old_ast = ast;
-    ast = new_ast;
-  }
-  return old_ast;
+    static struct ast *ast = NULL;
+    struct ast *old_ast = ast;
+    if (new_ast)
+    {
+        old_ast = ast;
+        ast = new_ast;
+    }
+    return old_ast;
 }
-

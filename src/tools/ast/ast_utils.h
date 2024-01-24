@@ -38,9 +38,8 @@ void debug_pretty_print(struct ast *ast);
  */
 char *ast_to_str(struct ast *ast);
 
-
 /***
- * Swap old and new ast 
+ * Swap old and new ast
  * @param new_ast, the ast to swap
  * @return old ast after swap
  */

@@ -13,7 +13,7 @@ struct ringbuffer *swap_token_buffer(struct ringbuffer *new)
     static struct ringbuffer *rb = NULL;
     struct ringbuffer *ret_rb = rb;
     if (new)
-      rb = new;
+        rb = new;
     if (rb == NULL)
     {
         rb = rb_create(RB_TOKEN, 1);

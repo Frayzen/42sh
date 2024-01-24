@@ -6,7 +6,7 @@
 
 /***
  * Register the token as part of the futur expansion of the command
- * @param exp the expansion 
+ * @param exp the expansion
  * @param tok the token to register
  */
 void register_token(struct expansion *exp, struct token *tok);
