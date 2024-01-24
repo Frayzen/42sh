@@ -64,6 +64,7 @@ bool is_name(char *str, size_t size)
             continue;
         return false;
     }
+
     return true;
 }
 

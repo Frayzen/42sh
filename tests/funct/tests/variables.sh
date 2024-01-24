@@ -1,3 +1,10 @@
+
+###Test with functioni
+a='echo    ok;'
+$a
+
+
+
 ###Basic variable
 a=3
 b=4
@@ -35,10 +42,6 @@ echo $a$b
 a=1
 echo hehe >$a
 cat $a<$a
-
-###Test with functioni
-a='echo    ok;'
-$a
 
 ###Test variable quotes
 toto=Hello World
