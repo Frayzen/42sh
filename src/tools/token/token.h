@@ -47,6 +47,7 @@ enum token_type
     T_TRUE,
     T_FALSE,
     ECHO,
+    UNSET,
     // terminals
     WORD,
     ASSIGNMENT_WORD,
