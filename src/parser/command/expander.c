@@ -65,18 +65,52 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
 // EXPANSION
 //
 
-char *stringify_expandable(struct expandable *exp)
+char *stringify_expandable(struct expandable *exp, char ***last_exp)
 {
     if (exp->type == STR_LITTERAL)
         return strdup(exp->content);
     char *ret = retrieve_var(exp->content);
     if (!ret)
         ret = "";
+    else if (exp->type == UNQUOTED_VAR)
+    {
+        char *first = strdup(strtok(ret, " "));
+        size_t size = 1;
+        char *cur = strtok(NULL, " ");
+        char **temp = *last_exp;
+        while (cur)
+        {
+            temp = realloc(temp, sizeof(char *) * (size + 1));
+            temp[size - 1] = strdup(cur);
+            size++;
+            cur = strtok(NULL, " ");
+        }
+        temp[size - 1] = NULL;
+        *last_exp = temp;
+        return first;
+    }
     return strdup(ret);
 }
 
 struct expandable *expand_next(struct expandable *exp, char **str)
 {
+    static char **last_exp = NULL;
+    // Return the last_exp elements at each call till its empty
+    if (last_exp)
+    {
+        static int id = 0;
+        *str = last_exp[id++];
+        if (*str)
+        {
+            // dont go to next exp if there are still strings in last_exp
+            return last_exp[id] ? exp : exp->next;
+        }
+        // Free once empty
+        id = 0;
+        free(last_exp);
+        last_exp = NULL;
+    }
+    // last_exp is empty here
     if (!exp)
         return 0;
     char *build = NULL;
@@ -85,8 +119,9 @@ struct expandable *expand_next(struct expandable *exp, char **str)
     while (true)
     {
         VERBOSE("%s%s ", exp->type == STR_LITTERAL ? "" : "$", exp->content);
-        // Append the stringify of the current expandable
-        char *str_exp = stringify_expandable(exp);
+        // Append the stringify of the current expandable and
+        // fill last_exp with pending chars
+        char *str_exp = stringify_expandable(exp, &last_exp);
         int i = 0;
         while (str_exp[i])
         {
@@ -102,7 +137,7 @@ struct expandable *expand_next(struct expandable *exp, char **str)
     build[bsize - 1] = '\0';
     *str = build;
     VERBOSE("TO '%s'\n", build);
-    return exp->next;
+    return last_exp ? exp : exp->next;
 }
 
 char **expand(struct expansion *expansion)

@@ -54,7 +54,6 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     int ret = 2;
     char **argv = expand(&ast->args_expansion);
     apply_assignments(&ast->assignment_list);
-
     *pid = PID_SET;
     if (argv[0])
     {
