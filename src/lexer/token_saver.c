@@ -6,12 +6,19 @@
 #include "tools/ring_buffer/ring_buffer.h"
 #include "tools/token/token.h"
 
-static struct ringbuffer *get_buffer(void)
+
+struct ringbuffer *swap_token_buffer(struct ringbuffer *new)
 {
     static struct ringbuffer *rb = NULL;
+    struct ringbuffer *ret_rb = rb;
+    if (new)
+      rb = new;
     if (rb == NULL)
-        rb = rb_create(RB_TOKEN, 1);
-    return rb;
+    {
+        rb = rb_create(RB_CHAR, 1);
+        ret_rb = rb;
+    }
+    return ret_rb;
 }
 
 void next(void)

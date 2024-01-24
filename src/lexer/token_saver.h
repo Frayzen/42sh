@@ -35,4 +35,11 @@ void clean_token_saver(void);
  */
 void comsume_all(void);
 
+/***
+ * Swap token buffers
+ * @param new, the buffer to load, NULL only retrieve the current one
+ * @return the current loaded buffer
+ */
+struct ringbuffer *swap_token_buffer(struct ringbuffer *new)
+
 #endif /* !TOKEN_SAVER_H */

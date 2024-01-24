@@ -41,4 +41,10 @@ bool io_pop(void);
  */
 void clean_backend_saver(void);
 
+/***
+ * Swap backend buffers, to use in dot builtin
+ * @param new, the buffer to load, NULL only retrieve the current one
+ * @return the current loaded buffer
+ */
+struct ringbuffer *swap_backend_buffer(struct ringbuffer *new)
 #endif /* !BACKEND_SAVER_H */
