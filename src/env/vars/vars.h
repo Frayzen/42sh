@@ -1,5 +1,6 @@
 #ifndef VARS_H
 #define VARS_H
+#include <stdbool.h>
 #define _POSIX_C_SOURCE 200809L
 #define DBG_VAR(...)                                                           \
     if (get_env_flag()->debug_env)                                             \
@@ -20,5 +21,12 @@ char *assign_var(char *name, char *value);
  * returns the string value of the variable otherwise null
  */
 char *retrieve_var(char *name);
+
+/*
+ * Unset the variable
+ * @param name the name of the var
+ * @return true if the variable what set
+ */
+bool unset_var(char *name);
 
 #endif /* !VARS_H */
