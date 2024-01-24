@@ -1,5 +1,5 @@
-#include "io_backend/io_streamers.h"
 #define _POSIX_C_SOURCE 200809L
+#include "io_backend/io_streamers.h"
 #include "io_backend/backend_saver.h"
 #include "io_backend/io_streamers.h"
 #include "lexer/token_saver.h"
@@ -66,7 +66,9 @@ int builtin_dot(char **argv)
     // TODO build and execute the ast of the path
     FILE *old_fd = load_file(path); 
     io_streamer_file(path);
-    struct ast *old_ast = swap_ast(NULL);
+    struct ast *old_ast = swap_ast_root(NULL);
+    swap_fd(old_fd);
+    swap_ast_root(old_ast);
     swap_token_buffer(old_token_rb);
     swap_backend_buffer(old_backend_rb);
     rb_destroy(new_backend_rb);

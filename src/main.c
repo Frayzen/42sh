@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     main_to_stream(argc, argv);
     setup_debug_fds();
     struct ast *ast = NULL;
-    set_ast_root(&ast);
+    swap_ast_root(ast);
     int ret = 0;
     do
     {
