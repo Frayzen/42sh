@@ -47,7 +47,13 @@ int builtin_dot(char **argv)
     dprintf(STDERR, "error path file\n");
     return 1;
   }
-  //TODO exec file
+  struct ringbuffer *new_backend_rb = rb_create(RB_CHAR, BACKEND_BUFFER_SIZE);
+  struct ringbuffer *new_token_rb = rb_create(RB_TOKEN, 1);
+  struct old_ringbuffer *old_backend_rb = swap_backend_buffer(new_backend_rb);
+  struct old_ringbuffer *old_token_rb = swap_token_buffer(new_token_rb);
+  //TODO build and execute the ast of the path
+  rb_destroy(new_backend_rb); 
+  rb_destroy(new_token_rb); 
   return 0;
   
 }
