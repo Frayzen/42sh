@@ -9,6 +9,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "tools/ast/ast_utils.h"
 #include "env/env.h"
 #include "tools/ring_buffer/ring_buffer.h"
 
@@ -65,7 +66,7 @@ int builtin_dot(char **argv)
     // TODO build and execute the ast of the path
     FILE *old_fd = load_file(path); 
     io_streamer_file(path);
-    
+    struct ast *old_ast = swap_ast(NULL);
     swap_token_buffer(old_token_rb);
     swap_backend_buffer(old_backend_rb);
     rb_destroy(new_backend_rb);
