@@ -34,7 +34,7 @@ enum status gr_redir(struct ast_redir *ast)
 
     token = tok_peek();
     CHECK_GOTO(!IS_WORDABLE(token), error);
-    register_token(&redir->exp, token);
+    exp_register_str(&redir->exp, token->str);
     tok_pop();
 
     append_redir(ast, redir);

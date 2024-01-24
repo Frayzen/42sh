@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "assignment/assignment.h"
+#include "parser/command/expansion.h"
 #include "str/string.h"
 #include "tools/redirection/redirection.h"
 
@@ -51,6 +53,7 @@ void destroy_ast(void *ast)
     {
     case AST_CMD:
         clean_expansion(&AST_CMD(ast)->args_expansion);
+        clean_assignments(&AST_CMD(ast)->assignment_list);
         /* FALLTHROUGH */
     case AST_SH:
         destroy_redir(AST_REDIR(ast));
@@ -71,12 +74,7 @@ void destroy_ast(void *ast)
         break;
     case AST_FOR:
         free(AST_FOR(ast)->name);
-        if (AST_FOR(ast)->item_list)
-        {
-            for (int i = 0; i < AST_FOR(ast)->nb_items; i++)
-                destroy_lex_str(AST_FOR(ast)->item_list[i]);
-            free(AST_FOR(ast)->item_list);
-        }
+        clean_expansion(&AST_FOR(ast)->exp);
         /* FALLTHROUGH */
     case AST_PIPE:
     case AST_LIST:

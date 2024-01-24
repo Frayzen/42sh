@@ -64,6 +64,7 @@ bool is_name(char *str, size_t size)
             continue;
         return false;
     }
+
     return true;
 }
 
@@ -71,9 +72,9 @@ bool assignment_word(const struct lex_str *str)
 {
     char *begin = str->value;
     char *first_eq = strchr(begin, '=');
-    if (!first_eq)
+    if (!first_eq || first_eq == str->value)
         return false;
-    size_t size = first_eq - begin + 1;
+    size_t size = first_eq - begin;
     return is_name(begin, size);
 }
 

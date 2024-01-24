@@ -8,6 +8,9 @@
 extern char **environ;
 // need to add the default value in the get_env_flag function for each new flag
 
+#define DBG_ENV(...)                                                           \
+    if (get_env_flag()->debug_env)                                             \
+        dprintf(DBG_OUT, __VA_ARGS__);
 #define DBG_PIPE(...)                                                          \
     if (get_env_flag()->debug_pipe)                                            \
         dprintf(DBG_OUT, __VA_ARGS__);

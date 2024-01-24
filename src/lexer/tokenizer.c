@@ -15,7 +15,8 @@ struct token *next_token(void)
         return ret;
     }
     struct token *result = init_token(&pending->str);
-    if (pending->force_str)
+    // check that pending quoted and is not assignment
+    if (pending->force_str && result->type != ASSMT)
     {
         result->type = WORD;
         result->terminal = false;

@@ -49,7 +49,7 @@ enum token_type
     ECHO,
     // terminals
     WORD,
-    ASSIGNMENT_WORD,
+    ASSMT,
 
 };
 

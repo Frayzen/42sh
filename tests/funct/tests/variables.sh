@@ -1,8 +1,14 @@
+
+###Test with functioni
+a='echo    ok;'
+$a
+
+
+
 ###Basic variable
 a=3
 b=4
 echo $a $b
-printenv
 
 ###Shell variable
 
@@ -36,10 +42,6 @@ echo $a$b
 a=1
 echo hehe >$a
 cat $a<$a
-
-###Test with functioni
-a='echo    ok;'
-$a
 
 ###Test variable quotes
 toto=Hello World
@@ -100,6 +102,14 @@ c='ls -l'
 $c
 
 
+###In for loop
+b=this is a test
+c='this     as     well'
+for a in $b $c "$c"
+do
+    echo $a
+done
+
 ###redir string
 tat=1
 echo ok $tat>tst
@@ -107,6 +117,14 @@ cat tst
 tat=twok
 echo ok $twok>other
 cat other
+
+###Nested echo
+a=3 bash -c 'echo $a'
+
+###Var redir output file
+a=2
+echo this 2>&$a
+cat $a
 
 ###Unexpected EOF Var
 echo ${a

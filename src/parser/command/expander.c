@@ -5,7 +5,7 @@
 
 #include "command/expansion.h"
 #include "env/env.h"
-#include "tools/ast/ast.h"
+#include "env/vars/vars.h"
 #include "tools/str/string.h"
 
 //
@@ -43,9 +43,8 @@ int register_expandable(struct expansion *exp, struct lex_str *exp_str,
     return end;
 }
 
-void register_token(struct expansion *exp, struct token *tok)
+void exp_register_str(struct expansion *exp, struct lex_str *str)
 {
-    struct lex_str *str = tok->str;
     size_t i = 0;
     if (str->size == 0)
     {
@@ -66,25 +65,68 @@ void register_token(struct expansion *exp, struct token *tok)
 // EXPANSION
 //
 
-char *stringify_expandable(struct expandable *exp)
+char *stringify_expandable(struct expandable *exp, char ***last_exp)
 {
+    char *first = NULL;
     if (exp->type == STR_LITTERAL)
         return strdup(exp->content);
-    // TODO return the content of the var
-    char *ret = strdup("ech");
-    return ret;
+    char *ret = retrieve_var(exp->content);
+    if (!ret)
+        ret = "";
+    else if (exp->type == UNQUOTED_VAR)
+    {
+        first = strtok(ret, " ");
+        size_t size = 1;
+        char *cur = strtok(NULL, " ");
+        if (!cur)
+            goto finish;
+        first = strdup(first);
+        char **temp = *last_exp;
+        while (cur != NULL)
+        {
+            temp = realloc(temp, sizeof(char *) * (size + 1));
+            temp[size - 1] = strdup(cur);
+            size++;
+            cur = strtok(NULL, " ");
+        }
+        temp[size - 1] = NULL;
+        *last_exp = temp;
+        return first;
+    }
+finish:
+    return strdup(ret);
 }
 
 struct expandable *expand_next(struct expandable *exp, char **str)
 {
+    static char **last_exp = NULL;
+    // Return the last_exp elements at each call till its empty
+    if (last_exp)
+    {
+        static int id = 0;
+        *str = last_exp[id++];
+        if (*str)
+        {
+            // dont go to next exp if there are still strings in last_exp
+            return last_exp[id] ? exp : exp->next;
+        }
+        // Free once empty
+        id = 0;
+        free(last_exp);
+        last_exp = NULL;
+    }
+    // last_exp is empty here
     if (!exp)
         return 0;
     char *build = NULL;
     int bsize = 0;
+    VERBOSE("[EXPAND] ");
     while (true)
     {
-        // Append the stringify of the current expandable
-        char *str_exp = stringify_expandable(exp);
+        VERBOSE("%s%s ", exp->type == STR_LITTERAL ? "" : "$", exp->content);
+        // Append the stringify of the current expandable and
+        // fill last_exp with pending chars
+        char *str_exp = stringify_expandable(exp, &last_exp);
         int i = 0;
         while (str_exp[i])
         {
@@ -99,7 +141,8 @@ struct expandable *expand_next(struct expandable *exp, char **str)
     build = realloc(build, sizeof(char) * ++bsize);
     build[bsize - 1] = '\0';
     *str = build;
-    return exp->next;
+    VERBOSE("TO '%s'\n", build);
+    return last_exp ? exp : exp->next;
 }
 
 char **expand(struct expansion *expansion)
@@ -108,15 +151,21 @@ char **expand(struct expansion *expansion)
     char **argv = NULL;
     char *next = NULL;
     int argc = 0;
-    VERBOSE("Expanding...\n");
     do
     {
         argv = realloc(argv, sizeof(char *) * ++argc);
         exp = expand_next(exp, &next);
         argv[argc - 1] = next;
-        VERBOSE("[ARG %d] %s\n", argc - 1, next);
     } while (exp);
     argv = realloc(argv, sizeof(char *) * ++argc);
     argv[argc - 1] = NULL;
     return argv;
+}
+
+void destroy_expanded(char **argv)
+{
+    int i = 0;
+    while (argv[i])
+        free(argv[i++]);
+    free(argv);
 }

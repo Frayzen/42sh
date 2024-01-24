@@ -1,15 +1,22 @@
 #ifndef ASSIGNMENT_H
 #define ASSIGNMENT_H
-#define _POSIX_C_SOURCE 200809L
-#include <string.h>
 
+#define _POSIX_C_SOURCE 200809L
 #include "env/vars/vars.h"
+#include "parser/command/expansion.h"
 #include "tools/str/string.h"
+
 struct assignment
 {
     char *name;
-    struct lex_str *value;
+    struct expansion exp;
     char *prev;
+};
+
+struct assignment_list
+{
+    size_t size;
+    struct assignment **ass_list;
 };
 
 /*
@@ -25,5 +32,30 @@ struct assignment *init_assignment(struct lex_str *str);
  * @param assignment structure to destory
  */
 void destroy_assignment(struct assignment *assignment);
+
+/*
+ * appends an assignment structure to the list of assignements
+ * @param assign_list the list to append token
+ * @param ass the element to append
+ */
+void ass_list_append(struct assignment_list *assing_list,
+                     struct assignment *ass);
+
+/***
+ * Free all assignments from the assignment list
+ * @param assign_list the assignment list
+ */
+void clean_assignments(struct assignment_list *assign_list);
+
+/***
+ * Revert the assignments made by apply_assignments
+ * @param asslist the list of assignment
+ */
+void revert_assignments(struct assignment_list *asslist);
+/***
+ * Apply the assignments contained in apply_assignments
+ * @param asslist the list of assignment
+ */
+void apply_assignments(struct assignment_list *asslist);
 
 #endif // !ASSIGNMENT_H

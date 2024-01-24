@@ -2,14 +2,14 @@
 #define EXPANDER_H
 
 #include "parser/command/expansion.h"
-#include "tools/token/token.h"
+#include "tools/str/string.h"
 
 /***
  * Register the token as part of the futur expansion of the command
  * @param exp the expansion
  * @param tok the token to register
  */
-void register_token(struct expansion *exp, struct token *tok);
+void exp_register_str(struct expansion *exp, struct lex_str *str);
 
 /***
  * Expand the expansion
@@ -25,5 +25,11 @@ char **expand(struct expansion *expansion);
  * @return the next expandable
  */
 struct expandable *expand_next(struct expandable *exp, char **str);
+
+/***
+ * Free the arguments and the argv pointer
+ * @param argv the argument list
+ */
+void destroy_expanded(char **argv);
 
 #endif /* !EXPANDER_H */
