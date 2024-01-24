@@ -77,6 +77,8 @@ void consume_variable(struct pending *p)
     {
         io_pop();
         skip_until(p, '}', APPEND_CHARS);
+        if (io_peek() != '}')
+            exit_gracefully(UNEXPECTED_EOF);
         io_pop();
     }
     else
@@ -147,7 +149,7 @@ struct pending *finder(void)
     p.blank = true;
     consumer(&p);
     // Append the null terminating char
-    struct exp_str *str = &p.str;
+    struct lex_str *str = &p.str;
     str->value = realloc(str->value, str->size + 1);
     str->value[str->size] = '\0';
     return &p;

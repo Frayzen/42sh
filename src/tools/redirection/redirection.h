@@ -24,7 +24,7 @@ struct redirection
 {
     int io_number;
     enum redir_type type;
-    char *to;
+    struct expansion exp;
 };
 
 /***

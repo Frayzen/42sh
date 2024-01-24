@@ -2,7 +2,7 @@
 a=3
 b=4
 echo $a $b
-env
+printenv
 
 ###Shell variable
 
@@ -84,9 +84,29 @@ a="oncea upon" b="ime" && echo $a $b
 p="oncep upon" v="me" echo $p $v
 
 ###Check assignment before command
-a=3 b=4 c=5 tot='this is a test' env
+a=3 b=4 c=5 tot='this is a test' printenv
 
 ###Double alloc at once
 a=3 q=1
 echo $a $q
-a=4 env && env
+a=4 printenv && env
+
+###Args
+a='-ne'
+echo $a    ok
+b='-l'
+ls $b
+c='ls -l'
+$c
+
+
+###redir string
+tat=1
+echo ok $tat>tst
+cat tst
+tat=twok
+echo ok $twok>other
+cat other
+
+###Unexpected EOF Var
+echo ${a

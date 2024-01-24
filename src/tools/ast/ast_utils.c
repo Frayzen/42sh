@@ -2,7 +2,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "parser/command/arg_list.h"
 #include "parser/tools/gr_utils.h"
 #include "tools/ast/ast.h"
 
@@ -113,12 +112,12 @@ void print_ast_cmd(struct ast_cmd *ast, int depth, bool last_of_first)
 {
     printf("CMD\n");
     depth++;
-    if (!ast->arglist.size)
+    if (!ast->args_expansion.size)
         return;
-    struct arg *current = ast->arglist.head;
-    for (size_t i = 0; i < ast->arglist.size; i++)
+    struct expandable *current = ast->args_expansion.head;
+    for (size_t i = 0; i < ast->args_expansion.size; i++)
     {
-        if (i == ast->arglist.size - 1)
+        if (i == ast->args_expansion.size - 1)
             align(depth, true, last_of_first);
         else
             align(depth, false, last_of_first);
