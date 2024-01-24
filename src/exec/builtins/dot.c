@@ -19,6 +19,7 @@ static char *create_path_from_filename(char *filename, char *path)
 {
     char *new_path = malloc(sizeof(char) * PATH_MAX);
     strcpy(new_path, path);
+    new_path = strcat(new_path, "/");
     new_path = strcat(new_path, filename);
     return new_path;
 }
@@ -36,11 +37,14 @@ static char *look_file_path(char *filename)
             end[0] = 0;
         }
         char *path_file = create_path_from_filename(filename, start);
-        if (access(path_file, F_OK))
-        {
-            return path_file;
+        FILE *fd = fopen(path_file, "r");
+        if (fd)
+        { 
+            fclose(fd);
             free(dup);
+            return path_file;
         }
+        free(path_file);
         start = end + 1;
     } while (end);
     free(dup);
@@ -54,8 +58,11 @@ int builtin_dot(char **argv)
     {
         path = look_file_path(path);
     }
-    else if (!access(path, F_OK))
+    FILE *fd = fopen(path, "r");
+    if (!fd)
         path = NULL;
+    else
+    fclose(fd);
     if (!path)
     {
         dprintf(STDERR, "error path file\n");
