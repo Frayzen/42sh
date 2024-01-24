@@ -67,6 +67,7 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
 
 char *stringify_expandable(struct expandable *exp, char ***last_exp)
 {
+    char *first = NULL;
     if (exp->type == STR_LITTERAL)
         return strdup(exp->content);
     char *ret = retrieve_var(exp->content);
@@ -74,11 +75,14 @@ char *stringify_expandable(struct expandable *exp, char ***last_exp)
         ret = "";
     else if (exp->type == UNQUOTED_VAR)
     {
-        char *first = strdup(strtok(ret, " "));
+        first = strtok(ret, " ");
         size_t size = 1;
         char *cur = strtok(NULL, " ");
+        if (!cur)
+            goto finish;
+        first = strdup(first);
         char **temp = *last_exp;
-        while (cur)
+        while (cur != NULL)
         {
             temp = realloc(temp, sizeof(char *) * (size + 1));
             temp[size - 1] = strdup(cur);
@@ -89,6 +93,7 @@ char *stringify_expandable(struct expandable *exp, char ***last_exp)
         *last_exp = temp;
         return first;
     }
+finish:
     return strdup(ret);
 }
 
