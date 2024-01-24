@@ -5,7 +5,7 @@ AC_INIT([42sh], [1.0], [42sh@assistants.epita.fr])
 AM_INIT_AUTOMAKE([subdir-objects] [foreign])
 
 # Pretty display of makefile rules
-# AM_SILENT_RULES([yes])
+AM_SILENT_RULES([yes])
 
 # Enable ar for Makefile
 # AM_PROG_AR
@@ -17,7 +17,7 @@ AC_PROG_RANLIB
 AC_PROG_CC
 
 # Check if a compiler have this list of  flags
-# AX_COMPILER_FLAGS([], [], [], [-Wall -Wextra -Werror -Wvla -pedantic -std=c99])
+# AX_COMPILER_FLAGS([], [], [], [-Wall -Wextra -Werror -Wvla -pedantic -O2 -std=c99])
 
 # List Makefile in subdirectories
 AC_CONFIG_FILES([

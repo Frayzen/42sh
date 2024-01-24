@@ -13,4 +13,4 @@ libtools_a_SOURCES = \
 	assignment/assignment.c assignment/assignment.h
 
 libtools_a_CPPFLAGS = -I$(top_srcdir)/src
-libtools_a_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic
+libtools_a_CFLAGS = $(CFLAGS_42SH)
