@@ -1,5 +1,8 @@
 #define _POSIX_C_SOURCE 200809L
+#include "parser/grammar/rules.h"
 #include "io_backend/io_streamers.h"
+#include "execs.h"
+
 #include "io_backend/backend_saver.h"
 #include "io_backend/io_streamers.h"
 #include "lexer/token_saver.h"
@@ -63,10 +66,20 @@ int builtin_dot(char **argv)
     struct ringbuffer *new_token_rb = rb_create(RB_TOKEN, 1);
     struct ringbuffer *old_backend_rb = swap_backend_buffer(new_backend_rb);
     struct ringbuffer *old_token_rb = swap_token_buffer(new_token_rb);
-    // TODO build and execute the ast of the path
     FILE *old_fd = load_file(path); 
     io_streamer_file(path);
-    struct ast *old_ast = swap_ast_root(NULL);
+    struct ast *new_ast = NULL;
+    struct ast *old_ast = swap_ast_root(new_ast);
+    if (gr_input(&new_ast) == ERROR)
+    {
+      //TODO error handling
+      return 1;
+    }
+    exec_entry(new_ast);
+    destroy_ast(new_ast);
+      
+    
+    // TODO build and execute the ast of the path
     swap_fd(old_fd);
     swap_ast_root(old_ast);
     swap_token_buffer(old_token_rb);
