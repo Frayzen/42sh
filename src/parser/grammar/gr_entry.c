@@ -14,9 +14,9 @@ enum status gr_input(struct ast **ast)
     }
     CHECK_GOTO(gr_list(ast) == ERROR, error);
     struct token *trm = tok_peek();
-    tok_pop_clean();
     if (!trm->terminal)
         goto error;
+    tok_pop_clean();
     GR_DBG_RET(OK);
 error:
     comsume_all();

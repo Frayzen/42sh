@@ -7,4 +7,4 @@ liblexer_a_SOURCES = \
 	finder/finder_operator.c finder/finder_operator.h\
 	finder/finder.c finder/finder.h
 liblexer_a_CPPFLAGS = -I$(top_srcdir)/src
-liblexer_a_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic -O2
+liblexer_a_CFLAGS = $(CFLAGS_42SH)
