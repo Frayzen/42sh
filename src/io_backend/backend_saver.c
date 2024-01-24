@@ -5,7 +5,7 @@
 #include "io_streamers.h"
 #include "tools/ring_buffer/ring_buffer.h"
 
-#define GET_BUFFER swap_backend_buffer(NULL);
+#define GET_BUFFER swap_backend_buffer(NULL)
 
 struct ringbuffer *swap_backend_buffer(struct ringbuffer *new)
 {

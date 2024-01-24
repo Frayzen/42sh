@@ -6,6 +6,7 @@
 #include "tools/ring_buffer/ring_buffer.h"
 #include "tools/token/token.h"
 
+#define GET_BUFFER swap_token_buffer(NULL)
 
 struct ringbuffer *swap_token_buffer(struct ringbuffer *new)
 {
@@ -24,12 +25,12 @@ struct ringbuffer *swap_token_buffer(struct ringbuffer *new)
 void next(void)
 {
     union ringitem next = { .token = next_token() };
-    rb_push(get_buffer(), next);
+    rb_push(GET_BUFFER, next);
 }
 
 struct token *tok_peek(void)
 {
-    struct ringbuffer *rb = get_buffer();
+    struct ringbuffer *rb = GET_BUFFER;
     union ringitem *res = rb_peek(rb);
     if (res != NULL)
         return res->token;
@@ -41,7 +42,7 @@ struct token *tok_peek(void)
 bool tok_pop_clean(void)
 {
     struct token *tok = tok_peek();
-    if (!rb_pop(get_buffer()))
+    if (!rb_pop(GET_BUFFER))
         return false;
     destroy_token(tok);
     return true;
@@ -50,7 +51,7 @@ bool tok_pop_clean(void)
 bool tok_pop(void)
 {
     struct token *tok = tok_peek();
-    int ret = rb_pop(get_buffer());
+    int ret = rb_pop(GET_BUFFER);
     free(tok);
     return ret;
 }
@@ -64,5 +65,5 @@ void comsume_all(void)
 
 void clean_token_saver(void)
 {
-    rb_destroy(get_buffer());
+    rb_destroy(GET_BUFFER);
 }

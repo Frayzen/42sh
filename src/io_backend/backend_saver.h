@@ -46,5 +46,5 @@ void clean_backend_saver(void);
  * @param new, the buffer to load, NULL only retrieve the current one
  * @return the current loaded buffer
  */
-struct ringbuffer *swap_backend_buffer(struct ringbuffer *new)
+struct ringbuffer *swap_backend_buffer(struct ringbuffer *new);
 #endif /* !BACKEND_SAVER_H */
