@@ -51,7 +51,9 @@ void destroy_assignment(struct assignment *assignment)
 void ass_list_append(struct assignment_list *assign_list,
                      struct assignment *element)
 {
-    assign_list->ass_list = realloc(assign_list->ass_list, ++assign_list->size);
+    assign_list->ass_list =
+        realloc(assign_list->ass_list,
+                sizeof(struct assignment) * (++assign_list->size));
     assign_list->ass_list[assign_list->size - 1] = element;
 }
 
