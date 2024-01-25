@@ -2,6 +2,22 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/gr_tools.h"
+
+#define STOP 0 // grammar fails
+#define GOOD 1 // grammar is good
+#define WAIT 2 // need to look for other grammar
+
+/*
+shell_command =
+  '{' compound_list '}'
+| '(' compound_list ')'
+| rule_for
+| rule_while
+| rule_until
+| rule_if
+;
+*/
+
 int check_compound_token(enum token_type expected_type1,
                          enum token_type expected_type2, struct ast_list *list)
 {
@@ -13,14 +29,14 @@ int check_compound_token(enum token_type expected_type1,
         {
             token = tok_peek();
             if (token->type != expected_type2)
-                return 0;
+                return STOP;
             tok_pop_clean();
-            return 1;
+            return GOOD;
         }
         else
             return 0;
     }
-    return 2;
+    return WAIT;
 }
 
 enum status gr_shell_cmd(struct ast_list *list)
@@ -28,11 +44,11 @@ enum status gr_shell_cmd(struct ast_list *list)
     GR_DBG_START(ShellCmd);
 
     int res = check_compound_token(BRACKET_OPEN, BRACKET_CLOSED, list);
-    if (res == 1 || res == 0)
-        return (res == 1) ? gr_debug_end(OK) : gr_debug_end(ERROR);
+    if (res == GOOD || res == STOP)
+        return (res == GOOD) ? gr_debug_end(OK) : gr_debug_end(ERROR);
     res = check_compound_token(PARENTHESE_OPEN, PARENTHESE_CLOSED, list);
-    if (res == 1 || res == 0)
-        return (res == 1) ? gr_debug_end(OK) : gr_debug_end(ERROR);
+    if (res == GOOD || res == STOP)
+        return (res == GOOD) ? gr_debug_end(OK) : gr_debug_end(ERROR);
     if (gr_if(list) == OK)
         GR_DBG_RET(OK);
     if (gr_while(list) == OK)
