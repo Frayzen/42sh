@@ -16,6 +16,12 @@
 
 #define PATH_MAX 4096
 
+/***
+ * adds the filename to a path
+ * @param filename the file to add
+ * @param path the path to add the file to
+ * @return the path with the filename
+ */
 static char *create_path_from_filename(char *filename, char *path)
 {
     char *new_path = malloc(sizeof(char) * PATH_MAX);
@@ -25,6 +31,11 @@ static char *create_path_from_filename(char *filename, char *path)
     return new_path;
 }
 
+/***
+ * Looks through all the possible path to see if the file exists
+ * @param ilename the file to look for
+ * @return the valid path, NULL if doesn't exist
+ */
 static char *look_file_path(char *filename)
 {
     char *dup = strdup(getenv("PATH"));
