@@ -20,3 +20,6 @@ echo 'This is unclosed\' here
 
 ### If quotes
 if ''; then echo ok; fi
+
+###Unterminated simple quotes
+echo 'Hello Wor

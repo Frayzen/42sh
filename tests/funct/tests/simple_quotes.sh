@@ -22,6 +22,6 @@ echo hello ';' ls
 ###Attached to word
 echo 'hello'world
 
-###Unterminated
-echo 'Hello Wor
-
+### Escape in quotes
+echo 'this \$ is \' a\" test \\' "And this '\'\' is as \ well\
+    "
