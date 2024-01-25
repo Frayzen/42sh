@@ -25,3 +25,6 @@ fi
 
 ### Negate return builtin
 ! ls
+
+### Double negation
+! ! echo ok

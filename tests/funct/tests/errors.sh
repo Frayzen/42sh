@@ -15,3 +15,8 @@ while do
 ### error while2 2= correct exit code
 while ! true; do echo 
 
+### Unclosed
+echo 'This is unclosed\' here
+
+### If quotes
+if ''; then echo ok; fi
