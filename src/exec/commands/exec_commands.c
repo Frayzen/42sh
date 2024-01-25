@@ -51,7 +51,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     int *fds = setup_redirs(AST_REDIR(ast));
     if (!fds)
         return 1;
-    int ret = 2;
+    int ret = 0;
     char **argv = expand(&ast->args_expansion);
     apply_assignments(&ast->assignment_list);
     *pid = PID_SET;

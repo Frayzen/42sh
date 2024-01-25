@@ -15,7 +15,7 @@ struct lex_str *extract_value(struct lex_str *str, size_t eq_pos)
     size_t val_size = str->size - offset;
     struct lex_str *val = calloc(1, sizeof(struct lex_str));
     val->value = strdup(str->value + offset);
-    val->expand = calloc(1, sizeof(enum expand_type) * val_size);
+    val->expand = calloc(val_size, sizeof(enum expand_type));
     memcpy(val->expand, str->expand + offset,
            sizeof(enum expand_type) * val_size);
     val->size = val_size;
@@ -48,7 +48,7 @@ void destroy_assignment(struct assignment *assignment)
     free(assignment);
 }
 
-void ass_list_append(struct assignment_list *assign_list,
+void append_ass_list(struct assignment_list *assign_list,
                      struct assignment *element)
 {
     assign_list->ass_list =
@@ -73,6 +73,7 @@ void apply_assignments(struct assignment_list *asslist)
 {
     for (unsigned int i = 0; i < asslist->size; i++)
     {
+        // TODO find a better way to do it
         struct assignment *ass = asslist->ass_list[i];
         char *val = NULL;
         assert(expand_next(ass->exp.head, &val) == NULL);

@@ -38,7 +38,7 @@ void destroy_assignment(struct assignment *assignment);
  * @param assign_list the list to append token
  * @param ass the element to append
  */
-void ass_list_append(struct assignment_list *assing_list,
+void append_ass_list(struct assignment_list *assing_list,
                      struct assignment *ass);
 
 /***

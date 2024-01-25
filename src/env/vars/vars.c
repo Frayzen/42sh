@@ -6,10 +6,6 @@
 
 #include "env/env.h"
 
-#define DBG_VAR(...)                                                           \
-    if (get_env_flag()->debug_env)                                             \
-        dprintf(DBG_OUT, __VA_ARGS__);
-
 char *assign_var(char *name, char *value)
 {
     char *old = getenv(name);

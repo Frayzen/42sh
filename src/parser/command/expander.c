@@ -73,21 +73,23 @@ char *stringify_expandable(struct expandable *exp, char ***last_exp)
     char *ret = retrieve_var(exp->content);
     if (!ret)
         ret = "";
+    // if we have an unquted var we may need to
+    // split the string by spaces
     else if (exp->type == UNQUOTED_VAR)
     {
         first = strtok(ret, " ");
         size_t size = 1;
         char *cur = strtok(NULL, " ");
-        if (!cur)
+        if (!cur) // if there is only one word return it
             goto finish;
         first = strdup(first);
         char **temp = *last_exp;
-        while (cur != NULL)
+        while (cur != NULL) // save the rest of the qords in last_exp
         {
             temp = realloc(temp, sizeof(char *) * (size + 1));
             temp[size - 1] = strdup(cur);
             size++;
-            cur = strtok(NULL, " ");
+            cur = strtok(NULL, " "); // NULL terminate
         }
         temp[size - 1] = NULL;
         *last_exp = temp;
