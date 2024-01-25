@@ -1,5 +1,4 @@
 #define _POSIX_C_SOURCE 200809L
-#include <linux/limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,6 +13,8 @@
 #include "parser/grammar/rules.h"
 #include "tools/ast/ast_utils.h"
 #include "tools/ring_buffer/ring_buffer.h"
+
+#define PATH_MAX 4096
 
 static char *create_path_from_filename(char *filename, char *path)
 {
@@ -39,7 +40,7 @@ static char *look_file_path(char *filename)
         char *path_file = create_path_from_filename(filename, start);
         FILE *fd = fopen(path_file, "r");
         if (fd)
-        { 
+        {
             fclose(fd);
             free(dup);
             return path_file;
@@ -62,7 +63,7 @@ int builtin_dot(char **argv)
     if (!fd)
         path = NULL;
     else
-    fclose(fd);
+        fclose(fd);
     if (!path)
     {
         dprintf(STDERR, "error path file\n");

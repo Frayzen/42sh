@@ -1,7 +1,7 @@
 ###ls in file
-echo . ./test.sh
+. ./test.sh
 
 ###non existing file
-echo . test.sh
+. test.sh
 
 
