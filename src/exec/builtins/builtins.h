@@ -13,4 +13,10 @@ void builtin_echo(char **argv);
  */
 void builtin_exit(char **argv);
 
+/***
+ * Execute the dot builtin given the arguments
+ * @param argv the agument list, null terminated
+ */
+int builtin_dot(char **argv);
+
 #endif /* !BUILTINS_H */

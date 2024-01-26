@@ -4,6 +4,13 @@
 
 static char next = '\0';
 
+char swap_next_char(char new)
+{
+    char ret = next;
+    next = new;
+    return ret;
+}
+
 char io_peek(void)
 {
     if (next == '\0')

@@ -6,7 +6,7 @@
 #include "parser/command/expansion.h"
 #include "tools/token/token.h"
 
-#define AST_ROOT (set_ast_root(NULL))
+#define AST_ROOT (swap_ast_root(NULL))
 
 enum ast_type
 {
@@ -122,5 +122,12 @@ void *init_ast(enum ast_type type);
  * @param ast the ast to free
  */
 void destroy_ast(void *ast);
+
+/***
+ * Swap old and new ast
+ * @param new_ast, the ast to swap
+ * @return the old ast
+ */
+struct ast **swap_ast_root(struct ast **new_ast);
 
 #endif // !AST_H

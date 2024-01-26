@@ -7,6 +7,13 @@
 
 static struct token *next = NULL;
 
+struct token *swap_next_token(struct token *new)
+{
+    struct token *tok = next;
+    next = new;
+    return tok;
+}
+
 struct token *tok_peek(void)
 {
     if (!next)

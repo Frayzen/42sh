@@ -12,4 +12,11 @@ char io_peek(void);
  */
 void io_pop(void);
 
+/***
+ * Swap the saved char
+ * @param new the new saved char
+ * @return the old char
+ */
+char swap_next_char(char new);
+
 #endif /* !BACKEND_SAVER_H */
