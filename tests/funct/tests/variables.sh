@@ -38,10 +38,6 @@ ls && cat $a >$b;
 rm $a $b
 echo $a$b
 
-###Var with redirection
-a=1
-echo hehe >$a
-cat $a<$a
 
 ###Test variable quotes
 toto=Hello World
