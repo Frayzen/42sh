@@ -17,8 +17,8 @@ enum token_type
     SEMI_COLON,
 
     // operators ?
-    PARENTHESE_OPEN,
-    PARENTHESE_CLOSED,
+    PRTH_OPEN,
+    PRTH_CLOSED,
     // redir
     CHEVRON,
     PIPE,
@@ -44,8 +44,8 @@ enum token_type
     DO,
     DONE,
 
-    BRACKET_OPEN,
-    BRACKET_CLOSED,
+    BRK_OPEN,
+    BRK_CLOSED,
 
     NEGATION,
 

@@ -43,10 +43,10 @@ enum status gr_shell_cmd(struct ast_list *list)
 {
     GR_DBG_START(ShellCmd);
 
-    int res = check_compound_token(BRACKET_OPEN, BRACKET_CLOSED, list);
+    int res = check_compound_token(BRK_OPEN, BRK_CLOSED, list);
     if (res == GOOD || res == STOP)
         return (res == GOOD) ? gr_debug_end(OK) : gr_debug_end(ERROR);
-    res = check_compound_token(PARENTHESE_OPEN, PARENTHESE_CLOSED, list);
+    res = check_compound_token(PRTH_OPEN, PRTH_CLOSED, list);
     if (res == GOOD || res == STOP)
         return (res == GOOD) ? gr_debug_end(OK) : gr_debug_end(ERROR);
     if (gr_if(list) == OK)
