@@ -100,21 +100,45 @@ void append_io(struct pending *p)
     io_pop();
 }
 
+static const char limit_lt[] = {
+    [SKIP_SINGLE_QUOTE] = '\'',
+    [SKIP_DOUBLE_QUOTE] = '"',
+    [SKIP_HASHTAG] = '\n',
+    [SKIP_VARIABLE_BRACKETS] = '}',
+};
+
+static void bslash_in_skip(struct pending *p, enum skip_behavior behavior)
+{
+    io_pop();
+    if (io_peek() == limit_lt[behavior])
+        append_io(p);
+    else
+    {
+        if (behavior == SKIP_DOUBLE_QUOTE)
+        {
+
+        }
+    }
+}
+
 // Append every char until limit is found (limit excluded)
-void skip_until(struct pending *p, char limit, bool append)
+void skip_until(struct pending *p, enum skip_behavior behavior)
 {
     char c = io_peek();
-    while (c && c != limit)
+    bool append = behavior != SKIP_HASHTAG;
+    while (c && c != limit_lt[behavior])
     {
-        if (append)
+        if (!append)
+            io_pop();
+        else if (c == '\\')
+            bslash_in_skip(p, limit_lt[behavior]);
+        else
         {
-            if (limit == '"' && c == '$')
+            if (limit_lt[behavior] == '"' && c == '$')
                 consume_variable(p);
             else
                 append_io(p);
         }
-        else
-            io_pop();
         c = io_peek();
     }
 }

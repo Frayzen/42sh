@@ -110,3 +110,13 @@ echo -Een
 
 ###Long command list
 echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto; echo toto ;echo toto;
+
+### Echo with bsl n
+echo This should be\
+discard
+
+echo "This should be\
+discard"
+
+echo 'This should be\
+discard'
