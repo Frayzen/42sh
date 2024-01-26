@@ -71,6 +71,8 @@ char *stringify_expandable(struct expandable *exp, char ***last_exp)
     if (exp->type == STR_LITTERAL)
         return strdup(exp->content);
     char *ret = retrieve_var(exp->content);
+
+    printf("ret = %s\n", ret);
     if (!ret)
         ret = "";
     // if we have an unquted var we may need to

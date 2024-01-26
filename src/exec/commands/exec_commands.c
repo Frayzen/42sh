@@ -54,7 +54,14 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     int ret = 0;
     char **argv = expand(&ast->args_expansion);
     apply_assignments(&ast->assignment_list);
+    // int i = 0;
+    // while (argv[i])
+    // {
+    //     printf("argv[%d] = %s\n", i ,argv[i]);
+    //     i++;
+    // }
     *pid = PID_SET;
+
     if (argv[0])
     {
         if (!strcmp(argv[0], "echo"))
@@ -74,6 +81,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             ret = -1;
         }
         revert_assignments(&ast->assignment_list);
+        printf("should be null %s\n", getenv("x"));
     }
     destroy_expanded(argv);
     close_redirs(fds);
