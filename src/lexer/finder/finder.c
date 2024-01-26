@@ -80,7 +80,7 @@ void consume_variable(struct pending *p)
         if (io_peek() != '}')
         {
             if (!io_peek())
-            exit_gracefully(UNEXPECTED_EOF);
+                exit_gracefully(UNEXPECTED_EOF);
         }
         io_pop();
     }

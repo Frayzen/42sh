@@ -26,7 +26,8 @@ bool chevron_type(const struct lex_str *str);
  */
 bool assignment_word(const struct lex_str *str);
 
-enum skip_behavior{
+enum skip_behavior
+{
     SKIP_SINGLE_QUOTE,
     SKIP_DOUBLE_QUOTE,
     SKIP_VARIABLE_BRACKETS,
