@@ -46,6 +46,7 @@ struct pending
     bool blank;
     bool expanding;
     bool in_quote;
+    bool error;
     bool force_str;
 };
 

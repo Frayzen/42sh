@@ -78,7 +78,10 @@ void consume_variable(struct pending *p)
         io_pop();
         skip_until(p, SKIP_VARIABLE_BRACKETS);
         if (io_peek() != '}')
+        {
+            if (!io_peek())
             exit_gracefully(UNEXPECTED_EOF);
+        }
         io_pop();
     }
     else

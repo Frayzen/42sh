@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "exit/error_handler.h"
 #include "finder.h"
 #include "io_backend/backend_saver.h"
 #include "tools/str/string.h"
@@ -116,8 +117,22 @@ static void bslash_in_skip(struct pending *p, enum skip_behavior behavior)
     {
         if (behavior == SKIP_DOUBLE_QUOTE)
         {
-
+            switch (io_peek())
+            {
+            case '\n':
+                io_pop();
+                return;
+            case '$':
+            case '`':
+            case '\\':
+                append_io(p);
+                return;
+            default:
+                break;
+            }
         }
+        append_char(p, '\\');
+        append_io(p);
     }
 }
 
@@ -130,8 +145,10 @@ void skip_until(struct pending *p, enum skip_behavior behavior)
     {
         if (!append)
             io_pop();
+        else if (behavior == SKIP_VARIABLE_BRACKETS && !is_name_char(c))
+            exit_gracefully(BAD_VAR_NAME);
         else if (c == '\\')
-            bslash_in_skip(p, limit_lt[behavior]);
+            bslash_in_skip(p, behavior);
         else
         {
             if (limit_lt[behavior] == '"' && c == '$')
