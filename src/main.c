@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     main_to_stream(argc, argv);
     setup_debug_fds();
     struct ast *ast = NULL;
-    set_ast_root(&ast);
+    swap_ast_root(&ast);
     int ret = 0;
     do
     {
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
         if (get_env_flag()->pretty_print)
             debug_pretty_print(ast);
         if (ast)
-          ret = exec_entry(ast);
+            ret = exec_entry(ast);
         assert(DICT->nb_entries == 0);
         fflush(NULL);
         destroy_ast(ast);

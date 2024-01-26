@@ -13,7 +13,7 @@
 
 static FILE *streamer = NULL;
 
-FILE *set_fd(FILE *new_file)
+FILE *swap_fd(FILE *new_file)
 {
     if (new_file == NULL)
         return streamer;
@@ -33,12 +33,8 @@ bool is_executable(char *path_to_file)
     return true;
 }
 
-void io_streamer_file(char *path_to_file)
+FILE *load_file(char *path_to_file)
 {
-    if (access(path_to_file, F_OK))
-        exit_gracefully(INVALID_FILE_PATH);
-    if (access(path_to_file, R_OK))
-        exit_gracefully(NO_EXEC_PERM);
     FILE *file = fopen(path_to_file, "r");
     if (!file)
     {
@@ -50,7 +46,16 @@ void io_streamer_file(char *path_to_file)
         exit_gracefully(NO_EXEC_PERM);
     }
     fseek(file, 0, SEEK_SET);
-    streamer = file;
+    return swap_fd(file);
+}
+
+void io_streamer_file(char *path_to_file)
+{
+    if (access(path_to_file, F_OK))
+        exit_gracefully(INVALID_FILE_PATH);
+    if (access(path_to_file, R_OK))
+        exit_gracefully(NO_EXEC_PERM);
+    load_file(path_to_file);
 }
 
 void io_streamer_string(int argc, char **argv)
@@ -97,7 +102,11 @@ void main_to_stream(int argc, char **argv)
     if (argc == 0)
         io_streamer_stdin();
     else if (argc == 1)
+    {
+        if (!strcmp(*argv, "-c"))
+            exit_gracefully(ARG_ERROR);
         io_streamer_file(*argv);
+    }
     else if (argc == 2)
         io_streamer_string(argc, argv);
     else

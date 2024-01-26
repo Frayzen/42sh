@@ -25,4 +25,11 @@ void tok_pop_clean(void);
  */
 void tok_pop(void);
 
+/***
+ * Swap the saved token
+ * @param new the new saved token
+ * @return the old token
+ */
+struct token *swap_next_token(struct token *new);
+
 #endif /* !TOKEN_SAVER_H */

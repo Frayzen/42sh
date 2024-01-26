@@ -12,6 +12,7 @@ enum error_type
     LIST_NOT_FOUND,
     PIPE_NOT_FOUND,
     FD_DICO_FULL,
+    FUNCT_DICO_FULL,
     UNEXPECTED_EOF,
     BAD_REDIRECTION,
     BAD_FD,

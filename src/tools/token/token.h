@@ -16,6 +16,11 @@ enum token_type
     NEWLINE,
     BSZERO,
     SEMI_COLON,
+
+    PRTH_OPEN,
+    PRTH_CLOSED,
+    BRK_OPEN,
+    BRK_CLOSED,
    // redir
     CHEVRON,
     PIPE,
@@ -47,6 +52,7 @@ enum token_type
     T_TRUE,
     T_FALSE,
     ECHO,
+    DOT,
     // terminals
     WORD,
     ASSIGNMENT_WORD,
