@@ -16,6 +16,10 @@ enum token_type
     NEWLINE,
     BSZERO,
     SEMI_COLON,
+
+    // operators ?
+    PRTH_OPEN,
+    PRTH_CLOSED,
     // redir
     CHEVRON,
     PIPE,
@@ -40,6 +44,9 @@ enum token_type
     IN,
     DO,
     DONE,
+
+    BRK_OPEN,
+    BRK_CLOSED,
 
     NEGATION,
 

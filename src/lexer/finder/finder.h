@@ -32,8 +32,9 @@ case '|'
 #define CONTROL_OP_CASES                                                       \
 AND_OR_CASES:                                                                  \
 case ';':                                                                      \
+case ')':                                                                      \
+case '(':                                                                      \
 case '\n'
-/* TODO include ( and ) */
 
 #define OPERATORS_CASES                                                        \
 REDIR_OPS_CASES:                                                               \
@@ -50,7 +51,8 @@ struct pending
     bool force_str;
 };
 
-// In this file, understand 'current character' as the one returned by io_peek
+// In this file, understand 'current character' as the one returned by
+// io_peek
 
 /***
  * finder: gets character by character and return the string token
