@@ -44,3 +44,6 @@ fi
 
 ###with spaces double
 !       ! true
+
+### Double negation
+! ! echo ok
