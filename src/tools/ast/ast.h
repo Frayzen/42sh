@@ -103,12 +103,11 @@ struct ast_and_or
 };
 // END AND OR
 
-
 #define AST_FUNCT(Base) ((struct ast_funct *)(Base))
 struct ast_funct
 {
-  struct token *name;
-  struct ast *body;
+    struct token *name;
+    struct ast *body;
 };
 /***
  * Set or gets the pointer to the ast root

@@ -1,9 +1,10 @@
+#include "tools/funct_manager/funct_dict.h"
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "exit/error_handler.h"
-#include "tools/funct_manager/funct_dict.h"
 
 struct funct_dictionary *get_funct_dict(void)
 {
@@ -22,7 +23,7 @@ void funct_dict_push(char *name, struct ast *body)
     FUNCT_DICT->nb_entries++;
 }
 
-struct ast *funct_dict_peek_value(char * name)
+struct ast *funct_dict_peek_value(char *name)
 {
     for (int i = 0; i < FUNCT_DICT->nb_entries; i++)
     {
@@ -44,7 +45,7 @@ char *funct_dict_peek_key(struct ast *body)
     return NULL;
 }
 
-void funct_dict_pop(char * name)
+void funct_dict_pop(char *name)
 {
     int index = -1;
     for (int i = 0; i < FUNCT_DICT->nb_entries; ++i)
@@ -57,7 +58,8 @@ void funct_dict_pop(char * name)
     }
     if (index == -1)
         return;
-    FUNCT_DICT->entries[index] = FUNCT_DICT->entries[FUNCT_DICT->nb_entries - 1];
+    FUNCT_DICT->entries[index] =
+        FUNCT_DICT->entries[FUNCT_DICT->nb_entries - 1];
     FUNCT_DICT->nb_entries--;
 }
 

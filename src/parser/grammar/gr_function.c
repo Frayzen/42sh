@@ -1,9 +1,9 @@
+#include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/gr_tools.h"
-#include "lexer/token_saver.h"
-#include "tools/token/token.h"
 #include "tools/gr_utils.h"
+#include "tools/token/token.h"
 /*
 funcdec = WORD '(' ')' '{\n}' shell_command
 */
@@ -20,13 +20,13 @@ enum status gr_function(struct ast_list *ast)
     CHECK_GOTO(tok_peek()->type != PRTH_CLOSED, error);
     tok_pop_clean();
     while (tok_peek()->terminal)
-      tok_pop_clean();
+        tok_pop_clean();
     CHECK_GOTO(gr_shell_cmd(AST_LIST(&ast_funct->body)) == ERROR, error);
-    //don't know if &ast->body, does it keep the result here ?
-    //TODO put into dictionnary IN THE EXEC PART, NOT HERE
+    // don't know if &ast->body, does it keep the result here ?
+    // TODO put into dictionnary IN THE EXEC PART, NOT HERE
     add_child(ast, AST(ast_funct));
     GR_DBG_RET(OK);
 error:
-  destroy_ast(ast_funct);
-  return ERROR;
+    destroy_ast(ast_funct);
+    return ERROR;
 }

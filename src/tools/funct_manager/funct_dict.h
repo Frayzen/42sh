@@ -34,14 +34,14 @@ void funct_dict_push(char *name, struct ast *body);
  * @param old_fd original file descriptor
  * @return the new redirected file descriptor
  */
-int funct_dict_peek_new(char *name);
+struct ast *funct_dict_peek_value(char *name);
 
 /***
  * Gives the old file descriptor associated with the file descriptor given
  * @param new_fd new redirected file descriptor
  * @return the original file descriptor
  */
-int funct_dict_peek_old(struct ast *body);
+char *funct_dict_peek_key(struct ast *body);
 
 /***
  * Removes the entry associated with a file descriptor from the file descriptor
