@@ -20,21 +20,20 @@ execute() {
     modname=$(echo $2)
     id=$3
     unique="$(echo $id)_$file_id"
-    rm -rf *
     theirs="../../theirs$unique"
     theirs_err="../../theirs_err$unique"
-    rm -rf *
     ours="../../ours$unique"
     ours_err="../../ours_err$unique"
 
     script="../../script$unique"
     code=$(echo "$1" | sed 's/ timflochaslm/\n/g')
     printf '%s' "$code" > $script
-    $path_42sh $script 1> $ours 2> $ours_err
+    $path_42sh $script 1>$ours 2>$ours_err
     ours_ret=$?
     rm -rf *
-    bash --posix $script 1> $theirs 2> $theirs_err
+    bash --posix $script 1>$theirs 2>$theirs_err
     theirs_ret=$?
+    rm -rf *
     dif=$(diff -q $ours $theirs)
     res=$?
     dif_err=$(diff -q $ours_err $theirs_err)
@@ -86,7 +85,7 @@ execute() {
                 print_line "STDERR should not be empty but is" 0 $PURPLE
             fi
         fi
-        print_line "[ = END = ]" 0 $PURPLE
+        print_line "[ = END = ]" 0 $PRPLE
     fi
     if [ $mod_id -eq 0 ]; then
         rm $theirs $ours $ours_err $theirs_err $script
@@ -117,7 +116,8 @@ parallelize_entry() {
             '###'*)
                 if [ $save -eq 1 ]; then
                     if [ $mod_id -eq 0 -o $curid -eq $mod_id ]; then
-                        val=$(execute "$build" "$modname" $curid)
+                        val=$(execute "$build" "$modname" $curid &)
+                        wait
                         if [ $? -eq 1 ]; then
                             errs=1
                         fi
