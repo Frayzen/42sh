@@ -60,21 +60,25 @@ static char *look_file_path(char *filename)
     return NULL;
 }
 
-int builtin_dot(char **argv)
+// Return the FILE or NULL if the path is invalid
+FILE *get_file(char *path)
 {
-    char *path = argv[1];
-    if (!strchr(path, '/'))
-    {
-        path = look_file_path(path);
-    }
     FILE *fd = fopen(path, "r");
     if (!fd)
         path = NULL;
     else
         fclose(fd);
-    if (!path)
+    return fd;
+}
+
+int builtin_dot(char **argv)
+{
+    char *path = argv[1];
+    if (!strchr(path, '/'))
+        path = look_file_path(path);
+    if (!get_file(path))
     {
-        dprintf(STDERR, "error path file\n");
+        print_error(INVALID_FILE_PATH);
         return 1;
     }
     struct context *old = new_context();
@@ -86,7 +90,8 @@ int builtin_dot(char **argv)
         print_error(GRAMMAR_ERROR_ENTRY);
         ret = 2;
     }
-    ret = exec_entry(*AST_ROOT);
+    else
+        ret = exec_entry(*AST_ROOT);
     load_context(old);
     return ret;
 }
