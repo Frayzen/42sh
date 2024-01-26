@@ -110,3 +110,16 @@ echo -Een
 
 ###Long command list
 echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto;echo toto; echo toto ;echo toto;
+
+###e c h o 
+echo e c h o
+
+###empty command
+
+###empty quotes after -c 
+""
+
+###only spaces in command
+"     "
+
+

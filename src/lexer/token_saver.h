@@ -16,23 +16,20 @@ struct token *tok_peek(void);
  * @return true if the jump happened, false if the buffer is empty
  * @see tok_peek() to get the current token value
  */
-bool tok_pop_clean(void);
+void tok_pop_clean(void);
 
 /***
  * Jump to the next token of the buffer and free the token (but NOT the string)
  * @return true if the jump happened, false if the buffer is empty
  * @see tok_peek() to get the current token value
  */
-bool tok_pop(void);
+void tok_pop(void);
 
 /***
- * Clean the memory saved by the buffer, the buffer is not usable after this
+ * Swap the saved token
+ * @param new the new saved token
+ * @return the old token
  */
-void clean_token_saver(void);
-
-/***
- * Consume all the tokens to ensure a proper exit (grammar error)
- */
-void comsume_all(void);
+struct token *swap_next_token(struct token *new);
 
 #endif /* !TOKEN_SAVER_H */
