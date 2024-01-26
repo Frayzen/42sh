@@ -102,7 +102,11 @@ void main_to_stream(int argc, char **argv)
     if (argc == 0)
         io_streamer_stdin();
     else if (argc == 1)
+    {
+        if (!strcmp(*argv, "-c"))
+            exit_gracefully(ARG_ERROR);
         io_streamer_file(*argv);
+    }
     else if (argc == 2)
         io_streamer_string(argc, argv);
     else
