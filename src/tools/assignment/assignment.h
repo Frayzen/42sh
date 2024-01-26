@@ -1,8 +1,13 @@
 #ifndef ASSIGNMENT_H
 #define ASSIGNMENT_H
 
-#define _POSIX_C_SOURCE 200809L
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "env/vars/vars.h"
+#include "parser/command/expander.h"
 #include "parser/command/expansion.h"
 #include "tools/str/string.h"
 

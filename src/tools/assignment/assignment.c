@@ -1,12 +1,4 @@
 #include "assignment.h"
-
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "parser/command/expander.h"
-#include "str/string.h"
 // manage the variable assignments using environ to store, restore and update
 
 struct lex_str *extract_value(struct lex_str *str, size_t eq_pos)
