@@ -72,6 +72,8 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         ret = 0;
     else if (!strcmp(argv[0], "false"))
         ret = 1;
+    else if (!strcmp(argv[0], "."))
+        ret = builtin_dot(argv);
     else
     {
         *pid = exec_prog(argv);

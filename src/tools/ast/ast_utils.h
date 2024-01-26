@@ -2,7 +2,7 @@
 #define AST_UTILS_H
 #include "tools/ast/ast.h"
 /***
- * Prints the AST
+ * Prints the AST with ast_to_str and pretty_print
  * @param ast AST to be printed
  */
 void debug_pretty_print(struct ast *ast);
@@ -37,4 +37,11 @@ void debug_pretty_print(struct ast *ast);
  * @return the unique malloced string associated with the AST
  */
 char *ast_to_str(struct ast *ast);
+
+/***
+ * Swap old and new ast
+ * @param new_ast, the ast to swap
+ * @return old ast after swap
+ */
+struct ast *swap_ast(struct ast *new_ast);
 #endif // AST_UTILS_H
