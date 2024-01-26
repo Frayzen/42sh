@@ -16,7 +16,7 @@ enum token_type
     NEWLINE,
     BSZERO,
     SEMI_COLON,
-    // redir
+   // redir
     CHEVRON,
     PIPE,
     // numbers
