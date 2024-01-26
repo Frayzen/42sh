@@ -9,6 +9,7 @@ libtools_a_SOURCES = \
 	ast/ast.c ast/ast.h\
 	str/string.h str/string.c\
 	ast/ast_utils.c ast/ast_utils.h\
+	pretty_print/pretty_print.h pretty_print/pretty_print.c\
 	fd_manager/fd_dictionary.c fd_manager/fd_manager.h
 libtools_a_CPPFLAGS = -I$(top_srcdir)/src
 libtools_a_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic
