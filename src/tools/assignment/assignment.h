@@ -1,7 +1,6 @@
 #ifndef ASSIGNMENT_H
 #define ASSIGNMENT_H
 
-#define _POSIX_C_SOURCE 200809L
 #include "env/vars/vars.h"
 #include "parser/command/expansion.h"
 #include "tools/str/string.h"
