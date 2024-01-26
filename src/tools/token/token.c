@@ -114,7 +114,7 @@ const char **toktype_lookup(void)
         [WORD] = NULL,       [WHILE] = "while", [DO] = "do",
         [DONE] = "done",     [UNTIL] = "until", [OR] = "||",
         [AND] = "&&",        [FOR] = "for",     [IN] = "in",
-        [ASSMT] = "ASMT",
+        [ASSMT] = "ASMT",    [DOT] = ".",
     };
     return lookup_table;
 }

@@ -26,5 +26,24 @@ fi
 ### Negate return builtin
 ! ls
 
+
+###double negation true
+! ! true
+
+###triple negation true
+! ! ! true
+
+###double negation false
+! ! false
+
+###triple negation false
+! ! ! false
+
+###with spaces
+!        true
+
+###with spaces double
+!       ! true
+
 ### Double negation
 ! ! echo ok
