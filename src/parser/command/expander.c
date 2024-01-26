@@ -176,7 +176,7 @@ char **expand(struct expansion *expansion)
             link_next = e->link_next;
             DBG_VAR("%s ", e->content);
             if (link_next)
-                printf(" -> ");
+                DBG_VAR(" -> ");
             size += strlen(e->content);
             cur = realloc(cur, sizeof(char) * (size + 1)); 
             strcat(cur, e->content);
