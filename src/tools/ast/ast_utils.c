@@ -1,6 +1,9 @@
+#include <assert.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "parser/tools/gr_utils.h"
+#include "pretty_print/pretty_print.h"
 #include "tools/ast/ast.h"
 
 #define _POSIX_C_SOURCE 200809L
@@ -29,59 +32,6 @@ int node_to_str(char *buf, struct ast *ast_root)
     return len;
 }
 
-void pretty_print_ast_help(struct ast *ast_root, int depth, bool is_last_child,
-                           bool last_of_first)
-{
-    if (!ast_root)
-        return;
-    for (int i = 0; i < depth - 1; i++)
-    {
-        if (last_of_first)
-            printf("   ");
-        else
-            printf("║  ");
-    }
-    if (depth)
-    {
-        if (is_last_child)
-            printf("╚══");
-        else
-            printf("╠══");
-    }
-    static char buf[1024] = { 0 };
-    node_to_str(buf, ast_root);
-    printf("%s$\n", buf);
-    struct ast **children = get_children(ast_root);
-    if (AST(ast_root)->type == AST_CMD)
-        expansion_print(&AST_CMD(ast_root)->args_expansion);
-    if (!children)
-        return;
-    int i = 0;
-    while (children[i])
-    {
-        struct ast *child = children[i++];
-        if (child)
-        {
-            if (!depth)
-                last_of_first = true;
-            is_last_child = true;
-        }
-        else
-            is_last_child = false;
-        pretty_print_ast_help(child, depth + 1, is_last_child, last_of_first);
-    }
-    free(children);
-}
-
-void pretty_print_ast(struct ast *ast)
-{
-    if (!ast)
-    {
-        printf("\nNULL ast\n");
-        return;
-    }
-    pretty_print_ast_help(ast, 0, true, false);
-}
 #define START
 void ast_to_str_rec(struct ast *ast, char *buf, size_t *id)
 {

@@ -2,7 +2,7 @@
 #define AST_UTILS_H
 #include "tools/ast/ast.h"
 /***
- * Prints the AST
+ * Prints the AST with ast_to_str and pretty_print
  * @param ast AST to be printed
  */
 void debug_pretty_print(struct ast *ast);
