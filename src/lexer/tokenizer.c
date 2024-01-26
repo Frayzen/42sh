@@ -1,11 +1,19 @@
 #include "tokenizer.h"
 
+#include <stdlib.h>
+
 #include "env/env.h"
 #include "finder/finder.h"
 #include "tools/token/token.h"
 struct token *next_token(void)
 {
     struct pending *pending = finder();
+    if (!pending)
+    {
+        struct token *ret = calloc(1, sizeof(struct token));
+        ret->type = TOK_ERROR;
+        return ret;
+    }
     struct token *result = init_token(&pending->str);
     if (pending->force_str)
     {

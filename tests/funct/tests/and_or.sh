@@ -19,3 +19,15 @@ echo OK&&echo ok||echo no
 ### Example SCL
 false && echo foo || echo bar
 true || echo foo && echo bar
+
+###with if true
+if echo a && true; then echo ok; else echo ko; fi
+
+###with if false
+if echo a && false; then echo ok; else echo ko; fi
+
+###with if true and negation
+if echo a && ! true; then echo ok; else echo ko; fi
+
+###with if false and negation
+if echo a && ! false; then echo ok; else echo ko; fi

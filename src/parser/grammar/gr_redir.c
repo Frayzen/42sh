@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "lexer/token_saver.h"
+#include "parser/command/expander.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/gr_tools.h"
@@ -33,9 +34,8 @@ enum status gr_redir(struct ast_redir *ast)
 
     token = tok_peek();
     CHECK_GOTO(!IS_WORDABLE(token), error);
-    redir->to = token->str->value;
-    token->str->value = NULL;
-    tok_pop_clean();
+    register_token(&redir->exp, token);
+    tok_pop();
 
     append_redir(ast, redir);
     GR_DBG_RET(OK);

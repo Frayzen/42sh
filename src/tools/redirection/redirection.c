@@ -9,6 +9,7 @@
 
 #include "env/env.h"
 #include "exit/error_handler.h"
+#include "parser/command/expander.h"
 #include "tools/str/string.h"
 
 #define NO_FD -1
@@ -18,14 +19,17 @@
 // If we have 2<&1, it duplicates FD[1]
 int get_fd(struct redirection *redir)
 {
+    char *to = NULL;
+    assert(expand_next(redir->exp.head, &to) == NULL);
     int fd = NO_FD;
-    DBG_PIPE("[REDIR] '%s' has been ", redir->to);
+    DBG_PIPE("[REDIR] '%s' has been ", to);
     int type = redir->type;
-    if (type & RT_MASK_DUP && is_number(redir->to))
+    if (type & RT_MASK_DUP && is_number(to))
     {
-        fd = atoi(redir->to);
+        fd = atoi(to);
         int ret = dup(FDS[fd]);
         DBG_PIPE("duplicated as %d and from %d\n", ret, FDS[fd]);
+        free(to);
         return ret;
     }
     else
@@ -44,8 +48,9 @@ int get_fd(struct redirection *redir)
             else
                 flag |= O_TRUNC;
         }
-        fd = open(redir->to, flag, 0644);
+        fd = open(to, flag, 0644);
         DBG_PIPE("in %d\n", fd);
+        free(to);
         return fd;
     }
 }
@@ -159,7 +164,7 @@ void destroy_redir(struct ast_redir *ast)
 {
     for (int i = 0; i < ast->redir_nb; i++)
     {
-        free(ast->redirs[i]->to);
+        clean_expansion(&ast->redirs[i]->exp);
         free(ast->redirs[i]);
     }
     free(ast->redirs);

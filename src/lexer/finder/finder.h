@@ -44,7 +44,7 @@ REDIR_OPS_CASES:                                                               \
 
 struct pending
 {
-    struct exp_str str;
+    struct lex_str str;
     bool backslashed;
     bool blank;
     bool expanding;
@@ -58,7 +58,7 @@ struct pending
 /***
  * finder: gets character by character and return the string token
  * @return a string struct
- * @see struct exp_str
+ * @see struct lex_str
  */
 struct pending *finder(void);
 

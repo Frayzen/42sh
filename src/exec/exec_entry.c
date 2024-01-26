@@ -16,6 +16,7 @@ int exec_entry(struct ast *ast)
         break;
     default:
         exit_gracefully(GRAMMAR_ERROR_ENTRY);
+        break;
     }
-    return -1; // shouldn't happpend
+    return 2;
 }

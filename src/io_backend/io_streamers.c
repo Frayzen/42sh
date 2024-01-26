@@ -10,17 +10,15 @@
 
 #include "env/env.h"
 #include "exit/error_handler.h"
-#include "io_backend/backend_saver.h"
 
-#define IO_FILE (set_fd(NULL))
+static FILE *streamer = NULL;
 
-FILE *set_fd(FILE *new_file)
+FILE *swap_fd(FILE *new_file)
 {
-    static FILE *file = NULL;
     if (new_file == NULL)
-        return file;
-    file = new_file;
-    return file;
+        return streamer;
+    streamer = new_file;
+    return streamer;
 }
 
 bool is_executable(char *path_to_file)
@@ -35,12 +33,8 @@ bool is_executable(char *path_to_file)
     return true;
 }
 
-void io_streamer_file(char *path_to_file)
+FILE *load_file(char *path_to_file)
 {
-    if (access(path_to_file, F_OK))
-        exit_gracefully(INVALID_FILE_PATH);
-    if (access(path_to_file, R_OK))
-        exit_gracefully(NO_EXEC_PERM);
     FILE *file = fopen(path_to_file, "r");
     if (!file)
     {
@@ -52,7 +46,16 @@ void io_streamer_file(char *path_to_file)
         exit_gracefully(NO_EXEC_PERM);
     }
     fseek(file, 0, SEEK_SET);
-    set_fd(file);
+    return swap_fd(file);
+}
+
+void io_streamer_file(char *path_to_file)
+{
+    if (access(path_to_file, F_OK))
+        exit_gracefully(INVALID_FILE_PATH);
+    if (access(path_to_file, R_OK))
+        exit_gracefully(NO_EXEC_PERM);
+    load_file(path_to_file);
 }
 
 void io_streamer_string(int argc, char **argv)
@@ -63,7 +66,7 @@ void io_streamer_string(int argc, char **argv)
         {
             char *buf = argv[i + 1];
             FILE *file = fmemopen(buf, strlen(buf), "r");
-            set_fd(file);
+            streamer = file;
         }
     }
     return;
@@ -71,7 +74,8 @@ void io_streamer_string(int argc, char **argv)
 
 void io_streamer_stdin(void)
 {
-    set_fd(stdin);
+    get_env_flag()->is_interactive = true;
+    streamer = stdin;
 }
 
 void main_to_stream(int argc, char **argv)
@@ -85,6 +89,8 @@ void main_to_stream(int argc, char **argv)
             get_env_flag()->verbose = true;
         else if (!strcmp(argv[i], "--debug-pipe") || !strcmp(argv[i], "-d"))
             get_env_flag()->debug_pipe = true;
+        else if (!strcmp(argv[i], "--debug-env") || !strcmp(argv[i], "-e"))
+            get_env_flag()->debug_env = true;
         else if (!strcmp(argv[i], "--debug-grammar") || !strcmp(argv[i], "-g"))
             get_env_flag()->debug_grammar = true;
         else
@@ -96,24 +102,21 @@ void main_to_stream(int argc, char **argv)
     if (argc == 0)
         io_streamer_stdin();
     else if (argc == 1)
+    {
+        if (!strcmp(*argv, "-c"))
+            exit_gracefully(ARG_ERROR);
         io_streamer_file(*argv);
+    }
     else if (argc == 2)
         io_streamer_string(argc, argv);
     else
         exit_gracefully(ARG_ERROR);
 }
 
-void stream_input(size_t size)
+char stream_next(void)
 {
-    if (IO_FILE == NULL)
-    {
-        io_push_chars("\0", 1);
-        return;
-    }
-    char *buffer = calloc(size, sizeof(char));
-    if (!fgets(buffer, size, IO_FILE))
-        io_push_chars("\0", 1);
-    else
-        io_push(buffer);
-    free(buffer);
+    char ret = fgetc(streamer);
+    if (ret == -1)
+        ret = '\0';
+    return ret;
 }
