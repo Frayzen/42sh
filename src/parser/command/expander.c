@@ -71,22 +71,24 @@ char *stringify_expandable(struct expandable *exp, char ***last_exp)
     if (exp->type == STR_LITTERAL)
         return strdup(exp->content);
     char *ret = retrieve_var(exp->content);
-
-    printf("ret = %s\n", ret);
+    // printf("ret = %s\n", ret) ;
     if (!ret)
         ret = "";
     // if we have an unquted var we may need to
     // split the string by spaces
     else if (exp->type == UNQUOTED_VAR)
     {
+        // printf("enter unquted\n");
         first = strtok(ret, " ");
+        // printf("first = %s\n", first);
         size_t size = 1;
         char *cur = strtok(NULL, " ");
+        // printf("cur = %s\n", cur);
         if (!cur) // if there is only one word return it
             goto finish;
         first = strdup(first);
         char **temp = *last_exp;
-        while (cur != NULL) // save the rest of the qords in last_exp
+        while (cur != NULL) // save the rest of the words in last_exp
         {
             temp = realloc(temp, sizeof(char *) * (size + 1));
             temp[size - 1] = strdup(cur);
@@ -104,16 +106,20 @@ finish:
 struct expandable *expand_next(struct expandable *exp, char **str)
 {
     static char **last_exp = NULL;
+
+    char *build = NULL;
     // Return the last_exp elements at each call till its empty
     if (last_exp)
     {
         static int id = 0;
         *str = last_exp[id++];
-        if (*str)
+        if (last_exp[id])
         {
+
             // dont go to next exp if there are still strings in last_exp
-            return last_exp[id] ? exp : exp->next;
+            return exp;
         }
+        build = *str;
         // Free once empty
         id = 0;
         free(last_exp);
@@ -122,7 +128,6 @@ struct expandable *expand_next(struct expandable *exp, char **str)
     // last_exp is empty here
     if (!exp)
         return 0;
-    char *build = NULL;
     int bsize = 0;
     VERBOSE("[EXPAND] ");
     while (true)
