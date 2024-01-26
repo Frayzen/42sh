@@ -35,6 +35,8 @@ bool is_executable(char *path_to_file)
 
 void io_streamer_file(char *path_to_file)
 {
+    if (!strcmp(path_to_file, "-c"))
+        exit_gracefully(ARG_ERROR);
     if (access(path_to_file, F_OK))
         exit_gracefully(INVALID_FILE_PATH);
     if (access(path_to_file, R_OK))
