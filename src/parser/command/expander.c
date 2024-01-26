@@ -65,102 +65,128 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
 // EXPANSION
 //
 
-char *stringify_expandable(struct expandable *exp, char ***last_exp)
+// return the new current
+static struct expandable *expand_unquoted_var(struct expandable *cur)
 {
-    char *first = NULL;
-    if (exp->type == STR_LITTERAL)
-        return strdup(exp->content);
-    char *ret = retrieve_var(exp->content);
-
-    printf("ret = %s\n", ret);
-    if (!ret)
-        ret = "";
-    // if we have an unquted var we may need to
-    // split the string by spaces
-    else if (exp->type == UNQUOTED_VAR)
+    assert(cur->type == UNQUOTED_VAR);
+    char *val = retrieve_var(cur->content);
+    char *elem = strtok(val, " ");
+    struct expandable *last = NULL;
+    struct expandable *first = NULL;
+    if (!elem)
     {
-        first = strtok(ret, " ");
-        size_t size = 1;
-        char *cur = strtok(NULL, " ");
-        if (!cur) // if there is only one word return it
-            goto finish;
-        first = strdup(first);
-        char **temp = *last_exp;
-        while (cur != NULL) // save the rest of the qords in last_exp
-        {
-            temp = realloc(temp, sizeof(char *) * (size + 1));
-            temp[size - 1] = strdup(cur);
-            size++;
-            cur = strtok(NULL, " "); // NULL terminate
-        }
-        temp[size - 1] = NULL;
-        *last_exp = temp;
-        return first;
+        last = expandable_init(val, STR_LITTERAL, cur->link_next);
+        last->next = cur->next;
+        return last;
     }
-finish:
-    return strdup(ret);
+    while (elem)
+    {
+        struct expandable *new_string = malloc(sizeof(struct expandable));
+        new_string->type = STR_LITTERAL;
+        new_string->content = strdup(elem);
+        new_string->link_next = false;
+        if (last)
+            last->next = new_string;
+        else
+            first = new_string;
+        last = new_string;
+        elem = strtok(NULL, " ");
+    }
+    last->link_next = cur->link_next;
+    last->next = cur->next;
+    free(val);
+    return first;
 }
 
-struct expandable *expand_next(struct expandable *exp, char **str)
+static struct expandable *expand_quoted_var(struct expandable *cur)
 {
-    static char **last_exp = NULL;
-    // Return the last_exp elements at each call till its empty
-    if (last_exp)
+    assert(cur->type == QUOTED_VAR);
+    struct expandable *new_string = malloc(sizeof(struct expandable));
+    new_string->type = STR_LITTERAL;
+    new_string->link_next = cur->link_next;
+    new_string->next = cur->next;
+    new_string->content = retrieve_var(cur->content);
+    return new_string;
+}
+
+static struct expandable *expand_str_litt(struct expandable *cur)
+{
+    assert(cur->type == STR_LITTERAL);
+    struct expandable *new_string = malloc(sizeof(struct expandable));
+    new_string->type = STR_LITTERAL;
+    new_string->link_next = cur->link_next;
+    new_string->next = cur->next;
+    new_string->content = strdup(cur->content);
+    return new_string;
+}
+
+struct expansion *create_str_list(struct expansion *old)
+{
+    struct expansion *exp = malloc(sizeof(struct expansion));
+    memcpy(exp, old, sizeof(struct expansion));
+    struct expandable **last = &exp->head;
+    struct expandable *cur = exp->head;
+    while (cur)
     {
-        static int id = 0;
-        *str = last_exp[id++];
-        if (*str)
+        switch (cur->type)
         {
-            // dont go to next exp if there are still strings in last_exp
-            return last_exp[id] ? exp : exp->next;
+            case STR_LITTERAL:
+                *last = expand_str_litt(cur);
+                break;
+            case QUOTED_VAR:
+                *last = expand_quoted_var(cur);
+                break;
+            case UNQUOTED_VAR:
+                *last = expand_unquoted_var(cur);
+                break;
         }
-        // Free once empty
-        id = 0;
-        free(last_exp);
-        last_exp = NULL;
+        while ((*last)->next != cur->next)
+            last = &(*last)->next;
+        last = &(*last)->next;
+        cur = cur->next;
     }
-    // last_exp is empty here
-    if (!exp)
-        return 0;
-    char *build = NULL;
-    int bsize = 0;
-    VERBOSE("[EXPAND] ");
-    while (true)
+    // Recompute the size
+    exp->size = 0;
+    cur = exp->head;
+    while (cur)
     {
-        VERBOSE("%s%s ", exp->type == STR_LITTERAL ? "" : "$", exp->content);
-        // Append the stringify of the current expandable and
-        // fill last_exp with pending chars
-        char *str_exp = stringify_expandable(exp, &last_exp);
-        int i = 0;
-        while (str_exp[i])
-        {
-            build = realloc(build, sizeof(char) * ++bsize);
-            build[bsize - 1] = str_exp[i++];
-        }
-        free(str_exp);
-        if (!exp->link_next || !exp->next)
-            break;
-        exp = exp->next;
+        exp->size++;
+        cur = cur->next;
     }
-    build = realloc(build, sizeof(char) * ++bsize);
-    build[bsize - 1] = '\0';
-    *str = build;
-    VERBOSE("TO '%s'\n", build);
-    return last_exp ? exp : exp->next;
+    return exp;
 }
 
 char **expand(struct expansion *expansion)
 {
-    struct expandable *exp = expansion->head;
-    char **argv = NULL;
-    char *next = NULL;
+    struct expansion *exp = create_str_list(expansion);
+    struct expandable *e = exp->head;
     int argc = 0;
-    do
+    char **argv = NULL;
+    // for all arg
+    while (e)
     {
         argv = realloc(argv, sizeof(char *) * ++argc);
-        exp = expand_next(exp, &next);
-        argv[argc - 1] = next;
-    } while (exp);
+        char *cur = calloc(1, sizeof(char));
+        size_t size = 0;
+        bool link_next;
+        // for all str in the current arg
+        DBG_VAR("ARG[%d] ", argc - 1);
+        do
+        {
+            link_next = e->link_next;
+            DBG_VAR("%s ", e->content);
+            if (link_next)
+                printf(" -> ");
+            size += strlen(e->content);
+            cur = realloc(cur, sizeof(char) * (size + 1)); 
+            strcat(cur, e->content);
+            e = e->next;
+        } while (e && link_next);
+        DBG_VAR("\n");
+        argv[argc - 1] = cur;
+    }
+    clean_expansion(exp);
+    free(exp);
     argv = realloc(argv, sizeof(char *) * ++argc);
     argv[argc - 1] = NULL;
     return argv;

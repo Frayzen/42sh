@@ -11,9 +11,9 @@
 char *assign_var(char *name, char *value);
 
 /*
- * retrieve a value from the env variables
+ * retrieve a value from the env variables and allocate it
  * @param name the name of the variable
- * returns the string value of the variable otherwise null
+ * returns the string value allocated
  */
 char *retrieve_var(char *name);
 

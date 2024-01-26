@@ -78,7 +78,6 @@ bool set_option_echo(const char *content, bool *interpret_bslash,
 
 void builtin_echo(char **argv)
 {
-    printf("calling echo=====\n");
     int i = 1;
     bool print_nline = true;
     bool interpret_bslash = false;

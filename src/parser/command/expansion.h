@@ -19,6 +19,7 @@ struct expansion
     size_t size;
     struct expandable *head;
     struct expandable *tail;
+    char **remainings;
 };
 
 /***

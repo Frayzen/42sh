@@ -1,3 +1,4 @@
+#include "parser/command/expander.h"
 #define _POSIX_C_SOURCE 200809L
 #include "assignment.h"
 
@@ -69,11 +70,10 @@ void apply_assignments(struct assignment_list *asslist)
     {
         // TODO find a better way to do it
         struct assignment *ass = asslist->ass_list[i];
-        char *val = NULL;
-        assert(expand_next(ass->exp.head, &val) == NULL);
-        assert(val != NULL);
-        ass->prev = assign_var(ass->name, val);
-        free(val);
+        char **val = expand(&ass->exp);
+        assert(val && val[0] && !val[1]);
+        ass->prev = assign_var(ass->name, val[0]);
+        destroy_expanded(val);
     }
 }
 
