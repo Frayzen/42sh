@@ -20,6 +20,7 @@ enum ast_type
     AST_UNTIL,
     AST_FOR,
     AST_AND_OR,
+    AST_FUNCT,
     // NOT USED
     AST_ASS
 };

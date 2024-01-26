@@ -34,7 +34,9 @@ case '|'
 #define CONTROL_OP_CASES                                                       \
 AND_OR_CASES:                                                                  \
 case ';':                                                                      \
-case '\n'
+case '\n':                                                                    \
+case '(':                                                                     \
+case ')'
 /* TODO include ( and ) */
 
 #define OPERATORS_CASES                                                        \

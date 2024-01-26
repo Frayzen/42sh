@@ -36,7 +36,10 @@ enum status gr_simple_command(struct ast_list *list)
     struct token *tok_word = tok_peek();
     if (!IS_COMMAND(tok_word) && nb_prefix == 0)
         goto error;
-    // WORLD
+    // WORD
+    struct token *tok2 = tok_peek2();
+    if (tok2->type == PRTH_OPEN)
+        goto error;
     register_token(&cmd->args_expansion, tok_word);
     tok_pop();
     // {element}

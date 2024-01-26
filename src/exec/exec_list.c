@@ -21,6 +21,9 @@ int exec_list(struct ast_list *ast)
         case AST_AND_OR:
             ret = exec_and_or(AST_AND_OR(child));
             break;
+        case AST_FUNCT:
+            ret = exec_store_funct(AST_FUNCT(child));
+            break;
         default:
             exit_gracefully(LIST_NOT_FOUND);
             return 2;

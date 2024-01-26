@@ -68,7 +68,7 @@ void funct_dict_free(void)
     if (FUNCT_DICT)
         free(FUNCT_DICT->entries);
 }
-
+/*
 void funct_dict_print(void)
 {
     if (!FUNCT_DICT->nb_entries)
@@ -94,3 +94,4 @@ void funct_dict_print(void)
     }
     printf("┗━━━━━━━━━━━━━┛\n");
 }
+*/

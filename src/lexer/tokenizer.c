@@ -26,3 +26,4 @@ struct token *next_token(void)
         print_token(result);
     return result;
 }
+
