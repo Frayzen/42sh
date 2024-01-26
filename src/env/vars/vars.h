@@ -1,6 +1,5 @@
 #ifndef VARS_H
 #define VARS_H
-#define _POSIX_C_SOURCE 200809L
 
 /*
  * set the variable named name to the value

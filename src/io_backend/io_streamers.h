@@ -3,7 +3,6 @@
 
 #include <stddef.h>
 
-#define _POSIX_C_SOURCE 200809L
 
 /***
  * According to the arguments given to main, calls the right
