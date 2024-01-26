@@ -25,6 +25,7 @@
 void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
                            bool is_last_child, bool *closed_nod);
 
+// Aligns the nod according to its depth
 void align(int depth, bool is_last_child, bool *closed_nod)
 {
     if (closed_nod)
@@ -35,9 +36,10 @@ void align(int depth, bool is_last_child, bool *closed_nod)
         printf("%s", is_last_child ? "╚══" : "╠══");
 }
 
+// Prints the nod and child of the ast of type AST_LIST
 void print_ast_list(struct ast_list *ast, int depth, bool *closed_nod)
 {
-    printf(BLUE"LST\n"RESET);
+    printf(BLUE "LST\n" RESET);
     struct ast **children = get_children(AST(ast));
     if (!children)
         return;
@@ -51,9 +53,10 @@ void print_ast_list(struct ast_list *ast, int depth, bool *closed_nod)
     free(children);
 }
 
+// Prints the nod and child of the ast of type AST_PIPE
 void print_ast_pipe(struct ast_pipe *ast, int depth, bool *closed_nod)
 {
-    printf(YELLOW"PIPE\n"RESET);
+    printf(YELLOW "PIPE\n" RESET);
     struct ast **children = get_children(AST(ast));
     if (!children)
         return;
@@ -70,9 +73,10 @@ void print_ast_pipe(struct ast_pipe *ast, int depth, bool *closed_nod)
     free(children);
 }
 
+// Prints the nod and child of the ast of type AST_IF
 void print_ast_if(struct ast_if *ast, int depth, bool *closed_nod)
 {
-    printf(GREEN"IF\n"RESET);
+    printf(GREEN "IF\n" RESET);
     pretty_print_ast_help(AST(&ast->cond), AST_LIST, depth + 1, false,
                           closed_nod);
     pretty_print_ast_help(AST(&ast->then), AST_LIST, depth + 1, !ast->fallback,
@@ -84,18 +88,20 @@ void print_ast_if(struct ast_if *ast, int depth, bool *closed_nod)
     }
 }
 
+// Prints the nod and child of the ast of type AST_LOOP
 void print_ast_loop(struct ast_loop *ast, int depth, bool *closed_nod)
 {
-    printf(PURPLE"LOOP\n"RESET);
+    printf(PURPLE "LOOP\n" RESET);
     pretty_print_ast_help(AST(&ast->cond), AST_LIST, depth + 1, false,
                           closed_nod);
     pretty_print_ast_help(AST(&ast->exec), AST_LIST, depth + 1, true,
                           closed_nod);
 }
 
+// Prints the nod and child of the ast of type AST_CMD
 void print_ast_cmd(struct ast_cmd *ast, int depth, bool *closed_nod)
 {
-    printf(RED"CMD\n"RESET);
+    printf(RED "CMD\n" RESET);
     depth++;
     if (!ast->args_expansion.size)
         return;
@@ -110,17 +116,19 @@ void print_ast_cmd(struct ast_cmd *ast, int depth, bool *closed_nod)
     return;
 }
 
+// Prints the nod and child of the ast of type AST_SH
 void print_ast_sh(struct ast_sh *ast, int depth, bool *closed_nod)
 {
-    printf(RED"SH\n"RED);
+    printf(RED "SH\n" RED);
     align(depth, true, closed_nod);
     pretty_print_ast_help(ast->sh_cmd, AST(ast->sh_cmd)->type, depth + 1, true,
                           closed_nod);
 }
 
+// Prints the nod and child of the ast of type AST_FOR
 void print_ast_for(struct ast_for *ast, int depth, bool *closed_nod)
 {
-    printf(CYAN"FOR\n"RESET);
+    printf(CYAN "FOR\n" RESET);
     depth++;
     if (!ast->item_list)
     {
@@ -132,9 +140,10 @@ void print_ast_for(struct ast_for *ast, int depth, bool *closed_nod)
                           closed_nod);
 }
 
+// Prints the nod and child of the ast of type AST_AND_OR
 void print_ast_and_or(struct ast_and_or *ast, int depth, bool *closed_nod)
 {
-    printf(YELLOW"AND_OR\n"RESET);
+    printf(YELLOW "AND_OR\n" RESET);
     if (ast->types)
     {
         align(depth, false, closed_nod);
@@ -151,6 +160,8 @@ void print_ast_and_or(struct ast_and_or *ast, int depth, bool *closed_nod)
                           closed_nod);
 }
 
+// Returns the max depth if the given depth is <= or replace max depth with the
+// new max_depth and returns the old max depth
 bool get_max_depth(int depth)
 {
     static int max_depth = 0;
@@ -160,6 +171,7 @@ bool get_max_depth(int depth)
     return true;
 }
 
+// Prints the ast according to its type
 void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
                            bool is_last_child, bool *closed_nod)
 {

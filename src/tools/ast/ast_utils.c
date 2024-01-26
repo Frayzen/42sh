@@ -3,8 +3,8 @@
 #include <stdlib.h>
 
 #include "parser/tools/gr_utils.h"
-#include "tools/ast/ast.h"
 #include "pretty_print/pretty_print.h"
+#include "tools/ast/ast.h"
 
 #define _POSIX_C_SOURCE 200809L
 
