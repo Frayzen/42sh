@@ -1,7 +1,6 @@
 lib_LIBRARIES = libtools.a
 
 libtools_a_SOURCES = \
-	ring_buffer/ring_buffer.c ring_buffer/ring_buffer.h\
 	redirection/redirection.h \
 	redirection/redirection.c \
 	str/string.c str/string.h\
