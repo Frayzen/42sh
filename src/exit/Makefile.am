@@ -5,4 +5,4 @@ libexit_a_SOURCES = \
 					error_handler.c\
 					clean.c
 libexit_a_CPPFLAGS = -I$(top_srcdir)/src
-libexit_a_CFLAGS = -std=c99 -Werror -Wall -Wextra -Wvla -pedantic
+libexit_a_CFLAGS = $(CFLAGS_42SH)

@@ -6,10 +6,10 @@
 #include "str/string.h"
 #include "tools/redirection/redirection.h"
 
-struct ast *swap_ast_root(struct ast *new_ast)
+struct ast **swap_ast_root(struct ast **new_ast)
 {
-    static struct ast *ast_root = NULL;
-    struct ast *old_root = ast_root;
+    static struct ast **ast_root = NULL;
+    struct ast **old_root = ast_root;
     if (new_ast)
     {
         old_root = ast_root;
@@ -17,15 +17,7 @@ struct ast *swap_ast_root(struct ast *new_ast)
     }
     return old_root;
 }
-/*
-struct ast **set_ast_root(struct ast **ast)
-{
-    static struct ast **ast_root = NULL;
-    if (ast)
-        ast_root = ast;
-    return ast_root;
-}
-*/
+
 void *init_ast(enum ast_type type)
 {
     static const size_t ast_size[] = {

@@ -4,15 +4,12 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "env/context.h"
 #include "env/env.h"
 #include "execs.h"
 #include "exit/error_handler.h"
-#include "io_backend/backend_saver.h"
 #include "io_backend/io_streamers.h"
-#include "lexer/token_saver.h"
 #include "parser/grammar/rules.h"
-#include "tools/ast/ast_utils.h"
-#include "tools/ring_buffer/ring_buffer.h"
 
 #define PATH_MAX 4096
 
@@ -80,28 +77,16 @@ int builtin_dot(char **argv)
         dprintf(STDERR, "error path file\n");
         return 1;
     }
-    struct ringbuffer *new_backend_rb = rb_create(RB_CHAR, BACKEND_BUFFER_SIZE);
-    struct ringbuffer *new_token_rb = rb_create(RB_TOKEN, 1);
-    struct ringbuffer *old_backend_rb = swap_backend_buffer(new_backend_rb);
-    struct ringbuffer *old_token_rb = swap_token_buffer(new_token_rb);
-    FILE *old_fd = load_file(path);
+    struct context *old = new_context();
     io_streamer_file(path);
-    struct ast *new_ast = NULL;
-    struct ast *old_ast = swap_ast_root(new_ast);
     int ret = 0;
-    if (gr_input(&new_ast) == ERROR)
+    if (gr_input(AST_ROOT) == ERROR)
     {
-        new_ast = NULL;
+        *AST_ROOT = NULL;
         print_error(GRAMMAR_ERROR_ENTRY);
         ret = 2;
     }
-    ret = exec_entry(new_ast);
-    destroy_ast(new_ast);
-    swap_fd(old_fd);
-    swap_ast_root(old_ast);
-    swap_token_buffer(old_token_rb);
-    swap_backend_buffer(old_backend_rb);
-    rb_destroy(new_backend_rb);
-    rb_destroy(new_token_rb);
+    ret = exec_entry(*AST_ROOT);
+    load_context(old);
     return ret;
 }

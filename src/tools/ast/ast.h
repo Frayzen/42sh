@@ -128,6 +128,6 @@ void destroy_ast(void *ast);
  * @param new_ast, the ast to swap
  * @return the old ast
  */
-struct ast *swap_ast_root(struct ast *new_ast);
+struct ast **swap_ast_root(struct ast **new_ast);
 
 #endif // !AST_H

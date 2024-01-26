@@ -5,6 +5,6 @@
 
 void builtin_exit(char **argv)
 {
-    clean(AST_ROOT);
+    clean(*AST_ROOT);
     exit(atoi(argv[1]));
 }

@@ -14,7 +14,7 @@ void exit_gracefully(enum error_type type)
     print_error(type);
     if (get_env_flag()->is_interactive)
         return;
-    struct ast *root = AST_ROOT;
+    struct ast *root = *AST_ROOT;
     if (root)
         clean(root);
     switch (type)
