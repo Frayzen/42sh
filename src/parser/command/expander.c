@@ -31,9 +31,10 @@ int register_expandable(struct expansion *exp, struct lex_str *exp_str,
     }
     else
     {
-        while (end < exp_str->size && exp_str->expand[end] == type
-               && exp_str->value[end] != '$')
+        do
             end++;
+        while (end < exp_str->size && exp_str->expand[end] == type
+               && exp_str->value[end] != '$');
     }
     size_t size = end - begin;
     bool is_last = exp_str->size == end;
@@ -65,11 +66,16 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
 // EXPANSION
 //
 
-// return the new current
+// return the new current or NULL if the expansion is empty
 static struct expandable *expand_unquoted_var(struct expandable *cur)
 {
     assert(cur->type == UNQUOTED_VAR);
     char *val = retrieve_var(cur->content);
+    if (val[0] == '\0')
+    {
+        free(val);
+        return NULL;
+    }
     char *elem = strtok(val, " ");
     struct expandable *last = NULL;
     struct expandable *first = NULL;
@@ -98,14 +104,21 @@ static struct expandable *expand_unquoted_var(struct expandable *cur)
     return first;
 }
 
+// return the new current or NULL if the expansion is empty
 static struct expandable *expand_quoted_var(struct expandable *cur)
 {
     assert(cur->type == QUOTED_VAR);
+    char *content = retrieve_var(cur->content);
+    if (content[0] == '\0')
+    {
+        free(content);
+        return NULL;
+    }
     struct expandable *new_string = malloc(sizeof(struct expandable));
     new_string->type = STR_LITTERAL;
     new_string->link_next = cur->link_next;
     new_string->next = cur->next;
-    new_string->content = retrieve_var(cur->content);
+    new_string->content = content;
     return new_string;
 }
 
@@ -130,15 +143,20 @@ struct expansion *create_str_list(struct expansion *old)
     {
         switch (cur->type)
         {
-            case STR_LITTERAL:
-                *last = expand_str_litt(cur);
-                break;
-            case QUOTED_VAR:
-                *last = expand_quoted_var(cur);
-                break;
-            case UNQUOTED_VAR:
-                *last = expand_unquoted_var(cur);
-                break;
+        case STR_LITTERAL:
+            *last = expand_str_litt(cur);
+            break;
+        case QUOTED_VAR:
+            *last = expand_quoted_var(cur);
+            break;
+        case UNQUOTED_VAR:
+            *last = expand_unquoted_var(cur);
+            break;
+        }
+        if (*last == NULL)
+        {
+            cur = cur->next;
+            continue;
         }
         while ((*last)->next != cur->next)
             last = &(*last)->next;
@@ -178,7 +196,7 @@ char **expand(struct expansion *expansion)
             if (link_next)
                 DBG_VAR(" -> ");
             size += strlen(e->content);
-            cur = realloc(cur, sizeof(char) * (size + 1)); 
+            cur = realloc(cur, sizeof(char) * (size + 1));
             strcat(cur, e->content);
             e = e->next;
         } while (e && link_next);

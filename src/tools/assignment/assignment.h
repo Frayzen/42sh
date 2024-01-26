@@ -10,7 +10,6 @@
 #include "parser/command/expander.h"
 #include "parser/command/expansion.h"
 #include "tools/str/string.h"
-
 struct assignment
 {
     char *name;

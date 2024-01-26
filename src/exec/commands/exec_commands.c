@@ -55,7 +55,6 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     char **argv = expand(&ast->args_expansion);
     apply_assignments(&ast->assignment_list);
     *pid = PID_SET;
-
     if (argv[0])
     {
         if (!strcmp(argv[0], "echo"))
@@ -65,6 +64,8 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         }
         else if (!strcmp(argv[0], "exit"))
             builtin_exit(argv);
+        else if (!strcmp(argv[0], "unset"))
+            ret = builtin_unset(argv);
         else if (!strcmp(argv[0], "true"))
             ret = 0;
         else if (!strcmp(argv[0], "false"))

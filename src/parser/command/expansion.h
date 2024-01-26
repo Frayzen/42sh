@@ -54,4 +54,5 @@ void expansion_print(const struct expansion *exp);
  * @param expansion the expansion
  */
 void clean_expansion(struct expansion *list);
+
 #endif /* !EXPANSION_H */

@@ -82,6 +82,9 @@ void revert_assignments(struct assignment_list *asslist)
     for (unsigned int i = 0; i < asslist->size; i++)
     {
         struct assignment *ass = asslist->ass_list[i];
-        assign_var(ass->name, ass->prev);
+        if (ass->prev)
+            assign_var(ass->name, ass->prev);
+        else 
+            unset_var(ass->name); 
     }
 }

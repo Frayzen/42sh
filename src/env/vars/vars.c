@@ -1,5 +1,4 @@
 #define _POSIX_C_SOURCE 200809L
-
 #include "vars.h"
 
 #include <stdio.h>
@@ -8,10 +7,11 @@
 
 #include "env/env.h"
 
+
 char *assign_var(char *name, char *value)
 {
     char *old = getenv(name);
-    DBG_VAR("assign |%s| to |%s|, old = |%s|\n", name, value, old);
+    DBG_VAR("[VAR] assign |%s| to |%s|, old = |%s|\n", name, value, old);
     if (!name || !value)
         return old;
     setenv(name, value, 1);
@@ -29,4 +29,13 @@ char *retrieve_var(char *name)
     value = strdup(value);
     DBG_VAR("|%s|=|%s|\n", name, value);
     return value;
+}
+
+bool unset_var(char *name)
+{
+    bool exist = getenv(name) != NULL;
+    DBG_VAR("[VAR] unset |%s|\n", name);
+    if (unsetenv(name) || !exist)
+        return false;
+    return true;
 }
