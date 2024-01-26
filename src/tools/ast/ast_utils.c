@@ -161,9 +161,7 @@ void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
                            bool is_last_child, bool *closed_nod)
 {
     align(depth, is_last_child, closed_nod);
-    if (!closed_nod)
-        closed_nod = calloc(1, sizeof(bool));
-    else if (get_max_depth(0) && depth)
+    if (get_max_depth(0) && depth)
     {
         closed_nod = realloc(closed_nod, (depth) * sizeof(bool));
         closed_nod[depth - 1] = false;
@@ -209,7 +207,7 @@ void pretty_print_ast(struct ast *ast)
         printf("\nNULL AST\n");
         return;
     }
-    bool *closed_nod = NULL;
+    bool *closed_nod = calloc(1, sizeof(bool));
     pretty_print_ast_help(ast, AST(ast)->type, 0, true, closed_nod);
     free(closed_nod);
 }
