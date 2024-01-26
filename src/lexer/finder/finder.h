@@ -7,8 +7,6 @@
 
 #define IS_BLANK(Pending) ((Pending)->blank)
 
-#define APPEND_CHARS true
-
 #define SPECIAL_PARAMETERS "0123456789@*#?-$!0"
 
 #define SPACE_CASES                                                            \
@@ -34,10 +32,9 @@ case '|'
 #define CONTROL_OP_CASES                                                       \
 AND_OR_CASES:                                                                  \
 case ';':                                                                      \
-case '\n':                                                                    \
-case '(':                                                                     \
-case ')'
-/* TODO include ( and ) */
+case ')':                                                                      \
+case '(':                                                                      \
+case '\n'
 
 #define OPERATORS_CASES                                                        \
 REDIR_OPS_CASES:                                                               \
@@ -50,10 +47,12 @@ struct pending
     bool blank;
     bool expanding;
     bool in_quote;
+    bool error;
     bool force_str;
 };
 
-// In this file, understand 'current character' as the one returned by io_peek
+// In this file, understand 'current character' as the one returned by
+// io_peek
 
 /***
  * finder: gets character by character and return the string token

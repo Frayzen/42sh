@@ -1,7 +1,7 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
-#include <bits/types/FILE.h>
+#include <stdio.h>
 struct context
 {
     FILE *saved_file;

@@ -107,6 +107,7 @@ struct ast_and_or
 #define AST_FUNCT(Base) ((struct ast_funct *)(Base))
 struct ast_funct
 {
+    struct ast base;
     struct token *name;
     struct ast *body;
 };

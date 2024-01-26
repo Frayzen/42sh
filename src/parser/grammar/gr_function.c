@@ -10,7 +10,7 @@ funcdec = WORD '(' ')' '{\n}' shell_command
 enum status gr_function(struct ast_list *ast)
 {
     GR_DBG_START(Function);
-    struct ast_funct *ast_funct = AST_FUNCT(ast);
+    struct ast_funct *ast_funct = init_ast(AST_FUNCT);
     struct token *token = tok_peek();
     CHECK_GOTO(!IS_WORDABLE(token), error);
     ast_funct->name = token;
