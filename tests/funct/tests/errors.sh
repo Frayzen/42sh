@@ -23,3 +23,6 @@ if ''; then echo ok; fi
 
 ###Unterminated simple quotes
 echo 'Hello Wor
+
+###Unexpected EOF Var
+echo ${a

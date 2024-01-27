@@ -14,6 +14,7 @@
 
 int main(int argc, char *argv[])
 {
+    srand(42); // Initialization, should only be called once.
     main_to_stream(argc, argv);
     setup_debug_fds();
     struct ast *ast = NULL;
