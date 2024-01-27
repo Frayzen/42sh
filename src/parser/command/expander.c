@@ -24,7 +24,7 @@ int register_expandable(struct expansion *exp, struct lex_str *exp_str,
 {
     size_t end = begin;
     enum expand_type type = exp_str->expand[begin];
-    if (type == STR_LITTERAL)
+    if (IS_STR_TYPE(type))
     {
         while (end < exp_str->size && exp_str->expand[end] == type)
             end++;
@@ -55,7 +55,7 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
     while (i < str->size)
     {
         // Skip the dollar if needed
-        if (str->value[i] == '$' && str->expand[i] != STR_LITTERAL)
+        if (str->value[i] == '$' && !IS_STR_TYPE(str->expand[i]))
             i++;
         i = register_expandable(exp, str, i);
     }
@@ -87,10 +87,8 @@ static struct expandable *expand_unquoted_var(struct expandable *cur)
     }
     while (elem)
     {
-        struct expandable *new_string = malloc(sizeof(struct expandable));
-        new_string->type = STR_LITTERAL;
-        new_string->content = strdup(elem);
-        new_string->link_next = false;
+        struct expandable *new_string =
+            expandable_init(strdup(elem), STR_LITTERAL, false);
         if (last)
             last->next = new_string;
         else
@@ -114,50 +112,45 @@ static struct expandable *expand_quoted_var(struct expandable *cur)
         free(content);
         return NULL;
     }
-    struct expandable *new_string = malloc(sizeof(struct expandable));
-    new_string->type = STR_LITTERAL;
-    new_string->link_next = cur->link_next;
+    struct expandable *new_string =
+        expandable_init(content, STR_LITTERAL, cur->link_next);
     new_string->next = cur->next;
-    new_string->content = content;
     return new_string;
 }
 
-static struct expandable *expand_str_litt(struct expandable *cur)
+static struct expandable *expand_str(struct expandable *cur)
 {
-    assert(cur->type == STR_LITTERAL);
-    struct expandable *new_string = malloc(sizeof(struct expandable));
-    new_string->type = STR_LITTERAL;
-    new_string->link_next = cur->link_next;
+    assert(IS_STR_TYPE(cur->type));
+    struct expandable *new_string =
+        expandable_init(strdup(cur->content), STR_LITTERAL, cur->link_next);
     new_string->next = cur->next;
-    new_string->content = strdup(cur->content);
     return new_string;
 }
 
 struct expansion *create_str_list(struct expansion *old)
 {
-    struct expansion *exp = malloc(sizeof(struct expansion));
-    memcpy(exp, old, sizeof(struct expansion));
+    struct expansion *exp = calloc(1, sizeof(struct expansion));
     struct expandable *last = NULL;
     struct expandable *ret = NULL;
-    struct expandable *cur = exp->head;
-    exp->size = 0;
+    struct expandable *cur = old->head;
     while (cur)
     {
         switch (cur->type)
         {
-        case STR_LITTERAL:
-            ret = expand_str_litt(cur);
-            break;
         case QUOTED_VAR:
             ret = expand_quoted_var(cur);
             break;
         case UNQUOTED_VAR:
             ret = expand_unquoted_var(cur);
             break;
+        default:
+            ret = expand_str(cur);
+            break;
         }
         if (ret == NULL)
         {
-            last->link_next = last->link_next && cur->link_next;
+            if (last)
+                last->link_next = last->link_next && cur->link_next;
             cur = cur->next;
             continue;
         }

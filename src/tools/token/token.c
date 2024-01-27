@@ -73,7 +73,7 @@ char *to_upper(const char *type)
     return str;
 }
 
-#define UNDER_EXPAND_CHAR(Type) ((Type) != STR_LITTERAL ? '^' : ' ')
+#define UNDER_EXPAND_CHAR(Type) (IS_VAR_TYPE(Type) ? '^' : ' ')
 void print_token(struct token *token)
 {
     if (!token)

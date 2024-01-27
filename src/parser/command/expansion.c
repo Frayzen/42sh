@@ -18,6 +18,7 @@ void expansion_print(const struct expansion *exp)
         [UNQUOTED_VAR] = "UNQOTD_VAR",
         [QUOTED_VAR] = "QUOTED_VAR",
         [STR_LITTERAL] = "STR_LITTRL",
+        [QUOTED_STR] = "QUOTED_STR",
     };
     struct expandable *e = exp->head;
     while (e)

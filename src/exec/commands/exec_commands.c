@@ -1,9 +1,8 @@
-#include "env/vars/vars.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
 #include <stdbool.h>
-#include <stdio.h>
+#include "env/vars/vars.h"
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>

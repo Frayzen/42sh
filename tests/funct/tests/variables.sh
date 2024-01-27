@@ -10,6 +10,10 @@ a=3
 b=4
 echo $a $b
 
+### Assignment quotes
+'val'=ok; echo $val
+val='ok'; echo $val
+
 ###Shell variable
 
 a=3
