@@ -63,7 +63,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             ret = 0;
         }
         else if (!strcmp(argv[0], "cd"))
-            builtin_cd(argv);
+            ret = builtin_cd(argv);
         else if (!strcmp(argv[0], "exit"))
             builtin_exit(argv);
         else if (!strcmp(argv[0], "true"))

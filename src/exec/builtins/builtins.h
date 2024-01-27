@@ -17,6 +17,6 @@ void builtin_exit(char **argv);
  * Execute the cd builtin given the arguments
  * @param argv the agument list, null terminated
  */
-void builtin_cd(char **argv);
+int builtin_cd(char **argv);
 
 #endif /* !BUILTINS_H */

@@ -1,3 +1,18 @@
+###Check the pwd
+mkdir ok toto tata
+pwd
+cd ok
+pwd
+mkdir toto
+cd toto
+pwd
+cd ../../toto
+pwd
+cd ../tata
+mkdir /tmp/thisisatest
+cd /tmp/thisisatest
+pwd
+
 ###Default cd
 mkdir folder
 echo $OLDPWD
