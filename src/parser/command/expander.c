@@ -137,38 +137,37 @@ struct expansion *create_str_list(struct expansion *old)
 {
     struct expansion *exp = malloc(sizeof(struct expansion));
     memcpy(exp, old, sizeof(struct expansion));
-    struct expandable **last = &exp->head;
+    struct expandable *last = NULL;
+    struct expandable *ret = NULL;
     struct expandable *cur = exp->head;
+    exp->size = 0;
     while (cur)
     {
         switch (cur->type)
         {
         case STR_LITTERAL:
-            *last = expand_str_litt(cur);
+            ret = expand_str_litt(cur);
             break;
         case QUOTED_VAR:
-            *last = expand_quoted_var(cur);
+            ret = expand_quoted_var(cur);
             break;
         case UNQUOTED_VAR:
-            *last = expand_unquoted_var(cur);
+            ret = expand_unquoted_var(cur);
             break;
         }
-        if (*last == NULL)
+        if (ret == NULL)
         {
+            last->link_next = last->link_next && cur->link_next;
             cur = cur->next;
             continue;
         }
-        while ((*last)->next != cur->next)
-            last = &(*last)->next;
-        last = &(*last)->next;
-        cur = cur->next;
-    }
-    // Recompute the size
-    exp->size = 0;
-    cur = exp->head;
-    while (cur)
-    {
-        exp->size++;
+        if (last == NULL)
+            exp->head = ret;
+        else
+            last->next = ret;
+        for (last = ret; last->next != cur->next; last = last->next)
+            exp->size++;
+        last->next = NULL;
         cur = cur->next;
     }
     return exp;
@@ -202,6 +201,13 @@ char **expand(struct expansion *expansion)
         } while (e && link_next);
         DBG_VAR("\n");
         argv[argc - 1] = cur;
+    }
+    if (get_env_flag()->debug_env)
+    {
+        printf("BEF\n");
+        expansion_print(expansion);
+        printf("AFT\n");
+        expansion_print(exp);
     }
     clean_expansion(exp);
     free(exp);

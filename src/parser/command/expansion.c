@@ -20,10 +20,10 @@ void expansion_print(const struct expansion *exp)
         [STR_LITTERAL] = "STR_LITTRL",
     };
     struct expandable *e = exp->head;
-    for (size_t i = 0; i < exp->size; i++)
+    while (e)
     {
-        printf("[%s] '%s' %c\n", exp_type_lt[e->type], e->content,
-               e->link_next ? '|' : '=');
+        printf("[%s] '%s' (%p) %c\n", exp_type_lt[e->type], e->content,
+               (void *)e, e->link_next ? '|' : '=');
         e = e->next;
     }
 }
