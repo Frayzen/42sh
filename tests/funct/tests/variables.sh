@@ -45,8 +45,8 @@ echo $a$b
 
 ###Test variable quotes
 toto="Hello World"
-echo 'this is $toto hehe' "This is the real $toto$" "Hello \$toto" >"$$"
-cat <$$
+echo 'this is $toto hehe' "This is the real $toto$" "Hello \$toto" >"$UID"
+cat <$UID
 
 ###Hard expansions
 a='sh    42'
@@ -126,5 +126,10 @@ a=2
 echo this 2>&$a
 cat $a
 
-###Unexpected EOF Var
-echo ${a
+###Print args
+for a in "$*"; do
+    echo $a
+done
+for a in "$@"; do
+    echo $a
+done
