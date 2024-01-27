@@ -12,7 +12,8 @@ enum unset_mode
     UNSET_FN,
 };
 
-int consume_options(char **argv, enum unset_mode *mode, int *i) {
+int consume_options(char **argv, enum unset_mode *mode, int *i)
+{
     while (argv[*i][0] == '-')
     {
         int j = 1;
@@ -63,7 +64,7 @@ int builtin_unset(char **argv)
         if (mode == UNSET_VAR)
             unset_var(argv[i]);
         else
-            //TODO unset function
+            // TODO unset function
             unset_var(argv[i]);
         i++;
     }
