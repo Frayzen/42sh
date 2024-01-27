@@ -1,6 +1,7 @@
 lib_LIBRARIES = libtools.a
 
 libtools_a_SOURCES = \
+	definitions.h\
 	redirection/redirection.h \
 	redirection/redirection.c \
 	str/string.c str/string.h\
