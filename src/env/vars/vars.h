@@ -2,9 +2,6 @@
 #define VARS_H
 #include <stdbool.h>
 #define _POSIX_C_SOURCE 200809L
-#define DBG_VAR(...)                                                           \
-    if (get_env_flag()->debug_env)                                             \
-        dprintf(DBG_OUT, __VA_ARGS__);
 
 /*
  * set the variable named name to the value
@@ -16,9 +13,9 @@
 char *assign_var(char *name, char *value);
 
 /*
- * retrieve a value from the env variables
+ * retrieve a value from the env variables and allocate it
  * @param name the name of the variable
- * returns the string value of the variable otherwise null
+ * returns the string value allocated
  */
 char *retrieve_var(char *name);
 

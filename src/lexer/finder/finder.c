@@ -9,13 +9,14 @@
 #include "exit/error_handler.h"
 #include "io_backend/backend_saver.h"
 #include "lexer/finder/finder_tools.h"
+#include "tools/definitions.h"
 
 void consume_comment(struct pending *p)
 {
     if (IS_BLANK(p))
     {
         io_pop();
-        skip_until(p, '\n', !APPEND_CHARS);
+        skip_until(p, SKIP_HASHTAG);
     }
     else
         append_io(p);
@@ -35,14 +36,14 @@ void consume_quote(struct pending *p)
     }
     p->in_quote = true;
     io_pop();
-    skip_until(p, c, APPEND_CHARS);
+    skip_until(p, c == '"' ? SKIP_DOUBLE_QUOTE : SKIP_SINGLE_QUOTE);
     if (!io_peek())
         exit_gracefully(UNEXPECTED_EOF);
     io_pop();
     p->in_quote = false;
 }
 
-bool check_next(void)
+BOOL check_next(void)
 {
     switch (io_peek())
     {
@@ -75,9 +76,12 @@ void consume_variable(struct pending *p)
     else if (c == '{')
     {
         io_pop();
-        skip_until(p, '}', APPEND_CHARS);
+        skip_until(p, SKIP_VARIABLE_BRACKETS);
         if (io_peek() != '}')
-            exit_gracefully(UNEXPECTED_EOF);
+        {
+            if (!io_peek())
+                exit_gracefully(UNEXPECTED_EOF);
+        }
         io_pop();
     }
     else
@@ -133,7 +137,10 @@ void consumer(struct pending *p)
         if (p->backslashed)
         {
             p->backslashed = false;
-            append_io(p);
+            if (c != '\n')
+                append_io(p);
+            else
+                io_pop();
         }
         else if (consume(p, c))
             return;

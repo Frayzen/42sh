@@ -35,7 +35,7 @@ int get_type(const struct lex_str *str)
         return CHEVRON;
     char next = io_peek();
     if (assignment_word(str))
-        return ASSIGNMENT_WORD;
+        return ASSMT;
     if ((next == '>' || next == '<') && is_number(str->value))
         return IO_NUMBER;
     return i;
@@ -73,7 +73,7 @@ char *to_upper(const char *type)
     return str;
 }
 
-#define UNDER_EXPAND_CHAR(Type) ((Type) != STR_LITTERAL ? '^' : ' ')
+#define UNDER_EXPAND_CHAR(Type) (IS_VAR_TYPE(Type) ? '^' : ' ')
 void print_token(struct token *token)
 {
     if (!token)
@@ -84,23 +84,21 @@ void print_token(struct token *token)
         const char *type_token = tok_type[token->type];
         char *type = to_upper(type_token);
         if (!type)
-        {
-            printf(" |%s|%s| \n", "WORD", token->str->value);
-            printf("       ");
-            for (size_t i = 0; i < token->str->size; i++)
-                printf("%c", UNDER_EXPAND_CHAR(token->str->expand[i]));
-        }
+            printf(" |%s|%s| ", "WORD", token->str->value);
         else if (!strcmp(type, "\n"))
             printf(" |%s|%s| ", "NEWLINE", "\\n");
         else if (!strcmp(type, "\0"))
             printf(" |%s|%s| ", "BSZERO", "\\0");
         else
             printf(" |%s|%s| ", type, token->str->value);
-        if (type)
+        printf("\n");
+        if (token->type == WORD || token->type == ASSMT)
         {
-            printf("\n");
-            free(type);
+            printf("       ");
+            for (size_t i = 0; i < token->str->size; i++)
+                printf("%c", UNDER_EXPAND_CHAR(token->str->expand[i]));
         }
+        free(type);
     }
     printf("\n");
 }
@@ -113,10 +111,12 @@ const char **toktype_lookup(void)
         [NEWLINE] = "\n",    [ECHO] = "echo",   [T_TRUE] = "true",
         [T_FALSE] = "false", [BSZERO] = "\0",   [CHEVRON] = "CHEVRON",
         [IO_NUMBER] = "NB",  [NEGATION] = "!",  [PIPE] = "|",
-        [WORD] = NULL,       [WHILE] = "while", [DO] = "do",
-        [DONE] = "done",     [UNTIL] = "until", [OR] = "||",
-        [AND] = "&&",        [FOR] = "for",     [IN] = "in",
-        [UNSET] = "unset",        [DOT] = ".",
+        [WHILE] = "while",   [DO] = "do",       [DONE] = "done",
+        [UNTIL] = "until",   [OR] = "||",       [AND] = "&&",
+        [FOR] = "for",       [IN] = "in",       [UNSET] = "unset",
+        [DOT] = ".",         [ASSMT] = "ASMT",  [BRK_OPEN] = "{",
+        [BRK_CLOSED] = "}",  [PRTH_OPEN] = "(", [PRTH_CLOSED] = ")",
+        [WORD] = NULL,
     };
     return lookup_table;
 }
