@@ -1,10 +1,9 @@
 #define _POSIX_C_SOURCE 200809L
+#include "env.h"
 #include "vars.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "env.h"
 
 char *assign(char *name, char *value)
 {
