@@ -19,14 +19,6 @@ void exp_register_str(struct expansion *exp, struct lex_str *str);
 char **expand(struct expansion *expansion);
 
 /***
- * Expand the expandable and return the size of the new str
- * @param exp the expandable
- * @param str the string. It is set to NULL if expandable is NULL
- * @return the next expandable
- */
-struct expandable *expand_next(struct expandable *exp, char **str);
-
-/***
  * Free the arguments and the argv pointer
  * @param argv the argument list
  */

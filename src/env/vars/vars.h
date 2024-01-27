@@ -1,5 +1,6 @@
 #ifndef VARS_H
 #define VARS_H
+#include <stdbool.h>
 #define _POSIX_C_SOURCE 200809L
 
 /***
@@ -19,8 +20,15 @@ void setup_vars(void);
 /***
  * retrieve a value from the env variables
  * @param name the name of the variable
- * returns the string value of the variable otherwise null
+ * returns the string value allocated
  */
 char *retrieve_var(char *name);
+
+/*
+ * Unset the variable
+ * @param name the name of the var
+ * @return true if the variable what set
+ */
+bool unset_var(char *name);
 
 #endif /* !VARS_H */

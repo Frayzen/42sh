@@ -24,16 +24,17 @@ int register_expandable(struct expansion *exp, struct lex_str *exp_str,
 {
     size_t end = begin;
     enum expand_type type = exp_str->expand[begin];
-    if (type == STR_LITTERAL)
+    if (IS_STR_TYPE(type))
     {
         while (end < exp_str->size && exp_str->expand[end] == type)
             end++;
     }
     else
     {
-        while (end < exp_str->size && exp_str->expand[end] == type
-               && exp_str->value[end] != '$')
+        do
             end++;
+        while (end < exp_str->size && exp_str->expand[end] == type
+               && exp_str->value[end] != '$');
     }
     size_t size = end - begin;
     bool is_last = exp_str->size == end;
@@ -54,7 +55,7 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
     while (i < str->size)
     {
         // Skip the dollar if needed
-        if (str->value[i] == '$' && str->expand[i] != STR_LITTERAL)
+        if (str->value[i] == '$' && !IS_STR_TYPE(str->expand[i]))
             i++;
         i = register_expandable(exp, str, i);
     }
@@ -65,58 +66,161 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
 // EXPANSION
 //
 
-char *stringify_expandable(struct expandable *exp)
+// Expand the unquoted var (= expand it and split it by ' ')
+// return the new current or NULL if the expansion is empty
+static struct expandable *expand_unquoted_var(struct expandable *cur)
 {
-    if (exp->type == STR_LITTERAL)
-        return strdup(exp->content);
-    char *ret = retrieve_var(exp->content);
-    if (!ret)
-        ret = "";
-    return strdup(ret);
-}
-
-struct expandable *expand_next(struct expandable *exp, char **str)
-{
-    if (!exp)
-        return 0;
-    char *build = NULL;
-    int bsize = 0;
-    VERBOSE("[EXPAND] ");
-    while (true)
+    assert(cur->type == UNQUOTED_VAR);
+    char *val = retrieve_var(cur->content);
+    if (val[0] == '\0')
     {
-        VERBOSE("%s%s ", exp->type == STR_LITTERAL ? "" : "$", exp->content);
-        // Append the stringify of the current expandable
-        char *str_exp = stringify_expandable(exp);
-        int i = 0;
-        while (str_exp[i])
-        {
-            build = realloc(build, sizeof(char) * ++bsize);
-            build[bsize - 1] = str_exp[i++];
-        }
-        free(str_exp);
-        if (!exp->link_next || !exp->next)
-            break;
-        exp = exp->next;
+        free(val);
+        return NULL;
     }
-    build = realloc(build, sizeof(char) * ++bsize);
-    build[bsize - 1] = '\0';
-    *str = build;
-    VERBOSE("TO '%s'\n", build);
-    return exp->next;
+    char *elem = strtok(val, " ");
+    struct expandable *last = NULL;
+    struct expandable *first = NULL;
+    if (!elem)
+    {
+        last = expandable_init(val, STR_LITTERAL, cur->link_next);
+        last->next = cur->next;
+        return last;
+    }
+    while (elem)
+    {
+        struct expandable *new_string =
+            expandable_init(strdup(elem), STR_LITTERAL, false);
+        if (last)
+            last->next = new_string;
+        else
+            first = new_string;
+        last = new_string;
+        elem = strtok(NULL, " ");
+    }
+    last->link_next = cur->link_next;
+    last->next = cur->next;
+    free(val);
+    return first;
 }
 
+// Expand the quoted var (= expand it)
+// return the new current or NULL if the expansion is empty
+static struct expandable *expand_quoted_var(struct expandable *cur)
+{
+    assert(cur->type == QUOTED_VAR);
+    char *content = retrieve_var(cur->content);
+    if (content[0] == '\0')
+    {
+        free(content);
+        return NULL;
+    }
+    struct expandable *new_string =
+        expandable_init(content, STR_LITTERAL, cur->link_next);
+    new_string->next = cur->next;
+    return new_string;
+}
+
+// Expand the string litteral (= duplicate it)
+static struct expandable *expand_str(struct expandable *cur)
+{
+    assert(IS_STR_TYPE(cur->type));
+    struct expandable *new_string =
+        expandable_init(strdup(cur->content), STR_LITTERAL, cur->link_next);
+    new_string->next = cur->next;
+    return new_string;
+}
+
+// The function create_str_list creates a linked list of string based on an
+// expansion, It allocates the memory inside another expansion and expand any
+// variable accordingly The returned expansion only contains string_litterals
+struct expansion *create_str_list(struct expansion *old)
+{
+    // The function keeps expanding(and append) elements from the old expansion
+    // to exp
+    struct expansion *exp = calloc(1, sizeof(struct expansion));
+    struct expandable *last = NULL; // last element expanded
+    struct expandable *ret = NULL; // returned element after expansion
+    struct expandable *cur = old->head; // The current elem of the old exp
+    while (cur)
+    {
+        // We expand the current based on its type
+        // Every expansion create the (list of) expandable and return the first
+        // one The last element of the new list points to the cur->next
+        // expandable
+        switch (cur->type)
+        {
+        case QUOTED_VAR:
+            ret = expand_quoted_var(cur);
+            break;
+        case UNQUOTED_VAR:
+            ret = expand_unquoted_var(cur);
+            break;
+        default:
+            ret = expand_str(cur);
+            break;
+        }
+        // If the expansion of the variable returns an empty string, the
+        // argument should not be taken in account
+        if (ret == NULL)
+        {
+            if (last)
+                last->link_next = last->link_next && cur->link_next;
+            cur = cur->next;
+            continue;
+        }
+        // Set up the head for the first one
+        if (last == NULL)
+            exp->head = ret;
+        else
+            last->next = ret;
+        // Recompute the size
+        for (last = ret; last->next != cur->next; last = last->next)
+            exp->size++;
+        // Last element points to NULL
+        last->next = NULL;
+        cur = cur->next;
+    }
+    exp->tail = last;
+    return exp;
+}
+
+// This function will expand the expansion given as a list of str
+// The returned char ** is meant to be freed as it will be allocated
+// The returned char ** is meant to be NULL terminated
 char **expand(struct expansion *expansion)
 {
-    struct expandable *exp = expansion->head;
-    char **argv = NULL;
-    char *next = NULL;
+    struct expansion *exp = create_str_list(expansion);
+    struct expandable *e = exp->head;
     int argc = 0;
-    do
+    char **argv = NULL;
+    // for all arg
+    while (e)
     {
         argv = realloc(argv, sizeof(char *) * ++argc);
-        exp = expand_next(exp, &next);
-        argv[argc - 1] = next;
-    } while (exp);
+        char *cur = calloc(1, sizeof(char));
+        size_t size = 0;
+        bool link_next;
+        // for all str in the current arg
+        DBG_VAR("ARG[%d] ", argc - 1);
+        do
+        {
+            link_next = e->link_next;
+            DBG_VAR("%s ", e->content);
+            if (link_next)
+                DBG_VAR(" -> ");
+            size += strlen(e->content);
+            cur = realloc(cur, sizeof(char) * (size + 1));
+            strcat(cur, e->content);
+            e = e->next;
+        } while (e && link_next);
+        DBG_VAR("\n");
+        argv[argc - 1] = cur;
+    }
+    if (get_env_flag()->debug_env)
+        expansion_print(expansion);
+    // Cleanup the created list and add the NULL terminatig str
+    clean_expansion(exp);
+    free(exp);
     argv = realloc(argv, sizeof(char *) * ++argc);
     argv[argc - 1] = NULL;
     return argv;

@@ -19,4 +19,15 @@ void builtin_exit(char **argv);
  */
 int builtin_cd(char **argv);
 
+/***
+ * Execute the dot builtin given the arguments
+ * @param argv the agument list, null terminated
+ */
+int builtin_dot(char **argv);
+
+/* Execute the exit builtin given the arguments
+ * @param argv the agument list, null terminated
+ */
+int builtin_unset(char **argv);
+
 #endif /* !BUILTINS_H */

@@ -1,11 +1,15 @@
 #ifndef ASSIGNMENT_H
 #define ASSIGNMENT_H
 
-#define _POSIX_C_SOURCE 200809L
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "env/vars/vars.h"
+#include "parser/command/expander.h"
 #include "parser/command/expansion.h"
 #include "tools/str/string.h"
-
 struct assignment
 {
     char *name;
@@ -38,7 +42,7 @@ void destroy_assignment(struct assignment *assignment);
  * @param assign_list the list to append token
  * @param ass the element to append
  */
-void ass_list_append(struct assignment_list *assing_list,
+void append_ass_list(struct assignment_list *assing_list,
                      struct assignment *ass);
 
 /***
