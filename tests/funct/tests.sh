@@ -171,8 +171,10 @@ wait
 total=$(cat $total_file | wc -l)
 valid=$(cat $valid_file | wc -l)
 rm $valid_file $total_file
+echo " = [SUMMARY] = "
+echo ""
 echo "$top_line"
-print_line " = [SUMMARY] = "
 print_line "Success : $valid" 0 "$GREEN"
 print_line "Fails : $((total - valid))" 0 "$RED"
 echo "$bot_line"
+echo ""
