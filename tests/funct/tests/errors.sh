@@ -35,3 +35,5 @@ echo 'Hello Wor
 ###only spaces in command
 "     "
 
+###Unexpected EOF Var
+echo ${a

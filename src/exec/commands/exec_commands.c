@@ -1,3 +1,4 @@
+#include "env/vars/specials.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
@@ -82,5 +83,6 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     }
     destroy_expanded(argv);
     close_redirs(fds);
+    set_ret_val(ret);
     return ret;
 }

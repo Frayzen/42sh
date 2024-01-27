@@ -1,3 +1,4 @@
+#include "env/vars/specials.h"
 #define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
@@ -130,6 +131,24 @@ static struct expandable *expand_str(struct expandable *cur)
     return new_string;
 }
 
+// This function calls the appropriate subfunction in order to create a string
+// litteral linked list from the currrent expandable
+static struct expandable *stringify_expandable(struct expandable *cur)
+{
+    struct expandable *exp = expand_special_var(cur);
+    if (exp)
+        return exp;
+    switch (cur->type)
+    {
+    case QUOTED_VAR:
+        return expand_quoted_var(cur);
+    case UNQUOTED_VAR:
+        return expand_unquoted_var(cur);
+    default:
+        return expand_str(cur);
+    }
+}
+
 // The function create_str_list creates a linked list of string based on an
 // expansion, It allocates the memory inside another expansion and expand any
 // variable accordingly The returned expansion only contains string_litterals
@@ -147,18 +166,7 @@ struct expansion *create_str_list(struct expansion *old)
         // Every expansion create the (list of) expandable and return the first
         // one The last element of the new list points to the cur->next
         // expandable
-        switch (cur->type)
-        {
-        case QUOTED_VAR:
-            ret = expand_quoted_var(cur);
-            break;
-        case UNQUOTED_VAR:
-            ret = expand_unquoted_var(cur);
-            break;
-        default:
-            ret = expand_str(cur);
-            break;
-        }
+        ret = stringify_expandable(cur);
         // If the expansion of the variable returns an empty string, the
         // argument should not be taken in account
         if (ret == NULL)
@@ -174,7 +182,8 @@ struct expansion *create_str_list(struct expansion *old)
         else
             last->next = ret;
         // Recompute the size
-        for (last = ret; last->next != cur->next; last = last->next)
+        for (last = ret; last->next && last->next != cur->next;
+             last = last->next)
             exp->size++;
         // Last element points to NULL
         last->next = NULL;
