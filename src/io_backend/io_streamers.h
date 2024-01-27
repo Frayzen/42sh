@@ -11,7 +11,7 @@
  * @return nothing
  */
 
-#include <bits/types/FILE.h>
+#include <stdio.h>
 void main_to_stream(int argc, char **argv);
 
 /***
