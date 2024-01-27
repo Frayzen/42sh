@@ -7,6 +7,7 @@ SUBDIRS = \
 		  exec\
 		  exit\
 		  env\
+		  arg_parser\
 		  .
 
 TOP_BD=$(top_builddir)

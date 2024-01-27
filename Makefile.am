@@ -7,7 +7,8 @@ export LIB_LIST=exec/libexec.a \
 		 io_backend/libiobackend.a \
 		 exit/libexit.a \
 		 env/libenv.a \
-		 tools/libtools.a
+		 tools/libtools.a \
+		 arg_parser/libargparser.a
 
 export CFLAGS_42SH=-std=c99 -Werror -Wall -Wextra -Wvla -pedantic -O2 -fsanitize=address
 

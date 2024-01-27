@@ -30,6 +30,7 @@ AC_CONFIG_FILES([
                     src/exec/Makefile
                     src/exit/Makefile
                     src/env/Makefile
+                    src/arg_parser/Makefile
                     tests/Makefile
                     tests/funct/Makefile
                     tests/unit/Makefile

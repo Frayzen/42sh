@@ -108,7 +108,10 @@ void main_to_stream(int argc, char **argv)
         io_streamer_file(*argv);
     }
     else if (argc == 2)
+    {
+        printf("argv [0] = %s\n", argv[0]);
         io_streamer_string(argc, argv);
+    }
     else
         exit_gracefully(ARG_ERROR);
 }
