@@ -16,6 +16,7 @@
 int main(int argc, char *argv[])
 {
     parse_args(argc, argv);
+    srand(42); // Initialization, should only be called once.
     setup_debug_fds();
     struct ast *ast = NULL;
     swap_ast_root(&ast);

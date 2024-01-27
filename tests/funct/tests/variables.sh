@@ -126,5 +126,10 @@ a=2
 echo this 2>&$a
 cat $a
 
-###Unexpected EOF Var
-echo ${a
+###Print args
+for a in "$*"; do
+    echo $a
+done
+for a in "$@"; do
+    echo $a
+done

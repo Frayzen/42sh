@@ -43,6 +43,6 @@ void parse_args(int argc, char **argv)
             exit_gracefully(ARG_ERROR);
         io_streamer_string(argc, argv + 1);
     }
-    else 
+    else
         io_streamer_file(argv[1]);
 }
