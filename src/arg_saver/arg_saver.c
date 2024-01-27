@@ -42,23 +42,18 @@ void destroy_arg_info(struct arg_info *arg_info)
     free(arg_info);
 }
 
-static struct arg_info *old_arg_info = NULL;
-static struct arg_info *cur_arg_info = NULL;
 
+static struct arg_info *arg_info = NULL;
 
-struct arg_info *new_arg_info(int argc, char **argv)
+struct arg_info *new_arg_info(int argc, char ** argv)
 {
-    assert(old_arg_info == NULL);
-    old_arg_info = cur_arg_info;
-    cur_arg_info = init_arg_info(argv, argc);
-    return cur_arg_info;
+    struct arg_info *current = arg_info;
+    arg_info = init_arg_info(argv, argc);
+    return current;
 }
 
-struct arg_info *revert_arg_info(void)
+void load_arg_info(struct arg_info *old_arg_info)
 {
-    assert(old_arg_info != NULL);
-    destroy_arg_info(cur_arg_info);
-    cur_arg_info = old_arg_info;
-    old_arg_info = NULL;
-    return cur_arg_info; 
+    destroy_arg_info(arg_info);
+    arg_info = old_arg_info;
 }
