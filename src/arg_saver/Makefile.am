@@ -1,6 +1,6 @@
-lib_LIBRARIES = libargsaver.a
+lib_LIBRARIES = libarg_saver.a
 
-libargsaver_a_SOURCES = \
-					arg_parser.h arg_parser.c 
-libargsaver_a_CPPFLAGS = -I$(top_srcdir)/src
-libargsaver_a_CFLAGS = $(CFLAGS_42SH)
+libarg_saver_a_SOURCES = \
+					arg_saver.h arg_saver.c 
+libarg_saver_a_CPPFLAGS = -I$(top_srcdir)/src
+libarg_saver_a_CFLAGS = $(CFLAGS_42SH)
