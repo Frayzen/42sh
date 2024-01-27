@@ -118,5 +118,6 @@ char stream_next(void)
     char ret = fgetc(streamer);
     if (ret == -1)
         ret = '\0';
+    fflush(streamer);
     return ret;
 }

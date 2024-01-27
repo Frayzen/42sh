@@ -105,12 +105,6 @@ void print_ast_for(struct ast_for *ast, int depth, bool *closed_nod)
 {
     printf("FOR\n");
     depth++;
-    if (!ast->item_list)
-    {
-        pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth, true,
-                              closed_nod);
-        return;
-    }
     pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth, false,
                           closed_nod);
 }

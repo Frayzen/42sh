@@ -95,3 +95,7 @@ wc -l textfile.txt # Counting the number of lines in a file
 
 ### Find with a comment
 find . -name "*.tmp" # Deleting temporary files
+
+### Check out comment backslashed
+echo ok #This is a\
+echo backslashed comment

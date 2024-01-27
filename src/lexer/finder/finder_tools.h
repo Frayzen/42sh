@@ -25,13 +25,22 @@ bool chevron_type(const struct lex_str *str);
  * @return true if could
  */
 bool assignment_word(const struct lex_str *str);
+
+enum skip_behavior
+{
+    SKIP_SINGLE_QUOTE,
+    SKIP_DOUBLE_QUOTE,
+    SKIP_VARIABLE_BRACKETS,
+    SKIP_HASHTAG,
+};
+
 /***
  * pop the chars until the limit is found
  * @param p the pending structure to append char in
- * @param limit the limit char that will make the function return
- * @param append true if the popped character need to be appended
+ * @param behavior the behavior of the skippping function
  */
-void skip_until(struct pending *p, char limit, bool append);
+void skip_until(struct pending *p, enum skip_behavior behavior);
+
 /***
  * append a char to the pending, pop it as well
  * @param p the pending structure

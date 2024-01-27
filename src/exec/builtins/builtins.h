@@ -31,4 +31,9 @@ int builtin_continue(char **argv);
  */
 int builtin_break(char **argv);
 
+/* Execute the exit builtin given the arguments
+ * @param argv the agument list, null terminated
+ */
+int builtin_unset(char **argv);
+
 #endif /* !BUILTINS_H */

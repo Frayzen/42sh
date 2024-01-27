@@ -78,11 +78,12 @@ bool set_option_echo(const char *content, bool *interpret_bslash,
 
 void builtin_echo(char **argv)
 {
-    int i = 1;
     bool print_nline = true;
     bool interpret_bslash = false;
+    int i = 1;
     while (argv[i])
     {
+        DBG_VAR("[ECHO] ARG[%d] = %s\n", i, argv[i]);
         const char *content = argv[i];
         if (!set_option_echo(content, &interpret_bslash, &print_nline))
             break;

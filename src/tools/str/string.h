@@ -6,9 +6,12 @@
 
 bool is_number(char *val);
 
+#define IS_VAR_TYPE(Type) ((Type) == QUOTED_VAR || (Type) == UNQUOTED_VAR)
+#define IS_STR_TYPE(Type) ((Type) == STR_LITTERAL || (Type) == QUOTED_STR)
 enum expand_type
 {
     STR_LITTERAL = 0,
+    QUOTED_STR,
     QUOTED_VAR,
     UNQUOTED_VAR,
 };
