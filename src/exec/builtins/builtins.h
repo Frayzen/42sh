@@ -19,4 +19,16 @@ void builtin_exit(char **argv);
  */
 int builtin_dot(char **argv);
 
+/***
+ * Execute the continue builtin given the arguments
+ * @param argv the agument list, null terminated
+ */
+int builtin_continue(char **argv);
+
+/***
+ * Execute the break builtin given the arguments
+ * @param argv the agument list, null terminated
+ */
+int builtin_break(char **argv);
+
 #endif /* !BUILTINS_H */

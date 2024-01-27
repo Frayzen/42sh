@@ -5,6 +5,7 @@ libexec_a_SOURCES = \
 	builtins/echo.c\
 	builtins/dot.c\
 	builtins/exit.c\
+	builtins/continue_break.c\
 	execs.h\
 	exec_and_or.c\
 	commands/exec_commands.c\

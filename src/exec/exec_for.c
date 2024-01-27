@@ -14,14 +14,26 @@ extern char **environ;
 int exec_for(struct ast_for *ast)
 {
     assert(ast && AST(ast)->type == AST_FOR);
+    get_nb_loop(NB_LOOPS + 1);
     if (!ast->nb_items)
         return 0;
     int ret = 0;
     for (int i = 0; i < ast->nb_items; i++)
     {
+        if (CONTINUE == NB_LOOPS)
+        {
+            get_continue(-2);
+            continue;
+        }
+        else if (BREAK == NB_LOOPS)
+        {
+            get_break(-2);
+            break;
+        }
         // TODO variable assignment
         setenv(ast->name, ast->item_list[i]->value, 1);
         ret = exec_list(AST_LIST(ast));
     }
+    get_nb_loop(NB_LOOPS - 1);
     return ret;
 }

@@ -46,8 +46,10 @@ enum token_type
     // builtins /!\ leave T_TRUE as first one and ECHO as last one
     T_TRUE,
     T_FALSE,
-    ECHO,
+    T_CONTINUE,
+    T_BREAK,
     DOT,
+    ECHO,
     // terminals
     WORD,
     ASSIGNMENT_WORD,

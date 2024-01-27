@@ -3,6 +3,14 @@
 
 #include "tools/ast/ast.h"
 
+#define NB_LOOPS (get_nb_loop(-1))
+#define CONTINUE (get_continue(-1))
+#define BREAK (get_break(-1))
+
+int get_nb_loop(int set);
+int get_continue(int set);
+int get_break(int set);
+
 /***
  * executes the list ast
  * @param ast the AST_LIST tree to execute

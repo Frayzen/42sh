@@ -9,9 +9,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "commands/execs_cmd.h"
 #include "env/env.h"
 #include "exec/builtins/builtins.h"
+#include "exec/commands/execs_cmd.h"
 #include "exit/error_handler.h"
 #include "parser/command/expander.h"
 #include "tools/ast/ast.h"
@@ -74,6 +74,8 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         ret = 1;
     else if (!strcmp(argv[0], "."))
         ret = builtin_dot(argv);
+    else if (!strcmp(argv[0], "continue"))
+        ret = builtin_continue(argv);
     else
     {
         *pid = exec_prog(argv);
