@@ -182,7 +182,8 @@ struct expansion *create_str_list(struct expansion *old)
         else
             last->next = ret;
         // Recompute the size
-        for (last = ret; last->next != cur->next; last = last->next)
+        for (last = ret; last->next && last->next != cur->next;
+             last = last->next)
             exp->size++;
         // Last element points to NULL
         last->next = NULL;

@@ -2,10 +2,10 @@
 
 #include <string.h>
 
+#include "arg_saver/arg_saver.h"
 #include "env/env.h"
 #include "exit/error_handler.h"
 #include "io_backend/io_streamers.h"
-
 int set_options(int argc, char **argv)
 {
     int i = 1;
@@ -44,5 +44,8 @@ void parse_args(int argc, char **argv)
         io_streamer_string(argc, argv + 1);
     }
     else
+    {
+        new_arg_info(argc - 1, argv + 2);
         io_streamer_file(argv[1]);
+    }
 }
