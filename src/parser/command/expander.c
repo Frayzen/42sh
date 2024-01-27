@@ -66,6 +66,7 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
 // EXPANSION
 //
 
+// Expand the unquoted var (= expand it and split it by ' ')
 // return the new current or NULL if the expansion is empty
 static struct expandable *expand_unquoted_var(struct expandable *cur)
 {
@@ -102,6 +103,7 @@ static struct expandable *expand_unquoted_var(struct expandable *cur)
     return first;
 }
 
+// Expand the quoted var (= expand it)
 // return the new current or NULL if the expansion is empty
 static struct expandable *expand_quoted_var(struct expandable *cur)
 {
@@ -118,6 +120,7 @@ static struct expandable *expand_quoted_var(struct expandable *cur)
     return new_string;
 }
 
+// Expand the string litteral (= duplicate it)
 static struct expandable *expand_str(struct expandable *cur)
 {
     assert(IS_STR_TYPE(cur->type));
@@ -127,14 +130,23 @@ static struct expandable *expand_str(struct expandable *cur)
     return new_string;
 }
 
+// The function create_str_list creates a linked list of string based on an
+// expansion, It allocates the memory inside another expansion and expand any
+// variable accordingly The returned expansion only contains string_litterals
 struct expansion *create_str_list(struct expansion *old)
 {
+    // The function keeps expanding(and append) elements from the old expansion
+    // to exp
     struct expansion *exp = calloc(1, sizeof(struct expansion));
-    struct expandable *last = NULL;
-    struct expandable *ret = NULL;
-    struct expandable *cur = old->head;
+    struct expandable *last = NULL; // last element expanded
+    struct expandable *ret = NULL; // returned element after expansion
+    struct expandable *cur = old->head; // The current elem of the old exp
     while (cur)
     {
+        // We expand the current based on its type
+        // Every expansion create the (list of) expandable and return the first
+        // one The last element of the new list points to the cur->next
+        // expandable
         switch (cur->type)
         {
         case QUOTED_VAR:
@@ -147,6 +159,8 @@ struct expansion *create_str_list(struct expansion *old)
             ret = expand_str(cur);
             break;
         }
+        // If the expansion of the variable returns an empty string, the
+        // argument should not be taken in account
         if (ret == NULL)
         {
             if (last)
@@ -154,18 +168,25 @@ struct expansion *create_str_list(struct expansion *old)
             cur = cur->next;
             continue;
         }
+        // Set up the head for the first one
         if (last == NULL)
             exp->head = ret;
         else
             last->next = ret;
+        // Recompute the size
         for (last = ret; last->next != cur->next; last = last->next)
             exp->size++;
+        // Last element points to NULL
         last->next = NULL;
         cur = cur->next;
     }
+    exp->tail = last;
     return exp;
 }
 
+// This function will expand the expansion given as a list of str
+// The returned char ** is meant to be freed as it will be allocated
+// The returned char ** is meant to be NULL terminated
 char **expand(struct expansion *expansion)
 {
     struct expansion *exp = create_str_list(expansion);
@@ -196,12 +217,8 @@ char **expand(struct expansion *expansion)
         argv[argc - 1] = cur;
     }
     if (get_env_flag()->debug_env)
-    {
-        printf("BEF\n");
         expansion_print(expansion);
-        printf("AFT\n");
-        expansion_print(exp);
-    }
+    // Cleanup the created list and add the NULL terminatig str
     clean_expansion(exp);
     free(exp);
     argv = realloc(argv, sizeof(char *) * ++argc);
