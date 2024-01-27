@@ -43,6 +43,7 @@ void print_error(enum error_type type)
     static const char *const error_names[] = {
         // General Errors -> 1
         [MALLOC_NULL] = "Memory error : running out of RAM ?",
+        [UNSET_NOT_VAR_AND_FN] = "Cannot unset function AND variable at once",
         [RING_BF_FULL] = "Ring buffer is full",
         [ADD_CHILD_ERROR] = "Tried to add a child to an ast with NULL children",
         [LIST_NOT_FOUND] = "The element in the list ast is invalid",

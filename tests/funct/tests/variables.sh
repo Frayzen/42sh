@@ -45,8 +45,8 @@ echo $a$b
 
 ###Test variable quotes
 toto="Hello World"
-echo 'this is $toto hehe' "This is the real $toto$" "Hello \$toto" >"$$"
-cat <$$
+echo 'this is $toto hehe' "This is the real $toto$" "Hello \$toto" >"$UID"
+cat <$UID
 
 ###Hard expansions
 a='sh    42'

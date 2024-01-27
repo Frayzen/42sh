@@ -119,11 +119,12 @@ launch_test()
 
 parallelize_entry() {
     cd ..
-    tmp_folder=$(mktemp -d .XXXXXX)
-    cd "$tmp_folder" || exit
     entry=$1
     file_id=$2
     name=$(basename "$entry")
+    tmp_folder="test$file_id"
+    mkdir "$tmp_folder"
+    cd "$tmp_folder" || exit
     toprint="[MODULE $file_id] $name\n"
     toprint="$toprint$top_line\n"
     save=0
