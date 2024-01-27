@@ -5,7 +5,6 @@
 
 #include "assignment/assignment.h"
 #include "parser/command/expansion.h"
-#include "str/string.h"
 #include "tools/redirection/redirection.h"
 
 struct ast **swap_ast_root(struct ast **new_ast)
