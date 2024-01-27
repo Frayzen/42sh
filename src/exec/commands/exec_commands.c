@@ -2,7 +2,6 @@
 #include <assert.h>
 #include <fcntl.h>
 #include <stdbool.h>
-#include "env/vars/vars.h"
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -10,6 +9,7 @@
 #include <unistd.h>
 
 #include "env/env.h"
+#include "env/vars/vars.h"
 #include "exec/builtins/builtins.h"
 #include "exec/commands/execs_cmd.h"
 #include "exit/error_handler.h"

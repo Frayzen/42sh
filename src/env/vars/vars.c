@@ -7,7 +7,6 @@
 
 #include "env/env.h"
 
-
 char *assign_var(char *name, char *value)
 {
     char *old = getenv(name);
