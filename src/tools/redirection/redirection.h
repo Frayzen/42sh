@@ -1,8 +1,6 @@
 #ifndef REDIRECTION_H
 #define REDIRECTION_H
-
 #include "tools/ast/ast.h"
-
 #define DBG_OUT 666
 #define DBG_ERR 667
 

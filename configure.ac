@@ -5,7 +5,7 @@ AC_INIT([42sh], [1.0], [42sh@assistants.epita.fr])
 AM_INIT_AUTOMAKE([subdir-objects] [foreign])
 
 # Pretty display of makefile rules
-AM_SILENT_RULES([yes])
+# AM_SILENT_RULES([yes])
 
 # Enable ar for Makefile
 # AM_PROG_AR

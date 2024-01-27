@@ -1,6 +1,8 @@
 #ifndef IO_STREAMERS_H
 #define IO_STREAMERS_H
 
+#include <stddef.h>
+
 /***
  * According to the arguments given to main, calls the right
     streamer function

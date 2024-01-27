@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "lexer/token_saver.h"
 #include "parser/command/expander.h"
 #include "rules.h"
@@ -34,15 +36,20 @@ enum status gr_simple_command(struct ast_list *list)
     while (gr_prefix(cmd) != ERROR)
         nb_prefix++;
     struct token *tok_word = tok_peek();
-    if (!IS_COMMAND(tok_word) && nb_prefix == 0)
-        goto error;
+    if (!IS_COMMAND(tok_word))
+    {
+        if (nb_prefix == 0)
+            goto error;
+        goto success;
+    }
     // WORLD
-    register_token(&cmd->args_expansion, tok_word);
+    exp_register_str(&cmd->args_expansion, tok_word->str);
     tok_pop();
     // {element}
     while (gr_element(cmd) != ERROR)
         continue;
     // {element}
+success:
     add_child(list, AST(cmd));
     GR_DBG_RET(OK);
 error:
