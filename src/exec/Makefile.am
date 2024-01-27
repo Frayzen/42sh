@@ -2,7 +2,10 @@ lib_LIBRARIES = libexec.a
 
 libexec_a_SOURCES = \
 	builtins/builtins.h\
+	builtins/unset.c\
 	builtins/echo.c\
+	builtins/cd.c\
+	builtins/dot.c\
 	builtins/exit.c\
 	execs.h\
 	exec_and_or.c\

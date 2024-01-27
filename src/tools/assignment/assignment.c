@@ -1,12 +1,7 @@
+#include "parser/command/expander.h"
+#define _POSIX_C_SOURCE 200809L
 #include "assignment.h"
 
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "parser/command/expander.h"
-#include "str/string.h"
 // manage the variable assignments using environ to store, restore and update
 
 struct lex_str *extract_value(struct lex_str *str, size_t eq_pos)
@@ -15,7 +10,7 @@ struct lex_str *extract_value(struct lex_str *str, size_t eq_pos)
     size_t val_size = str->size - offset;
     struct lex_str *val = calloc(1, sizeof(struct lex_str));
     val->value = strdup(str->value + offset);
-    val->expand = calloc(1, sizeof(enum expand_type) * val_size);
+    val->expand = calloc(val_size, sizeof(enum expand_type));
     memcpy(val->expand, str->expand + offset,
            sizeof(enum expand_type) * val_size);
     val->size = val_size;
@@ -48,10 +43,12 @@ void destroy_assignment(struct assignment *assignment)
     free(assignment);
 }
 
-void ass_list_append(struct assignment_list *assign_list,
+void append_ass_list(struct assignment_list *assign_list,
                      struct assignment *element)
 {
-    assign_list->ass_list = realloc(assign_list->ass_list, ++assign_list->size);
+    assign_list->ass_list =
+        realloc(assign_list->ass_list,
+                sizeof(struct assignment) * (++assign_list->size));
     assign_list->ass_list[assign_list->size - 1] = element;
 }
 
@@ -71,12 +68,12 @@ void apply_assignments(struct assignment_list *asslist)
 {
     for (unsigned int i = 0; i < asslist->size; i++)
     {
+        // TODO find a better way to do it
         struct assignment *ass = asslist->ass_list[i];
-        char *val = NULL;
-        assert(expand_next(ass->exp.head, &val) == NULL);
-        assert(val != NULL);
-        ass->prev = assign_var(ass->name, val);
-        free(val);
+        char **val = expand(&ass->exp);
+        assert(val && val[0] && !val[1]);
+        ass->prev = assign_var(ass->name, val[0]);
+        destroy_expanded(val);
     }
 }
 
@@ -85,6 +82,9 @@ void revert_assignments(struct assignment_list *asslist)
     for (unsigned int i = 0; i < asslist->size; i++)
     {
         struct assignment *ass = asslist->ass_list[i];
-        assign_var(ass->name, ass->prev);
+        if (ass->prev)
+            assign_var(ass->name, ass->prev);
+        else
+            unset_var(ass->name);
     }
 }

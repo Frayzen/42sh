@@ -1,14 +1,18 @@
-
 ###Test with functioni
 a='echo    ok;'
 $a
 
-
+### Echo diff var empty str
+echo this $a '' $a$b this
 
 ###Basic variable
 a=3
 b=4
 echo $a $b
+
+### Assignment quotes
+'val'=ok; echo $val
+val='ok'; echo $val
 
 ###Shell variable
 
@@ -18,7 +22,7 @@ echo $a a=4
 
 ###Variable does not exist
 echo $a; echo a$toto
-echo $b
+echo $b a$b\c a$b $b\c
 
 ###Subsitution
 a=3
@@ -38,13 +42,9 @@ ls && cat $a >$b;
 rm $a $b
 echo $a$b
 
-###Var with redirection
-a=1
-echo hehe >$a
-cat $a<$a
 
 ###Test variable quotes
-toto=Hello World
+toto="Hello World"
 echo 'this is $toto hehe' "This is the real $toto$" "Hello \$toto" >"$$"
 cat <$$
 

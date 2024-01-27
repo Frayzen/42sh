@@ -73,7 +73,7 @@ char *to_upper(const char *type)
     return str;
 }
 
-#define UNDER_EXPAND_CHAR(Type) ((Type) != STR_LITTERAL ? '^' : ' ')
+#define UNDER_EXPAND_CHAR(Type) (IS_VAR_TYPE(Type) ? '^' : ' ')
 void print_token(struct token *token)
 {
     if (!token)
@@ -111,10 +111,12 @@ const char **toktype_lookup(void)
         [NEWLINE] = "\n",    [ECHO] = "echo",   [T_TRUE] = "true",
         [T_FALSE] = "false", [BSZERO] = "\0",   [CHEVRON] = "CHEVRON",
         [IO_NUMBER] = "NB",  [NEGATION] = "!",  [PIPE] = "|",
-        [WORD] = NULL,       [WHILE] = "while", [DO] = "do",
-        [DONE] = "done",     [UNTIL] = "until", [OR] = "||",
-        [AND] = "&&",        [FOR] = "for",     [IN] = "in",
-        [ASSMT] = "ASMT",
+        [WHILE] = "while",   [DO] = "do",       [DONE] = "done",
+        [UNTIL] = "until",   [OR] = "||",       [AND] = "&&",
+        [FOR] = "for",       [IN] = "in",       [UNSET] = "unset",
+        [DOT] = ".",         [ASSMT] = "ASMT",  [BRK_OPEN] = "{",
+        [BRK_CLOSED] = "}",  [PRTH_OPEN] = "(", [PRTH_CLOSED] = ")",
+        [WORD] = NULL,
     };
     return lookup_table;
 }

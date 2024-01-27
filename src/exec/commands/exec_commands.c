@@ -1,9 +1,7 @@
-#include "env/vars/vars.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
 #include <stdbool.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -11,6 +9,7 @@
 #include <unistd.h>
 
 #include "env/env.h"
+#include "env/vars/vars.h"
 #include "exec/builtins/builtins.h"
 #include "exec/commands/execs_cmd.h"
 #include "exit/error_handler.h"
@@ -51,7 +50,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     int *fds = setup_redirs(AST_REDIR(ast));
     if (!fds)
         return 1;
-    int ret = 2;
+    int ret = 0;
     char **argv = expand(&ast->args_expansion);
     apply_assignments(&ast->assignment_list);
     *pid = PID_SET;
@@ -62,8 +61,12 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             builtin_echo(argv);
             ret = 0;
         }
+        else if (!strcmp(argv[0], "cd"))
+            ret = builtin_cd(argv);
         else if (!strcmp(argv[0], "exit"))
             builtin_exit(argv);
+        else if (!strcmp(argv[0], "unset"))
+            ret = builtin_unset(argv);
         else if (!strcmp(argv[0], "true"))
             ret = 0;
         else if (!strcmp(argv[0], "false"))

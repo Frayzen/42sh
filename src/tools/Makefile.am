@@ -1,7 +1,7 @@
 lib_LIBRARIES = libtools.a
 
 libtools_a_SOURCES = \
-	ring_buffer/ring_buffer.c ring_buffer/ring_buffer.h\
+	definitions.h\
 	redirection/redirection.h \
 	redirection/redirection.c \
 	str/string.c str/string.h\
@@ -9,8 +9,8 @@ libtools_a_SOURCES = \
 	ast/ast.c ast/ast.h\
 	str/string.h str/string.c\
 	ast/ast_utils.c ast/ast_utils.h\
-	fd_manager/fd_dictionary.c fd_manager/fd_manager.h \
-	assignment/assignment.c assignment/assignment.h
-
+	assignment/assignment.c assignment/assignment.h\
+	pretty_print/pretty_print.h pretty_print/pretty_print.c\
+	fd_manager/fd_dictionary.c fd_manager/fd_dictionnary.h 
 libtools_a_CPPFLAGS = -I$(top_srcdir)/src
 libtools_a_CFLAGS = $(CFLAGS_42SH)

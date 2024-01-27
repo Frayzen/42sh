@@ -19,8 +19,10 @@
 // If we have 2<&1, it duplicates FD[1]
 int get_fd(struct redirection *redir)
 {
-    char *to = NULL;
-    assert(expand_next(redir->exp.head, &to) == NULL);
+    char **val = expand(&redir->exp);
+    assert(val && val[0] && !val[1]);
+    char *to = strdup(val[0]);
+    destroy_expanded(val);
     int fd = NO_FD;
     DBG_PIPE("[REDIR] '%s' has been ", to);
     int type = redir->type;

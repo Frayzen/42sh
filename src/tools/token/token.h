@@ -16,6 +16,10 @@ enum token_type
     NEWLINE,
     BSZERO,
     SEMI_COLON,
+
+    // operators ?
+    PRTH_OPEN,
+    PRTH_CLOSED,
     // redir
     CHEVRON,
     PIPE,
@@ -41,12 +45,17 @@ enum token_type
     DO,
     DONE,
 
+    BRK_OPEN,
+    BRK_CLOSED,
+
     NEGATION,
 
     // builtins /!\ leave T_TRUE as first one and ECHO as last one
     T_TRUE,
     T_FALSE,
     ECHO,
+    UNSET,
+    DOT,
     // terminals
     WORD,
     ASSMT,

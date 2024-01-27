@@ -1,8 +1,8 @@
 line_size=90
 dash_line=$(printf '━%.0s' $(seq 1 $line_size))
 
-top_line=$(echo "┏$dash_line┓")
-bot_line=$(echo "┗$dash_line┛")
+export top_line="┏$dash_line┓"
+export bot_line="┗$dash_line┛"
 
 #Black        0;30     Dark Gray     1;30
 #Red          0;31     Light Red     1;31
@@ -31,7 +31,7 @@ print_line() {
     fi
     color="$3"
     nb_char=$(echo "$to_print" | wc -m)
-    nb_char=$(($line_size-$nb_char+$to_add+1))
+    nb_char=$((line_size-nb_char+to_add+1))
     echo -n "┃"
     printf '%b' "$color"
     echo -n "$to_print"

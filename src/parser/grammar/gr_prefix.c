@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/assignment/assignment.h"
@@ -17,7 +15,7 @@ enum status gr_prefix(struct ast_cmd *cmd)
     if (token->type == ASSMT)
     {
         struct assignment *ass = init_assignment(token->str);
-        ass_list_append(&cmd->assignment_list, ass);
+        append_ass_list(&cmd->assignment_list, ass);
         tok_pop_clean();
         return OK;
     }

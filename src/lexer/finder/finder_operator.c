@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "finder.h"
 #include "io_backend/backend_saver.h"
 #include "lexer/finder/finder_tools.h"
@@ -18,6 +20,9 @@ void consume_redir_op(struct pending *p)
         if (next == '&' || next == '>')
             append_io(p);
         break;
+    default:
+        assert(false);
+        break;
     }
 }
 
@@ -35,6 +40,9 @@ void consume_control_op(struct pending *p)
     case '\n':
         append_io(p);
         break;
+    default:
+        assert(false);
+        break;
     }
 }
 
@@ -50,6 +58,9 @@ void consume_operators(struct pending *p)
         break;
     CONTROL_OP_CASES:
         consume_control_op(p);
+        break;
+    default:
+        assert(false);
         break;
     }
 }
