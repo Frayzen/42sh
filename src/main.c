@@ -15,8 +15,7 @@
 
 int main(int argc, char *argv[])
 {
-    main_to_stream(argc, argv);
-    // parse_args(argc, argv);
+    parse_args(argc, argv);
     setup_debug_fds();
     struct ast *ast = NULL;
     swap_ast_root(&ast);
