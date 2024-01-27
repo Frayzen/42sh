@@ -166,7 +166,7 @@ void skip_until(struct pending *p, enum skip_behavior behavior)
         if (!append)
             io_pop();
         else if (behavior == SKIP_SINGLE_QUOTE)
-                append_io(p);
+            append_io(p);
         else if (behavior == SKIP_VARIABLE_BRACKETS && !is_name_char(c))
             exit_gracefully(BAD_VAR_NAME);
         else if (c == '\\')
