@@ -7,6 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "env.h"
 #include "env/env.h"
 
 void setup_vars(void)
