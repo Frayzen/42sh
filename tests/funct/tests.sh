@@ -160,6 +160,7 @@ test_dir=./tests
 id=0
 export total_file="../../result_total"
 export valid_file="../../result_valid"
+touch $total_file $valid_file
 for entry in "$test_dir"/*
 do
     id=$((id+1))

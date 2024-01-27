@@ -1,6 +1,12 @@
 ###Error no binary
 bidule ok
 
+###Error assigning var number
+3ok=No
+
+###Error assigning var underscore
+_ok=No
+
 ###invalid condition
 
 if jfjf; then echo 1; fi
@@ -16,10 +22,18 @@ while do
 while ! true; do echo 
 
 ### Unclosed
-echo 'This is unclosed\' here
+echo "This is unclosed\" here
 
 ### If quotes
 if ''; then echo ok; fi
 
 ###Unterminated simple quotes
 echo 'Hello Wor
+
+###empty command
+
+###only spaces in command
+"     "
+
+###Unexpected EOF Var
+echo ${a

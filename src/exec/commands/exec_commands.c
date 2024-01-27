@@ -1,3 +1,4 @@
+#include "env/vars/specials.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
@@ -67,6 +68,8 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             builtin_exit(argv);
         else if (!strcmp(argv[0], "unset"))
             ret = builtin_unset(argv);
+        else if (!strcmp(argv[0], "."))
+            ret = builtin_dot(argv);
         else if (!strcmp(argv[0], "true"))
             ret = 0;
         else if (!strcmp(argv[0], "false"))
@@ -80,5 +83,6 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     }
     destroy_expanded(argv);
     close_redirs(fds);
+    set_ret_val(ret);
     return ret;
 }

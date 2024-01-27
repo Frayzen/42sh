@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "arg_parser/arg_parser.h"
 #include "env/env.h"
 #include "exec/execs.h"
 #include "exit/error_handler.h"
@@ -14,7 +15,8 @@
 
 int main(int argc, char *argv[])
 {
-    main_to_stream(argc, argv);
+    parse_args(argc, argv);
+    srand(42); // Initialization, should only be called once.
     setup_debug_fds();
     struct ast *ast = NULL;
     swap_ast_root(&ast);
