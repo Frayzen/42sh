@@ -22,10 +22,16 @@ while do
 while ! true; do echo 
 
 ### Unclosed
-echo 'This is unclosed\' here
+echo "This is unclosed\" here
 
 ### If quotes
 if ''; then echo ok; fi
 
 ###Unterminated simple quotes
 echo 'Hello Wor
+
+###empty command
+
+###only spaces in command
+"     "
+

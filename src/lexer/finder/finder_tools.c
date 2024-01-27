@@ -61,10 +61,8 @@ bool is_name(char *str, size_t size)
     char c = str[0];
     if (!is_name_char(c))
         return false;
-    if (c == '_')
-        return false;
     if (c >= '0' && c <= '9')
-        return true;
+        return false;
     for (size_t i = 1; i < size; i++)
     {
         c = str[i];
@@ -167,6 +165,8 @@ void skip_until(struct pending *p, enum skip_behavior behavior)
     {
         if (!append)
             io_pop();
+        else if (behavior == SKIP_SINGLE_QUOTE)
+                append_io(p);
         else if (behavior == SKIP_VARIABLE_BRACKETS && !is_name_char(c))
             exit_gracefully(BAD_VAR_NAME);
         else if (c == '\\')
