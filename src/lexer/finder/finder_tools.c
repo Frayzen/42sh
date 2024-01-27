@@ -56,9 +56,18 @@ bool is_name_char(char c)
 
 bool is_name(char *str, size_t size)
 {
-    for (unsigned int i = 0; i < size; i++)
+    if (size == 0)
+        return false;
+    char c = str[0];
+    if (!is_name_char(c))
+        return false;
+    if (c == '_')
+        return false;
+    if (c >= '0' && c <= '9')
+        return true;
+    for (size_t i = 1; i < size; i++)
     {
-        char c = str[i];
+        c = str[i];
         // Check if c is in the portable character set
         if (is_name_char(c))
             continue;

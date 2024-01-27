@@ -1,6 +1,12 @@
 ###Error no binary
 bidule ok
 
+###Error assigning var number
+3ok=No
+
+###Error assigning var underscore
+_ok=No
+
 ###invalid condition
 
 if jfjf; then echo 1; fi
