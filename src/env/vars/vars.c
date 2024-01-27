@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "env.h"
 #include "vars.h"
 
 #include <stdio.h>

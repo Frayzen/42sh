@@ -54,8 +54,8 @@ enum token_type
     T_TRUE,
     T_FALSE,
     ECHO,
-    DOT,
     UNSET,
+    DOT,
     // terminals
     WORD,
     ASSMT,
