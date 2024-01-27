@@ -32,6 +32,7 @@ int set_options(int argc, char **argv)
 void parse_args(int argc, char **argv)
 {
     argc -= set_options(argc, argv);
+
     if (argc == 0)
     {
         io_streamer_stdin();
@@ -41,9 +42,7 @@ void parse_args(int argc, char **argv)
         if (1 >= argc)
             exit_gracefully(ARG_ERROR);
         io_streamer_string(argc, argv + 1);
-        return;
     }
-
-    // TODO store argv + 2 for  $@ $# $* $1..n special variavles
-    io_streamer_file(argv[1]);
+    else 
+        io_streamer_file(argv[1]);
 }
