@@ -14,13 +14,13 @@ int builtin_cd(char **argv)
     char *new = NULL;
     // If no arguments, go to the HOME folder
     if (!argv[1])
-        new = retrieve_var("HOME");
+        new = read_var("HOME");
     else
     {
         // If the argument is -, go to the last folder (aka OLDPWD)
         if (!strcmp(argv[1], "-"))
         {
-            new = retrieve_var("OLDPWD");
+            new = read_var("OLDPWD");
             dprintf(STDOUT, "%s\n", new);
         }
         else

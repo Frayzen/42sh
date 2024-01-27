@@ -27,14 +27,20 @@ char *assign_var(char *name, char *value)
     return old;
 }
 
-char *retrieve_var(char *name)
+char *read_var(char *name)
 {
-    DBG_VAR("attemp retrieving |%s|\n", name);
     char *value = NULL;
     if (name)
         value = getenv(name);
     if (!value)
         value = "";
+    return value;
+}
+
+char *retrieve_var(char *name)
+{
+    DBG_VAR("attemp retrieving |%s|\n", name);
+    char *value = read_var(name);
     value = strdup(value);
     DBG_VAR("|%s|=|%s|\n", name, value);
     return value;

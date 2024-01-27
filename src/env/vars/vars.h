@@ -24,6 +24,13 @@ void setup_vars(void);
  */
 char *retrieve_var(char *name);
 
+/***
+ * Return a read only string of the content of the env variable
+ * @param name the name of the var
+ * @return NULL if the var doesnt exist, the read only content otherwise
+ */
+char *read_var(char *name);
+
 /*
  * Unset the variable
  * @param name the name of the var
