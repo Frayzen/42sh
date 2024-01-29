@@ -11,13 +11,13 @@
 
 #include "commands/execs_cmd.h"
 #include "env/env.h"
-#include "exec/execs.h"
 #include "exec/builtins/builtins.h"
+#include "exec/execs.h"
 #include "exit/error_handler.h"
 #include "parser/command/expander.h"
 #include "tools/ast/ast.h"
-#include "tools/redirection/redirection.h"
 #include "tools/funct_manager/funct_dict.h"
+#include "tools/redirection/redirection.h"
 
 // Fork execute the binary and return pid in parent
 int exec_prog(char **argv)
@@ -78,14 +78,14 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         ret = builtin_dot(argv);
     else
     {
-        //look for possible function
-        struct ast *function = funct_dict_peek_value(argv[0]);
+        // look for possible function
+        struct ast_list *function = funct_dict_peek_value(argv[0]);
         if (function)
-            ret = exec_entry(function);
+            ret = exec_entry(AST(function));
         else
         {
-          *pid = exec_prog(argv);
-          ret = -1;
+            *pid = exec_prog(argv);
+            ret = -1;
         }
     }
     destroy_argv(argv);

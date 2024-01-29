@@ -8,6 +8,6 @@
 
 int exec_store_funct(struct ast_funct *ast)
 {
-  funct_dict_push(ast->name->str->value, ast->body);
-  return 0;
+    funct_dict_push(ast->name, &ast->body);
+    return 0;
 }

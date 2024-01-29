@@ -107,9 +107,8 @@ struct ast_and_or
 #define AST_FUNCT(Base) ((struct ast_funct *)(Base))
 struct ast_funct
 {
-    struct ast base;
-    struct token *name;
-    struct ast *body;
+    struct ast_list body;
+    char *name;
 };
 /***
  * Set or gets the pointer to the ast root

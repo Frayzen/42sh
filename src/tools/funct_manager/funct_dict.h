@@ -7,7 +7,7 @@
 struct funct_pair
 {
     char *name;
-    struct ast *body;
+    struct ast_list *body;
 };
 
 struct funct_dictionary
@@ -27,21 +27,21 @@ struct funct_dictionary *get_funct_dict(void);
  * @param old_fd original file descriptor
  * @param new_fd new redirected file descriptor
  */
-void funct_dict_push(char *name, struct ast *body);
+void funct_dict_push(char *name, struct ast_list *body);
 
 /***
  * Gives the new file descriptor associated with the file descriptor given
  * @param old_fd original file descriptor
  * @return the new redirected file descriptor
  */
-struct ast *funct_dict_peek_value(char *name);
+struct ast_list *funct_dict_peek_value(char *name);
 
 /***
  * Gives the old file descriptor associated with the file descriptor given
  * @param new_fd new redirected file descriptor
  * @return the original file descriptor
  */
-char *funct_dict_peek_key(struct ast *body);
+char *funct_dict_peek_key(struct ast_list *body);
 
 /***
  * Removes the entry associated with a file descriptor from the file descriptor

@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "exit/error_handler.h"
 
@@ -14,7 +15,7 @@ struct funct_dictionary *get_funct_dict(void)
     return funct_dico;
 }
 
-void funct_dict_push(char *name, struct ast *body)
+void funct_dict_push(char *name, struct ast_list *body)
 {
     if (FUNCT_DICT->nb_entries == FUNCT_DICT_SIZE)
         exit_gracefully(FUNCT_DICO_FULL);
@@ -23,11 +24,11 @@ void funct_dict_push(char *name, struct ast *body)
     FUNCT_DICT->nb_entries++;
 }
 
-struct ast *funct_dict_peek_value(char *name)
+struct ast_list *funct_dict_peek_value(char *name)
 {
     for (int i = 0; i < FUNCT_DICT->nb_entries; i++)
     {
-        if (FUNCT_DICT->entries[i].name == name)
+        if (!strcmp(FUNCT_DICT->entries[i].name,name))
         {
             return FUNCT_DICT->entries[i].body;
         }
@@ -35,7 +36,7 @@ struct ast *funct_dict_peek_value(char *name)
     return NULL;
 }
 
-char *funct_dict_peek_key(struct ast *body)
+char *funct_dict_peek_key(struct ast_list *body)
 {
     for (int i = 0; i < FUNCT_DICT->nb_entries; i++)
     {
