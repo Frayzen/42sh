@@ -33,6 +33,7 @@ void exit_gracefully(enum error_type type)
     case EXECVP_FAILED:
     case INVALID_FILE_PATH:
         exit(127);
+
     default:
         exit(1);
     }
@@ -49,11 +50,12 @@ void print_error(enum error_type type)
         [LIST_NOT_FOUND] = "The element in the list ast is invalid",
         [PIPE_NOT_FOUND] = "The element in the pipe ast is invalid",
         [FD_DICO_FULL] = "The file descriptor dictionary is full",
+        [CONT_BREAK_RANGE] = "Continue or break : loop count out of range",
         // Misuse of shell built-ins -> 2
         [ARG_ERROR] = "The arguments did not match",
         [GRAMMAR_ERROR_ENTRY] = "The entry grammar failed to find a match",
         [FORK_ERROR] = "An error occured while forking another program",
-        //  Command cannot execute (permission or not an executable) -> 126
+        // Command cannot execute (permission or not an executable) -> 126
         [NO_EXEC_PERM] = "Permission to execute denied",
         [NO_READ_PERM] = "Permission to read denied",
         [INVALID_FILE_PATH] = "No such file or directory",
@@ -62,6 +64,8 @@ void print_error(enum error_type type)
         [UNEXPECTED_EOF] = "Unexpected end of file",
         [BAD_REDIRECTION] = "Bad redirection",
         [BAD_FD] = "The file descriptor couldn't be open",
+        // Numeric argument required
+        [CONT_BREAK_NOT_NUM] = "Coninue or break : numeric argument required",
     };
     dprintf(STDERR_FILENO, "%s\n", error_names[type]);
 }

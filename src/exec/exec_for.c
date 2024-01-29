@@ -1,3 +1,4 @@
+#include <stdio.h>
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <env/env.h>
@@ -13,15 +14,31 @@ extern char **environ;
 int exec_for(struct ast_for *ast)
 {
     assert(ast && AST(ast)->type == AST_FOR);
+    set_nb_loop(NB_LOOPS + 1);
     char **elems = expand(&ast->exp);
     int ret = 0;
     int i = 0;
     while (elems[i])
     {
+        if (CONT_LAYER)
+        {
+            set_continue(CONT_LAYER - 1);
+            if (IS_CUR_LOOP(CONT_LAYER))
+                continue;
+            break;
+        }
+        if (BREAK_LAYER)
+        {
+            set_break(BREAK_LAYER - 1);
+            if (IS_CUR_LOOP(BREAK_LAYER))
+                continue;
+            break;
+        }
         assign_var(ast->name, elems[i]);
         ret = exec_list(AST_LIST(ast));
         i++;
     }
+    set_nb_loop(NB_LOOPS - 1);
     destroy_expanded(elems);
     return ret;
 }
