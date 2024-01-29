@@ -1,8 +1,10 @@
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
+#include "tools/ast/ast_utils.h"
 #include "tools/gr_tools.h"
 #include "tools/gr_utils.h"
+#include <stdio.h>
 #include "tools/token/token.h"
 /*
 funcdec = WORD '(' ')' '{\n}' shell_command
