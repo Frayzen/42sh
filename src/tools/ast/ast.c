@@ -76,7 +76,6 @@ void destroy_ast(void *ast)
         break;
     case AST_FUNCT:
         free(AST_FUNCT(ast)->name);
-        goto destroy_list;
         break;
     case AST_FOR:
         free(AST_FOR(ast)->name);
