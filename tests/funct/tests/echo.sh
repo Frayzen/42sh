@@ -124,12 +124,7 @@ discard'
 ###e c h o 
 echo e c h o
 
-###empty command
-
-###empty quotes after -c 
-""
-
-###only spaces in command
-"     "
+### Not backslahed
+echo 'This is unclosed\' here
 
 

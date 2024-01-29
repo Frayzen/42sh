@@ -119,11 +119,12 @@ launch_test()
 
 parallelize_entry() {
     cd ..
-    tmp_folder=$(mktemp -d .XXXXXX)
-    cd "$tmp_folder" || exit
     entry=$1
     file_id=$2
     name=$(basename "$entry")
+    tmp_folder="test$file_id"
+    mkdir "$tmp_folder"
+    cd "$tmp_folder" || exit
     toprint="[MODULE $file_id] $name\n"
     toprint="$toprint$top_line\n"
     save=0
@@ -159,6 +160,7 @@ test_dir=./tests
 id=0
 export total_file="../../result_total"
 export valid_file="../../result_valid"
+touch $total_file $valid_file
 for entry in "$test_dir"/*
 do
     id=$((id+1))
