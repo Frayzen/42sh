@@ -31,10 +31,10 @@ int set_options(int argc, char **argv)
 
 void parse_args(int argc, char **argv)
 {
-        int i = set_options(argc, argv);
+    int i = set_options(argc, argv);
 
     argc -= i;
-    argv += i -1;
+    argv += i - 1;
     if (argc == 0)
     {
         io_streamer_stdin();
