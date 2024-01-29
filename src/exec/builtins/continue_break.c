@@ -7,32 +7,26 @@
 #include "exit/error_handler.h"
 #include "tools/str/string.h"
 
-int get_nb_loop(int set)
+int set_nb_loop(int set)
 {
     static int nb_loop = 0;
-    if (set < 0)
-        nb_loop = 0;
-    else if (set)
+    if (set >= 0)
         nb_loop = set;
     return nb_loop;
 }
 
-int get_continue(int set)
+int set_continue(int set)
 {
     static int cont = 0;
-    if (set < 0)
-        cont = 0;
-    else if (set)
+    if (set >= 0)
         cont = set;
     return cont;
 }
 
-int get_break(int set)
+int set_break(int set)
 {
     static int brk = 0;
-    if (set < 0)
-        brk = 0;
-    else if (set)
+    if (set >= 0)
         brk = set;
     return brk;
 }
@@ -46,13 +40,10 @@ int builtin_continue(char **argv)
         int cont = atoi(argv[1]);
         if (cont <= 0)
             exit_gracefully(CONT_BREAK_RANGE);
-        else if (cont > NB_LOOPS)
-            get_continue(NB_LOOPS);
-        else
-            get_continue(cont);
+        set_continue(cont > NB_LOOPS ? NB_LOOPS : cont);
     }
     else
-        get_continue(1);
+        set_continue(1);
     return 0;
 }
 
@@ -65,11 +56,9 @@ int builtin_break(char **argv)
         int brk = atoi(argv[1]);
         if (brk <= 0)
             exit_gracefully(CONT_BREAK_RANGE);
-        else if (brk > NB_LOOPS)
-            get_break(NB_LOOPS);
-        else
-            get_break(brk);
+        set_break(brk > NB_LOOPS ? NB_LOOPS : brk);
     }
-    get_break(1);
+    else
+        set_break(1);
     return 0;
 }

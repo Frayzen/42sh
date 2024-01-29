@@ -3,13 +3,18 @@
 
 #include "tools/ast/ast.h"
 
-#define NB_LOOPS (get_nb_loop(0))
-#define CONTINUE (get_continue(0))
-#define BREAK (get_break(0))
+// get the number of loops we are currently in
+#define NB_LOOPS (set_nb_loop(-1))
+// get the number of remaining loops to continue
+#define CONT_LAYER (set_continue(-1))
+// get the number of remaining loops to break
+#define BREAK_LAYER (set_break(-1))
+// indicates if the current loop is the loop to break or continue
+#define IS_CUR_LOOP(Val) ((Val) == 0)
 
-int get_nb_loop(int set);
-int get_continue(int set);
-int get_break(int set);
+int set_nb_loop(int set);
+int set_continue(int set);
+int set_break(int set);
 
 /***
  * executes the list ast

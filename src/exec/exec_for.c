@@ -14,38 +14,31 @@ extern char **environ;
 int exec_for(struct ast_for *ast)
 {
     assert(ast && AST(ast)->type == AST_FOR);
-    get_nb_loop(NB_LOOPS + 1);
+    set_nb_loop(NB_LOOPS + 1);
     char **elems = expand(&ast->exp);
     int ret = 0;
     int i = 0;
     while (elems[i])
     {
-        if (CONTINUE)
+        if (CONT_LAYER)
         {
-            if (CONTINUE - 1)
-            {
-                get_continue(CONTINUE - 1);
-                break;
-            }
-            else
-            {
-                get_continue(-1);
+            set_continue(CONT_LAYER - 1);
+            if (IS_CUR_LOOP(CONT_LAYER))
                 continue;
-            }
+            break;
         }
-        else if (BREAK)
+        if (BREAK_LAYER)
         {
-            if (BREAK - 1)
-                get_break(BREAK - 1);
-            else
-                get_break(-1);
+            set_break(BREAK_LAYER - 1);
+            if (IS_CUR_LOOP(BREAK_LAYER))
+                continue;
             break;
         }
         assign_var(ast->name, elems[i]);
         ret = exec_list(AST_LIST(ast));
         i++;
     }
-    get_nb_loop(NB_LOOPS - 1);
+    set_nb_loop(NB_LOOPS - 1);
     destroy_expanded(elems);
     return ret;
 }
