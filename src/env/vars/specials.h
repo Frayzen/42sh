@@ -3,6 +3,13 @@
 
 #include <stdbool.h>
 
+#define CHECK_ARGS(arginfo)                                             \
+    if (!(arginfo) || (arginfo)->argc == 0)                                                                  \
+    {                                                                          \
+        return NULL;                                                     \
+    }
+
+
 enum var_type
 {
     CLASSIC_VAR,

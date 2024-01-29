@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #define _POSIX_C_SOURCE 200809L
 #include "specials.h"
 
@@ -10,8 +11,23 @@
 #include "parser/command/expansion.h"
 #include "tools/str/string.h"
 
+static bool is_arg_index(char *name)
+{
+    if (*name == '0')
+        return false;
+    while (*name)
+    {
+        if (*name > '9' || *name < '0')
+            return false;
+        name++;
+    }
+    return true;
+}
+
 static enum var_type get_var_type(char *name)
 {
+    if (is_arg_index(name))
+        return POSITIONAL_PARAM; 
     if (!strcmp("@", name))
         return SPECIAL_PARAMS;
     if (!strcmp("*", name))
@@ -65,11 +81,12 @@ struct expandable *expand_special_var(struct expandable *cur)
     case POSITIONAL_PARAM: {
         if (!arg_info || arg_info->argc == 0)
             return NULL;
-        int pos = atoi(cur->content);
-        return expandable_init(arg_info->argv[pos], STR_LITTERAL,
+        int pos = atoi(cur->content) - 1;
+        return expandable_init(strdup(arg_info->argv[pos]), STR_LITTERAL,
                                cur->link_next);
     }
-    case SPECIAL_PARAMS: {
+    case SPECIAL_PARAMS: 
+    {
         if (!arg_info || arg_info->argc == 0)
             return NULL;
 
