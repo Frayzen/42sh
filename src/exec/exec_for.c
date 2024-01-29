@@ -1,3 +1,4 @@
+#include <stdio.h>
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <env/env.h>
@@ -19,16 +20,18 @@ int exec_for(struct ast_for *ast)
     int i = 0;
     while (elems[i])
     {
-        if (CONTINUE == NB_LOOPS)
+        if (CONTINUE == (NB_LOOPS - CONTINUE + 1))
         {
-            get_continue(-2);
+            get_continue(-1);
             continue;
         }
-        else if (BREAK == NB_LOOPS)
+        else if (BREAK == (NB_LOOPS - CONTINUE + 1))
         {
-            get_break(-2);
+            get_break(-1);
             break;
         }
+        else if (BREAK || CONTINUE)
+            break;
         assign_var(ast->name, elems[i]);
         ret = exec_list(AST_LIST(ast));
         i++;

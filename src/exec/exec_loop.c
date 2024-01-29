@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 
 #include "execs.h"
 #include "tools/ast/ast.h"
@@ -15,14 +16,16 @@ int exec_loop(struct ast_loop *ast)
     {
         if (CONTINUE == NB_LOOPS)
         {
-            get_continue(-2);
+            get_continue(-1);
             continue;
         }
         else if (BREAK == NB_LOOPS)
         {
-            get_break(-2);
+            get_break(-1);
             break;
         }
+        else if (CONTINUE || BREAK)
+            break;
         exec_list(&ast->exec);
         ret = exec_list(&ast->cond);
     }

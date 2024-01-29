@@ -3,9 +3,9 @@
 
 #include "tools/ast/ast.h"
 
-#define NB_LOOPS (get_nb_loop(-1))
-#define CONTINUE (get_continue(-1))
-#define BREAK (get_break(-1))
+#define NB_LOOPS (get_nb_loop(0))
+#define CONTINUE (get_continue(0))
+#define BREAK (get_break(0))
 
 int get_nb_loop(int set);
 int get_continue(int set);
