@@ -1,8 +1,4 @@
-#include <stddef.h>
-#include <stdio.h>
-
 #include "execs.h"
-#include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 #include "tools/funct_manager/funct_dict.h"
 

@@ -30,7 +30,7 @@ enum status gr_compound_list(struct ast_list *list_ast)
     while (tok_peek()->type == NEWLINE)
         tok_pop_clean();
 
-    return OK;
+    GR_DBG_RET(OK);
 error:
     GR_DBG_RET(ERROR);
 }

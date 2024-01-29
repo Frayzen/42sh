@@ -81,7 +81,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         // look for possible function
         struct ast_list *function = funct_dict_peek_value(argv[0]);
         if (function)
-            ret = exec_entry(AST(function));
+            ret = exec_list(function);
         else
         {
             *pid = exec_prog(argv);
