@@ -14,7 +14,7 @@ int exec_list(struct ast_list *ast)
     int ret = -1;
     for (int i = 0; i < ast->nb_children; i++)
     {
-        if ((CONTINUE && NB_LOOPS - CONTINUE + 1 <= CONTINUE))
+        if (CONTINUE || BREAK)
             break;
         struct ast *child = ast->children[i];
         switch (child->type)

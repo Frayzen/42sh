@@ -14,18 +14,27 @@ int exec_loop(struct ast_loop *ast)
     //! ret for 0
     while (negate ? ret : !ret)
     {
-        if (CONTINUE == NB_LOOPS)
+        if (CONTINUE)
         {
-            get_continue(-1);
-            continue;
+            if (CONTINUE - 1)
+            {
+                get_continue(CONTINUE - 1);
+                break;
+            }
+            else
+            {
+                get_continue(-1);
+                continue;
+            }
         }
-        else if (BREAK == NB_LOOPS)
+        else if (BREAK)
         {
-            get_break(-1);
+            if (BREAK - 1)
+                get_break(BREAK - 1);
+            else
+                get_break(-1);
             break;
         }
-        else if (CONTINUE || BREAK)
-            break;
         exec_list(&ast->exec);
         ret = exec_list(&ast->cond);
     }

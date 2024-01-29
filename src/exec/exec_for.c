@@ -20,18 +20,27 @@ int exec_for(struct ast_for *ast)
     int i = 0;
     while (elems[i])
     {
-        if (CONTINUE == (NB_LOOPS - CONTINUE + 1))
+        if (CONTINUE)
         {
-            get_continue(-1);
-            continue;
+            if (CONTINUE - 1)
+            {
+                get_continue(CONTINUE - 1);
+                break;
+            }
+            else
+            {
+                get_continue(-1);
+                continue;
+            }
         }
-        else if (BREAK == (NB_LOOPS - CONTINUE + 1))
+        else if (BREAK)
         {
-            get_break(-1);
+            if (BREAK - 1)
+                get_break(BREAK - 1);
+            else
+                get_break(-1);
             break;
         }
-        else if (BREAK || CONTINUE)
-            break;
         assign_var(ast->name, elems[i]);
         ret = exec_list(AST_LIST(ast));
         i++;
