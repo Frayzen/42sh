@@ -25,14 +25,16 @@ int set_options(int argc, char **argv)
             break;
         i++;
     }
-    argv += i;
+
     return i;
 }
 
 void parse_args(int argc, char **argv)
 {
-    argc -= set_options(argc, argv);
+    int i = set_options(argc, argv);
 
+    argc -= i;
+    argv += i - 1;
     if (argc == 0)
     {
         io_streamer_stdin();
