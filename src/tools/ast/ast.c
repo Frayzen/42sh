@@ -74,6 +74,10 @@ void destroy_ast(void *ast)
         free(AST_AND_OR(ast)->types);
         goto destroy_list;
         break;
+    case AST_FUNCT:
+        free(AST_FUNCT(ast)->name);
+        goto destroy_list;
+        break;
     case AST_FOR:
         free(AST_FOR(ast)->name);
         if (AST_FOR(ast)->item_list)

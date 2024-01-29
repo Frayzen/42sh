@@ -1,3 +1,6 @@
+#define _POSIX_C_SOURCE 200809L
+#include <string.h>
+
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
@@ -13,8 +16,8 @@ enum status gr_function(struct ast_list *ast)
     struct ast_funct *ast_funct = init_ast(AST_FUNCT);
     struct token *token = tok_peek();
     CHECK_GOTO(!IS_WORDABLE(token), error);
-    ast_funct->name = token->str->value;
-    tok_pop();
+    ast_funct->name = strdup(token->str->value);
+    tok_pop_clean();
     CHECK_GOTO(tok_peek()->type != PRTH_OPEN, error);
     tok_pop_clean();
     CHECK_GOTO(tok_peek()->type != PRTH_CLOSED, error);
