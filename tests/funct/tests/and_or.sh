@@ -31,3 +31,11 @@ if echo a && ! true; then echo ok; else echo ko; fi
 
 ###with if false and negation
 if echo a && ! false; then echo ok; else echo ko; fi
+
+###bad or pipe
+echo hehe || | cat
+echo e |||
+
+###bad or ;
+true || ;
+echo; || ;

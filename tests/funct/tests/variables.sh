@@ -133,3 +133,7 @@ done
 for a in "$@"; do
     echo $a
 done
+
+###question mark
+cat heheh
+echo $?
