@@ -37,7 +37,7 @@ enum status gr_function(struct ast_list *ast)
     struct ast_funct *ast_funct = init_ast(AST_FUNCT);
     struct token *token = tok_peek();
     struct token *token2 = tok_peek2();
-    CHECK_GOTO(!IS_WORDABLE(token) || (!check_name_valid(token->str->value))
+    CHECK_GOTO(!IS_WORDABLE(token) || !check_name_valid(token->str->value)
                    || token2->type != PRTH_OPEN,
                error);
     ast_funct->name = strdup(token->str->value);
