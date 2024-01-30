@@ -1,3 +1,4 @@
+#include "exit/error_handler.h"
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
@@ -25,6 +26,7 @@ enum status gr_input(struct ast **ast)
     tok_pop_clean();
     GR_DBG_RET(OK);
 error:
+    exit_gracefully(GRAMMAR_ERROR_ENTRY);
     consume_all();
     destroy_ast(*ast);
     GR_DBG_RET(ERROR);
