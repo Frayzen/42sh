@@ -53,9 +53,11 @@ enum token_type
     // builtins /!\ leave T_TRUE as first one and ECHO as last one
     T_TRUE,
     T_FALSE,
-    ECHO,
-    UNSET,
+    T_CONTINUE,
+    T_BREAK,
     DOT,
+    UNSET,
+    ECHO,
     // terminals
     WORD,
     ASSMT,

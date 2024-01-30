@@ -74,6 +74,12 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             ret = 0;
         else if (!strcmp(argv[0], "false"))
             ret = 1;
+        else if (!strcmp(argv[0], "."))
+            ret = builtin_dot(argv);
+        else if (!strcmp(argv[0], "continue"))
+            ret = builtin_continue(argv);
+        else if (!strcmp(argv[0], "break"))
+            ret = builtin_break(argv);
         else
         {
             *pid = exec_prog(argv);
@@ -83,6 +89,5 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     }
     destroy_expanded(argv);
     close_redirs(fds);
-    set_ret_val(ret);
     return ret;
 }

@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "pretty_print/pretty_print.h"
+#include "tools/pretty_print/pretty_print.h"
 
 // Setting colors
 #define RED "\033[0;31m"
@@ -162,9 +162,6 @@ void print_ast_and_or(struct ast_and_or *ast, int depth) //, bool *closed_nod)
     pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth + 1, true);
     // closed_nod);
 }
-
-// Returns the max depth if the given depth is <= or replace max depth with the
-// new max_depth and returns the old max depth
 bool get_max_depth(int depth)
 {
     static int max_depth = 0;
@@ -173,8 +170,6 @@ bool get_max_depth(int depth)
     max_depth = depth;
     return true;
 }
-
-// Prints the ast according to its type
 void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
                            bool is_last_child)
 //, bool *closed_nod)
@@ -218,7 +213,6 @@ void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
         break;
     }
 }
-
 void pretty_print_ast(struct ast *ast)
 {
     if (!ast)
