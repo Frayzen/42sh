@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
         if (gr_input(&ast) == ERROR)
         {
             ast = NULL;
-            
+
             print_error(GRAMMAR_ERROR_ENTRY);
             ret = 2;
             continue;
