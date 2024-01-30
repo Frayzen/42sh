@@ -15,10 +15,10 @@ int exec_loop(struct ast_loop *ast)
     //! ret for 0
     while (negate ? ret : !ret)
     {
-        if (CONT_LAYER)
+        if (CNTU_LAYER)
         {
             negate = false;
-            if (IS_CUR_LOOP(set_continue(CONT_LAYER - 1)))
+            if (IS_CUR_LOOP(set_continue(CNTU_LAYER - 1)))
                 continue;
             break;
         }

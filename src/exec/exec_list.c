@@ -14,7 +14,7 @@ int exec_list(struct ast_list *ast)
     int ret = -1;
     for (int i = 0; i < ast->nb_children; i++)
     {
-        if (CONT_LAYER || BREAK_LAYER)
+        if (CNTU_LAYER || BREAK_LAYER)
             break;
         struct ast *child = ast->children[i];
         switch (child->type)
