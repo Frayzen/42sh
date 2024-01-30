@@ -14,7 +14,7 @@ while
 
 
     # a list
-    date && who > output & true
+    ls && who > output && true
     # another list
     echo 2<heylol || ls; rm file && echo "ok" > file
     # a couple of <newline>s

@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include "parser/command/expansion.h"
+#include "tools/assignment/assignment.h"
 #include "tools/token/token.h"
 
 #define AST_ROOT (swap_ast_root(NULL))
@@ -77,6 +78,7 @@ struct ast_cmd
 {
     struct ast_redir redirs;
     struct expansion args_expansion;
+    struct assignment_list assignment_list;
 };
 
 #define AST_SH(Base) ((struct ast_sh *)(Base))
@@ -91,8 +93,7 @@ struct ast_for
 {
     struct ast_list cmds;
     char *name;
-    int nb_items;
-    struct lex_str **item_list;
+    struct expansion exp;
 };
 
 // BEGIN AND OR

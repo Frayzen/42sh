@@ -1,17 +1,18 @@
+#include "env/vars/specials.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
 #include <stdbool.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "commands/execs_cmd.h"
 #include "env/env.h"
+#include "env/vars/vars.h"
 #include "exec/builtins/builtins.h"
+#include "exec/commands/execs_cmd.h"
 #include "exec/execs.h"
 #include "exit/error_handler.h"
 #include "parser/command/expander.h"
@@ -46,49 +47,58 @@ int exec_prog(char **argv)
     return pid;
 }
 
-void destroy_argv(char **argv)
-{
-    int i = 0;
-    while (argv[i])
-        free(argv[i++]);
-    free(argv);
-}
-
 int exec_cmd(struct ast_cmd *ast, int *pid)
 {
     assert(ast && AST(ast)->type == AST_CMD);
     int *fds = setup_redirs(AST_REDIR(ast));
     if (!fds)
         return 1;
-    int ret = 2;
+    int ret = 0;
     char **argv = expand(&ast->args_expansion);
+    apply_assignments(&ast->assignment_list);
     *pid = PID_SET;
-    if (!strcmp(argv[0], "echo"))
+    if (argv[0])
     {
-        builtin_echo(argv);
-        ret = 0;
-    }
-    else if (!strcmp(argv[0], "exit"))
-        builtin_exit(argv);
-    else if (!strcmp(argv[0], "true"))
-        ret = 0;
-    else if (!strcmp(argv[0], "false"))
-        ret = 1;
-    else if (!strcmp(argv[0], "."))
-        ret = builtin_dot(argv);
-    else
-    {
-        // look for possible function
-        struct ast_list *function = funct_dict_peek_value(argv[0]);
-        if (function)
-            ret = exec_list(function);
+        if (!strcmp(argv[0], "echo"))
+        {
+            builtin_echo(argv);
+            ret = 0;
+        }
+        else if (!strcmp(argv[0], "cd"))
+            ret = builtin_cd(argv);
+        else if (!strcmp(argv[0], "exit"))
+            builtin_exit(argv);
+        else if (!strcmp(argv[0], "unset"))
+            ret = builtin_unset(argv);
+        else if (!strcmp(argv[0], "."))
+            ret = builtin_dot(argv);
+        else if (!strcmp(argv[0], "true"))
+            ret = 0;
+        else if (!strcmp(argv[0], "false"))
+            ret = 1;
+        else if (!strcmp(argv[0], "."))
+            ret = builtin_dot(argv);
+        else if (!strcmp(argv[0], "continue"))
+            ret = builtin_continue(argv);
+        else if (!strcmp(argv[0], "break"))
+            ret = builtin_break(argv);
+        else if (!strcmp(argv[0], "exit"))
+            builtin_exit(argv);
         else
         {
-            *pid = exec_prog(argv);
-            ret = -1;
+            // look for possible function
+            struct ast_list *function = funct_dict_peek_value(argv[0]);
+            if (function)
+                ret = exec_list(function);
+            else
+            {
+                *pid = exec_prog(argv);
+                ret = -1;
+            }
         }
+        revert_assignments(&ast->assignment_list);
     }
-    destroy_argv(argv);
+    destroy_expanded(argv);
     close_redirs(fds);
     return ret;
 }

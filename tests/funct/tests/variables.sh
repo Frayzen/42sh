@@ -1,8 +1,18 @@
+###Test with functioni
+a='echo    ok;'
+$a
+
+### Echo diff var empty str
+echo this $a '' $a$b this
+
 ###Basic variable
 a=3
 b=4
 echo $a $b
-printenv
+
+### Assignment quotes
+'val'=ok; echo $val
+val='ok'; echo $val
 
 ###Shell variable
 
@@ -12,7 +22,7 @@ echo $a a=4
 
 ###Variable does not exist
 echo $a; echo a$toto
-echo $b
+echo $b a$b\c a$b $b\c
 
 ###Subsitution
 a=3
@@ -32,19 +42,11 @@ ls && cat $a >$b;
 rm $a $b
 echo $a$b
 
-###Var with redirection
-a=1
-echo hehe >$a
-cat $a<$a
-
-###Test with functioni
-a='echo    ok;'
-$a
 
 ###Test variable quotes
-toto=Hello World
-echo 'this is $toto hehe' "This is the real $toto$" "Hello \$toto" >"$$"
-cat <$$
+toto="Hello World"
+echo 'this is $toto hehe' "This is the real $toto$" "Hello \$toto" >"$UID"
+cat <$UID
 
 ###Hard expansions
 a='sh    42'
@@ -100,6 +102,14 @@ c='ls -l'
 $c
 
 
+###In for loop
+b=this is a test
+c='this     as     well'
+for a in $b $c "$c"
+do
+    echo $a
+done
+
 ###redir string
 tat=1
 echo ok $tat>tst
@@ -108,5 +118,22 @@ tat=twok
 echo ok $twok>other
 cat other
 
-###Unexpected EOF Var
-echo ${a
+###Nested echo
+a=3 bash -c 'echo $a'
+
+###Var redir output file
+a=2
+echo this 2>&$a
+cat $a
+
+###Print args
+for a in "$*"; do
+    echo $a
+done
+for a in "$@"; do
+    echo $a
+done
+
+###question mark
+cat heheh
+echo $?

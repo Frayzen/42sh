@@ -78,45 +78,11 @@ void io_streamer_stdin(void)
     streamer = stdin;
 }
 
-void main_to_stream(int argc, char **argv)
-{
-    int i = 1;
-    while (i < argc)
-    {
-        if (!strcmp(argv[i], "--pretty-print") || !strcmp(argv[i], "-p"))
-            get_env_flag()->pretty_print = true;
-        else if (!strcmp(argv[i], "--verbose") || !strcmp(argv[i], "-v"))
-            get_env_flag()->verbose = true;
-        else if (!strcmp(argv[i], "--debug-pipe") || !strcmp(argv[i], "-d"))
-            get_env_flag()->debug_pipe = true;
-        else if (!strcmp(argv[i], "--debug-env") || !strcmp(argv[i], "-e"))
-            get_env_flag()->debug_env = true;
-        else if (!strcmp(argv[i], "--debug-grammar") || !strcmp(argv[i], "-g"))
-            get_env_flag()->debug_grammar = true;
-        else
-            break;
-        i++;
-    }
-    argc -= i;
-    argv += i;
-    if (argc == 0)
-        io_streamer_stdin();
-    else if (argc == 1)
-    {
-        if (!strcmp(*argv, "-c"))
-            exit_gracefully(ARG_ERROR);
-        io_streamer_file(*argv);
-    }
-    else if (argc == 2)
-        io_streamer_string(argc, argv);
-    else
-        exit_gracefully(ARG_ERROR);
-}
-
 char stream_next(void)
 {
     char ret = fgetc(streamer);
     if (ret == -1)
         ret = '\0';
+    fflush(streamer);
     return ret;
 }

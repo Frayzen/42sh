@@ -1,16 +1,8 @@
 #ifndef IO_STREAMERS_H
 #define IO_STREAMERS_H
 
-/***
- * According to the arguments given to main, calls the right
-    streamer function
- * @param argc number of arguments given to the function 42sh
- * @param argc list of the arguments given to the function 42sh
- * @return nothing
- */
-
+#include <stddef.h>
 #include <stdio.h>
-void main_to_stream(int argc, char **argv);
 
 /***
  * Return the following of the current stream
@@ -38,4 +30,7 @@ FILE *swap_fd(FILE *new_file);
  */
 FILE *load_file(char *path_to_file);
 
+void io_streamer_stdin(void);
+
+void io_streamer_string(int argc, char **argv);
 #endif /* !IO_STREAMERS_H */

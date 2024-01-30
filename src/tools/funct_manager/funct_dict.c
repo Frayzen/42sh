@@ -28,7 +28,7 @@ struct ast_list *funct_dict_peek_value(char *name)
 {
     for (int i = 0; i < FUNCT_DICT->nb_entries; i++)
     {
-        if (!strcmp(FUNCT_DICT->entries[i].name,name))
+        if (!strcmp(FUNCT_DICT->entries[i].name, name))
         {
             return FUNCT_DICT->entries[i].body;
         }

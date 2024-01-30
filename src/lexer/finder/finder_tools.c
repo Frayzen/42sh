@@ -1,6 +1,5 @@
 #include "finder_tools.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -57,14 +56,22 @@ bool is_name_char(char c)
 
 bool is_name(char *str, size_t size)
 {
-    for (unsigned int i = 0; i < size; i++)
+    if (size == 0)
+        return false;
+    char c = str[0];
+    if (!is_name_char(c))
+        return false;
+    if (c >= '0' && c <= '9')
+        return false;
+    for (size_t i = 1; i < size; i++)
     {
-        char c = str[i];
+        c = str[i];
         // Check if c is in the portable character set
         if (is_name_char(c))
             continue;
         return false;
     }
+
     return true;
 }
 
@@ -72,9 +79,14 @@ bool assignment_word(const struct lex_str *str)
 {
     char *begin = str->value;
     char *first_eq = strchr(begin, '=');
-    if (!first_eq)
+    for (int i = 0; i < first_eq - str->value + 1; i++)
+    {
+        if (str->expand[i] != STR_LITTERAL)
+            return false;
+    }
+    if (!first_eq || first_eq == str->value)
         return false;
-    size_t size = first_eq - begin + 1;
+    size_t size = first_eq - begin;
     return is_name(begin, size);
 }
 
@@ -85,12 +97,20 @@ void append_char(struct pending *p, char c)
     str->value = realloc(str->value, str->size * sizeof(char));
     str->value[id] = c;
     str->expand = realloc(str->expand, str->size * sizeof(enum expand_type));
-    if (!p->expanding)
-        str->expand[id] = STR_LITTERAL;
-    else if (p->in_quote)
-        str->expand[id] = QUOTED_VAR;
+    if (p->in_quote)
+    {
+        if (!p->expanding)
+            str->expand[id] = QUOTED_STR;
+        else
+            str->expand[id] = QUOTED_VAR;
+    }
     else
-        str->expand[id] = UNQUOTED_VAR;
+    {
+        if (!p->expanding)
+            str->expand[id] = STR_LITTERAL;
+        else
+            str->expand[id] = UNQUOTED_VAR;
+    }
     p->blank = false;
 }
 
@@ -145,6 +165,8 @@ void skip_until(struct pending *p, enum skip_behavior behavior)
     {
         if (!append)
             io_pop();
+        else if (behavior == SKIP_SINGLE_QUOTE)
+            append_io(p);
         else if (behavior == SKIP_VARIABLE_BRACKETS && !is_name_char(c))
             exit_gracefully(BAD_VAR_NAME);
         else if (c == '\\')

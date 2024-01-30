@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "lexer/token_saver.h"
 #include "parser/command/expander.h"
 #include "rules.h"
@@ -40,12 +42,14 @@ enum status gr_simple_command(struct ast_list *list)
     struct token *tok2 = tok_peek2();
     if (tok2->type == PRTH_OPEN)
         goto error;
-    register_token(&cmd->args_expansion, tok_word);
+    exp_register_str(&cmd->args_expansion, tok_word->str);
     tok_pop();
     // {element}
     while (gr_element(cmd) != ERROR)
         continue;
+    goto success;
     // {element}
+success:
     add_child(list, AST(cmd));
     GR_DBG_RET(OK);
 error:

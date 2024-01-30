@@ -5,14 +5,18 @@
 #include "execs.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
+#include "tools/token/token.h"
 
 int exec_list(struct ast_list *ast)
 {
-    assert(AST(ast)->type == AST_LIST || AST(ast)->type == AST_FOR || AST(ast)->type == AST_FUNCT);
+    assert(AST(ast)->type == AST_LIST || AST(ast)->type == AST_FOR
+           || AST(ast)->type == AST_FUNCT);
     assert(ast && ast->nb_children > 0);
     int ret = -1;
     for (int i = 0; i < ast->nb_children; i++)
     {
+        if (CONT_LAYER || BREAK_LAYER)
+            break;
         struct ast *child = ast->children[i];
         switch (child->type)
         {

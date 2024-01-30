@@ -1,8 +1,8 @@
+#include <assert.h>
+
 #include "finder.h"
 #include "io_backend/backend_saver.h"
 #include "lexer/finder/finder_tools.h"
-
-#include <assert.h>
 
 void consume_redir_op(struct pending *p)
 {
