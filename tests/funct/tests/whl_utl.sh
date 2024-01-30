@@ -26,3 +26,6 @@ do
     ls
     cat file
 done
+
+### Until simple
+n=true; until ! $n; do echo toto; n=false; done

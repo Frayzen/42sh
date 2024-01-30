@@ -20,10 +20,10 @@ int exec_for(struct ast_for *ast)
     int i = 0;
     while (elems[i])
     {
-        if (CONT_LAYER)
+        if (CNTU_LAYER)
         {
-            set_continue(CONT_LAYER - 1);
-            if (IS_CUR_LOOP(CONT_LAYER))
+            set_continue(CNTU_LAYER - 1);
+            if (IS_CUR_LOOP(CNTU_LAYER))
                 continue;
             break;
         }

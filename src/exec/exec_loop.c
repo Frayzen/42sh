@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 
 #include "execs.h"
@@ -14,17 +15,17 @@ int exec_loop(struct ast_loop *ast)
     //! ret for 0
     while (negate ? ret : !ret)
     {
-        if (CONT_LAYER)
+        if (CNTU_LAYER)
         {
-            set_continue(CONT_LAYER - 1);
-            if (IS_CUR_LOOP(CONT_LAYER))
+            negate = false;
+            if (IS_CUR_LOOP(set_continue(CNTU_LAYER - 1)))
                 continue;
             break;
         }
         if (BREAK_LAYER)
         {
-            set_break(BREAK_LAYER - 1);
-            if (IS_CUR_LOOP(BREAK_LAYER))
+            negate = false;
+            if (IS_CUR_LOOP(set_break(BREAK_LAYER - 1)))
                 continue;
             break;
         }
