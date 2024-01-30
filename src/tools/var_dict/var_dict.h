@@ -3,11 +3,12 @@
 
 #define VAR_DICT_SIZE 1024
 #define VAR_DICT (get_dict())
-
+#include "tools/definitions.h"
 struct var_pair
 {
     char * key;
     char * value;
+    BOOL env_var;
 };
 
 struct var_dict
