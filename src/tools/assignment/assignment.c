@@ -1,5 +1,5 @@
-#include "parser/command/expander.h"
 #define _POSIX_C_SOURCE 200809L
+#include "parser/command/expander.h"
 #include "assignment.h"
 
 // manage the variable assignments using environ to store, restore and update

@@ -7,7 +7,6 @@
 #include "env/env.h"
 #include "exec/execs.h"
 #include "exit/error_handler.h"
-#include "io_backend/io_streamers.h"
 #include "parser/grammar/rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
@@ -20,6 +19,7 @@ int main(int argc, char *argv[])
     setup_debug_fds();
     struct ast *ast = NULL;
     swap_ast_root(&ast);
+    init_env_vars();
     int ret = 0;
     do
     {
