@@ -13,7 +13,8 @@
 funcdec = WORD '(' ')' '{\n}' shell_command
 */
 
-int check_name_valid(char *name)
+//check that the name of the function is valid according to SCL
+static int check_name_valid(char *name)
 {
     int i = 0;
     while (name[i] != 0)
