@@ -1,4 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
+#include <ctype.h>
+#include <fnmatch.h>
 #include <string.h>
 
 #include "lexer/token_saver.h"
@@ -10,13 +12,33 @@
 /*
 funcdec = WORD '(' ')' '{\n}' shell_command
 */
+
+int check_name_valid(char *name)
+{
+    int i = 0;
+    while (name[i] != 0)
+    {
+        if (i == 0)
+        {
+            if (!isalpha(name[i]) && name[i] != '_')
+                return 0;
+        }
+        else if (!isalnum(name[i]) && name[i] != '_')
+            return 0;
+        i++;
+    }
+    return 1;
+}
+
 enum status gr_function(struct ast_list *ast)
 {
     GR_DBG_START(Function);
     struct ast_funct *ast_funct = init_ast(AST_FUNCT);
     struct token *token = tok_peek();
     struct token *token2 = tok_peek2();
-    CHECK_GOTO(!IS_WORDABLE(token) || token2->type != PRTH_OPEN, error);
+    CHECK_GOTO(!IS_WORDABLE(token) || (!check_name_valid(token->str->value))
+                   || token2->type != PRTH_OPEN,
+               error);
     ast_funct->name = strdup(token->str->value);
     tok_pop_clean();
     tok_pop_clean();
