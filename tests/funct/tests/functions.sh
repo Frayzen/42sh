@@ -6,3 +6,4 @@ foo() { bar() { echo toto } }; foo; bar
 
 ###triple function
 foo() { bar() { popo() { echo toto } } }; foo; bar; popo
+
