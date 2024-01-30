@@ -50,6 +50,7 @@ void print_error(enum error_type type)
         [LIST_NOT_FOUND] = "The element in the list ast is invalid",
         [PIPE_NOT_FOUND] = "The element in the pipe ast is invalid",
         [FD_DICO_FULL] = "The file descriptor dictionary is full",
+        [VAR_DICO_FULL] = "The variable dictionary is full",
         [CONT_BREAK_RANGE] = "Continue or break : loop count out of range",
         // Misuse of shell built-ins -> 2
         [ARG_ERROR] = "The arguments did not match",
