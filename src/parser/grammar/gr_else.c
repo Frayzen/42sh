@@ -20,9 +20,9 @@ enum status gr_else(struct ast_if *ast)
         {
             destroy_ast(ast->fallback);
             ast->fallback = NULL;
-            return ERROR;
+            GR_DBG_RET(ERROR);
         }
-        return OK;
+        GR_DBG_RET(OK);
     }
     if (token->type != ELIF)
         GR_DBG_RET(ERROR);
@@ -34,8 +34,8 @@ enum status gr_else(struct ast_if *ast)
     CHECK_GOTO(gr_compound_list(AST_LIST(&elif->then)) == ERROR, error);
     gr_else(elif);
     ast->fallback = AST(elif);
-    return OK;
+    GR_DBG_RET(OK);
 error:
     destroy_ast(elif);
-    return ERROR;
+    GR_DBG_RET(ERROR);
 }

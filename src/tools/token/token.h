@@ -16,10 +16,12 @@ enum token_type
     NEWLINE,
     BSZERO,
     SEMI_COLON,
-
     // operators ?
     PRTH_OPEN,
     PRTH_CLOSED,
+    BRK_OPEN,
+    BRK_CLOSED,
+
     // redir
     CHEVRON,
     PIPE,
@@ -44,10 +46,6 @@ enum token_type
     IN,
     DO,
     DONE,
-
-    BRK_OPEN,
-    BRK_CLOSED,
-
     NEGATION,
 
     // builtins /!\ leave T_TRUE as first one and ECHO as last one

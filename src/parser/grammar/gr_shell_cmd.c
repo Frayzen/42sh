@@ -25,7 +25,7 @@ int check_compound_token(enum token_type expected_type1,
     if (token->type == expected_type1)
     {
         tok_pop_clean();
-        if (gr_list((struct ast **)&list) == OK)
+        if (gr_compound_list(list) == OK)
         {
             token = tok_peek();
             if (token->type != expected_type2)
@@ -34,7 +34,7 @@ int check_compound_token(enum token_type expected_type1,
             return GOOD;
         }
         else
-            return 0;
+            return STOP;
     }
     return WAIT;
 }
@@ -45,10 +45,10 @@ enum status gr_shell_cmd(struct ast_list *list)
 
     int res = check_compound_token(BRK_OPEN, BRK_CLOSED, list);
     if (res == GOOD || res == STOP)
-        return (res == GOOD) ? gr_debug_end(OK) : gr_debug_end(ERROR);
+        GR_DBG_RET((res == GOOD) ? gr_debug_end(OK) : gr_debug_end(ERROR));
     res = check_compound_token(PRTH_OPEN, PRTH_CLOSED, list);
     if (res == GOOD || res == STOP)
-        return (res == GOOD) ? gr_debug_end(OK) : gr_debug_end(ERROR);
+        GR_DBG_RET((res == GOOD) ? gr_debug_end(OK) : gr_debug_end(ERROR));
     if (gr_if(list) == OK)
         GR_DBG_RET(OK);
     if (gr_while(list) == OK)

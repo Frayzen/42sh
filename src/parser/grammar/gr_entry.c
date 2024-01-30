@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "exit/error_handler.h"
 #include "lexer/token_saver.h"
 #include "rules.h"
