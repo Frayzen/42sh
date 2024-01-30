@@ -89,6 +89,5 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     }
     destroy_expanded(argv);
     close_redirs(fds);
-    set_ret_val(ret);
     return ret;
 }

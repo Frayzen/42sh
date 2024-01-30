@@ -42,6 +42,10 @@ echo "A" ;;;; echo "B"
 ###bad seperator5
 echo "Redirected" &;; output.txt
 
+##bad_unterminated_quote
+echo 'hdhdh
+
+
 ### Unclosed
 echo "This is unclosed\" here
 
