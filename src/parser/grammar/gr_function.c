@@ -19,6 +19,7 @@ enum status gr_function(struct ast_list *ast)
     CHECK_GOTO(!IS_WORDABLE(token) || token2->type != PRTH_OPEN, error);
     ast_funct->name = strdup(token->str->value);
     tok_pop_clean();
+    tok_pop_clean();
     CHECK_GOTO(tok_peek()->type != PRTH_CLOSED, error);
     tok_pop_clean();
 
