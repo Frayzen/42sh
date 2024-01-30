@@ -1,7 +1,7 @@
 #ifndef VARS_H
 #define VARS_H
 #include <stdbool.h>
-// #define _POSIX_C_SOURCE 200809L
+#define _POSIX_C_SOURCE 200809L
 
 /***
  * set the variable named name to the value

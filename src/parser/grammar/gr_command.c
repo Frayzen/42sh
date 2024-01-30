@@ -18,6 +18,7 @@ enum status gr_command(struct ast_pipe *pipe)
         struct ast_sh *sh = AST_SH(list->children[list->nb_children - 1]);
         while (gr_redir(AST_REDIR(sh)) == OK)
             ;
+        GR_DBG_RET(OK);
     }
     if (gr_function(list) == ERROR)
         GR_DBG_RET(ERROR);

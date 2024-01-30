@@ -15,15 +15,16 @@ enum status gr_function(struct ast_list *ast)
     GR_DBG_START(Function);
     struct ast_funct *ast_funct = init_ast(AST_FUNCT);
     struct token *token = tok_peek();
-    CHECK_GOTO(!IS_WORDABLE(token), error);
+    struct token *token2 = tok_peek2();
+    CHECK_GOTO(!IS_WORDABLE(token) || token2->type != PRTH_OPEN, error);
     ast_funct->name = strdup(token->str->value);
-    tok_pop_clean();
-    CHECK_GOTO(tok_peek()->type != PRTH_OPEN, error);
     tok_pop_clean();
     CHECK_GOTO(tok_peek()->type != PRTH_CLOSED, error);
     tok_pop_clean();
+
     while (tok_peek()->terminal)
         tok_pop_clean();
+
     CHECK_GOTO(gr_shell_cmd(AST_LIST(ast_funct)) == ERROR, error);
     add_child(ast, AST(ast_funct));
     GR_DBG_RET(OK);
