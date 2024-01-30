@@ -1,5 +1,5 @@
-#ifndef FD_DICT_H
-#define FD_DICT_H
+#ifndef FUNCT_DICT_H
+#define FUNCT_DICT_H
 
 #define FUNCT_DICT_SIZE 1024
 #define FUNCT_DICT (get_funct_dict())
@@ -55,4 +55,4 @@ void funct_dict_pop(char *name);
  */
 void funct_dict_free(void);
 
-#endif /* !FD_DICT_H */
+#endif /* !FUNCT_DICT_H */
