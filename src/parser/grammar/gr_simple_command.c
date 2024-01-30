@@ -38,7 +38,7 @@ enum status gr_simple_command(struct ast_list *list)
     struct token *tok_word = tok_peek();
     if (!IS_COMMAND(tok_word))
     {
-        if (nb_prefix == 0)
+        if (nb_prefix == 0 && !tok_word->terminal)
             goto error;
         goto success;
     }

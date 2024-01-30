@@ -3,6 +3,7 @@
 #include "tools/ast/ast.h"
 #include "tools/gr_tools.h"
 #include "tools/gr_utils.h"
+#include "tools/token/token.h"
 /*
 pipeline = ['!'] command { '|' {'\n'} command } ;
 */
@@ -15,6 +16,12 @@ enum status gr_pipeline(struct ast_list *list)
     {
         pipe->negated = true;
         tok_pop_clean();
+        while ((token = tok_peek())->type == NEGATION)
+        {
+            tok_pop_clean();
+            pipe->negated = !pipe->negated;
+        }
+
     }
     CHECK_GOTO(gr_command(pipe) == ERROR, error);
     while (tok_peek()->type == PIPE)
