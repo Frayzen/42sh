@@ -1,3 +1,4 @@
+#include "env/vars/specials.h"
 #define _POSIX_C_SOURCE 200809L
 
 #include <assert.h>
@@ -36,6 +37,9 @@ int exec_piped(struct ast *ast, int in, int out, int *pid)
         break;
     case AST_FOR:
         ret = exec_for(AST_FOR(ast));
+        break;
+    case AST_FUNCT:
+        ret = exec_store_funct(AST_FUNCT(ast));
         break;
     default:
         print_error(PIPE_NOT_FOUND);
@@ -96,6 +100,7 @@ int exec_pipe(struct ast_pipe *ast)
     // Set return value
     if (retval == PID_SET)
         retval = wait_for(pids[i]);
+    set_ret_val(retval);
     free(pids);
     if (ast->negated)
         retval = !retval;

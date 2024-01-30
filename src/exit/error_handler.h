@@ -12,11 +12,13 @@ enum error_type
     LIST_NOT_FOUND,
     PIPE_NOT_FOUND,
     FD_DICO_FULL,
+    FUNCT_DICO_FULL,
     UNEXPECTED_EOF,
     UNSET_NOT_VAR_AND_FN,
     BAD_VAR_NAME,
     BAD_REDIRECTION,
     BAD_FD,
+    CONT_BREAK_RANGE,
     // Misuse of shell built-ins -> 2
     ARG_ERROR,
     GRAMMAR_ERROR_ENTRY,
@@ -26,7 +28,9 @@ enum error_type
     NO_READ_PERM,
     INVALID_FILE_PATH,
     // Command not found -> 127
-    EXECVP_FAILED
+    EXECVP_FAILED,
+    // Numeric argument exepcted -> 128
+    CONT_BREAK_NOT_NUM
 };
 
 /***

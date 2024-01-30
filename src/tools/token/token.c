@@ -1,5 +1,5 @@
 #define _XOPEN_SOURCE 700
-#include "token/token.h"
+#include "tools/token/token.h"
 
 #include <ctype.h>
 #include <fnmatch.h>
@@ -106,17 +106,23 @@ void print_token(struct token *token)
 const char **toktype_lookup(void)
 {
     static const char *lookup_table[] = {
-        [IF] = "if",         [THEN] = "then",   [ELIF] = "elif",
-        [ELSE] = "else",     [FI] = "fi",       [SEMI_COLON] = ";",
-        [NEWLINE] = "\n",    [ECHO] = "echo",   [T_TRUE] = "true",
-        [T_FALSE] = "false", [BSZERO] = "\0",   [CHEVRON] = "CHEVRON",
-        [IO_NUMBER] = "NB",  [NEGATION] = "!",  [PIPE] = "|",
-        [WHILE] = "while",   [DO] = "do",       [DONE] = "done",
-        [UNTIL] = "until",   [OR] = "||",       [AND] = "&&",
-        [FOR] = "for",       [IN] = "in",       [UNSET] = "unset",
-        [DOT] = ".",         [ASSMT] = "ASMT",  [BRK_OPEN] = "{",
-        [BRK_CLOSED] = "}",  [PRTH_OPEN] = "(", [PRTH_CLOSED] = ")",
-        [WORD] = NULL,
+        [IF] = "if",         [THEN] = "then",
+        [ELIF] = "elif",     [ELSE] = "else",
+        [FI] = "fi",         [SEMI_COLON] = ";",
+        [NEWLINE] = "\n",    [ECHO] = "echo",
+        [T_TRUE] = "true",   [T_FALSE] = "false",
+        [BSZERO] = "\0",     [CHEVRON] = "CHEVRON",
+        [IO_NUMBER] = "NB",  [NEGATION] = "!",
+        [PIPE] = "|",        [WORD] = NULL,
+        [WHILE] = "while",   [DO] = "do",
+        [DONE] = "done",     [UNTIL] = "until",
+        [OR] = "||",         [AND] = "&&",
+        [FOR] = "for",       [IN] = "in",
+        [DOT] = ".",         [BRK_OPEN] = "{",
+        [BRK_CLOSED] = "}",  [UNSET] = "unset",
+        [ASSMT] = "ASMT",    [PRTH_OPEN] = "(",
+        [PRTH_CLOSED] = ")", [T_CONTINUE] = "continue",
+        [T_BREAK] = "break",
     };
     return lookup_table;
 }

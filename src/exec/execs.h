@@ -3,6 +3,19 @@
 
 #include "tools/ast/ast.h"
 
+// get the number of loops we are currently in
+#define NB_LOOPS (set_nb_loop(-1))
+// get the number of remaining loops to continue
+#define CNTU_LAYER (set_continue(-1))
+// get the number of remaining loops to break
+#define BREAK_LAYER (set_break(-1))
+// indicates if the current loop is the loop to break or continue
+#define IS_CUR_LOOP(Val) ((Val) == 0)
+
+int set_nb_loop(int set);
+int set_continue(int set);
+int set_break(int set);
+
 /***
  * executes the list ast
  * @param ast the AST_LIST tree to execute
@@ -37,5 +50,11 @@ int exec_for(struct ast_for *ast);
  * @param ast tree to execute
  */
 int exec_and_or(struct ast_and_or *ast);
+
+/***
+ * stores the name and body of a function in the dictionnary
+ * @param ast tree to store
+ */
+int exec_store_funct(struct ast_funct *ast);
 
 #endif /* EXECS_H */
