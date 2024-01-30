@@ -11,7 +11,6 @@ libtools_a_SOURCES = \
 	ast/ast_utils.c ast/ast_utils.h\
 	assignment/assignment.c assignment/assignment.h\
 	pretty_print/pretty_print.h pretty_print/pretty_print.c\
-	fd_manager/fd_dictionary.c fd_manager/fd_manager.h\
-	funct_manager/funct_dict.c funct_manager/funct_dict.h
+	fd_manager/fd_dictionary.c fd_manager/fd_dictionnary.h 
 libtools_a_CPPFLAGS = -I$(top_srcdir)/src
 libtools_a_CFLAGS = $(CFLAGS_42SH)

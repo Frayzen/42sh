@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "lexer/token_saver.h"
@@ -34,8 +33,8 @@ enum status gr_and_or(struct ast_list *list)
         tok = tok_peek();
     }
     add_child(list, AST(ast_ao));
-    GR_DBG_RET(OK);
+    return OK;
 error:
     destroy_ast(AST(ast_ao));
-    GR_DBG_RET(ERROR);
+    return ERROR;
 }

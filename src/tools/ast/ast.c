@@ -31,7 +31,6 @@ void *init_ast(enum ast_type type)
         [AST_FOR] = sizeof(struct ast_for),
         [AST_AND_OR] = sizeof(struct ast_and_or),
         // TODO later
-        [AST_FUNCT] = sizeof(struct ast_funct),
         [AST_ASS] = sizeof(struct ast),
     };
     struct ast *ast = calloc(1, ast_size[type]);
@@ -75,9 +74,6 @@ void destroy_ast(void *ast)
     case AST_AND_OR:
         free(AST_AND_OR(ast)->types);
         goto destroy_list;
-        break;
-    case AST_FUNCT:
-        free(AST_FUNCT(ast)->name);
         break;
     case AST_FOR:
         free(AST_FOR(ast)->name);

@@ -6,7 +6,6 @@
 #include "tools/token/token.h"
 
 static struct token *next = NULL;
-static struct token *next2 = NULL;
 
 struct token *swap_next_token(struct token *new)
 {
@@ -22,23 +21,14 @@ struct token *tok_peek(void)
     return next;
 }
 
-struct token *tok_peek2(void)
-{
-    if (!next2)
-        next2 = next_token();
-    return next2;
-}
-
 void tok_pop_clean(void)
 {
     destroy_token(next);
-    next = next2;
-    next2 = NULL;
+    next = NULL;
 }
 
 void tok_pop(void)
 {
     free(next);
-    next = next2;
-    next2 = NULL;
+    next = NULL;
 }

@@ -24,7 +24,7 @@ enum status gr_if(struct ast_list *list)
 
     tok_pop_clean();
     add_child(list, AST(if_ast));
-    GR_DBG_RET(OK);
+    return OK;
 
 error:
     destroy_ast(if_ast);

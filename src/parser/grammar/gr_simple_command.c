@@ -36,18 +36,18 @@ enum status gr_simple_command(struct ast_list *list)
     while (gr_prefix(cmd) != ERROR)
         nb_prefix++;
     struct token *tok_word = tok_peek();
-    if (!IS_COMMAND(tok_word) && nb_prefix == 0)
-        goto error;
-    // WORD
-    struct token *tok2 = tok_peek2();
-    if (tok2->type == PRTH_OPEN)
-        goto error;
+    if (!IS_COMMAND(tok_word))
+    {
+        if (nb_prefix == 0)
+            goto error;
+        goto success;
+    }
+    // WORLD
     exp_register_str(&cmd->args_expansion, tok_word->str);
     tok_pop();
     // {element}
     while (gr_element(cmd) != ERROR)
         continue;
-    goto success;
     // {element}
 success:
     add_child(list, AST(cmd));

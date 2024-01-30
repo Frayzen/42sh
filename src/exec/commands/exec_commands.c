@@ -13,11 +13,9 @@
 #include "env/vars/vars.h"
 #include "exec/builtins/builtins.h"
 #include "exec/commands/execs_cmd.h"
-#include "exec/execs.h"
 #include "exit/error_handler.h"
 #include "parser/command/expander.h"
 #include "tools/ast/ast.h"
-#include "tools/funct_manager/funct_dict.h"
 #include "tools/redirection/redirection.h"
 
 // Fork execute the binary and return pid in parent
@@ -82,19 +80,10 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             ret = builtin_continue(argv);
         else if (!strcmp(argv[0], "break"))
             ret = builtin_break(argv);
-        else if (!strcmp(argv[0], "exit"))
-            builtin_exit(argv);
         else
         {
-            // look for possible function
-            struct ast_list *function = funct_dict_peek_value(argv[0]);
-            if (function)
-                ret = exec_list(function);
-            else
-            {
-                *pid = exec_prog(argv);
-                ret = -1;
-            }
+            *pid = exec_prog(argv);
+            ret = -1;
         }
         revert_assignments(&ast->assignment_list);
     }

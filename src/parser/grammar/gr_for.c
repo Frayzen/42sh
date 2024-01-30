@@ -15,11 +15,10 @@ enum status gr_for(struct ast_list *ast)
 {
     GR_DBG_START(For);
     if (tok_peek()->type != FOR)
-        GR_DBG_RET(ERROR);
+        return ERROR;
     tok_pop_clean();
     if (!IS_WORDABLE(tok_peek()))
-        GR_DBG_RET(ERROR);
-    tok_pop_clean();
+        return ERROR;
     struct ast_for *ast_for = init_ast(AST_FOR);
     ast_for->name = tok_peek()->str->value;
     tok_peek()->str->value = NULL;
