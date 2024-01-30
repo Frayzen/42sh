@@ -1,5 +1,4 @@
 #define _POSIX_C_SOURCE 200809L
-#include <linux/limits.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
@@ -8,7 +7,7 @@
 #include "builtins.h"
 #include "env/env.h"
 #include "env/vars/vars.h"
-
+#define PATH_MAX 4096
 int builtin_cd(char **argv)
 {
     char *new = NULL;

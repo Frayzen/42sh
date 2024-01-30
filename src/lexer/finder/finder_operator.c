@@ -38,6 +38,8 @@ void consume_control_op(struct pending *p)
         break;
     case ';':
     case '\n':
+    case '(':
+    case ')':
         append_io(p);
         break;
     default:
