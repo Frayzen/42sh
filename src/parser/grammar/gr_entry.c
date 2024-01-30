@@ -13,7 +13,7 @@ void consume_all(void)
 enum status gr_input(struct ast **ast)
 {
     GR_DBG_START(Input);
-    if (tok_peek()->terminal)
+    if (tok_peek()->terminal && tok_peek()->type != SEMI_COLON)
     {
         tok_pop_clean();
         GR_DBG_RET(OK);
