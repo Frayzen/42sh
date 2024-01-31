@@ -9,22 +9,25 @@ list = and_or { ';' and_or } [ ';' ] ;
 */
 enum status gr_list(struct ast **new_list)
 {
-    GR_DBG_START(List);
+    GR_START(List);
     struct ast_list *list = init_ast(AST_LIST);
-    CHECK_GOTO(gr_and_or(list) == ERROR, error);
-    enum status state = OK;
-    while (state == OK)
+    enum status status = gr_and_or(list);
+    switch (status)
+    {
+    default:
+        GR_RET_CLEAN(status, list);
+    case OK:
+        break;
+    }
+    while (status == OK)
     {
         if (tok_peek()->type != SEMI_COLON)
             break;
         tok_pop_clean();
-        state = gr_and_or(list);
+        status = gr_and_or(list);
     }
-    if (tok_peek()->type == SEMI_COLON)
-        tok_pop_clean();
+    if (status == ERROR)
+        GR_RET_CLEAN(ERROR, list);
     *new_list = AST(list);
-    GR_DBG_RET(OK);
-error:
-    destroy_ast(list);
-    GR_DBG_RET(ERROR);
+    GR_RET(OK);
 }

@@ -10,32 +10,36 @@
 ***/
 enum status gr_else(struct ast_if *ast)
 {
-    GR_DBG_START(Else);
+    GR_START(Else);
     struct token *token = tok_peek();
     if (token->type == ELSE)
     {
         tok_pop_clean();
         ast->fallback = init_ast(AST_LIST);
-        if (gr_compound_list(AST_LIST(ast->fallback)) == ERROR)
+        if (gr_compound_list(AST_LIST(ast->fallback)) != OK)
         {
             destroy_ast(ast->fallback);
             ast->fallback = NULL;
-            return ERROR;
+            GR_RET(ERROR);
         }
-        return OK;
+        GR_RET(OK);
     }
-    if (token->type != ELIF)
-        GR_DBG_RET(ERROR);
-    tok_pop_clean();
-    struct ast_if *elif = init_ast(AST_IF);
-    CHECK_GOTO(gr_compound_list(AST_LIST(&elif->cond)) == ERROR, error);
-    CHECK_GOTO(tok_peek()->type != THEN, error)
-    tok_pop_clean();
-    CHECK_GOTO(gr_compound_list(AST_LIST(&elif->then)) == ERROR, error);
-    gr_else(elif);
-    ast->fallback = AST(elif);
-    return OK;
-error:
-    destroy_ast(elif);
-    return ERROR;
+    if (token->type == ELIF)
+    {
+        tok_pop_clean();
+        struct ast_if *elif = init_ast(AST_IF);
+        GR_RET_CLEAN(ERROR, elif);
+        if (gr_compound_list(AST_LIST(&elif->cond)) != OK)
+            GR_RET_CLEAN(ERROR, elif);
+        if (tok_peek()->type != THEN)
+            GR_RET_CLEAN(ERROR, elif);
+        tok_pop_clean();
+        if (gr_compound_list(AST_LIST(&elif->then)) != OK)
+            GR_RET_CLEAN(ERROR, elif);
+        if (gr_else(elif) == ERROR)
+            GR_RET_CLEAN(ERROR, elif);
+        ast->fallback = AST(elif);
+        GR_RET(OK);
+    }
+    GR_RET(NO_MATCH);
 }

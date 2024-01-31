@@ -8,24 +8,29 @@ void consume_all(void)
 {
     while (!tok_peek()->terminal)
         tok_pop_clean();
+    tok_pop_clean();
 }
-
+/*
+input =
+list '\n'
+| list EOF
+| '\n'
+| EOF
+;
+*/
 enum status gr_input(struct ast **ast)
 {
-    GR_DBG_START(Input);
-    if (tok_peek()->terminal)
-    {
-        tok_pop_clean();
-        GR_DBG_RET(OK);
-    }
-    CHECK_GOTO(gr_list(ast) == ERROR, error);
-    struct token *trm = tok_peek();
-    if (!trm->terminal)
+    GR_START(Input);
+    if (gr_list(ast) == ERROR)
+        goto error;
+    struct token *end = tok_peek();
+    printf("%s\n", end->str->value);
+    if (end->type != BSZERO && end->type != NEWLINE)
         goto error;
     tok_pop_clean();
-    GR_DBG_RET(OK);
+    GR_RET(OK);
 error:
     consume_all();
     destroy_ast(*ast);
-    GR_DBG_RET(ERROR);
+    GR_RET(ERROR);
 }
