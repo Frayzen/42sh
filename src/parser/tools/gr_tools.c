@@ -48,11 +48,11 @@ enum status gr_debug_end(enum status status)
         set_state(state->prev);
         for (int i = 0; i < state->depth; i++)
             printf(GR_DBG_SPACE);
-    static const char * status_lt[] = {
-        [OK] = "OK",
-        [ERROR] = "ERROR",
-        [NO_MATCH] = "NO_MATCH",
-    };
+        static const char *status_lt[] = {
+            [OK] = "OK",
+            [ERROR] = "ERROR",
+            [NO_MATCH] = "NO_MATCH",
+        };
         printf("<- %s [%s]\n", status_lt[status], state->name);
         free(state);
     }

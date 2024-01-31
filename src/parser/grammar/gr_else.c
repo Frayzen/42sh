@@ -28,7 +28,6 @@ enum status gr_else(struct ast_if *ast)
     {
         tok_pop_clean();
         struct ast_if *elif = init_ast(AST_IF);
-        GR_RET_CLEAN(ERROR, elif);
         if (gr_compound_list(AST_LIST(&elif->cond)) != OK)
             GR_RET_CLEAN(ERROR, elif);
         if (tok_peek()->type != THEN)
