@@ -15,6 +15,7 @@ enum token_type
     // end of instruction
     NEWLINE,
     BSZERO,
+    DBL_SEMI_COLON,
     SEMI_COLON,
 
     // operators ?
