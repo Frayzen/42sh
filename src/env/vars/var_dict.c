@@ -31,7 +31,7 @@ struct sh_var *get_or_create_var(char *name)
     struct sh_varlist *nl = calloc(1, sizeof(struct sh_varlist));
     var = &nl->var;
     var->name = strdup(name);
-    var->value = strdup("");
+    var->value = NULL;
     var->exported = false;
     nl->next = list;
     if (list)
@@ -69,6 +69,7 @@ BOOL remove_var(char *name)
         list = varlist->next;
     }
     free(varlist->var.value);
+    free(varlist->var.name);
     free(varlist);
     return true;
 }
