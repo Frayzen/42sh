@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -13,12 +14,13 @@ static struct sh_varlist *get_varlist(char *name)
     if (!list)
         return NULL;
     struct sh_varlist *cur = list;
-    while (cur->next != list)
+    do
     {
         if (!strcmp(name, cur->var.name))
             return cur;
         cur = cur->next;
     }
+    while (cur != list);
     return NULL;
 }
 
@@ -27,16 +29,14 @@ struct sh_var *get_or_create_var(char *name)
     struct sh_var *var = get_var(name);
     if (var)
         return var;
-    var = calloc(1, sizeof(struct sh_var));
+    struct sh_varlist *nl = calloc(1, sizeof(struct sh_varlist));
+    var = &nl->var;
     var->name = strdup(name);
     var->value = strdup("");
     var->exported = false;
-    struct sh_varlist *nl = calloc(1, sizeof(struct sh_varlist));
     nl->next = list;
     if (list)
-    {
         nl->prev = list->prev;
-    }
     else
     {
         nl->prev = nl;
@@ -44,6 +44,7 @@ struct sh_var *get_or_create_var(char *name)
     };
     nl->next->prev = nl;
     nl->prev->next = nl;
+    list = nl;
     return var;
 }
 
@@ -60,14 +61,16 @@ BOOL remove_var(char *name)
     struct sh_varlist *varlist = get_varlist(name);
     if (!varlist)
         return false;
-    free(varlist->var.value); 
     if (varlist->next == varlist)
         list = NULL;
     else
     {
         varlist->next->prev = varlist->prev;
         varlist->prev->next = varlist->next;
+        list = varlist->next;
     }
+    free(varlist->var.value);
+    free(varlist);
     return true;
 }
 

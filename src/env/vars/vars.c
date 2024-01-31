@@ -22,8 +22,9 @@ char *assign_var(char *name, char *value)
 {
     struct sh_var *var = get_or_create_var(name);
     char *old = var->value;
-    if (get_var(name)->exported)
+    if (var->exported)
         setenv(name, value, 1);
+    var->value = strdup(value);
     DBG_VAR("[VAR] assign |%s| to |%s|, old = |%s|\n", name, value, old);
     if (!name || !value)
         return old;
@@ -64,6 +65,7 @@ static void init_env_var(char *name, char *val)
     var->value = strdup(val);
     var->exported = true;
 }
+
 void init_env_vars(void)
 {
     int i = 0;
@@ -71,10 +73,15 @@ void init_env_vars(void)
     {
         char *name = strdup(environ[i]);
         char *eq = strchr(environ[i], '=');
-        *eq = '\0';
-        char *val = eq + 1;
+        char *val = "";
+        if (eq)
+        {
+            val = eq + 1;
+            *eq = '\0';
+        }
         init_env_var(name, val);
         free(name);
+        i++;
     }
 
     if (!get_var("IFS"))
