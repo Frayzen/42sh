@@ -20,7 +20,7 @@ enum status gr_compound_list(struct ast_list *list_ast)
         tok_pop_clean();
         while (tok_peek()->type == NEWLINE)
             tok_pop_clean();
-        state = gr_and_or(list_ast);
+        gr_and_or(list_ast);
     }
     if (state == ERROR)
         GR_RET(ERROR);

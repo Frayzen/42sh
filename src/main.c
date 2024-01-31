@@ -5,6 +5,7 @@
 
 #include "arg_parser/arg_parser.h"
 #include "env/env.h"
+#include "env/vars/vars.h"
 #include "exec/execs.h"
 #include "exit/error_handler.h"
 #include "parser/grammar/rules.h"

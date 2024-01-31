@@ -29,7 +29,7 @@ struct sh_var *get_or_create_var(char *name)
     if (var)
         return var;
     struct sh_varlist *nl = calloc(1, sizeof(struct sh_varlist));
-    var = &nl->var;
+    var = &(nl->var);
     var->name = strdup(name);
     var->value = NULL;
     var->exported = false;
@@ -52,7 +52,7 @@ struct sh_var *get_var(char *name)
     struct sh_varlist *varlist = get_varlist(name);
     if (!varlist)
         return NULL;
-    return &varlist->var;
+    return &(varlist->var);
 }
 
 BOOL remove_var(char *name)

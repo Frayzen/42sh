@@ -37,7 +37,8 @@ int builtin_cd(char **argv)
         char path[PATH_MAX];
         // Set the old pwd to the old pwd value and set the pwd value to the
         // current return of getcwd
-        assign_var("OLDPWD", assign_var("PWD", getcwd(path, PATH_MAX)));
+        assign_var("OLDPWD", read_var("PWD"));
+        assign_var("PWD", getcwd(path, PATH_MAX));
     }
     return 0;
 }
