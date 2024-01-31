@@ -1,6 +1,7 @@
 #ifndef VARS_H
 #define VARS_H
 #include <stdbool.h>
+
 #include "tools/definitions.h"
 #define _POSIX_C_SOURCE 200809L
 

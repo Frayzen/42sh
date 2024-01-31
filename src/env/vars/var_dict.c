@@ -19,8 +19,7 @@ static struct sh_varlist *get_varlist(char *name)
         if (!strcmp(name, cur->var.name))
             return cur;
         cur = cur->next;
-    }
-    while (cur != list);
+    } while (cur != list);
     return NULL;
 }
 

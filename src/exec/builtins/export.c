@@ -9,7 +9,7 @@ bool my_strchr(char *str, char chr, char **end)
 {
     int i = 0;
     while (str[i] && str[i] != chr)
-        i ++;
+        i++;
     *end = str + i;
     return str[i] == chr;
 }
