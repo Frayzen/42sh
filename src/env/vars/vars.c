@@ -71,12 +71,12 @@ void init_env_vars(void)
     while (environ[i])
     {
         char *name = strdup(environ[i]);
-        char *eq = strchr(environ[i], '=');
+        char *eq = strchr(name, '=');
         char *val = "";
         if (eq)
         {
-            val = eq + 1;
             *eq = '\0';
+            val = eq + 1;
         }
         init_env_var(name, val);
         free(name);
@@ -90,5 +90,5 @@ void init_env_vars(void)
     if (!get_var("PWD"))
         init_env_var("PWD", path);
     if (!get_var("OLDPWD"))
-        init_env_var("OLDPWD", path);
+        init_env_var("OLDPWD", read_var("PWD"));
 }
