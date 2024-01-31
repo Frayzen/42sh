@@ -32,5 +32,5 @@ FILE *load_file(char *path_to_file);
 
 void io_streamer_stdin(void);
 
-void io_streamer_string(int argc, char **argv);
+void io_streamer_string(char *arg);
 #endif /* !IO_STREAMERS_H */

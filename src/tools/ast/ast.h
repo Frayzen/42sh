@@ -95,6 +95,13 @@ struct ast_for
     struct expansion exp;
 };
 
+#define AST_SUBCMD(Base) ((struct ast_subcmd *)(Base))
+struct ast_subcmd {
+    struct ast base;
+    // do not forget to set the ast root when building subcmd
+    struct ast subcmd;
+};
+
 // BEGIN AND OR
 #define AST_AND_OR(Base) ((struct ast_and_or *)(Base))
 struct ast_and_or

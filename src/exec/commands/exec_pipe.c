@@ -89,7 +89,7 @@ int exec_pipe(struct ast_pipe *ast)
         last_read = p[0];
     }
     int retval =
-        exec_piped(list->children[i], last_read, STDOUT_FILENO, &pids[i]);
+        exec_piped(list->children[i], last_read, STDOUT, &pids[i]);
     close(last_read);
     // Wait for all of them
     for (int j = 0; j < list->nb_children - 1; j++)

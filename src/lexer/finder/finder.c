@@ -63,7 +63,7 @@ void consume_variable(struct pending *p)
     char c = io_peek();
     bool special_char = strchr(SPECIAL_PARAMETERS, c) != NULL;
     // If the dollar is not followed by any var
-    if (c != '{' && !is_name_char(c) && !special_char)
+    if (c != '{'  && c != '(' && !is_name_char(c) && !special_char)
     {
         append_char(p, '$');
         return;
@@ -83,6 +83,19 @@ void consume_variable(struct pending *p)
                 exit_gracefully(UNEXPECTED_EOF);
         }
         io_pop();
+    }
+    else if (c == '(')
+    {
+        p->in_sub_cmd = true;
+        io_pop();
+        skip_until(p, SKIP_PARENTHESES);
+        if (io_peek() != ')')
+        {
+            if (!io_peek())
+                exit_gracefully(UNEXPECTED_EOF);
+        }
+        io_pop();
+        p->in_sub_cmd = false;
     }
     else
     {

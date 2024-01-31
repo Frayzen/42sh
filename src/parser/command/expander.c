@@ -1,14 +1,20 @@
-#include "env/vars/specials.h"
 #define _POSIX_C_SOURCE 200809L
+#include <sys/wait.h>
+#include <unistd.h>
+#include "env/vars/specials.h"
+#include "exec/execs.h"
+#include "exit/error_handler.h"
+#include "env/context.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "parser/grammar/rules.h"
 #include "command/expansion.h"
 #include "env/env.h"
 #include "env/vars/vars.h"
 #include "tools/str/string.h"
-
+#include "io_backend/io_streamers.h"
+#define BUFSIZE 8
 //
 // REGISTERING TOKENS
 //
@@ -131,6 +137,55 @@ static struct expandable *expand_str(struct expandable *cur)
     return new_string;
 }
 
+
+static struct expansion *building_exp = NULL;
+static struct expandable *expand_sub_cmd(struct expandable *cur)
+{
+    
+    int fds[2];
+    int err = pipe(fds);
+    if (err == -1)
+        exit(3); 
+    int pid = fork();
+    
+    if (!pid)
+    {
+        STDOUT = fds[1];
+        DBG_PIPE("set STDOUT to %d", STDOUT);
+        close(fds[0]);
+        struct context *old = new_context();
+        io_streamer_string(cur->content);
+        
+        if (gr_input(AST_ROOT) == ERROR)
+        {
+            *AST_ROOT = NULL;
+            print_error(GRAMMAR_ERROR_ENTRY);
+        }
+        else
+            exec_entry(*AST_ROOT);
+        load_context(old);
+        close(fds[0]);
+        _exit(0);
+    }
+    char *buf = calloc(BUFSIZE, sizeof(char));
+    close(fds[1]);
+    int begin = 0;
+    ssize_t size;
+    while ((size = read(fds[0], buf + begin, BUFSIZE)) > 0)
+    {
+        begin += size;
+        buf = realloc(buf, begin + BUFSIZE);
+    }
+    buf[begin] = '\0';
+    int ret; 
+    waitpid(pid, &ret, 0);
+    struct expandable *new_string =
+        expandable_init(strdup(buf), STR_LITTERAL, cur->link_next);
+    new_string->next = cur->next;
+    free(buf);
+    return new_string;
+}
+
 // This function calls the appropriate subfunction in order to create a string
 // litteral linked list from the currrent expandable
 static struct expandable *stringify_expandable(struct expandable *cur)
@@ -144,6 +199,8 @@ static struct expandable *stringify_expandable(struct expandable *cur)
         return expand_quoted_var(cur);
     case UNQUOTED_VAR:
         return expand_unquoted_var(cur);
+    case SUB_CMD:
+        return expand_sub_cmd(cur);
     default:
         return expand_str(cur);
     }
@@ -156,7 +213,7 @@ struct expansion *create_str_list(struct expansion *old)
 {
     // The function keeps expanding(and append) elements from the old expansion
     // to exp
-    struct expansion *exp = calloc(1, sizeof(struct expansion));
+    building_exp = calloc(1, sizeof(struct expansion));
     struct expandable *last = NULL; // last element expanded
     struct expandable *ret = NULL; // returned element after expansion
     struct expandable *cur = old->head; // The current elem of the old exp
@@ -178,19 +235,19 @@ struct expansion *create_str_list(struct expansion *old)
         }
         // Set up the head for the first one
         if (last == NULL)
-            exp->head = ret;
+            building_exp->head = ret;
         else
             last->next = ret;
         // Recompute the size
         for (last = ret; last->next && last->next != cur->next;
              last = last->next)
-            exp->size++;
+            building_exp->size++;
         // Last element points to NULL
         last->next = NULL;
         cur = cur->next;
     }
-    exp->tail = last;
-    return exp;
+    building_exp->tail = last;
+    return building_exp;
 }
 
 // This function will expand the expansion given as a list of str

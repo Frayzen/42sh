@@ -97,7 +97,9 @@ void append_char(struct pending *p, char c)
     str->value = realloc(str->value, str->size * sizeof(char));
     str->value[id] = c;
     str->expand = realloc(str->expand, str->size * sizeof(enum expand_type));
-    if (p->in_quote)
+    if (p->in_sub_cmd)
+        str->expand[id] = SUB_CMD;
+    else if (p->in_quote)
     {
         if (!p->expanding)
             str->expand[id] = QUOTED_STR;
@@ -126,6 +128,7 @@ static const char limit_lt[] = {
     [SKIP_DOUBLE_QUOTE] = '"',
     [SKIP_HASHTAG] = '\n',
     [SKIP_VARIABLE_BRACKETS] = '}',
+    [SKIP_PARENTHESES] = ')'
 };
 
 static void bslash_in_skip(struct pending *p, enum skip_behavior behavior)

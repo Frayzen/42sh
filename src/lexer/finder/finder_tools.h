@@ -32,6 +32,7 @@ enum skip_behavior
     SKIP_DOUBLE_QUOTE,
     SKIP_VARIABLE_BRACKETS,
     SKIP_HASHTAG,
+    SKIP_PARENTHESES,
 };
 
 /***
