@@ -26,7 +26,11 @@ enum status gr_compound_list(struct ast_list *list_ast)
     if (state == ERROR)
         GR_RET(ERROR);
     if (tok_peek()->type == SEMI_COLON)
+    {
+        if (state == NO_MATCH)
+            GR_RET(ERROR);
         tok_pop_clean();
+    }
     while (tok_peek()->type == NEWLINE)
         tok_pop_clean();
     GR_RET(OK);
