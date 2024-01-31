@@ -8,6 +8,7 @@
 
 #include "env.h"
 #include "env/env.h"
+#include "exit/error_handler.h"
 #include "var_dict.h"
 
 void export_var(char *name)
@@ -82,7 +83,9 @@ void init_env_vars(void)
     if (!get_var("IFS"))
         init_env_var("IFS", "\t\r ");
     char path[PATH_MAX];
-    getcwd(path, PATH_MAX);
+    char *ret = getcwd(path, PATH_MAX);
+    if (!ret)
+        print_error(INVALID_FILE_PATH);
     if (!get_var("PWD"))
         init_env_var("PWD", path);
     if (!get_var("OLDPWD"))
