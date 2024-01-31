@@ -38,6 +38,7 @@ enum status gr_and_or(struct ast_list *list)
             tok_pop_clean();
         if (gr_pipeline(AST_LIST(ast_ao)) != OK)
             GR_RET_CLEAN(ERROR, ast_ao);
+        tok = tok_peek();
     }
     add_child(list, AST(ast_ao));
     GR_RET(OK);

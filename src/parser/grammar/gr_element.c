@@ -21,5 +21,5 @@ enum status gr_element(struct ast_cmd *cmd)
         tok_pop();
         GR_RET(OK);
     }
-    return gr_redir(AST_REDIR(cmd));
+    GR_RET(gr_redir(AST_REDIR(cmd)));
 }

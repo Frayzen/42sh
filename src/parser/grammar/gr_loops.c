@@ -7,33 +7,37 @@
 
 static enum status gr_loop(struct ast_list *list, enum token_type type)
 {
-    GR_START(Until);
     if (tok_peek()->type != type)
-        GR_RET(NO_MATCH);
+        return NO_MATCH;
     tok_pop_clean();
     struct ast_loop *utl_ast = init_ast(AST_UNTIL);
     if (gr_compound_list(AST_LIST(&utl_ast->cond)) != OK)
-        GR_RET_CLEAN(ERROR, utl_ast);
+        goto error;
     if (tok_peek()->type != DO)
-        GR_RET_CLEAN(ERROR, utl_ast);
+        goto error;
     tok_pop_clean();
     if (gr_compound_list(AST_LIST(&utl_ast->exec)) != OK)
-        GR_RET_CLEAN(ERROR, utl_ast);
+        goto error;
     if (tok_peek()->type != DONE)
-        GR_RET_CLEAN(ERROR, utl_ast);
+        goto error;
     tok_pop_clean();
     add_child(list, AST(utl_ast));
-    GR_RET(OK);
+    return OK;
+error:
+    destroy_ast(utl_ast);
+    return ERROR;
 }
 
 // rule_while = 'while' compound_list 'do' compound_list 'done' ;
 enum status gr_while(struct ast_list *ast)
 {
-    return gr_loop(ast, UNTIL);
+    GR_START(While);
+    GR_RET(gr_loop(ast, WHILE));
 }
 
 // rule_until = 'until' compound_list 'do' compound_list 'done' ;
 enum status gr_until(struct ast_list *ast)
 {
-    return gr_loop(ast, UNTIL);
+    GR_START(Until);
+    GR_RET(gr_loop(ast, WHILE));
 }

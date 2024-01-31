@@ -25,5 +25,5 @@ enum status gr_if(struct ast_list *list)
         GR_RET_CLEAN(ERROR, if_ast);
     tok_pop_clean();
     add_child(list, AST(if_ast));
-    return OK;
+    GR_RET(OK);
 }

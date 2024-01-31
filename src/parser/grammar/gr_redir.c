@@ -35,8 +35,8 @@ enum status gr_redir(struct ast_redir *ast)
         free(redir);
         GR_RET(ERROR);
     }
-    tok_pop();
     exp_register_str(&redir->exp, token->str);
+    tok_pop();
     append_redir(ast, redir);
     GR_RET(OK);
 }

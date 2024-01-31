@@ -24,7 +24,6 @@ enum status gr_input(struct ast **ast)
     if (gr_list(ast) == ERROR)
         goto error;
     struct token *end = tok_peek();
-    printf("%s\n", end->str->value);
     if (end->type != BSZERO && end->type != NEWLINE)
         goto error;
     tok_pop_clean();

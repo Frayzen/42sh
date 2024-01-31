@@ -2,6 +2,7 @@
 #include "rules.h"
 #include "tools/assignment/assignment.h"
 #include "tools/ast/ast.h"
+#include "tools/gr_tools.h"
 #include "tools/token/token.h"
 /*
 *prefix =
@@ -11,13 +12,14 @@ ASSIGNMENT_WORD
 */
 enum status gr_prefix(struct ast_cmd *cmd)
 {
+    GR_START(Prefix);
     struct token *token = tok_peek();
     if (token->type == ASSMT)
     {
         struct assignment *ass = init_assignment(token->str);
         append_ass_list(&cmd->assignment_list, ass);
         tok_pop_clean();
-        return OK;
+        GR_RET(OK);
     }
-    return gr_redir(AST_REDIR(cmd));
+    GR_RET(gr_redir(AST_REDIR(cmd)));
 }
