@@ -24,11 +24,11 @@ struct token *tok_peek(void)
 void tok_pop_clean(void)
 {
     destroy_token(next);
-    next = NULL;
+    next = next_token();
 }
 
 void tok_pop(void)
 {
     free(next);
-    next = NULL;
+    next = next_token();
 }
