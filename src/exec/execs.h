@@ -6,7 +6,7 @@
 // get the number of loops we are currently in
 #define NB_LOOPS (set_nb_loop(-1))
 // get the number of remaining loops to continue
-#define CONT_LAYER (set_continue(-1))
+#define CNTU_LAYER (set_continue(-1))
 // get the number of remaining loops to break
 #define BREAK_LAYER (set_break(-1))
 // indicates if the current loop is the loop to break or continue

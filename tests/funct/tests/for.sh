@@ -48,35 +48,35 @@ for i in true false true; do
     done
 done
 
-### Using while loop
-echo Using while loop:
+## Using while loop
+echo Using while loop
 i=true
 while $i; do
-    echo Outer loop iteration: $i
+    echo Outer loop $i
     j=true
-    while [ $j == true ]; do
-        echo Inner loop iteration: $j
+    while $j; do
+        echo Inner loop $j
         k=true
-        while [ $k == true ]; do
-            echo Deep loop iteration: $k
-            if [ $k == true ]; then
+        while $k; do
+            echo Deep loop $k
+            if $k; then
                 echo Continuing 3 loops...
                 k=false
                 j=false
                 i=false
                 continue 3
-            elif [ $j == true ]; then
+            elif $j; then
                 echo Breaking 5 loops...
                 k=false
                 j=false
                 i=false
                 break 5
-            elif [ $i == true ]; then
+            elif $i; then
                 echo Continuing...
                 k=false
                 j=false
                 continue
-            elif [ $j == true ]; then
+            elif $j; then
                 echo Breaking 2 loops...
                 k=false
                 j=false
@@ -91,9 +91,9 @@ echo Using for loop:
 for l in true true true; do
     echo Outer loop iteration: $l
     m=true
-    while [ $m == true ]; do
+    while $m; do
         echo Inner loop iteration: $m
-        if [ $l == true ]; then
+        if $l; then
             echo Breaking 2 loops...
             m=false
             break 2
@@ -104,12 +104,12 @@ done
 ### Using until loop
 echo Using until loop:
 n=true
-until [ $n == false ]; do
+until ! $n; do
     echo Outer loop iteration: $n
     o=true
-    until [ $o == false ]; do
+    until ! $o; do
         echo Inner loop iteration: $o
-        if [ $n == true ]; then
+        if $n; then
             echo Continuing...
             o=false
             continue
