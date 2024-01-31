@@ -23,7 +23,6 @@ enum status gr_for(struct ast_list *ast)
     struct ast_for *ast_for = init_ast(AST_FOR);
     ast_for->name = tok_peek()->str->value;
     tok_peek()->str->value = NULL;
-    tok_pop_clean();
     if (tok_peek()->type == SEMI_COLON)
         tok_pop_clean();
     else
