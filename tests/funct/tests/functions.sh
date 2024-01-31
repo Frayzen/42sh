@@ -1,9 +1,8 @@
 ###simple function
-foo() { echo toto }; foo
+foo() { echo toto; }; foo
 
 ###double function
-foo() { bar() { echo toto } }; foo; bar
+foo() { bar() { echo toto; } }; foo; bar
 
 ###triple function
-foo() { bar() { popo() { echo toto } } }; foo; bar; popo
-
+foo() { bar() { popo() { echo toto; } } }; foo; bar; popo

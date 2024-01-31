@@ -15,9 +15,10 @@ enum status gr_list(struct ast **new_list)
     enum status state = OK;
     while (state == OK)
     {
-        if (tok_peek()->type != SEMI_COLON)
-            break;
-        tok_pop_clean();
+        if (tok_peek()->type == SEMI_COLON || !strcmp(tok_peek()->str->value, "&") || tok_peek()->type == NEWLINE)
+          tok_pop_clean();
+        while (tok_peek()->type == NEWLINE)
+          tok_pop_clean();
         state = gr_and_or(list);
     }
     if (tok_peek()->type == SEMI_COLON)
