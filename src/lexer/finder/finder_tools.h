@@ -60,4 +60,12 @@ void append_io(struct pending *p);
  */
 bool is_name_char(char c);
 
+/***
+ * Check if the given string is a valid name for a variable
+ * @param str the buffer
+ * @param size the size of the buffer
+ * @return true if it is valid name
+ */
+bool is_name(char *str, size_t size);
+
 #endif /* !FINDER_TOOLS_H */

@@ -43,7 +43,6 @@ BOOL unset_var(char *name);
  * Export the variable
  * @param name the name of the variable to export
  */
-void export_char(char *name);
-
+void export_var(char *name);
 
 #endif /* !VARS_H */

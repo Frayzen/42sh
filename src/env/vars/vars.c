@@ -2,7 +2,6 @@
 #include "vars.h"
 
 #include <linux/limits.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -11,7 +10,7 @@
 #include "env/env.h"
 #include "var_dict.h"
 
-void export_char(char *name)
+void export_var(char *name)
 {
     struct sh_var *var = get_var(name);
     var->exported = true;
