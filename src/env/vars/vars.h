@@ -9,10 +9,8 @@
  * set the variable named name to the value
  * @param name a string following the rules of the scl
  * @param value that is already expanded
- * @return the string value of the variable or null if the variable has not been
- * assigned
  */
-char *assign_var(char *name, char *value);
+void assign_var(char *name, char *value);
 
 /***
  * Setup the environment variable required to make the shell function

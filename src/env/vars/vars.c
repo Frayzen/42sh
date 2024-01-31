@@ -17,17 +17,14 @@ void export_var(char *name)
     setenv(name, var->value, 1);
 }
 
-char *assign_var(char *name, char *value)
+void assign_var(char *name, char *value)
 {
     struct sh_var *var = get_or_create_var(name);
-    char *old = var->value;
+    DBG_VAR("[VAR] assign |%s| to |%s|, old = |%s|\n", name, value, var->value);
+    free(var->value);
     if (var->exported)
         setenv(name, value, 1);
     var->value = strdup(value);
-    DBG_VAR("[VAR] assign |%s| to |%s|, old = |%s|\n", name, value, old);
-    if (!name || !value)
-        return old;
-    return old;
 }
 
 char *read_var(char *name)
@@ -60,9 +57,8 @@ BOOL unset_var(char *name)
 
 static void init_env_var(char *name, char *val)
 {
-    struct sh_var *var = get_or_create_var(name);
-    var->value = strdup(val);
-    var->exported = true;
+    assign_var(name, val);
+    export_var(name);
 }
 
 void init_env_vars(void)
