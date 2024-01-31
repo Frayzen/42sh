@@ -46,7 +46,7 @@ enum status gr_simple_command(struct ast_list *list)
         if (!consumed)
             GR_RET_CLEAN(NO_MATCH, cmd);
         add_child(list, AST(cmd));
-        GR_RET_CLEAN(OK, cmd);
+        GR_RET(OK);
     }    // WORLD
     exp_register_str(&cmd->args_expansion, tok_word->str);
     tok_pop();
