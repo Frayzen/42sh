@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
         case NO_MATCH:
             break;
         }
+        printf("here\n");
         destroy_ast(ast);
         ast = NULL;
     } while (!get_env_flag()->null_received);

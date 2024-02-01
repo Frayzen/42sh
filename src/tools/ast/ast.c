@@ -56,7 +56,7 @@ void destroy_case(struct ast_case *ast)
             clean_expansion(ast->list_cond[i][j]);
         free(ast->list_cond[i]);
         destroy_list(ast->cmds[i]);
-    } 
+    }
     free(ast->cmds);
 }
 

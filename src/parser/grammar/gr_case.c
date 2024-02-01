@@ -3,11 +3,11 @@
 #include <stdlib.h>
 
 #include "lexer/token_saver.h"
-#include "parser/grammar/rules.h"
-#include "tools/ast/ast.h"
 #include "parser/command/expander.h"
+#include "parser/grammar/rules.h"
 #include "parser/tools/gr_tools.h"
 #include "parser/tools/gr_utils.h"
+#include "tools/ast/ast.h"
 #include "tools/str/string.h"
 #include "tools/token/token.h"
 

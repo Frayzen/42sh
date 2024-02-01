@@ -1,8 +1,8 @@
 #include "lexer/token_saver.h"
 #include "parser/command/expander.h"
+#include "parser/tools/gr_tools.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "parser/tools/gr_tools.h"
 #include "tools/token/token.h"
 
 /*
