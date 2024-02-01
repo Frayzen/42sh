@@ -1,5 +1,5 @@
 #ifndef PATH_UTILS_H
-#    include <stdbool.h>
+#define PATH_UTILS_H
 
 /***
  * Looks through all the possible path to see if the file exists
