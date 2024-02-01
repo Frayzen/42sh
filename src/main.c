@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
         {
         case ERROR:
             ast = NULL;
-
             print_error(GRAMMAR_ERROR_ENTRY);
             ret = 2;
             continue;

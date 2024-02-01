@@ -21,6 +21,7 @@ enum ast_type
     AST_UNTIL,
     AST_FOR,
     AST_AND_OR,
+    AST_SUBSHELL,
     // NOT USED
     AST_ASS
 };
@@ -93,6 +94,12 @@ struct ast_for
     struct ast_list cmds;
     char *name;
     struct expansion exp;
+};
+
+#define AST_SUBSHELL(Base) ((struct ast_subshell *)(Base))
+struct ast_subshell
+{
+    struct ast_list cmds;
 };
 
 // BEGIN AND OR

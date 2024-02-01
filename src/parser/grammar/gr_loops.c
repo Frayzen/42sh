@@ -5,7 +5,7 @@
 #include "tools/gr_utils.h"
 #include "tools/token/token.h"
 
-static enum status gr_loop(struct ast_list *list, enum token_type type,
+static enum status gr_loop(struct ast_sh *sh, enum token_type type,
                            enum ast_type ast_type)
 {
     if (tok_peek()->type != type)
@@ -22,7 +22,7 @@ static enum status gr_loop(struct ast_list *list, enum token_type type,
     if (tok_peek()->type != DONE)
         goto error;
     tok_pop_clean();
-    add_child(list, AST(utl_ast));
+    sh->sh_cmd = AST(utl_ast);
     return OK;
 error:
     destroy_ast(utl_ast);
@@ -30,15 +30,15 @@ error:
 }
 
 // rule_while = 'while' compound_list 'do' compound_list 'done' ;
-enum status gr_while(struct ast_list *ast)
+enum status gr_while(struct ast_sh *sh)
 {
     GR_START(While);
-    GR_RET(gr_loop(ast, WHILE, AST_WHILE));
+    GR_RET(gr_loop(sh, WHILE, AST_WHILE));
 }
 
 // rule_until = 'until' compound_list 'do' compound_list 'done' ;
-enum status gr_until(struct ast_list *ast)
+enum status gr_until(struct ast_sh *sh)
 {
     GR_START(Until);
-    GR_RET(gr_loop(ast, UNTIL, AST_UNTIL));
+    GR_RET(gr_loop(sh, UNTIL, AST_UNTIL));
 }
