@@ -51,3 +51,8 @@ ls 2<>hello 1>&2
 
 ###Two ways tricky
 ls 4<>hello 1>&4 | cat <&4
+
+###Cat in out
+echo "This is a test" >ok
+<ok >ok2 cat
+cat ok2

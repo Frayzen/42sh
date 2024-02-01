@@ -9,6 +9,19 @@
  * @see tok_pop() to access the next token
  */
 struct token *tok_peek(void);
+/***
+ * Retrieve the second token from the buffer, do not change the buffer
+ * @return The second token of the buffer
+ * @see tok_pop() to access the next token
+ */
+struct token *tok_peek2(void);
+
+/***
+ * Retrieve the second token from the buffer, do not change the buffer
+ * @return The second token of the buffer
+ * @see tok_pop() to access the next token
+ */
+struct token *tok_peek2(void);
 
 /***
  * Jump to the next token of the buffer and destroy the token (INCLUDING the

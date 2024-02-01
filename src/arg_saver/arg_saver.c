@@ -3,8 +3,6 @@
 
 #include <stddef.h>
 
-#include "tools/ast/ast.h"
-
 char *build_argstr(char **argv, int argc)
 {
     int totalSize = 0;
