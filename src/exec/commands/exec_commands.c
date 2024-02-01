@@ -92,5 +92,6 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     discard_assignments(&ast->assignment_list, argv[0]);
     destroy_expanded(argv);
     close_redirs(fds);
+    // printf("ret -= %d\n", ret);
     return ret;
 }

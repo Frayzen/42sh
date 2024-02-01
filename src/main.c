@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
             if (get_env_flag()->pretty_print)
                 debug_pretty_print(ast);
             ret = exec_entry(ast);
+            // printf("ret main = %d\n", ret);
             assert(DICT->nb_entries == 0);
             fflush(NULL);
         case NO_MATCH:
@@ -46,5 +47,6 @@ int main(int argc, char *argv[])
         ast = NULL;
     } while (!get_env_flag()->null_received);
     clean(ast);
+    // printf("re main end = %d\n", ret);
     return ret;
 }
