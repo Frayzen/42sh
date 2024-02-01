@@ -10,36 +10,33 @@
 #include "tools/token/token.h"
 /*
 redirection =
-|[IONUMBER] ( '>' | '<' | '>>' | '>&' | '<&' | '>|' | '<>' )
-|WORD ;
+|[IONUMBER] ( '>' | '<' | '>>' | '>&' | '<&' | '>|' | '<>' ) WORD ;
 */
 enum status gr_redir(struct ast_redir *ast)
 {
-    GR_DBG_START(Redir);
-    struct redirection *redir = calloc(1, sizeof(struct redirection));
-
+    GR_START(Redir);
     struct token *token = tok_peek();
+    int io_number = -1;
     if (tok_peek()->type == IO_NUMBER)
     {
-        redir->io_number = atoi(token->str->value);
+        io_number = atoi(token->str->value);
         tok_pop_clean();
     }
-    else
-        redir->io_number = -1;
-
     token = tok_peek();
-    CHECK_GOTO(token->type != CHEVRON, error);
+    if (token->type != CHEVRON)
+        GR_RET(io_number == -1 ? NO_MATCH : ERROR);
+    struct redirection *redir = calloc(1, sizeof(struct redirection));
     redir->type = get_redir_type(token->str->value);
+    redir->io_number = io_number;
     tok_pop_clean();
-
     token = tok_peek();
-    CHECK_GOTO(!IS_WORDABLE(token), error);
+    if (!IS_WORDABLE(token))
+    {
+        free(redir);
+        GR_RET(ERROR);
+    }
     exp_register_str(&redir->exp, token->str);
     tok_pop();
-
     append_redir(ast, redir);
-    GR_DBG_RET(OK);
-error:
-    free(redir);
-    GR_DBG_RET(ERROR);
+    GR_RET(OK);
 }

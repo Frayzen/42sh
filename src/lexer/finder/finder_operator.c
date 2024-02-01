@@ -32,11 +32,11 @@ void consume_control_op(struct pending *p)
     switch (c)
     {
     AND_OR_CASES:
+    case ';':
         append_io(p);
         if (io_peek() == c)
             append_io(p);
         break;
-    case ';':
     case '\n':
         append_io(p);
         break;

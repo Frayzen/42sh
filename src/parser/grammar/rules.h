@@ -3,21 +3,11 @@
 
 #include "tools/ast/ast.h"
 
-/***
- * Macros to decide if need to goto error
- * @param test the condition to check
- * @param function the function to goto
- */
-#define CHECK_GOTO(test, function)                                             \
-    if (test)                                                                  \
-    {                                                                          \
-        goto function;                                                         \
-    }
-
 enum status
 {
     OK,
     ERROR,
+    NO_MATCH,
 };
 
 typedef enum status (*gr_rule)(struct ast **ast);

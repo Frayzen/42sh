@@ -40,6 +40,7 @@ int exec_prog(char **argv)
                 close(FDS[i]);
         }
         execvp(argv[0], argv);
+        print_error(EXECVP_FAILED);
         exit(127);
     }
     return pid;

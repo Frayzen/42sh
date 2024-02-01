@@ -9,8 +9,8 @@ pwd
 cd ../../toto
 pwd
 cd ../tata
-mkdir /tmp/thisisatest
-cd /tmp/thisisatest
+mkdir ./thisisatest
+cd ./thisisatest
 pwd
 
 ###Default cd

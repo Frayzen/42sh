@@ -26,20 +26,23 @@ int main(int argc, char *argv[])
     {
         STDOUT = STDOUT_FILENO;
         STDIN = STDIN_FILENO;
-        if (gr_input(&ast) == ERROR)
+        switch (gr_input(&ast))
         {
+        case ERROR:
             ast = NULL;
 
             print_error(GRAMMAR_ERROR_ENTRY);
             ret = 2;
             continue;
-        }
-        if (get_env_flag()->pretty_print)
-            debug_pretty_print(ast);
-        if (ast)
+        case OK:
+            if (get_env_flag()->pretty_print)
+                debug_pretty_print(ast);
             ret = exec_entry(ast);
-        assert(DICT->nb_entries == 0);
-        fflush(NULL);
+            assert(DICT->nb_entries == 0);
+            fflush(NULL);
+        case NO_MATCH:
+            break;
+        }
         destroy_ast(ast);
         ast = NULL;
     } while (!get_env_flag()->null_received);
