@@ -22,6 +22,7 @@
 // Reset the color
 #define RESET "\033[0m"
 
+static void print_ast_sh(struct ast_sh *ast, int depth); //, bool *closed_nod)
 static void pretty_print_ast_help(struct ast *ast, enum ast_type type,
                                   int depth, bool is_last_child);
 //, bool *closed_nod);
@@ -40,18 +41,8 @@ static void align(int depth, bool is_last_child) //, bool *closed_nod)
 
 static void print_funct(struct ast_funct *ast, int depth)
 {
-    printf(BLUE "LST\n" RESET);
-    struct ast **children = get_children(AST(ast));
-    if (!children)
-        return;
-    int i = 0;
-    while (children[i])
-    {
-        struct ast *child = children[i++];
-        pretty_print_ast_help(child, AST(child)->type, depth + 1, !children[i]);
-        // closed_nod);
-    }
-    free(children);
+    printf(BLUE "FCT\n" RESET);
+    print_ast_sh(AST_SH(ast), depth);
 }
 
 // Prints the nod and child of the ast of type AST_LIST

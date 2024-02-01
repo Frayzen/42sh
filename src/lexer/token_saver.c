@@ -24,6 +24,8 @@ struct token *tok_peek(void)
 
 struct token *tok_peek2(void)
 {
+    if (!next)
+        return tok_peek();
     if (!next2)
         next2 = next_token();
     return next2;

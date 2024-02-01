@@ -81,6 +81,8 @@ void destroy_ast(void *ast)
         break;
     case AST_FUNCT:
         free(AST_FUNCT(ast)->name);
+        // don't need to free the body because it is passed to the dictionnary
+        // it will be freed when the dictionnary is freed
         break;
     case AST_FOR:
         free(AST_FOR(ast)->name);
