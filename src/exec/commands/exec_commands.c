@@ -56,9 +56,9 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     char **argv = expand(&ast->args_expansion);
     apply_assignments(&ast->assignment_list);
     *pid = PID_SET;
-    // int i = 0;
-    // while (argv[i])
-    //     printf("argv = %s\n", argv[i++]);
+    int i = 0;
+    while (argv[i])
+        printf("argv = %s\n", argv[i++]);
     if (argv[0])
     {
         if (!strcmp(argv[0], "echo"))

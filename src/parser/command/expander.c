@@ -154,20 +154,16 @@ static struct expandable *expand_str(struct expandable *cur)
     return new_string;
 }
 
-void process_buffer(char *buf)
+static void process_buffer(char *buf)
 {
     size_t len = strlen(buf);
-
-    for (size_t i = 0; i < len; i++) {
-        if (buf[i] == '\n') {
-            if (i == len - 1) {
-                buf[i] = '\0';
-            } else {
-                buf[i] = ' ';
-            }
-        }
+    for (size_t i = 0; i < len; i++)
+    {
+        if (buf[i] == '\n')
+            buf[i] = i == len - 1 ? '\0' : ' ';
     }
 }
+
 static struct expandable *expand_sub_cmd(struct expandable *cur)
 {
     int fds[2];
@@ -179,7 +175,8 @@ static struct expandable *expand_sub_cmd(struct expandable *cur)
     {
         // STDOUT = fds[1];
         close(fds[0]);
-        if (dup2(fds[1], STDOUT_FILENO) == -1) {
+        if (dup2(fds[1], STDOUT_FILENO) == -1)
+        {
             perror("dup2 failed in child");
             exit(EXIT_FAILURE);
         }
@@ -209,7 +206,8 @@ static struct expandable *expand_sub_cmd(struct expandable *cur)
     }
     buf[begin] = '\0';
     process_buffer(buf);
-    // printf("buf = %s\n", buf);
+    // printf("buf = |%s|\n", buf);
+    // DBG_PIPE("buf = %s\n", buf);
     int ret;
     waitpid(pid, &ret, 0);
     struct expandable *new_string =
