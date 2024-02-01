@@ -5,6 +5,7 @@
 
 #include "parser/command/expansion.h"
 #include "tools/assignment/assignment.h"
+#include "tools/str/string.h"
 #include "tools/token/token.h"
 
 #define AST_ROOT (swap_ast_root(NULL))
@@ -21,6 +22,7 @@ enum ast_type
     AST_UNTIL,
     AST_FOR,
     AST_AND_OR,
+    AST_CASE,
     // NOT USED
     AST_ASS
 };
@@ -104,6 +106,16 @@ struct ast_and_or
 };
 // END AND OR
 
+#define AST_CASE(Base) ((struct ast_case *)(Base))
+struct ast_case
+{
+    struct ast base;
+    int nb_cond;
+    struct expansion name;
+    struct expansion ***list_cond;
+    struct ast_list **cmds;
+};
+
 /***
  * Set or gets the pointer to the ast root
  * @param pointer to the ast to set as the root if not NULL
@@ -131,4 +143,4 @@ void destroy_ast(void *ast);
  */
 struct ast **swap_ast_root(struct ast **new_ast);
 
-#endif // !AST_H
+#endif /* !AST_H */

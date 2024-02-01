@@ -5,8 +5,8 @@
 #include "parser/command/expander.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "tools/gr_tools.h"
-#include "tools/gr_utils.h"
+#include "parser/tools/gr_tools.h"
+#include "parser/tools/gr_utils.h"
 #include "tools/token/token.h"
 
 /* rule_for ='for' WORD ( [';'] | [ {'\n'} 'in' { WORD } ( ';' | '\n' ) ] )

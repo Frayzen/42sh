@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "command/expansion.h"
+#include "parser/command/expansion.h"
 #include "env/env.h"
 #include "env/vars/specials.h"
 #include "env/vars/vars.h"

@@ -30,6 +30,7 @@ void *init_ast(enum ast_type type)
         [AST_UNTIL] = sizeof(struct ast_loop),
         [AST_FOR] = sizeof(struct ast_for),
         [AST_AND_OR] = sizeof(struct ast_and_or),
+        [AST_CASE] = sizeof(struct ast_case),
         // TODO later
         [AST_ASS] = sizeof(struct ast),
     };
@@ -45,6 +46,18 @@ void destroy_list(struct ast_list *list)
     for (int i = 0; i < list->nb_children; i++)
         destroy_ast(list->children[i]);
     free(list->children);
+}
+
+void destroy_case(struct ast_case *ast)
+{
+    for (int i = 0; i < ast->nb_cond; i++)
+    {
+        for (int j = 0; ast->list_cond[i][j]; j++)
+            clean_expansion(ast->list_cond[i][j]);
+        free(ast->list_cond[i]);
+        destroy_list(ast->cmds[i]);
+    } 
+    free(ast->cmds);
 }
 
 void destroy_ast(void *ast)
@@ -74,6 +87,9 @@ void destroy_ast(void *ast)
     case AST_AND_OR:
         free(AST_AND_OR(ast)->types);
         goto destroy_list;
+        break;
+    case AST_CASE:
+        destroy_case(AST_CASE(ast));
         break;
     case AST_FOR:
         free(AST_FOR(ast)->name);

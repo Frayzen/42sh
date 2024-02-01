@@ -3,7 +3,7 @@
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "tools/gr_tools.h"
+#include "parser/tools/gr_tools.h"
 
 /*
 shell_command =
@@ -12,6 +12,7 @@ shell_command =
 | rule_for
 | rule_while
 | rule_until
+| rule_case
 | rule_if
 ;
 */
@@ -67,6 +68,8 @@ enum status gr_shell_cmd(struct ast_list *list)
     if (checkout(gr_until(list), &ret))
         GR_RET(ret);
     if (checkout(gr_for(list), &ret))
+        GR_RET(ret);
+    if (checkout(gr_case(list), &ret))
         GR_RET(ret);
     GR_RET(NO_MATCH);
 }

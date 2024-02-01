@@ -38,6 +38,9 @@ int exec_piped(struct ast *ast, int in, int out, int *pid)
     case AST_FOR:
         ret = exec_for(AST_FOR(ast));
         break;
+    case AST_CASE:
+        ret = exec_case(AST_CASE(ast));
+        break;
     default:
         print_error(PIPE_NOT_FOUND);
         ret = 1;

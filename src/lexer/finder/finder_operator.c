@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 
 #include "finder.h"
 #include "io_backend/backend_saver.h"
@@ -38,9 +39,12 @@ void consume_control_op(struct pending *p)
             append_io(p);
         break;
     case '\n':
+    case ')':
+    case '(':
         append_io(p);
         break;
     default:
+        printf("%c\n", c);
         assert(false);
         break;
     }

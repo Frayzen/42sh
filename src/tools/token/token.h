@@ -15,7 +15,7 @@ enum token_type
     // end of instruction
     NEWLINE,
     BSZERO,
-    DBL_SEMI_COLON,
+    DOUBLE_SEMI_COLON,
     SEMI_COLON,
 
     // operators ?
@@ -38,6 +38,8 @@ enum token_type
     ELIF,
     ELSE,
     FI,
+    CASE,
+    ESAC,
 
     WHILE,
     UNTIL,

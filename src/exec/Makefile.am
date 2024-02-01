@@ -9,8 +9,6 @@ libexec_a_SOURCES = \
 	builtins/dot.c\
 	builtins/exit.c\
 	builtins/continue_break.c\
-	execs.h\
-	exec_and_or.c\
 	commands/exec_commands.c\
 	commands/exec_pipe.c\
 	commands/exec_cmd.h\
@@ -18,6 +16,9 @@ libexec_a_SOURCES = \
 	exec_list.c \
 	exec_condition.c\
 	exec_loop.c\
-	exec_for.c
+	exec_for.c\
+	exec_case.c\
+	exec_and_or.c\
+	execs.h
 libexec_a_CPPFLAGS = -I$(top_srcdir)/src
 libexec_a_CFLAGS = $(CFLAGS_42SH)

@@ -51,4 +51,10 @@ int exec_for(struct ast_for *ast);
  */
 int exec_and_or(struct ast_and_or *ast);
 
+/***
+ * executes the case ast
+ * @param ast tree to execute
+ */
+int exec_case(struct ast_case *ast);
+
 #endif /* EXECS_H */
