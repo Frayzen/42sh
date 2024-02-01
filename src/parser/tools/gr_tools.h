@@ -5,6 +5,7 @@
 struct gr_state
 {
     struct gr_state *prev;
+    struct token *init_peek;
     char *name;
     int id;
     int depth;
@@ -24,7 +25,12 @@ void gr_debug_start(char *name);
  */
 enum status gr_debug_end(enum status status);
 
-#define GR_DBG_START(GrRule) gr_debug_start(#GrRule);
-#define GR_DBG_RET(Value) return gr_debug_end(Value);
+#define GR_START(GrRule) gr_debug_start(#GrRule);
+#define GR_RET(Value) return gr_debug_end(Value);
+#define GR_RET_CLEAN(Value, Ast)                                               \
+    {                                                                          \
+        destroy_ast(Ast);                                                      \
+        return gr_debug_end(Value);                                            \
+    }
 
 #endif /* !GR_TOOLS_H */

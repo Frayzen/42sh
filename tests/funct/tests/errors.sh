@@ -73,4 +73,8 @@ echo 'Hello Wor
 ###Unexpected EOF Var
 echo ${a
 
+###Pipe with an error 1
+echo ok | thisisnotright | cat | ls
 
+###Pipe with an error 2
+oeifeojf | echo ok | cat | wc -l

@@ -7,7 +7,6 @@ enum error_type
 {
     // General Errors -> 1
     MALLOC_NULL,
-    RING_BF_FULL,
     ADD_CHILD_ERROR,
     LIST_NOT_FOUND,
     PIPE_NOT_FOUND,

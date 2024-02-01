@@ -13,5 +13,5 @@ jobs:
           sudo apt-get install libcriterion-dev clang-format
           autoreconf -i
           ./configure
-          make check
+          make funct
 

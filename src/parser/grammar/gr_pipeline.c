@@ -8,26 +8,34 @@ pipeline = ['!'] command { '|' {'\n'} command } ;
 */
 enum status gr_pipeline(struct ast_list *list)
 {
-    GR_DBG_START(Pipeline);
+    GR_START(Pipeline);
     struct ast_pipe *pipe = init_ast(AST_PIPE);
     struct token *token = tok_peek();
+    bool consumed = false;
     while (token->type == NEGATION)
     {
+        consumed = true;
         pipe->negated = !pipe->negated;
         tok_pop_clean();
         token = tok_peek();
     }
-    CHECK_GOTO(gr_command(pipe) == ERROR, error);
+    switch (gr_command(pipe))
+    {
+    case NO_MATCH:
+        GR_RET_CLEAN(consumed ? ERROR : NO_MATCH, pipe);
+    case ERROR:
+        GR_RET_CLEAN(ERROR, pipe);
+    case OK:
+        break;
+    }
     while (tok_peek()->type == PIPE)
     {
         tok_pop_clean();
         while (tok_peek()->type == NEWLINE)
             tok_pop_clean();
-        CHECK_GOTO(gr_command(pipe), error);
+        if (gr_command(pipe) != OK)
+            GR_RET_CLEAN(ERROR, pipe);
     }
     add_child(list, AST(pipe));
-    GR_DBG_RET(OK);
-error:
-    destroy_ast(pipe);
-    GR_DBG_RET(ERROR);
+    GR_RET(OK);
 }
