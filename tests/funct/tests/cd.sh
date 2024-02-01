@@ -1,17 +1,17 @@
 ###Check the pwd
 mkdir ok toto tata
-pwd
+echo $PWD
 cd ok
-pwd
+echo $PWD
 mkdir toto
 cd toto
-pwd
+echo $PWD
 cd ../../toto
-pwd
+echo $PWD
 cd ../tata
 mkdir ./thisisatest
 cd ./thisisatest
-pwd
+echo $PWD
 
 ###Default cd
 mkdir folder
@@ -42,3 +42,8 @@ cd -
 echo $PWD
 echo $OLDPWD
 
+###Cd with link
+mkdir -p test_dir
+ln -s test_dir link
+cd link
+echo $PWD

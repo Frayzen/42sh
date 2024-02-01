@@ -17,7 +17,6 @@ struct token *tok_peek(void);
  */
 struct token *tok_peek2(void);
 
-
 /***
  * Jump to the next token of the buffer and destroy the token (INCLUDING the
  * string)
