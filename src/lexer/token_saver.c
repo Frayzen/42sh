@@ -23,9 +23,9 @@ struct token *tok_peek(void)
 
 struct token *tok_peek2(void)
 {
-  if (!next2)
-    next2 = next_token();
-  return next2;
+    if (!next2)
+        next2 = next_token();
+    return next2;
 }
 
 void tok_pop_clean(void)
@@ -45,4 +45,3 @@ void tok_pop(void)
     next = next2;
     next2 = NULL;
 }
-
