@@ -26,6 +26,7 @@
 #include "exit/error_handler.h"
 #include "io_backend/io_streamers.h"
 #include "parser/grammar/rules.h"
+#include "tools/pretty_print/pretty_print.h"
 #include "tools/str/string.h"
 #define BUFSIZE 8
 //
@@ -48,6 +49,12 @@ int register_expandable(struct expansion *exp, struct lex_str *exp_str,
     {
         while (end < exp_str->size && exp_str->expand[end] == type)
             end++;
+    }
+    else if (type == SUB_CMD)
+    {
+        do
+            end++;
+        while (end < exp_str->size && exp_str->expand[end] == SUB_CMD);
     }
     else
     {
@@ -77,6 +84,7 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
         // Skip the dollar if needed
         if (str->value[i] == '$' && !IS_STR_TYPE(str->expand[i]))
             i++;
+
         i = register_expandable(exp, str, i);
     }
     destroy_lex_str(str);
@@ -129,34 +137,6 @@ static struct expandable *expand_unquoted_var(struct expandable *cur)
         free(val);
         return NULL;
     }
-    // char *ifs = DEFAULT_IFS;
-    // if (is_set_var("IFS"))
-    //     ifs = read_var("IFS");
-    // char *elem = strtok(val, ifs);
-    // struct expandable *last = NULL;
-    // struct expandable *first = NULL;
-    // if (!elem)
-    // {
-    //     last = expandable_init(val, STR_LITTERAL, cur->link_next);
-    //     last->next = cur->next;
-    //     free(val);
-    //     return last;
-    // }
-    // while (elem)
-    // {
-    //     struct expandable *new_string =
-    //         expandable_init(strdup(elem), STR_LITTERAL, false);
-    //     if (last)
-    //         last->next = new_string;
-    //     else
-    //         first = new_string;
-    //     last = new_string;
-    //     elem = strtok(NULL, ifs);
-    // }
-    // last->link_next = cur->link_next;
-    // last->next = cur->next;
-    // free(val);
-    // return first;
     return ifs_splitting(val, cur);
 }
 
@@ -201,6 +181,7 @@ static void process_buffer(char *buf)
 
 static struct expandable *expand_sub_cmd(struct expandable *cur)
 {
+    // printf("content = |%s|\n", cur->content);
     int fds[2];
     int err = pipe(fds); // create the pipe reading stdout for the subcmd
                          // (child) into a buffer
@@ -219,6 +200,7 @@ static struct expandable *expand_sub_cmd(struct expandable *cur)
         DBG_PIPE("set STDOUT to %d\n", STDOUT);
         struct context *old = new_context();
         io_streamer_string(cur->content); // set the input cmd for the subcmd
+        DBG_PIPE("shit\n");
         if (gr_input(AST_ROOT) == ERROR)
         {
             *AST_ROOT = NULL;
@@ -254,6 +236,7 @@ static struct expandable *stringify_expandable(struct expandable *cur)
     struct expandable *exp = expand_special_var(cur);
     if (exp)
         return exp;
+
     switch (cur->type)
     {
     case QUOTED_VAR:

@@ -56,6 +56,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     char **argv = expand(&ast->args_expansion);
     apply_assignments(&ast->assignment_list);
     *pid = PID_SET;
+    DBG_PIPE("argv = %s==============================\n", *argv);
     if (argv[0])
     {
         if (!strcmp(argv[0], "echo"))
