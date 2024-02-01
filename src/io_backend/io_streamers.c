@@ -58,17 +58,11 @@ void io_streamer_file(char *path_to_file)
     load_file(path_to_file);
 }
 
-void io_streamer_string(int argc, char **argv)
+void io_streamer_string(char *arg)
 {
-    for (int i = 0; i < argc - 1; i++)
-    {
-        if (!strcmp(argv[i], "-c"))
-        {
-            char *buf = argv[i + 1];
-            FILE *file = fmemopen(buf, strlen(buf), "r");
-            streamer = file;
-        }
-    }
+    char *buf = arg;
+    FILE *file = fmemopen(buf, strlen(buf), "r");
+    streamer = file;
     return;
 }
 

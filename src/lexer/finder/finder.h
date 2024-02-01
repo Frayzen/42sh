@@ -49,6 +49,7 @@ struct pending
     bool in_quote;
     bool error;
     bool force_str;
+    bool in_sub_cmd;
 };
 
 // In this file, understand 'current character' as the one returned by
