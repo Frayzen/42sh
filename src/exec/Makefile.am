@@ -8,6 +8,7 @@ libexec_a_SOURCES = \
 	builtins/cd.c\
 	builtins/dot.c\
 	builtins/exit.c\
+	builtins/path_utils.c builtins/path_utils.h\
 	builtins/continue_break.c\
 	execs.h\
 	exec_and_or.c\

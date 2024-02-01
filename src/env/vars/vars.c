@@ -84,14 +84,14 @@ void init_env_vars(void)
         i++;
     }
 
-    if (!get_var("IFS"))
+    if (!is_set_var("IFS"))
         init_env_var("IFS", DEFAULT_IFS);
     char path[PATH_MAX];
     char *ret = getcwd(path, PATH_MAX);
     if (!ret)
         print_error(INVALID_FILE_PATH);
-    if (!get_var("PWD"))
+    if (!is_set_var("PWD"))
         init_env_var("PWD", path);
-    if (!get_var("OLDPWD"))
+    if (!is_set_var("OLDPWD"))
         init_env_var("OLDPWD", read_var("PWD"));
 }
