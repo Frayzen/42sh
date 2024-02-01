@@ -19,32 +19,28 @@ shell_command =
 
 enum status check_compound_token(enum token_type expected_type1,
                                  enum token_type expected_type2,
+                                 enum ast_type type,
                                  struct ast_sh *sh)
 {
     struct token *token = tok_peek();
-    if (token->type == expected_type1)
+    if (token->type != expected_type1)
+        return NO_MATCH;
+    struct ast_list *sub_shell = init_ast(type);
+    tok_pop_clean();
+    if (gr_compound_list(AST_LIST(sub_shell)) != OK)
     {
-        struct ast_subshell *sub_shell = init_ast(AST_SUBSHELL);
-        tok_pop_clean();
-        if (gr_compound_list(AST_LIST(sub_shell)) == OK)
-        {
-            token = tok_peek();
-            if (token->type != expected_type2)
-            {
-                destroy_ast(sub_shell);
-                return ERROR;
-            }
-            tok_pop_clean();
-        }
-        else
-        {
-            destroy_ast(sub_shell);
-            return ERROR;
-        }
-        sh->sh_cmd = AST(sub_shell);
-        return OK;
+        destroy_ast(sub_shell);
+        return ERROR;
     }
-    return NO_MATCH;
+    token = tok_peek();
+    if (token->type != expected_type2)
+    {
+        destroy_ast(sub_shell);
+        return ERROR;
+    }
+    tok_pop_clean();
+    sh->sh_cmd = AST(sub_shell);
+    return OK;
 }
 
 // Function to verify if the return value is a value that needs to be returned
@@ -64,9 +60,9 @@ bool checkout(enum status st, enum status *ret)
 enum status get_shell_command(struct ast_sh *sh)
 {
     enum status ret = OK;
-    if (checkout(check_compound_token(BRK_OPEN, BRK_CLOSED, sh), &ret))
+    if (checkout(check_compound_token(BRK_OPEN, BRK_CLOSED, AST_LIST, sh), &ret))
         return ret;
-    if (checkout(check_compound_token(PRTH_OPEN, PRTH_CLOSED, sh), &ret))
+    if (checkout(check_compound_token(PRTH_OPEN, PRTH_CLOSED, AST_SUBSHELL, sh), &ret))
         return ret;
     if (checkout(gr_if(sh), &ret))
         return ret;

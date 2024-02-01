@@ -19,6 +19,9 @@ int exec_sh(struct ast_sh *sh)
     case AST_FOR:
         ret = exec_for(AST_FOR(ast));
         break;
+    case AST_LIST:
+        ret = exec_list(AST_LIST(ast));
+        break;
     case AST_SUBSHELL:
         ret = exec_subshell(AST_SUBSHELL(ast));
         break;
