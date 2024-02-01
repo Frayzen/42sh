@@ -2,31 +2,27 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/gr_tools.h"
-#include "tools/gr_utils.h"
 #include "tools/token/token.h"
 // rule_if = 'if' compound_list 'then' compound_list [else_clause] 'fi' ;
-enum status gr_if(struct ast_list *list)
+enum status gr_if(struct ast_sh *sh)
 {
-    GR_DBG_START(If);
+    GR_START(If);
     if (tok_peek()->type != IF)
-        GR_DBG_RET(ERROR);
+        GR_RET(NO_MATCH);
     tok_pop_clean();
     struct ast_if *if_ast = init_ast(AST_IF);
-
-    CHECK_GOTO(gr_compound_list(AST_LIST(&if_ast->cond)) == ERROR, error);
-
-    CHECK_GOTO(tok_peek()->type != THEN, error);
-
+    if (gr_compound_list(AST_LIST(&if_ast->cond)) != OK)
+        GR_RET_CLEAN(ERROR, if_ast);
+    if (tok_peek()->type != THEN)
+        GR_RET_CLEAN(ERROR, if_ast);
     tok_pop_clean();
-    CHECK_GOTO(gr_compound_list(AST_LIST(&if_ast->then)) == ERROR, error);
-    gr_else(if_ast);
-    CHECK_GOTO(tok_peek()->type != FI, error);
-
+    if (gr_compound_list(AST_LIST(&if_ast->then)) != OK)
+        GR_RET_CLEAN(ERROR, if_ast);
+    if (gr_else(if_ast) == ERROR)
+        GR_RET_CLEAN(ERROR, if_ast);
+    if (tok_peek()->type != FI)
+        GR_RET_CLEAN(ERROR, if_ast);
     tok_pop_clean();
-    add_child(list, AST(if_ast));
-    return OK;
-
-error:
-    destroy_ast(if_ast);
-    GR_DBG_RET(ERROR);
+    sh->sh_cmd = AST(if_ast);
+    GR_RET(OK);
 }

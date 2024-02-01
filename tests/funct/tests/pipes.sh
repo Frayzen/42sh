@@ -24,4 +24,4 @@ cat file | wc -l | cat
 cat file | wc -c | cat
 
 ### Generate random letter
-cat /dev/urandom | tr -dc 'A-Z' | fold -w 1 |head -n 1 | wc -c
+tree | tr -dc 'A-Z' | head -n 1 | wc -c

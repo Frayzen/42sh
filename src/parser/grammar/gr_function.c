@@ -9,9 +9,6 @@
 #include "tools/gr_tools.h"
 #include "tools/gr_utils.h"
 #include "tools/token/token.h"
-/*
-funcdec = WORD '(' ')' '{\n}' shell_command
-*/
 
 // check that the name of the function is valid according to SCL
 static int check_name_valid(char *name)
@@ -30,29 +27,34 @@ static int check_name_valid(char *name)
     }
     return 1;
 }
-
+/*
+funcdec = WORD '(' ')' '{\n}' shell_command
+*/
 enum status gr_function(struct ast_list *ast)
 {
-    GR_DBG_START(Function);
-    struct ast_funct *ast_funct = init_ast(AST_FUNCT);
+    GR_START(Function);
     struct token *token = tok_peek();
     struct token *token2 = tok_peek2();
-    CHECK_GOTO(!IS_WORDABLE(token) || !check_name_valid(token->str->value)
-                   || token2->type != PRTH_OPEN,
-               error);
+    if (!((token)->type >= IF) || !check_name_valid(token->str->value)
+        || token2->type != PRTH_OPEN)
+        GR_RET(NO_MATCH);
+    struct ast_funct *ast_funct = init_ast(AST_FUNCT);
     ast_funct->name = strdup(token->str->value);
     tok_pop_clean();
     tok_pop_clean();
-    CHECK_GOTO(tok_peek()->type != PRTH_CLOSED, error);
+    if (tok_peek()->type != PRTH_CLOSED)
+        GR_RET_CLEAN(ERROR, ast_funct);
+
     tok_pop_clean();
 
     while (tok_peek()->terminal)
         tok_pop_clean();
 
-    CHECK_GOTO(gr_shell_cmd(AST_LIST(ast_funct)) == ERROR, error);
+    if (gr_shell_cmd(AST_LIST(ast_funct)) != OK)
+        GR_RET_CLEAN(ERROR, ast_funct);
     add_child(ast, AST(ast_funct));
-    GR_DBG_RET(OK);
+    GR_RET(OK);
 error:
     destroy_ast(ast_funct);
-    GR_DBG_RET(ERROR);
+    GR_RET(ERROR);
 }

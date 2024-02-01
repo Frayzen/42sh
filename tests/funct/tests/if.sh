@@ -107,12 +107,3 @@ else
     ! echo false
 fi
 
-###compound list in if
-if false
-    true; then
-    echo ok\
-    true
-    ; then
-    echo\
-    ls
-fi

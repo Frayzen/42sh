@@ -1,3 +1,4 @@
+#include "exit/error_handler.h"
 #include "lexer/token_saver.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
@@ -6,26 +7,43 @@
 
 void consume_all(void)
 {
-    while (!tok_peek()->terminal)
+    while (tok_peek()->type != NEWLINE && tok_peek()->type != BSZERO)
         tok_pop_clean();
+    tok_pop_clean();
 }
-
+/*
+input =
+list '\n'
+| list EOF
+| '\n'
+| EOF
+;
+*/
 enum status gr_input(struct ast **ast)
 {
-    GR_DBG_START(Input);
-    if (tok_peek()->terminal)
+    GR_START(Input);
+    enum status st = gr_list(ast);
+    bool empty = true;
+    switch (st)
     {
-        tok_pop_clean();
-        GR_DBG_RET(OK);
+    case NO_MATCH:
+        break;
+    case OK:
+        empty = false;
+        break;
+    case ERROR:
+        goto error;
     }
-    CHECK_GOTO(gr_list(ast) == ERROR, error);
-    struct token *trm = tok_peek();
-    if (!trm->terminal)
+    struct token *end = tok_peek();
+    if (end->type != BSZERO && end->type != NEWLINE)
         goto error;
     tok_pop_clean();
-    GR_DBG_RET(OK);
+    if (empty)
+        GR_RET(NO_MATCH);
+    GR_RET(OK);
 error:
+    exit_gracefully(GRAMMAR_ERROR_ENTRY);
     consume_all();
     destroy_ast(*ast);
-    GR_DBG_RET(ERROR);
+    GR_RET(ERROR);
 }

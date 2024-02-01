@@ -11,7 +11,7 @@ export LIB_LIST=exec/libexec.a \
 		 arg_parser/libargparser.a\
 		 arg_saver/libargsaver.a
 
-export CFLAGS_42SH=-std=c99 -Werror -Wall -Wextra -Wvla -pedantic -O2 -fsanitize=address
+export CFLAGS_42SH=-std=c99 -Werror -Wall -Wextra -Wvla -pedantic -O2
 
 funct_errors: all
 	chmod +x ./tests/funct/*.sh

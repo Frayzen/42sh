@@ -42,6 +42,16 @@ echo "A" ;;;; echo "B"
 ###bad seperator5
 echo "Redirected" &;; output.txt
 
+###compound list in if
+if false
+    true; then
+    echo ok\
+    true
+    ; then
+    echo\
+    ls
+fi
+
 ##bad_unterminated_quote
 echo 'hdhdh
 
@@ -63,4 +73,8 @@ echo 'Hello Wor
 ###Unexpected EOF Var
 echo ${a
 
+###Pipe with an error 1
+echo ok | thisisnotright | cat | ls
 
+###Pipe with an error 2
+oeifeojf | echo ok | cat | wc -l

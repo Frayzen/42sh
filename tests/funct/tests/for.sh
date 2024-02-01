@@ -48,7 +48,7 @@ for i in true false true; do
     done
 done
 
-## Using while loop
+### Using while loop
 echo Using while loop
 i=true
 while $i; do

@@ -7,6 +7,7 @@ libtools_a_SOURCES = \
 	str/string.c str/string.h\
 	token/token.c token/token.h\
 	ast/ast.c ast/ast.h\
+	definitions.h\
 	str/string.h str/string.c\
 	ast/ast_utils.c ast/ast_utils.h\
 	assignment/assignment.c assignment/assignment.h\

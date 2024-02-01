@@ -122,7 +122,7 @@ const char **toktype_lookup(void)
         [BRK_OPEN] = "{",    [BRK_CLOSED] = "}",
         [PRTH_OPEN] = "(",   [PRTH_CLOSED] = ")",
         [WORD] = NULL,       [T_CONTINUE] = "continue",
-        [T_BREAK] = "break",
+        [T_BREAK] = "break", [DBL_SEMI_COLON] = ";;",
     };
     return lookup_table;
 }

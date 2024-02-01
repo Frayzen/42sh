@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include "lexer/token_saver.h"
 #include "parser/command/expander.h"
 #include "rules.h"
@@ -29,30 +27,32 @@ prefix { prefix }
 */
 enum status gr_simple_command(struct ast_list *list)
 {
-    GR_DBG_START(SimpleCommand);
+    GR_START(SimpleCommand);
     struct ast_cmd *cmd = init_ast(AST_CMD);
     // {prefix}
-    int nb_prefix = 0;
-    while (gr_prefix(cmd) != ERROR)
-        nb_prefix++;
+    bool consumed = false;
+    do
+    {
+        enum status st = gr_prefix(cmd);
+        if (st == ERROR)
+            GR_RET_CLEAN(ERROR, cmd);
+        if (st == NO_MATCH)
+            break;
+        consumed = true;
+    } while (true);
     struct token *tok_word = tok_peek();
     if (!IS_COMMAND(tok_word))
     {
-        if (nb_prefix == 0)
-            goto error;
-        goto success;
-    }
-    // WORLD
+        if (!consumed)
+            GR_RET_CLEAN(NO_MATCH, cmd);
+        add_child(list, AST(cmd));
+        GR_RET(OK);
+    } // WORLD
     exp_register_str(&cmd->args_expansion, tok_word->str);
     tok_pop();
     // {element}
-    while (gr_element(cmd) != ERROR)
+    while (gr_element(cmd) == OK)
         continue;
-    // {element}
-success:
     add_child(list, AST(cmd));
-    GR_DBG_RET(OK);
-error:
-    destroy_ast(cmd);
-    GR_DBG_RET(ERROR);
+    GR_RET(OK);
 }

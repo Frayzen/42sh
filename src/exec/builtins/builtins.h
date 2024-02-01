@@ -54,4 +54,10 @@ int builtin_break(char **argv);
  */
 int builtin_unset(char **argv);
 
+/* Execute the export builtin given the arguments
+ * @param argv the agument list, null terminated
+ * @return value returned by the builtin execution
+ */
+int builtin_export(char **argv);
+
 #endif /* !BUILTINS_H */

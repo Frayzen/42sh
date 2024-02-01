@@ -3,21 +3,11 @@
 
 #include "tools/ast/ast.h"
 
-/***
- * Macros to decide if need to goto error
- * @param test the condition to check
- * @param function the function to goto
- */
-#define CHECK_GOTO(test, function)                                             \
-    if (test)                                                                  \
-    {                                                                          \
-        goto function;                                                         \
-    }
-
 enum status
 {
     OK,
     ERROR,
+    NO_MATCH,
 };
 
 typedef enum status (*gr_rule)(struct ast **ast);
@@ -93,11 +83,11 @@ enum status gr_else(struct ast_if *ast);
 
 /***
  * Grammar rule for if
- * @param list: the list to be updated
+ * @param sh: the shell ast to be updated
  * @return enum that tells the status
  */
 
-enum status gr_if(struct ast_list *ast);
+enum status gr_if(struct ast_sh *sh);
 
 /***
  * Grammar rule for shell comand
@@ -122,24 +112,24 @@ enum status gr_prefix(struct ast_cmd *cmd);
 
 /***
  * Grammar rule for while
- * @param list: the list to be updated
+ * @param sh: the shell ast to be updated
  * @return enum that tells the status
  */
-enum status gr_while(struct ast_list *ast);
+enum status gr_while(struct ast_sh *sh);
 
 /***
  * Grammar rule for until
- * @param list: the list to be updated
+ * @param sh: the shell ast to be updated
  * @return enum that tells the status
  */
-enum status gr_until(struct ast_list *ast);
+enum status gr_until(struct ast_sh *sh);
 
 /***
  * Grammar rule for for
- * @param ast: the tree to be updated
+ * @param sh: the shell ast to be updated
  * @return enum that tells the status
  */
-enum status gr_for(struct ast_list *ast);
+enum status gr_for(struct ast_sh *sh);
 
 /***
  * Grammar rule for and_or

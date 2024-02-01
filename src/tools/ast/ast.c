@@ -30,7 +30,8 @@ void *init_ast(enum ast_type type)
         [AST_UNTIL] = sizeof(struct ast_loop),
         [AST_FOR] = sizeof(struct ast_for),
         [AST_AND_OR] = sizeof(struct ast_and_or),
-        // TODO later
+        [AST_SUBSHELL] = sizeof(struct ast_subshell),
+        [AST_SH] = sizeof(struct ast_sh),
         [AST_ASS] = sizeof(struct ast),
     };
     struct ast *ast = calloc(1, ast_size[type]);
@@ -57,9 +58,11 @@ void destroy_ast(void *ast)
     case AST_CMD:
         clean_expansion(&AST_CMD(ast)->args_expansion);
         clean_assignments(&AST_CMD(ast)->assignment_list);
-        /* FALLTHROUGH */
+        destroy_redir(AST_REDIR(ast));
+        break;
     case AST_SH:
         destroy_redir(AST_REDIR(ast));
+        destroy_ast(AST_SH(ast)->sh_cmd);
         break;
     case AST_WHILE:
     case AST_UNTIL:
@@ -80,6 +83,7 @@ void destroy_ast(void *ast)
         clean_expansion(&AST_FOR(ast)->exp);
         /* FALLTHROUGH */
     case AST_PIPE:
+    case AST_SUBSHELL:
     case AST_LIST:
     destroy_list:
         destroy_list(AST_LIST(ast));

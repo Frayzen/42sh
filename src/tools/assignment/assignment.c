@@ -1,6 +1,12 @@
-#include "parser/command/expander.h"
 #define _POSIX_C_SOURCE 200809L
 #include "assignment.h"
+
+#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "env/vars/vars.h"
+#include "parser/command/expander.h"
 
 // manage the variable assignments using environ to store, restore and update
 
@@ -39,6 +45,8 @@ void destroy_assignment(struct assignment *assignment)
         return;
     if (assignment->name)
         free(assignment->name);
+    if (assignment->prev)
+        free(assignment->prev);
     clean_expansion(&assignment->exp);
     free(assignment);
 }
@@ -72,18 +80,24 @@ void apply_assignments(struct assignment_list *asslist)
         struct assignment *ass = asslist->ass_list[i];
         char **val = expand(&ass->exp);
         assert(val && val[0] && !val[1]);
-        ass->prev = assign_var(ass->name, val[0]);
+        ass->prev = retrieve_var(ass->name);
+        assign_var(ass->name, val[0]);
         destroy_expanded(val);
     }
 }
 
-void revert_assignments(struct assignment_list *asslist)
+void discard_assignments(struct assignment_list *asslist, bool revert)
 {
     for (unsigned int i = 0; i < asslist->size; i++)
     {
         struct assignment *ass = asslist->ass_list[i];
         if (ass->prev)
-            assign_var(ass->name, ass->prev);
+        {
+            if (revert)
+                assign_var(ass->name, ass->prev);
+            free(ass->prev);
+            ass->prev = NULL;
+        }
         else
             unset_var(ass->name);
     }
