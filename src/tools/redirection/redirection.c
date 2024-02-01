@@ -81,7 +81,7 @@ bool setup_redir(struct redirection *redir)
         apply_redir(fd_right, fd_left,
                     "[REDIR] Close and copy %d in FD[%d] OUT)\n");
     else
-        apply_redir(fd_left, fd_right,
+        apply_redir(fd_right, fd_left,
                     "[REDIR] Close and copy %d in FD[%d] IN)\n");
     return true;
 }
