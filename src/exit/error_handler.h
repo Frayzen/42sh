@@ -16,6 +16,7 @@ enum error_type
     BAD_VAR_NAME,
     BAD_REDIRECTION,
     BAD_FD,
+    CD_BAD_PATH,
     CONT_BREAK_RANGE,
     // Misuse of shell built-ins -> 2
     ARG_ERROR,

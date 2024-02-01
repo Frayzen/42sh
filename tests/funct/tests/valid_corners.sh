@@ -7,7 +7,7 @@
 echo 
 
 
-pwd
+echo $PWD
 
 
 ###echo echo echo 

@@ -22,6 +22,7 @@ enum ast_type
     AST_FOR,
     AST_AND_OR,
     AST_SUBSHELL,
+    AST_FUNCT,
     // NOT USED
     AST_ASS
 };
@@ -110,6 +111,13 @@ struct ast_and_or
     enum token_type *types;
 };
 // END AND OR
+
+#define AST_FUNCT(Base) ((struct ast_funct *)(Base))
+struct ast_funct
+{
+    struct ast_list list;
+    char *name;
+};
 
 /***
  * Set or gets the pointer to the ast root
