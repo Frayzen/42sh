@@ -19,8 +19,7 @@ shell_command =
 
 enum status check_compound_token(enum token_type expected_type1,
                                  enum token_type expected_type2,
-                                 enum ast_type type,
-                                 struct ast_sh *sh)
+                                 enum ast_type type, struct ast_sh *sh)
 {
     struct token *token = tok_peek();
     if (token->type != expected_type1)
@@ -60,9 +59,11 @@ bool checkout(enum status st, enum status *ret)
 enum status get_shell_command(struct ast_sh *sh)
 {
     enum status ret = OK;
-    if (checkout(check_compound_token(BRK_OPEN, BRK_CLOSED, AST_LIST, sh), &ret))
+    if (checkout(check_compound_token(BRK_OPEN, BRK_CLOSED, AST_LIST, sh),
+                 &ret))
         return ret;
-    if (checkout(check_compound_token(PRTH_OPEN, PRTH_CLOSED, AST_SUBSHELL, sh), &ret))
+    if (checkout(check_compound_token(PRTH_OPEN, PRTH_CLOSED, AST_SUBSHELL, sh),
+                 &ret))
         return ret;
     if (checkout(gr_if(sh), &ret))
         return ret;
