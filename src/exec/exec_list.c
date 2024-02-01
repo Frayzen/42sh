@@ -1,11 +1,9 @@
 #include <assert.h>
-#include <stdio.h>
 
 #include "commands/execs_cmd.h"
 #include "execs.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
-#include "tools/token/token.h"
 
 int exec_list(struct ast_list *ast)
 {
@@ -24,6 +22,9 @@ int exec_list(struct ast_list *ast)
             break;
         case AST_AND_OR:
             ret = exec_and_or(AST_AND_OR(child));
+            break;
+        case AST_SUBSHELL:
+            ret = exec_subshell(AST_SUBSHELL(child));
             break;
         default:
             exit_gracefully(LIST_NOT_FOUND);

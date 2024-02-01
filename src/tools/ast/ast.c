@@ -30,7 +30,7 @@ void *init_ast(enum ast_type type)
         [AST_UNTIL] = sizeof(struct ast_loop),
         [AST_FOR] = sizeof(struct ast_for),
         [AST_AND_OR] = sizeof(struct ast_and_or),
-        // TODO later
+        [AST_SUBSHELL] = sizeof(struct ast_subshell),
         [AST_ASS] = sizeof(struct ast),
     };
     struct ast *ast = calloc(1, ast_size[type]);

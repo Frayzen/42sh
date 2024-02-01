@@ -4,6 +4,7 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/gr_tools.h"
+#include "tools/gr_utils.h"
 
 /*
 shell_command =
@@ -23,17 +24,25 @@ enum status check_compound_token(enum token_type expected_type1,
     struct token *token = tok_peek();
     if (token->type == expected_type1)
     {
+        struct ast_subshell *shell = init_ast(AST_SUBSHELL);
         tok_pop_clean();
-        if (gr_list((struct ast **)&list) == OK)
+        if (gr_compound_list(AST_LIST(shell)) == OK)
         {
             token = tok_peek();
             if (token->type != expected_type2)
+            {
+                destroy_ast(shell);
                 return ERROR;
+            }
             tok_pop_clean();
             return OK;
         }
         else
+        {
+            destroy_ast(shell);
             return ERROR;
+        }
+        add_child(list, AST(shell));
     }
     return NO_MATCH;
 }

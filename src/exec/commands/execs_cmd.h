@@ -19,4 +19,10 @@ int exec_cmd(struct ast_cmd *ast, int *pid);
  */
 int exec_pipe(struct ast_pipe *ast);
 
+/***
+ * executes the subshell ast
+ * @param ast tree to execute
+ */
+int exec_subshell(struct ast_pipe *ast);
+
 #endif /* !EXECS_CMD_H */
