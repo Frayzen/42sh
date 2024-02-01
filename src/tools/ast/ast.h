@@ -22,6 +22,7 @@ enum ast_type
     AST_FOR,
     AST_AND_OR,
     AST_SUBSHELL,
+    AST_FUNCT,
     // NOT USED
     AST_ASS
 };
@@ -111,6 +112,13 @@ struct ast_and_or
 };
 // END AND OR
 
+
+#define AST_FUNCT(Base) ((struct ast_funct *)(Base))
+struct ast_funct
+{
+    struct ast_list body;
+    char *name;
+};
 /***
  * Set or gets the pointer to the ast root
  * @param pointer to the ast to set as the root if not NULL

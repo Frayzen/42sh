@@ -54,7 +54,4 @@ enum status gr_function(struct ast_list *ast)
         GR_RET_CLEAN(ERROR, ast_funct);
     add_child(ast, AST(ast_funct));
     GR_RET(OK);
-error:
-    destroy_ast(ast_funct);
-    GR_RET(ERROR);
 }

@@ -30,6 +30,18 @@ enum status gr_command(struct ast_pipe *pipe)
         GR_RET(OK);
     }
     default:
+        break;
+    }
+    st = gr_function(list);
+    switch (st)
+    {
+    case OK: {
+        struct ast_sh *sh = AST_SH(list->children[list->nb_children - 1]);
+        while (gr_redir(AST_REDIR(sh)) == OK)
+            ;
+        GR_RET(OK);
+    }
+    default:
         GR_RET(st);
     }
 }
