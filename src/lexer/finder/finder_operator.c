@@ -38,13 +38,12 @@ void consume_control_op(struct pending *p)
         if (io_peek() == c)
             append_io(p);
         break;
-    case '\n':
-    case ')':
     case '(':
+    case ')':
+    case '\n':
         append_io(p);
         break;
     default:
-        printf("%c\n", c);
         assert(false);
         break;
     }

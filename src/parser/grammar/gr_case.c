@@ -96,7 +96,7 @@ enum status gr_case_clause(struct ast_case *ast)
 
 // rule_case = 'case' WORD {'\n'} 'in' {'\n'} [case_clause] 'esac' ;
 
-enum status gr_case(struct ast_list *ast)
+enum status gr_case(struct ast_sh *sh)
 {
     GR_START(Case);
     if (tok_peek()->type != CASE)
@@ -126,6 +126,6 @@ enum status gr_case(struct ast_list *ast)
         GR_RET(ERROR);
 
     tok_pop_clean();
-    add_child(ast, AST(case_ast));
+    sh->sh_cmd = AST(case_ast);
     GR_RET(OK);
 }

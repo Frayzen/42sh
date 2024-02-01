@@ -83,11 +83,11 @@ enum status gr_else(struct ast_if *ast);
 
 /***
  * Grammar rule for if
- * @param list: the list to be updated
+ * @param sh: the shell ast to be updated
  * @return enum that tells the status
  */
 
-enum status gr_if(struct ast_list *ast);
+enum status gr_if(struct ast_sh *sh);
 
 /***
  * Grammar rule for shell comand
@@ -112,24 +112,24 @@ enum status gr_prefix(struct ast_cmd *cmd);
 
 /***
  * Grammar rule for while
- * @param list: the list to be updated
+ * @param sh: the shell ast to be updated
  * @return enum that tells the status
  */
-enum status gr_while(struct ast_list *ast);
+enum status gr_while(struct ast_sh *sh);
 
 /***
  * Grammar rule for until
- * @param list: the list to be updated
+ * @param sh: the shell ast to be updated
  * @return enum that tells the status
  */
-enum status gr_until(struct ast_list *ast);
+enum status gr_until(struct ast_sh *sh);
 
 /***
  * Grammar rule for for
- * @param ast: the tree to be updated
+ * @param sh: the shell ast to be updated
  * @return enum that tells the status
  */
-enum status gr_for(struct ast_list *ast);
+enum status gr_for(struct ast_sh *sh);
 
 /***
  * Grammar rule for and_or
@@ -143,6 +143,6 @@ enum status gr_and_or(struct ast_list *list);
  * @param ast: the tree to be updated
  * @return enum that tells the status
  */
-enum status gr_case(struct ast_list *ast);
+enum status gr_case(struct ast_sh *sh);
 
 #endif /* !RULES_H */

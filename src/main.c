@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
         {
         case ERROR:
             ast = NULL;
-
             print_error(GRAMMAR_ERROR_ENTRY);
             ret = 2;
             continue;
@@ -43,7 +42,6 @@ int main(int argc, char *argv[])
         case NO_MATCH:
             break;
         }
-        printf("here\n");
         destroy_ast(ast);
         ast = NULL;
     } while (!get_env_flag()->null_received);

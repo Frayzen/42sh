@@ -28,15 +28,8 @@ int exec_piped(struct ast *ast, int in, int out, int *pid)
     case AST_CMD:
         ret = exec_cmd(AST_CMD(ast), pid);
         break;
-    case AST_IF:
-        ret = exec_condition(AST_IF(ast));
-        break;
-    case AST_WHILE:
-    case AST_UNTIL:
-        ret = exec_loop(AST_LOOP(ast));
-        break;
-    case AST_FOR:
-        ret = exec_for(AST_FOR(ast));
+    case AST_SH:
+        ret = exec_sh(AST_SH(ast));
         break;
     case AST_CASE:
         ret = exec_case(AST_CASE(ast));

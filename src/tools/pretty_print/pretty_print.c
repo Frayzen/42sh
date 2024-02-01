@@ -4,8 +4,8 @@
 
 #include "parser/command/expansion.h"
 #include "parser/tools/gr_utils.h"
-#include "str/string.h"
 #include "tools/ast/ast.h"
+#include "tools/str/string.h"
 
 #define _POSIX_C_SOURCE 200809L
 
@@ -48,6 +48,23 @@ static void print_ast_list(struct ast_list *ast, int depth)
     {
         struct ast *child = children[i++];
         pretty_print_ast_help(child, AST(child)->type, depth + 1, !children[i]);
+    }
+    free(children);
+}
+
+static void print_ast_subshell(struct ast_subshell *sub_shell,
+                               int depth) //, bool *closed_nod)
+{
+    printf(YELLOW "SUB SHELL\n" RESET);
+    struct ast **children = get_children(AST(sub_shell));
+    if (!children)
+        return;
+    int i = 0;
+    while (children[i])
+    {
+        struct ast *child = children[i++];
+        pretty_print_ast_help(child, AST(child)->type, depth + 1, !children[i]);
+        // closed_nod);
     }
     free(children);
 }
@@ -167,15 +184,6 @@ static void print_ast_case(struct ast_case *ast, int depth)
     depth--;
 }
 
-bool get_max_depth(int depth)
-{
-    static int max_depth = 0;
-    if (depth <= max_depth)
-        return false;
-    max_depth = depth;
-    return true;
-}
-
 void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
                            bool is_last_child)
 {
@@ -203,6 +211,9 @@ void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
         break;
     case AST_FOR:
         print_ast_for(AST_FOR(ast), depth);
+        break;
+    case AST_SUBSHELL:
+        print_ast_subshell(AST_SUBSHELL(ast), depth);
         break;
     case AST_AND_OR:
         print_ast_and_or(AST_AND_OR(ast), depth);

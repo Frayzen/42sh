@@ -12,7 +12,7 @@
 /* rule_for ='for' WORD ( [';'] | [ {'\n'} 'in' { WORD } ( ';' | '\n' ) ] )
  * {'\n'} 'do' compound_list 'done';
  */
-enum status gr_for(struct ast_list *ast)
+enum status gr_for(struct ast_sh *ast)
 {
     GR_START(For);
     if (tok_peek()->type != FOR)
@@ -52,6 +52,6 @@ enum status gr_for(struct ast_list *ast)
     if (tok_peek()->type != DONE)
         GR_RET_CLEAN(ERROR, ast_for);
     tok_pop_clean();
-    add_child(ast, AST(ast_for));
+    ast->sh_cmd = AST(ast_for);
     GR_RET(OK);
 }
