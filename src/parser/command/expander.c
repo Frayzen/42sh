@@ -1,11 +1,12 @@
-#include "env/vars/specials.h"
 #define _POSIX_C_SOURCE 200809L
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "command/expansion.h"
 #include "env/env.h"
+#include "env/vars/specials.h"
 #include "env/vars/vars.h"
 #include "tools/str/string.h"
 
@@ -85,6 +86,7 @@ static struct expandable *expand_unquoted_var(struct expandable *cur)
     {
         last = expandable_init(val, STR_LITTERAL, cur->link_next);
         last->next = cur->next;
+        free(val);
         return last;
     }
     while (elem)

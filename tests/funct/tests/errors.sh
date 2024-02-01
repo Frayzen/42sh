@@ -42,6 +42,16 @@ echo "A" ;;;; echo "B"
 ###bad seperator5
 echo "Redirected" &;; output.txt
 
+###compound list in if
+if false
+    true; then
+    echo ok\
+    true
+    ; then
+    echo\
+    ls
+fi
+
 ##bad_unterminated_quote
 echo 'hdhdh
 

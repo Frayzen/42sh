@@ -1,4 +1,3 @@
-#include "env/vars/specials.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
@@ -15,6 +14,7 @@
 #include "exec/commands/execs_cmd.h"
 #include "exit/error_handler.h"
 #include "parser/command/expander.h"
+#include "tools/assignment/assignment.h"
 #include "tools/ast/ast.h"
 #include "tools/redirection/redirection.h"
 
@@ -76,6 +76,8 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             ret = 1;
         else if (!strcmp(argv[0], "."))
             ret = builtin_dot(argv);
+        else if (!strcmp(argv[0], "export"))
+            ret = builtin_export(argv);
         else if (!strcmp(argv[0], "continue"))
             ret = builtin_continue(argv);
         else if (!strcmp(argv[0], "break"))
@@ -85,8 +87,8 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             *pid = exec_prog(argv);
             ret = -1;
         }
-        revert_assignments(&ast->assignment_list);
     }
+    discard_assignments(&ast->assignment_list, argv[0]);
     destroy_expanded(argv);
     close_redirs(fds);
     return ret;

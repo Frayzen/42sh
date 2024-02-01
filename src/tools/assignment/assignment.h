@@ -1,13 +1,8 @@
 #ifndef ASSIGNMENT_H
 #define ASSIGNMENT_H
 
-#include <assert.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-#include "env/vars/vars.h"
-#include "parser/command/expander.h"
 #include "parser/command/expansion.h"
 #include "tools/str/string.h"
 struct assignment
@@ -55,7 +50,8 @@ void clean_assignments(struct assignment_list *assign_list);
  * Revert the assignments made by apply_assignments
  * @param asslist the list of assignment
  */
-void revert_assignments(struct assignment_list *asslist);
+void discard_assignments(struct assignment_list *asslist, bool revert);
+
 /***
  * Apply the assignments contained in apply_assignments
  * @param asslist the list of assignment

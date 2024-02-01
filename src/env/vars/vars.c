@@ -2,40 +2,37 @@
 #include "vars.h"
 
 #include <linux/limits.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
 #include "env.h"
 #include "env/env.h"
+#include "var_dict.h"
 
-void setup_vars(void)
+void export_var(char *name)
 {
-    assign_var("IFS", " \t\r");
-    char path[PATH_MAX];
-    assign_var("PWD", getcwd(path, PATH_MAX));
-    assign_var("OLDPWD", path);
+    struct sh_var *var = get_var(name);
+    var->exported = true;
+    setenv(name, var->value, 1);
 }
 
-char *assign_var(char *name, char *value)
+void assign_var(char *name, char *value)
 {
-    char *old = getenv(name);
-    DBG_VAR("[VAR] assign |%s| to |%s|, old = |%s|\n", name, value, old);
-    if (!name || !value)
-        return old;
-    setenv(name, value, 1);
-    return old;
+    struct sh_var *var = get_or_create_var(name);
+    DBG_VAR("[VAR] assign |%s| to |%s|, old = |%s|\n", name, value, var->value);
+    free(var->value);
+    if (var->exported)
+        setenv(name, value, 1);
+    var->value = strdup(value);
 }
 
 char *read_var(char *name)
 {
-    char *value = NULL;
-    if (name)
-        value = getenv(name);
-    if (!value)
-        value = "";
-    return value;
+    struct sh_var *var = get_var(name);
+    if (!var)
+        return "";
+    return var->value;
 }
 
 char *retrieve_var(char *name)
@@ -47,11 +44,47 @@ char *retrieve_var(char *name)
     return value;
 }
 
-bool unset_var(char *name)
+BOOL unset_var(char *name)
 {
-    bool exist = getenv(name) != NULL;
-    DBG_VAR("[VAR] unset |%s|\n", name);
-    if (unsetenv(name) || !exist)
+    struct sh_var *var = get_var(name);
+    if (!var)
         return false;
-    return true;
+    if (var->exported)
+        unsetenv(name);
+    DBG_VAR("[VAR] unset |%s|\n", name);
+    return remove_var(name);
+}
+
+static void init_env_var(char *name, char *val)
+{
+    assign_var(name, val);
+    export_var(name);
+}
+
+void init_env_vars(void)
+{
+    int i = 0;
+    while (environ[i])
+    {
+        char *name = strdup(environ[i]);
+        char *eq = strchr(name, '=');
+        char *val = "";
+        if (eq)
+        {
+            *eq = '\0';
+            val = eq + 1;
+        }
+        init_env_var(name, val);
+        free(name);
+        i++;
+    }
+
+    if (!get_var("IFS"))
+        init_env_var("IFS", "\t\r ");
+    char path[PATH_MAX];
+    getcwd(path, PATH_MAX);
+    if (!get_var("PWD"))
+        init_env_var("PWD", path);
+    if (!get_var("OLDPWD"))
+        init_env_var("OLDPWD", read_var("PWD"));
 }

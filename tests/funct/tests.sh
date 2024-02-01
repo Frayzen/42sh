@@ -37,8 +37,6 @@ execute() {
     theirs_ret=$?
     diff -q "$ours" "$theirs" >/dev/null 2>&1
     res=$?
-    diff -q "$ours_err" "$theirs_err" >/dev/null 2>&1
-    res_err=$?
     toprint="($id)"
     toadd=12
     res_err=0
@@ -123,7 +121,7 @@ parallelize_entry() {
     file_id=$2
     name=$(basename "$entry")
     tmp_folder="test$file_id"
-    mkdir "$tmp_folder"
+    mkdir "$tmp_folder" -p
     cd "$tmp_folder" || exit
     toprint="[MODULE $file_id] $name\n"
     toprint="$toprint$top_line\n"
@@ -160,6 +158,7 @@ test_dir=./tests
 id=0
 export total_file="../../result_total"
 export valid_file="../../result_valid"
+rm $valid_file $total_file -rf
 touch $total_file $valid_file
 for entry in "$test_dir"/*
 do
