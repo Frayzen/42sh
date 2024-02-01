@@ -77,12 +77,7 @@ bool setup_redir(struct redirection *redir)
         print_error(BAD_FD);
         return false;
     }
-    if (redir->type == RT_READ_WRITE || !(redir->type & RT_MASK_IN))
-        apply_redir(fd_right, fd_left,
-                    "[REDIR] Close and copy %d in FD[%d] OUT)\n");
-    else
-        apply_redir(fd_right, fd_left,
-                    "[REDIR] Close and copy %d in FD[%d] IN)\n");
+    apply_redir(fd_right, fd_left, "[REDIR] Close and copy %d in FD[%d] IN)\n");
     return true;
 }
 
