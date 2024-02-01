@@ -38,6 +38,22 @@ static void align(int depth, bool is_last_child) //, bool *closed_nod)
         printf("%s", is_last_child ? "╚══" : "╠══");
 }
 
+static void print_funct(struct ast_funct *ast, int depth)
+{
+    printf(BLUE "LST\n" RESET);
+    struct ast **children = get_children(AST(ast));
+    if (!children)
+        return;
+    int i = 0;
+    while (children[i])
+    {
+        struct ast *child = children[i++];
+        pretty_print_ast_help(child, AST(child)->type, depth + 1, !children[i]);
+        // closed_nod);
+    }
+    free(children);
+}
+
 // Prints the nod and child of the ast of type AST_LIST
 static void print_ast_list(struct ast_list *ast,
                            int depth) //, bool *closed_nod)
@@ -221,6 +237,9 @@ static void pretty_print_ast_help(struct ast *ast, enum ast_type type,
         break;
     case AST_AND_OR:
         print_ast_and_or(AST_AND_OR(ast), depth); //, closed_nod);
+        break;
+    case AST_FUNCT:
+        print_funct(AST_FUNCT(ast), depth);
         break;
     default:
         // Should not happend

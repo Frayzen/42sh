@@ -112,11 +112,11 @@ struct ast_and_or
 };
 // END AND OR
 
-
 #define AST_FUNCT(Base) ((struct ast_funct *)(Base))
 struct ast_funct
 {
-    struct ast_list body;
+    struct ast base;
+    struct ast_sh *body;
     char *name;
 };
 /***

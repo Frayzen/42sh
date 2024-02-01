@@ -76,7 +76,8 @@ enum status get_shell_command(struct ast_sh *sh)
     return NO_MATCH;
 }
 
-enum status gr_shell_cmd(struct ast_list *list)
+// ast is either a function or a list
+enum status gr_shell_cmd(struct ast *ast)
 {
     GR_START(ShellCmd);
     struct ast_sh *sh = init_ast(AST_SH);
@@ -89,6 +90,9 @@ enum status gr_shell_cmd(struct ast_list *list)
     case OK:
         break;
     }
-    add_child(list, AST(sh));
+    if (ast->type == AST_FUNCT)
+        AST_FUNCT(ast)->body = sh;
+    else
+        add_child(AST_LIST(ast), AST(sh));
     GR_RET(OK);
 }

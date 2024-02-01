@@ -33,6 +33,7 @@ void *init_ast(enum ast_type type)
         [AST_SUBSHELL] = sizeof(struct ast_subshell),
         [AST_SH] = sizeof(struct ast_sh),
         [AST_ASS] = sizeof(struct ast),
+        [AST_FUNCT] = sizeof(struct ast_funct),
     };
     struct ast *ast = calloc(1, ast_size[type]);
     ast->type = type;
@@ -77,6 +78,9 @@ void destroy_ast(void *ast)
     case AST_AND_OR:
         free(AST_AND_OR(ast)->types);
         goto destroy_list;
+        break;
+    case AST_FUNCT:
+        free(AST_FUNCT(ast)->name);
         break;
     case AST_FOR:
         free(AST_FOR(ast)->name);

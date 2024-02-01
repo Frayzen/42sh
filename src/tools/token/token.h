@@ -48,7 +48,6 @@ enum token_type
     DO,
     DONE,
 
-
     NEGATION,
 
     // builtins /!\ leave T_TRUE as first one and ECHO as last one

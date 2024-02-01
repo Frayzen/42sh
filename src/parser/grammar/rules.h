@@ -91,10 +91,10 @@ enum status gr_if(struct ast_sh *sh);
 
 /***
  * Grammar rule for shell comand
- * @param list: the list to be updated
+ * @param list: the ast to be updated
  * @return enum that tells the status
  */
-enum status gr_shell_cmd(struct ast_list *list);
+enum status gr_shell_cmd(struct ast *list);
 
 /***
  * Grammar rule for redirection
@@ -144,6 +144,5 @@ enum status gr_and_or(struct ast_list *list);
  * @return enum that tells the status
  */
 enum status gr_function(struct ast_list *list);
-
 
 #endif /* !RULES_H */

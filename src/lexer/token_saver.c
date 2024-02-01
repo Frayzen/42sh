@@ -29,7 +29,6 @@ struct token *tok_peek2(void)
     return next2;
 }
 
-
 void tok_pop_clean(void)
 {
     if (!next)

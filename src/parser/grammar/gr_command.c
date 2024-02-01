@@ -20,7 +20,7 @@ enum status gr_command(struct ast_pipe *pipe)
     default:
         break;
     }
-    enum status st = gr_shell_cmd(list);
+    enum status st = gr_shell_cmd(AST(list));
     switch (st)
     {
     case OK: {
@@ -29,6 +29,8 @@ enum status gr_command(struct ast_pipe *pipe)
             ;
         GR_RET(OK);
     }
+    case ERROR:
+        GR_RET(ERROR);
     default:
         break;
     }
