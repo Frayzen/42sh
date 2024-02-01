@@ -97,9 +97,10 @@ void append_char(struct pending *p, char c)
     str->value = realloc(str->value, str->size * sizeof(char));
     str->value[id] = c;
     str->expand = realloc(str->expand, str->size * sizeof(enum expand_type));
+    
     if (p->in_sub_cmd)
         str->expand[id] = SUB_CMD;
-    if (p->in_quote)
+    else if (p->in_quote)
     {
         if (!p->expanding)
             str->expand[id] = QUOTED_STR;

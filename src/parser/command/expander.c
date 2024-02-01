@@ -151,6 +151,20 @@ static struct expandable *expand_str(struct expandable *cur)
     return new_string;
 }
 
+void process_buffer(char *buf)
+{
+    size_t len = strlen(buf);
+
+    for (size_t i = 0; i < len; i++) {
+        if (buf[i] == '\n') {
+            if (i == len - 1) {
+                buf[i] = '\0';
+            } else {
+                buf[i] = ' ';
+            }
+        }
+    }
+}
 static struct expandable *expand_sub_cmd(struct expandable *cur)
 {
     int fds[2];
@@ -158,15 +172,18 @@ static struct expandable *expand_sub_cmd(struct expandable *cur)
     if (err == -1)
         exit(3);
     int pid = fork();
-
     if (!pid)
     {
-        STDOUT = fds[1];
-        DBG_PIPE("set STDOUT to %d", STDOUT);
+        // STDOUT = fds[1];
         close(fds[0]);
+        if (dup2(fds[1], STDOUT_FILENO) == -1) {
+            perror("dup2 failed in child");
+            exit(EXIT_FAILURE);
+        }
+        close(fds[1]);
+        DBG_PIPE("set STDOUT to %d\n", STDOUT);
         struct context *old = new_context();
         io_streamer_string(cur->content);
-
         if (gr_input(AST_ROOT) == ERROR)
         {
             *AST_ROOT = NULL;
@@ -188,6 +205,8 @@ static struct expandable *expand_sub_cmd(struct expandable *cur)
         buf = realloc(buf, begin + BUFSIZE);
     }
     buf[begin] = '\0';
+    process_buffer(buf);
+    // printf("buf = %s\n", buf);
     int ret;
     waitpid(pid, &ret, 0);
     struct expandable *new_string =
