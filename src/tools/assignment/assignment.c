@@ -72,7 +72,7 @@ void clean_assignments(struct assignment_list *assign_list)
     free(assign_list->ass_list);
 }
 
-char *argv_to_str(char *argv[])
+char *argv_to_str(char **argv)
 {
     size_t totalLength = 0;
     int i = 0;
@@ -103,7 +103,6 @@ void apply_assignments(struct assignment_list *asslist)
         assert(argv);
         char *val = NULL;
         val = argv[1] ? argv_to_str(argv) : strdup(argv[0]);
-
         ass->prev = retrieve_var(ass->name);
         assign_var(ass->name, val);
         free(val);

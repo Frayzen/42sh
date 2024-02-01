@@ -91,7 +91,8 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
 }
 
 //
-// EXPANSION
+// EXPANSIOpStop
+//
 //
 
 static struct expandable *ifs_splitting(char *str, struct expandable *cur)

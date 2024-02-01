@@ -56,7 +56,6 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     char **argv = expand(&ast->args_expansion);
     apply_assignments(&ast->assignment_list);
     *pid = PID_SET;
-    DBG_PIPE("argv = %s==============================\n", *argv);
     if (argv[0])
     {
         if (!strcmp(argv[0], "echo"))
@@ -93,6 +92,5 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     discard_assignments(&ast->assignment_list, argv[0]);
     destroy_expanded(argv);
     close_redirs(fds);
-    // printf("ret -= %d\n", ret);
     return ret;
 }
