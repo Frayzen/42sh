@@ -3,8 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "assignment/assignment.h"
+#include "parser/command/expander.h"
 #include "parser/command/expansion.h"
+#include "tools/assignment/assignment.h"
 #include "tools/redirection/redirection.h"
 
 struct ast **swap_ast_root(struct ast **new_ast)
@@ -54,10 +55,12 @@ void destroy_case(struct ast_case *ast)
     for (int i = 0; i < ast->nb_cond; i++)
     {
         for (int j = 0; ast->list_cond[i][j]; j++)
-            clean_expansion(ast->list_cond[i][j]);
+            free(ast->list_cond[i][j]);
         free(ast->list_cond[i]);
         destroy_list(ast->cmds[i]);
+        free(ast->cmds[i]);
     }
+    free(ast->list_cond);
     free(ast->cmds);
 }
 

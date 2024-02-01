@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 #include "env/env.h"
-#include "execs.h"
+#include "exec/execs.h"
 #include "execs_cmd.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
@@ -30,9 +30,6 @@ int exec_piped(struct ast *ast, int in, int out, int *pid)
         break;
     case AST_SH:
         ret = exec_sh(AST_SH(ast));
-        break;
-    case AST_CASE:
-        ret = exec_case(AST_CASE(ast));
         break;
     default:
         print_error(PIPE_NOT_FOUND);

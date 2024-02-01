@@ -163,19 +163,41 @@ static void print_ast_and_or(struct ast_and_or *ast, int depth)
     pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth + 1, true);
 }
 
+void pretty_print_exapandable(struct expandable *exp)
+{
+    switch (exp->type)
+    {
+    case STR_LITTERAL:
+        printf("%s\n", exp->content);
+        break;
+    case QUOTED_STR:
+        printf("\"%s\"\n", exp->content);
+        break;
+    case QUOTED_VAR:
+        printf("\"$%s\"\n", exp->content);
+        break;
+    case UNQUOTED_VAR:
+        printf("$%s\n", exp->content);
+        break;
+    }
+}
+
 static void print_ast_case(struct ast_case *ast, int depth)
 {
     printf(GREEN "CASE\n" RESET);
     depth++;
+    align(depth, false);
+    printf("name=");
+    pretty_print_exapandable(ast->name.head);
     align(depth, !ast->nb_cond);
-    printf("%s\n", ast->name.head->content);
+    printf("nb_cond=%d\n", ast->nb_cond);
     for (int i = 0; i < ast->nb_cond; i++)
     {
         int j = 0;
         while (ast->list_cond[i][j])
         {
             align(depth, i != ast->nb_cond + 1);
-            printf("%s\n", ast->list_cond[i][j]->head->content);
+            pretty_print_exapandable(ast->list_cond[i][j]->head);
             j++;
         }
         pretty_print_ast_help(AST(ast->cmds[i]), AST_LIST, depth + 1,

@@ -100,7 +100,7 @@ enum status gr_case(struct ast_sh *sh)
 {
     GR_START(Case);
     if (tok_peek()->type != CASE)
-        GR_RET(ERROR);
+        GR_RET(NO_MATCH);
     tok_pop_clean();
 
     if (!IS_WORDABLE(tok_peek()))
