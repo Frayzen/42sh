@@ -19,30 +19,30 @@ shell_command =
 
 enum status check_compound_token(enum token_type expected_type1,
                                  enum token_type expected_type2,
-                                 struct ast_list *list)
+                                 struct ast_sh *sh)
 {
     struct token *token = tok_peek();
     if (token->type == expected_type1)
     {
-        struct ast_subshell *shell = init_ast(AST_SUBSHELL);
+        struct ast_subshell *sub_shell = init_ast(AST_SUBSHELL);
         tok_pop_clean();
-        if (gr_compound_list(AST_LIST(shell)) == OK)
+        if (gr_compound_list(AST_LIST(sub_shell)) == OK)
         {
             token = tok_peek();
             if (token->type != expected_type2)
             {
-                destroy_ast(shell);
+                destroy_ast(sub_shell);
                 return ERROR;
             }
             tok_pop_clean();
-            return OK;
         }
         else
         {
-            destroy_ast(shell);
+            destroy_ast(sub_shell);
             return ERROR;
         }
-        add_child(list, AST(shell));
+        sh->sh_cmd = AST(sub_shell);
+        return OK;
     }
     return NO_MATCH;
 }
@@ -61,21 +61,37 @@ bool checkout(enum status st, enum status *ret)
     }
 }
 
+enum status get_shell_command(struct ast_sh *sh)
+{
+    enum status ret = OK;
+    if (checkout(check_compound_token(BRK_OPEN, BRK_CLOSED, sh), &ret))
+        return ret;
+    if (checkout(check_compound_token(PRTH_OPEN, PRTH_CLOSED, sh), &ret))
+        return ret;
+    if (checkout(gr_if(sh), &ret))
+        return ret;
+    if (checkout(gr_while(sh), &ret))
+        return ret;
+    if (checkout(gr_until(sh), &ret))
+        return ret;
+    if (checkout(gr_for(sh), &ret))
+        return ret;
+    return NO_MATCH;
+}
+
 enum status gr_shell_cmd(struct ast_list *list)
 {
     GR_START(ShellCmd);
-    enum status ret = OK;
-    if (checkout(check_compound_token(BRK_OPEN, BRK_CLOSED, list), &ret))
-        GR_RET(ret);
-    if (checkout(check_compound_token(PRTH_OPEN, PRTH_CLOSED, list), &ret))
-        GR_RET(ret);
-    if (checkout(gr_if(list), &ret))
-        GR_RET(ret);
-    if (checkout(gr_while(list), &ret))
-        GR_RET(ret);
-    if (checkout(gr_until(list), &ret))
-        GR_RET(ret);
-    if (checkout(gr_for(list), &ret))
-        GR_RET(ret);
-    GR_RET(NO_MATCH);
+    struct ast_sh *sh = init_ast(AST_SH);
+    switch (get_shell_command(sh))
+    {
+    case NO_MATCH:
+        GR_RET_CLEAN(NO_MATCH, sh);
+    case ERROR:
+        GR_RET_CLEAN(ERROR, sh);
+    case OK:
+        break;
+    }
+    add_child(list, AST(sh));
+    GR_RET(OK);
 }

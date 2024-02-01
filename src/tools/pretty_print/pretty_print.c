@@ -22,12 +22,12 @@
 // Reset the color
 #define RESET "\033[0m"
 
-void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
-                           bool is_last_child);
+static void pretty_print_ast_help(struct ast *ast, enum ast_type type,
+                                  int depth, bool is_last_child);
 //, bool *closed_nod);
 
 // Aligns the nod according to its depth
-void align(int depth, bool is_last_child) //, bool *closed_nod)
+static void align(int depth, bool is_last_child) //, bool *closed_nod)
 {
     // if (closed_nod)
     //     closed_nod[depth - 1] = is_last_child;
@@ -39,7 +39,8 @@ void align(int depth, bool is_last_child) //, bool *closed_nod)
 }
 
 // Prints the nod and child of the ast of type AST_LIST
-void print_ast_list(struct ast_list *ast, int depth) //, bool *closed_nod)
+static void print_ast_list(struct ast_list *ast,
+                           int depth) //, bool *closed_nod)
 {
     printf(BLUE "LST\n" RESET);
     struct ast **children = get_children(AST(ast));
@@ -55,8 +56,26 @@ void print_ast_list(struct ast_list *ast, int depth) //, bool *closed_nod)
     free(children);
 }
 
+static void print_ast_subshell(struct ast_subshell *sub_shell,
+                               int depth) //, bool *closed_nod)
+{
+    printf(YELLOW "SUB SHELL\n" RESET);
+    struct ast **children = get_children(AST(sub_shell));
+    if (!children)
+        return;
+    int i = 0;
+    while (children[i])
+    {
+        struct ast *child = children[i++];
+        pretty_print_ast_help(child, AST(child)->type, depth + 1, !children[i]);
+        // closed_nod);
+    }
+    free(children);
+}
+
 // Prints the nod and child of the ast of type AST_PIPE
-void print_ast_pipe(struct ast_pipe *ast, int depth) //, bool *closed_nod)
+static void print_ast_pipe(struct ast_pipe *ast,
+                           int depth) //, bool *closed_nod)
 {
     printf(YELLOW "PIPE\n" RESET);
     struct ast **children = get_children(AST(ast));
@@ -76,7 +95,7 @@ void print_ast_pipe(struct ast_pipe *ast, int depth) //, bool *closed_nod)
 }
 
 // Prints the nod and child of the ast of type AST_IF
-void print_ast_if(struct ast_if *ast, int depth) //, bool *closed_nod)
+static void print_ast_if(struct ast_if *ast, int depth) //, bool *closed_nod)
 {
     printf(GREEN "IF\n" RESET);
     pretty_print_ast_help(AST(&ast->cond), AST_LIST, depth + 1, false);
@@ -92,7 +111,8 @@ void print_ast_if(struct ast_if *ast, int depth) //, bool *closed_nod)
 }
 
 // Prints the nod and child of the ast of type AST_LOOP
-void print_ast_loop(struct ast_loop *ast, int depth) //, bool *closed_nod)
+static void print_ast_loop(struct ast_loop *ast,
+                           int depth) //, bool *closed_nod)
 {
     printf(PURPLE "LOOP\n" RESET);
     pretty_print_ast_help(AST(&ast->cond), AST_LIST, depth + 1, false);
@@ -102,7 +122,7 @@ void print_ast_loop(struct ast_loop *ast, int depth) //, bool *closed_nod)
 }
 
 // Prints the nod and child of the ast of type AST_CMD
-void print_ast_cmd(struct ast_cmd *ast, int depth) //, bool *closed_nod)
+static void print_ast_cmd(struct ast_cmd *ast, int depth) //, bool *closed_nod)
 {
     printf(RED "CMD\n" RESET);
     depth++;
@@ -120,16 +140,15 @@ void print_ast_cmd(struct ast_cmd *ast, int depth) //, bool *closed_nod)
 }
 
 // Prints the nod and child of the ast of type AST_SH
-void print_ast_sh(struct ast_sh *ast, int depth) //, bool *closed_nod)
+static void print_ast_sh(struct ast_sh *ast, int depth) //, bool *closed_nod)
 {
-    printf(RED "SH\n" RED);
-    align(depth, true); //, closed_nod);
+    printf(RED "SH\n" RESET);
     pretty_print_ast_help(ast->sh_cmd, AST(ast->sh_cmd)->type, depth + 1, true);
     // closed_nod);
 }
 
 // Prints the nod and child of the ast of type AST_FOR
-void print_ast_for(struct ast_for *ast, int depth) //, bool *closed_nod)
+static void print_ast_for(struct ast_for *ast, int depth) //, bool *closed_nod)
 {
     printf(CYAN "FOR\n" RESET);
     // depth++;
@@ -144,7 +163,8 @@ void print_ast_for(struct ast_for *ast, int depth) //, bool *closed_nod)
 }
 
 // Prints the nod and child of the ast of type AST_AND_OR
-void print_ast_and_or(struct ast_and_or *ast, int depth) //, bool *closed_nod)
+static void print_ast_and_or(struct ast_and_or *ast,
+                             int depth) //, bool *closed_nod)
 {
     printf(YELLOW "AND_OR\n" RESET);
     if (ast->types)
@@ -162,16 +182,8 @@ void print_ast_and_or(struct ast_and_or *ast, int depth) //, bool *closed_nod)
     pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth + 1, true);
     // closed_nod);
 }
-bool get_max_depth(int depth)
-{
-    static int max_depth = 0;
-    if (depth <= max_depth)
-        return false;
-    max_depth = depth;
-    return true;
-}
-void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
-                           bool is_last_child)
+static void pretty_print_ast_help(struct ast *ast, enum ast_type type,
+                                  int depth, bool is_last_child)
 //, bool *closed_nod)
 {
     align(depth, is_last_child); //, closed_nod);
@@ -203,6 +215,9 @@ void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
         break;
     case AST_FOR:
         print_ast_for(AST_FOR(ast), depth); //, closed_nod);
+        break;
+    case AST_SUBSHELL:
+        print_ast_subshell(AST_SUBSHELL(ast), depth); //, closed_nod);
         break;
     case AST_AND_OR:
         print_ast_and_or(AST_AND_OR(ast), depth); //, closed_nod);

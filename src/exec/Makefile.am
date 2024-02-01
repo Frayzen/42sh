@@ -12,6 +12,8 @@ libexec_a_SOURCES = \
 	execs.h\
 	exec_and_or.c\
 	commands/exec_commands.c\
+	commands/exec_subshell.c\
+	commands/exec_sh_cmd.c\
 	commands/exec_pipe.c\
 	commands/exec_cmd.h\
 	exec_entry.c\

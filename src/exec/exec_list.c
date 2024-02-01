@@ -7,7 +7,8 @@
 
 int exec_list(struct ast_list *ast)
 {
-    assert(AST(ast)->type == AST_LIST || AST(ast)->type == AST_FOR);
+    enum ast_type type = AST(ast)->type;
+    assert(type == AST_LIST || type == AST_FOR || type == AST_SUBSHELL);
     assert(ast && ast->nb_children > 0);
     int ret = -1;
     for (int i = 0; i < ast->nb_children; i++)

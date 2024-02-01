@@ -37,6 +37,8 @@ void consume_control_op(struct pending *p)
         if (io_peek() == c)
             append_io(p);
         break;
+    case '(':
+    case ')':
     case '\n':
         append_io(p);
         break;

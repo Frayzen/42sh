@@ -2,10 +2,9 @@
 #include "rules.h"
 #include "tools/ast/ast.h"
 #include "tools/gr_tools.h"
-#include "tools/gr_utils.h"
 #include "tools/token/token.h"
 // rule_if = 'if' compound_list 'then' compound_list [else_clause] 'fi' ;
-enum status gr_if(struct ast_list *list)
+enum status gr_if(struct ast_sh *sh)
 {
     GR_START(If);
     if (tok_peek()->type != IF)
@@ -24,6 +23,6 @@ enum status gr_if(struct ast_list *list)
     if (tok_peek()->type != FI)
         GR_RET_CLEAN(ERROR, if_ast);
     tok_pop_clean();
-    add_child(list, AST(if_ast));
+    sh->sh_cmd = AST(if_ast);
     GR_RET(OK);
 }

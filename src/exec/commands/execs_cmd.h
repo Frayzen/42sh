@@ -23,6 +23,12 @@ int exec_pipe(struct ast_pipe *ast);
  * executes the subshell ast
  * @param ast tree to execute
  */
-int exec_subshell(struct ast_pipe *ast);
+int exec_subshell(struct ast_subshell *ast);
+
+/***
+ * executes the shell command ast
+ * @param ast tree to execute
+ */
+int exec_sh(struct ast_sh *sh);
 
 #endif /* !EXECS_CMD_H */
