@@ -22,6 +22,7 @@
 // Reset the color
 #define RESET "\033[0m"
 
+static void print_ast_sh(struct ast_sh *ast, int depth); //, bool *closed_nod)
 static void pretty_print_ast_help(struct ast *ast, enum ast_type type,
                                   int depth, bool is_last_child);
 //, bool *closed_nod);
@@ -36,6 +37,12 @@ static void align(int depth, bool is_last_child) //, bool *closed_nod)
     // printf("%s", closed_nod[i] ? "   " : "║  ");
     if (depth)
         printf("%s", is_last_child ? "╚══" : "╠══");
+}
+
+static void print_funct(struct ast_funct *ast, int depth)
+{
+    printf(BLUE "FCT\n" RESET);
+    print_ast_sh(AST_SH(ast), depth);
 }
 
 // Prints the nod and child of the ast of type AST_LIST
@@ -221,6 +228,9 @@ static void pretty_print_ast_help(struct ast *ast, enum ast_type type,
         break;
     case AST_AND_OR:
         print_ast_and_or(AST_AND_OR(ast), depth); //, closed_nod);
+        break;
+    case AST_FUNCT:
+        print_funct(AST_FUNCT(ast), depth);
         break;
     default:
         // Should not happend
