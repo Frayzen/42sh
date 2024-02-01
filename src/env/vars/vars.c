@@ -45,7 +45,11 @@ char *retrieve_var(char *name)
     return value;
 }
 
-BOOL unset_var(char *name)
+int is_set_var(char *name)
+{
+    return get_var(name) != NULL;
+}
+int unset_var(char *name)
 {
     struct sh_var *var = get_var(name);
     if (!var)
@@ -81,7 +85,7 @@ void init_env_vars(void)
     }
 
     if (!get_var("IFS"))
-        init_env_var("IFS", "\t\r ");
+        init_env_var("IFS", DEFAULT_IFS);
     char path[PATH_MAX];
     char *ret = getcwd(path, PATH_MAX);
     if (!ret)

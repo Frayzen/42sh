@@ -79,7 +79,10 @@ static struct expandable *expand_unquoted_var(struct expandable *cur)
         free(val);
         return NULL;
     }
-    char *elem = strtok(val, " ");
+    char *ifs = DEFAULT_IFS;
+    if (is_set_var("IFS"))
+        ifs = read_var("IFS");
+    char *elem = strtok(val, ifs);
     struct expandable *last = NULL;
     struct expandable *first = NULL;
     if (!elem)
@@ -98,7 +101,7 @@ static struct expandable *expand_unquoted_var(struct expandable *cur)
         else
             first = new_string;
         last = new_string;
-        elem = strtok(NULL, " ");
+        elem = strtok(NULL, ifs);
     }
     last->link_next = cur->link_next;
     last->next = cur->next;

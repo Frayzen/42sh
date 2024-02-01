@@ -2,8 +2,8 @@
 #define VARS_H
 #include <stdbool.h>
 
-#include "tools/definitions.h"
 #define _POSIX_C_SOURCE 200809L
+#define DEFAULT_IFS "\t\r "
 
 /***
  * set the variable named name to the value
@@ -36,7 +36,14 @@ char *read_var(char *name);
  * @param name the name of the var
  * @return true if the variable what set
  */
-BOOL unset_var(char *name);
+int unset_var(char *name);
+
+/*
+ * Check for the existence of the variable
+ * @param name the name of the var
+ * @return true if the variable exists
+ */
+int is_set_var(char *name);
 
 /***
  * Export the variable
