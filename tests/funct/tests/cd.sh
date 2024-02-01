@@ -42,6 +42,19 @@ cd -
 echo $PWD
 echo $OLDPWD
 
+###Weird cds
+mkdir toto tata
+mkdir toto/a toto/b toto/c
+mkdir tata/1 tata/2 tata/3
+cd ./toto/../tata/././../tata/1/../2/../../toto/./a
+echo $PWD
+cd ../../
+echo $PWD
+cd toto/../tata/././../tata/1/../2/../../toto/./a
+echo $PWD
+cd ../..
+echo $PWD
+
 ###Cd with link
 mkdir -p test_dir
 ln -s test_dir link
