@@ -70,7 +70,7 @@ enum status gr_case_clause(struct ast_case *ast)
     if (gr_case_item(ast) == ERROR)
         GR_RET(ERROR);
 
-    while (tok_peek()->type == DOUBLE_SEMI_COLON)
+    while (tok_peek()->type == DBL_SEMI_COLON)
     {
         tok_pop_clean();
         if (tok_peek()->type == ESAC)
@@ -85,7 +85,7 @@ enum status gr_case_clause(struct ast_case *ast)
             GR_RET(ERROR);
     }
 
-    if (tok_peek()->type == DOUBLE_SEMI_COLON)
+    if (tok_peek()->type == DBL_SEMI_COLON)
         tok_pop_clean();
 
     while (tok_peek()->type == NEWLINE)
