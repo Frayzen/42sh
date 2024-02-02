@@ -184,6 +184,15 @@ void skip_until(struct pending *p, enum skip_behavior behavior)
     }
 }
 
+static void skip_sub_cmd_bs(struct pending *p)
+{
+    io_pop();
+    if (io_peek() != '\n')
+        append_io(p);
+    else
+        io_pop();
+}
+
 // append evething in the ()
 void skip_sub_cmd(struct pending *p)
 {
@@ -202,11 +211,7 @@ void skip_sub_cmd(struct pending *p)
         }
         else if (c == '\\')
         {
-            io_pop();
-            if (io_peek() != '\n')
-                append_io(p);
-            else
-                io_pop();
+            skip_sub_cmd_bs(p);
             c = io_peek();
             continue;
         }
