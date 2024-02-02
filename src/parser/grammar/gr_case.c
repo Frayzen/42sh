@@ -36,17 +36,16 @@ enum status gr_case_item(struct ast_case *ast)
 
         ast->list_cond[ast->nb_cond - 1] =
             realloc(ast->list_cond[ast->nb_cond - 1], sizeof(char *) * (i + 1));
-        ast->list_cond[ast->nb_cond - 1][i] =
-            calloc(1, sizeof(struct expansion));
         if (!IS_WORDABLE(tok_peek()))
         {
-            printf("wordable err\n");
             ast->cmds =
                 realloc(ast->cmds, sizeof(struct list *) * ast->nb_cond);
             ast->cmds[ast->nb_cond - 1] = NULL;
             ast->list_cond[ast->nb_cond - 1][i] = NULL;
             GR_RET(ERROR);
         }
+        ast->list_cond[ast->nb_cond - 1][i] =
+            calloc(1, sizeof(struct expansion));
         exp_register_str(ast->list_cond[ast->nb_cond - 1][i++],
                          tok_peek()->str);
         tok_pop();
@@ -61,10 +60,7 @@ enum status gr_case_item(struct ast_case *ast)
     ast->cmds[ast->nb_cond - 1] = NULL;
 
     if (tok_peek()->type != PRTH_CLOSED)
-    {
-        printf(")\n");
-        GR_RET(ERROR);
-    }
+        GR_RET_CLEAN(ERROR, list_cmd);
     tok_pop_clean();
 
     if (gr_compound_list(list_cmd) == OK)
@@ -127,22 +123,19 @@ enum status gr_case(struct ast_sh *sh)
         tok_pop_clean();
 
     if (tok_peek()->type != IN)
-        goto error_clean;
+        GR_RET_CLEAN(ERROR, case_ast);
     tok_pop_clean();
 
     while (tok_peek()->type == NEWLINE)
         tok_pop_clean();
 
     if (gr_case_clause(case_ast) == ERROR)
-        goto error_clean;
+        GR_RET_CLEAN(ERROR, case_ast);
 
     if (tok_peek()->type != ESAC)
-        goto error_clean;
+        GR_RET_CLEAN(ERROR, case_ast);
 
     tok_pop_clean();
     sh->sh_cmd = AST(case_ast);
     GR_RET(OK);
-
-error_clean:
-    GR_RET_CLEAN(ERROR, case_ast);
 }
