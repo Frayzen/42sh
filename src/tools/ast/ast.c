@@ -55,13 +55,17 @@ void destroy_case(struct ast_case *ast)
     for (int i = 0; i < ast->nb_cond; i++)
     {
         for (int j = 0; ast->list_cond[i][j]; j++)
+        {
+            clean_expansion(ast->list_cond[i][j]);
             free(ast->list_cond[i][j]);
+        }
         free(ast->list_cond[i]);
         destroy_list(ast->cmds[i]);
         free(ast->cmds[i]);
     }
     free(ast->list_cond);
     free(ast->cmds);
+    clean_expansion(&ast->name);
 }
 
 void destroy_ast(void *ast)

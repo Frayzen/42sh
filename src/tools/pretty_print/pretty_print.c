@@ -200,8 +200,7 @@ static void print_ast_case(struct ast_case *ast, int depth)
             pretty_print_exapandable(ast->list_cond[i][j]->head);
             j++;
         }
-        pretty_print_ast_help(AST(ast->cmds[i]), AST_LIST, depth + 1,
-                              i == ast->nb_cond - 1);
+        pretty_print_ast_help(AST(ast->cmds[i]), AST_LIST, depth + 1, true);
     }
     depth--;
 }

@@ -44,13 +44,12 @@ int exec_case(struct ast_case *ast)
             if (!found && match_pattern(pattern[0], name[0]))
             {
                 found = true;
-                ret = exec_list(ast->cmds[i]);
+                if (ast->cmds[i])
+                    ret = exec_list(ast->cmds[i]);
             }
             destroy_expanded(pattern);
-            clean_expansion(ast->list_cond[i][j]);
         }
     }
     destroy_expanded(name);
-    clean_expansion(&ast->name);
     return ret;
 }
