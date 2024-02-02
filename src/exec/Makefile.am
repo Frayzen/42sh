@@ -21,6 +21,7 @@ libexec_a_SOURCES = \
 	exec_list.c \
 	exec_condition.c\
 	exec_loop.c\
-	exec_for.c
+	exec_for.c\
+	exec_store_funct.c
 libexec_a_CPPFLAGS = -I$(top_srcdir)/src
 libexec_a_CFLAGS = $(CFLAGS_42SH)
