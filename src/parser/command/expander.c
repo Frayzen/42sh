@@ -97,7 +97,6 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
 
 static struct expandable *ifs_splitting(char *str, struct expandable *cur)
 {
-
     char *ifs = DEFAULT_IFS;
     if (is_set_var("IFS"))
         ifs = read_var("IFS");
@@ -226,13 +225,11 @@ static struct expandable *expand_sub_cmd(struct expandable *cur)
     process_buffer(buf); // newlines to spaces accroding to SCL
     // p
     // printf("buf  = |%s|\n", buf);
-    
 
     int ret;
     waitpid(pid, &ret, 0);
-    
 
-    if(!strcmp("", buf))
+    if (!strcmp("", buf))
     {
         free(buf);
         return NULL;

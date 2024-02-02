@@ -200,9 +200,21 @@ void skip_sub_cmd(struct pending *p)
                 return;
             }
         }
-        if (c == '(')
+        else if (c == '\\')
+        {
+            io_pop();
+            if (io_peek() != '\n')
+                append_io(p);
+            else
+                io_pop();
+            c = io_peek();
+            continue;
+        }
+        else if (c == '(')
             brac_cnt++;
         append_io(p);
         c = io_peek();
     }
+    if (brac_cnt != 0)
+        exit_gracefully(UNEXPECTED_EOF);
 }
