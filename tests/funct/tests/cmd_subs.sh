@@ -2,7 +2,7 @@
 $(echo ls)
 
 ### Command substitution with "cat" ###
-echo $(cat test.sh)
+echo $(echo toto | cat)
 
 ### Command substitution with "pwd" ###
 $(echo ls -l)
@@ -22,8 +22,7 @@ y=$(echo $x)
 z= $x\$(echo y)
 
 ###more varibales
-x=ls
-y=$($x)
+y=$(echo $(echo toto))
 echo $y
 
 ###more varibales

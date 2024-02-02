@@ -107,7 +107,7 @@ static struct expandable *ifs_splitting(char *str, struct expandable *cur)
     {
         last = expandable_init(str, STR_LITTERAL, cur->link_next);
         last->next = cur->next;
-        free(str);
+        // free(str);
         return last;
     }
     while (elem)
@@ -223,11 +223,13 @@ static struct expandable *expand_sub_cmd(struct expandable *cur)
         buf = realloc(buf, begin + BUFSIZE);
     }
     buf[begin] = '\0';
+        // printf("buf  = %s\n", buf);
     process_buffer(buf); // newlines to spaces accroding to SCL
     int ret;
     waitpid(pid, &ret, 0);
-    return ifs_splitting(
+    cur = ifs_splitting(
         buf, cur); // if buf has spaces, split into separate expandables
+    return cur;
 }
 
 // This function calls the appropriate subfunction in order to create a string
