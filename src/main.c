@@ -11,7 +11,6 @@
 #include "parser/grammar/rules.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
-#include "tools/fd_manager/fd_dictionnary.h"
 
 int main(int argc, char *argv[])
 {
@@ -29,16 +28,13 @@ int main(int argc, char *argv[])
         switch (gr_input(&ast))
         {
         case ERROR:
-            
-            ast = NULL;
             print_error(GRAMMAR_ERROR_ENTRY);
             ret = 2;
-            continue;
+            break;
         case OK:
             if (get_env_flag()->pretty_print)
                 debug_pretty_print(ast);
             ret = exec_entry(ast);
-            assert(DICT->nb_entries == 0);
             fflush(NULL);
             break;
         case NO_MATCH:
@@ -46,7 +42,6 @@ int main(int argc, char *argv[])
         }
         destroy_ast(ast);
         ast = NULL;
-        printf("REC %d \n", get_env_flag()->null_received);
     } while (!get_env_flag()->null_received);
     clean(ast);
     return ret;

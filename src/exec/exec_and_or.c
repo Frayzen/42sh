@@ -15,6 +15,7 @@ int exec_and_or_child(struct ast *child)
     case AST_AND_OR:
         return exec_and_or(AST_AND_OR(child));
     default:
+            printf("eoieoifjoefijoefijoefij\n");
         exit_gracefully(LIST_NOT_FOUND);
         return -1;
     }
@@ -38,7 +39,10 @@ int exec_and_or(struct ast_and_or *ast)
             continue;
         prev = exec_and_or_child(child);
         if (prev == -1)
+        {
+
             return 1;
+        }
     }
     return prev;
 }
