@@ -10,9 +10,9 @@ fi
 
 ###Negate in elif easy
 if false; then
-    pwd
+    echo $PWD
 elif ! false; then
-    pwd
+    ls
 fi
 
 ###Negate command

@@ -50,11 +50,8 @@ enum status gr_function(struct ast_list *ast)
     while (tok_peek()->terminal)
         tok_pop_clean();
 
-    if (gr_shell_cmd(AST_LIST(ast_funct)) != OK)
+    if (gr_shell_cmd(AST(ast_funct)) != OK)
         GR_RET_CLEAN(ERROR, ast_funct);
     add_child(ast, AST(ast_funct));
     GR_RET(OK);
-error:
-    destroy_ast(ast_funct);
-    GR_RET(ERROR);
 }

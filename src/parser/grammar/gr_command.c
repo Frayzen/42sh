@@ -20,7 +20,21 @@ enum status gr_command(struct ast_pipe *pipe)
     default:
         break;
     }
-    enum status st = gr_shell_cmd(list);
+    enum status st = gr_shell_cmd(AST(list));
+    switch (st)
+    {
+    case OK: {
+        struct ast_sh *sh = AST_SH(list->children[list->nb_children - 1]);
+        while (gr_redir(AST_REDIR(sh)) == OK)
+            ;
+        GR_RET(OK);
+    }
+    case ERROR:
+        GR_RET(ERROR);
+    default:
+        break;
+    }
+    st = gr_function(list);
     switch (st)
     {
     case OK: {
