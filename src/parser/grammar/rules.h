@@ -151,6 +151,5 @@ enum status gr_case(struct ast_sh *sh);
  * @return enum that tells the status
  */
 enum status gr_function(struct ast_list *list);
->>>>>>> dev
 
 #endif /* !RULES_H */
