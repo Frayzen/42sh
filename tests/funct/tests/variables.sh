@@ -137,3 +137,7 @@ done
 ###question mark
 cat heheh
 echo $?
+
+###Define unkown
+a=$b
+c=thisis$d\o
