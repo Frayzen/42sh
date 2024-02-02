@@ -2,7 +2,7 @@
 cd $(dirname "$0")
 . ./utils.sh
 
-modules="tests.sh clang.sh hguards.sh io.sh"
+modules="tests.sh clang.sh hguards.sh io.sh huge.sh"
 
 echo $top_line
 print_line "$(printf ' %.0s' $(seq 1 $((-8+line_size/2))))FUNCTIONAL TESTS"
