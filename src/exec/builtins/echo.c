@@ -31,7 +31,9 @@ void print_echo(char **argv, int i, bool interpret_bslash, bool print_nline)
                 }
             }
             else
+            {
                 dprintf(STDOUT, "%c", content[id]);
+            }
             id++;
         }
         if (argv[i + 1])
