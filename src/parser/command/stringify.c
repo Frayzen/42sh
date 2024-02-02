@@ -12,6 +12,8 @@
 // Find the first delimiter
 static int is_in(char c, char *delims)
 {
+    if (!c)
+        return false;
     int i = 0;
     while (delims[i] && delims[i] != c)
         i++;
@@ -28,22 +30,26 @@ static char *my_str_tok(char *buf, char *delims)
         return NULL;
     int i = 0;
     char *b = str;
-    bool not_delim_found = false;
+    int not_delim_found = 0;
     // Go to the next delimiter that is after a not delimiter and not a space
     // Also increase b for every leading space
     while (str[i])
     {
         if (is_in(str[i], delims))
         {
-            if (!not_delim_found && isspace(str[i]))
+            if (!not_delim_found && is_in(str[i], DEFAULT_IFS))
                 b++;
-            else
+            else if (not_delim_found >= 1)
                 break;
+            else
+                not_delim_found++;
         }
         else
-            not_delim_found = true;
+            not_delim_found += 2;
         i++;
     }
+    if (is_in(*b, delims))
+        b++;
     while (str[i])
     {
         if (is_in(str[i], delims))

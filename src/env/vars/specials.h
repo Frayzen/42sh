@@ -4,8 +4,8 @@
 #include <stdbool.h>
 
 #define CHECK_ARGS(Arginfo)                                                    \
-    if (!(Arginfo))                                    \
-        return NULL;                                                           \
+    if (!(Arginfo))                                                            \
+        return NULL;
 
 enum var_type
 {
