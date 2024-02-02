@@ -96,3 +96,32 @@ until ! $n; do
     done
     n=false
 done
+
+
+### Test out overflow
+while true; do
+    while true; do
+        break 4;
+    done
+done
+echo ok
+
+### Test continue
+while mkdir ok; do
+    while true; do
+        echo ok
+        continue 2;
+        echo ok
+    done
+    echo ok
+done
+echo end
+while mkdir ok; do
+
+    touch ok/ls ok/cat
+    while true; do
+        break 2;
+        ls;
+    done;
+    echo ok;
+done;
