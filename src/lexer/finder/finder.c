@@ -89,7 +89,7 @@ void consume_variable(struct pending *p)
     {
         p->in_sub_cmd = true;
         io_pop();
-        skip_until(p, SKIP_PARENTHESES);
+        skip_sub_cmd(p);
         if (io_peek() != ')')
         {
             if (!io_peek())

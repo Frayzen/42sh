@@ -223,7 +223,7 @@ static struct expandable *expand_sub_cmd(struct expandable *cur)
         buf = realloc(buf, begin + BUFSIZE);
     }
     buf[begin] = '\0';
-        // printf("buf  = %s\n", buf);
+    // printf("buf  = %s\n", buf);
     process_buffer(buf); // newlines to spaces accroding to SCL
     int ret;
     waitpid(pid, &ret, 0);

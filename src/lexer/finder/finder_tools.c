@@ -183,3 +183,30 @@ void skip_until(struct pending *p, enum skip_behavior behavior)
         c = io_peek();
     }
 }
+
+// append evething in the ()
+void skip_sub_cmd(struct pending *p)
+{
+    char c = io_peek();
+    int brac_cnt = 0;
+    while (c && (c != ')' || brac_cnt != 0))
+    {
+        // printf("c = %c     %d\n", c, brac_cnt);
+        if (c == ')')
+        {
+            brac_cnt--;
+            if (brac_cnt == 0)
+            {
+                append_io(p);
+                // printf("resx = %s\n", p->str.value);
+
+                return;
+            }
+        }
+        if (c == '(')
+            brac_cnt++;
+        append_io(p);
+        c = io_peek();
+    }
+    // printf("resx = %s\n", p->str.value);
+}
