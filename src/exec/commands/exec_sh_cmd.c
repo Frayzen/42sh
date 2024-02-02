@@ -1,6 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
 #include "commands/execs_cmd.h"
-#include "env/env.h"
 #include "execs.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"

@@ -85,11 +85,13 @@ int *setup_redirs(struct ast_redir *ast)
 {
     DBG_PIPE("[REDIR] START\n");
     int *saved = malloc(sizeof(int) * 3);
+    DBG_PIPE("[REDIR] Save ");
     for (int i = 0; i < 3; i++)
     {
         saved[i] = dup(FDS[i]);
-        DBG_PIPE("[REDIR] Save FDS[%d] to %d\n", i, saved[i]);
+        DBG_PIPE("FDS[%d] to %d ; ", i, saved[i]);
     }
+    DBG_PIPE("\n\n");
     for (int i = 3; i < 10; i++)
         FDS[i] = NO_FD;
     for (int i = 0; i < ast->redir_nb; i++)
@@ -106,12 +108,14 @@ int *setup_redirs(struct ast_redir *ast)
 
 void close_redirs(int *saved)
 {
+    DBG_PIPE("[REDIR] Restore ");
     for (int i = 0; i < 3; i++)
     {
-        DBG_PIPE("[REDIR] Restore FDS[%d] to %d\n", i, saved[i]);
+        DBG_PIPE("FDS[%d] to %d ; ", i, saved[i]);
         dup2(saved[i], FDS[i]);
         close(saved[i]);
     }
+    DBG_PIPE("\n\n");
     for (int i = 3; i < 10; i++)
     {
         if (FDS[i] != NO_FD)

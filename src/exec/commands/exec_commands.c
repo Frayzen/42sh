@@ -29,16 +29,6 @@ int exec_prog(char **argv)
     }
     if (pid == 0)
     {
-        DBG_PIPE("Command %s fds are [IN] %d | [OUT] %d | [ERR] %d\n", argv[0],
-                 STDIN, STDOUT, STDERR);
-        // Apply the file descriptors before executing
-        for (int i = 0; i < 3; i++)
-        {
-            dup2(FDS[i], i);
-            // Do not close if STDOUT = STOUD_FILENO
-            if (i != FDS[i])
-                close(FDS[i]);
-        }
         execvp(argv[0], argv);
         print_error(EXECVP_FAILED);
         exit(127);
