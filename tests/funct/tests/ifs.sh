@@ -6,15 +6,15 @@ done
 echo $b "$b"
 
 ### Basic ifs
-# IFS=" :;"
-# b="this;is:a; test  ;: ok"
-# for a in $b; do
-#     echo $a
-# done
-# echo $b "$b"
-# for a in "$b"; do
-#     echo $a
-# done
+IFS=" :;"
+b="this;is:a; test  ;: ok"
+for a in $b; do
+    echo $a
+done
+echo $b "$b"
+for a in "$b"; do
+    echo $a
+done
 
 ### IFS colon
 IFS=:
@@ -42,3 +42,8 @@ for a in $b; do
     echo $a
 done
 echo $b "$b"
+
+###Set IFS to ;
+a='this    is;a     test'
+IFS=;
+for b in $a; do echo $b; done

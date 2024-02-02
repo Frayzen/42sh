@@ -87,7 +87,7 @@ a="oncea upon" b="ime" && echo $a $b
 p="oncep upon" v="me" echo $p $v
 
 ###Check assignment before command
-testa=3 testabc=4 testabcef=5 testseofia='this is a test' printenv | grep 'test.*='
+testa=3 testabc=4 testabcef=5 testseofia='this is a test' printenv | grep 'test.*=' | sort
 
 ###Double alloc at once
 a=3 q=1
