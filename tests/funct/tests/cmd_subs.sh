@@ -26,3 +26,34 @@ $y
 
 ###recursive
 echo $(echo $(echo $(echo $(ls))))
+
+### ls |
+echo $(ls | cat) $(echo ok)
+
+### last
+echo  $(ls | cat) $(ls | cat)
+
+###check out with files
+$(echo ok >test && cat ok >also); $(mkdir toto && echo $(ls)); mv test also toto
+$(cd toto; ls)
+
+### Check unclosed
+$($($($($($($(echo ok))))))
+
+### Check too much
+$($($($($($($(echo ok))))))))
+
+### Check command
+$(echo $($(echo ls)))
+ls $(cd .. && cd -); $(cd /); ls
+ok=3 echo $(echo $ok) >test
+b=3
+$(echo $b)
+echo $(cat test)
+
+###Invalid close
+$(echo this is a\)
+
+###Invalid end
+$(echo this is a\
+)
