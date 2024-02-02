@@ -23,6 +23,7 @@ enum token_type
     PRTH_CLOSED,
     BRK_OPEN,
     BRK_CLOSED,
+    AMPERSAND,
     // redir
     CHEVRON,
     PIPE,
