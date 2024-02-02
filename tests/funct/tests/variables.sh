@@ -141,3 +141,12 @@ echo $?
 ###Define unkown
 a=$b
 c=thisis$d\o
+
+###Multiple definition per line
+a=3 b=4; echo $a $b
+
+###Multiple words
+a=test text
+
+###Commented content
+a=#123
