@@ -138,6 +138,12 @@ done
 cat heheh
 echo $?
 
+###Brakets compound list non terminated 
+a=3; { echo $a; a=4; echo $a }; echo $a
+
+###Nested bracekts compound list non terminated 
+a=3; { echo $a; { echo $a; a=4; echo $a } }; echo $a
+
 ###Define unkown
 a=$b
 c=thisis$d\o
