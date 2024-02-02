@@ -23,6 +23,7 @@ struct redirection
     int io_number;
     enum redir_type type;
     struct expansion exp;
+    int redir_fds[2];
 };
 
 /***
@@ -54,9 +55,10 @@ enum redir_type get_redir_type(char *chevron);
 int *setup_redirs(struct ast_redir *ast);
 /***
  * Close the file descriptor previously saved (@see setup_redirs)
+ * @param ast the redir ast
  * @param fds the saved file descriptors
  */
-void close_redirs(int *saved);
+void close_redirs(struct ast_redir *ast, int *saved);
 
 /***
  * Setup the file descriptor to debug

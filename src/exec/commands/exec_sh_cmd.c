@@ -33,6 +33,6 @@ int exec_sh(struct ast_sh *sh)
         print_error(PIPE_NOT_FOUND);
         break;
     }
-    close_redirs(fds);
+    close_redirs(AST_REDIR(sh), fds);
     return ret;
 }

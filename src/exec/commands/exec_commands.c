@@ -8,11 +8,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "env/env.h"
 #include "env/vars/vars.h"
 #include "exec/builtins/builtins.h"
 #include "exec/commands/execs_cmd.h"
-#include "execs.h"
 #include "exit/error_handler.h"
 #include "parser/command/expander.h"
 #include "tools/assignment/assignment.h"
@@ -88,6 +86,6 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     }
     discard_assignments(&ast->assignment_list, argv[0]);
     destroy_expanded(argv);
-    close_redirs(fds);
+    close_redirs(AST_REDIR(ast), fds);
     return ret;
 }

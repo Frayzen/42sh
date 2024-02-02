@@ -36,8 +36,6 @@ int exec_piped(struct ast *ast, int in, int out, int *pid)
         print_error(PIPE_NOT_FOUND);
         ret = 1;
     }
-    close(STDIN_FILENO);
-    close(STDOUT_FILENO);
     return ret;
 }
 
@@ -84,6 +82,7 @@ int exec_pipe(struct ast_pipe *ast)
         close(p[1]);
         last_read = p[0];
     }
+    DBG_PIPE("Last read %d\n", last_read);
     int retval =
         exec_piped(list->children[i], last_read, saved[1], &pids[i]);
     close(last_read);

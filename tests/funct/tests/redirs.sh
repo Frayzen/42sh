@@ -56,3 +56,8 @@ ls 4<>hello 1>&4 | cat <&4
 echo "This is a test" >ok
 <ok >ok2 cat
 cat ok2
+
+### Test really hard
+if true; then
+    echo toto >&7;
+fi 7<>file.txt

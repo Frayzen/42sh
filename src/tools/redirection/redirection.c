@@ -7,6 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "ast/ast.h"
 #include "env/env.h"
 #include "exit/error_handler.h"
 #include "parser/command/expander.h"
@@ -65,7 +66,7 @@ void apply_redir(int from, int to, char *dbg_msg)
 }
 
 // return true if everything has been fine
-bool setup_redir(struct redirection *redir)
+bool setup_redir(struct redirection *redir, int *saved)
 {
     int fd_left = redir->io_number;
     if (fd_left == NO_FD)
@@ -77,6 +78,18 @@ bool setup_redir(struct redirection *redir)
         print_error(BAD_FD);
         return false;
     }
+    int i = 0;
+    while (i < 3)
+    {
+        if (saved[i] == fd_right || saved[i] == fd_left)
+        {
+            saved[i] = dup(saved[i]);
+            i = 0;
+        }
+        i++;
+    }
+    redir->redir_fds[0] = fd_right;
+    redir->redir_fds[1] = fd_left;
     apply_redir(fd_right, fd_left, "[REDIR] Close and copy %d in FD[%d] IN)\n");
     return true;
 }
@@ -95,18 +108,25 @@ int *setup_redirs(struct ast_redir *ast)
     for (int i = 0; i < ast->redir_nb; i++)
     {
         struct redirection *redir = ast->redirs[i];
-        if (!setup_redir(redir))
+        if (!setup_redir(redir, saved))
         {
-            close_redirs(saved);
+            close_redirs(ast, saved);
             return NULL;
         }
     }
     return saved;
 }
 
-void close_redirs(int *saved)
+void close_redirs(struct ast_redir *ast, int *saved)
 {
-    DBG_PIPE("[REDIR] Restore ")
+    DBG_PIPE("[REDIR] Restore ");
+    for (int i = 0; i < ast->redir_nb; i++)
+    {
+        if (ast->redirs[i]->redir_fds[0] > 2)
+            close(ast->redirs[i]->redir_fds[0]);
+        if (ast->redirs[i]->redir_fds[1] > 2)
+            close(ast->redirs[i]->redir_fds[1]);
+    }
     for (int i = 0; i < 3; i++)
     {
         DBG_PIPE("%d to %d ; ", i, saved[i]);
