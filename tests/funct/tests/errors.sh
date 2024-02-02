@@ -93,3 +93,5 @@ echo this is a test >
 
 ###No word before redir sh
 > & if true; then echo this is a test; fi
+###No word after redir sh
+if true; then echo this is a test; fi >
