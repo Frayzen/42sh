@@ -107,11 +107,8 @@ static struct expandable *expand_quoted_var(struct expandable *cur)
 {
     assert(cur->type == QUOTED_VAR);
     char *content = retrieve_var(cur->content);
-    if (content[0] == '\0')
-    {
-        free(content);
+    if (!content)
         return NULL;
-    }
     struct expandable *new_string =
         expandable_init(content, STR_LITTERAL, cur->link_next);
     new_string->next = cur->next;
@@ -132,8 +129,9 @@ static struct expandable *expand_str(struct expandable *cur)
 // litteral linked list from the currrent expandable
 struct expandable *stringify_expandable(struct expandable *cur)
 {
-    struct expandable *exp = expand_special_var(cur);
-    if (exp)
+    int valid = 0;
+    struct expandable *exp = expand_special_var(cur, &valid);
+    if (valid)
         return exp;
     switch (cur->type)
     {

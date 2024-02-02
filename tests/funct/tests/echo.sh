@@ -130,3 +130,8 @@ echo 'This is unclosed\' here
 ### Check with spaces
 echo a \   b \ \ c    \ a\ v  eeee\ 
 
+### Echo weird quotes
+echo ""
+echo this "" is "" a "" test
+echo ok ""
+echo "" ok

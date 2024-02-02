@@ -11,8 +11,6 @@
  */
 void exp_register_str(struct expansion *exp, struct lex_str *str);
 
-
-
 /***
  * Stringify an expandable into several str_litt expandable linked list
  * @param cur the current expandable to expand
