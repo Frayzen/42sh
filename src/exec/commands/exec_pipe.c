@@ -18,11 +18,9 @@
 int exec_piped(struct ast *ast, int in, int out, int *pid)
 {
     int ret;
-    int oldin = STDOUT;
-    int oldout = STDIN;
-    STDIN = in;
-    STDOUT = out;
-    DBG_PIPE("[PIPE] New stdin=%d | stdout=%d\n\n", STDIN, STDOUT);
+    dup2(in, STDIN_FILENO);
+    dup2(out, STDOUT_FILENO);
+    DBG_PIPE("[PIPE] New stdin=%d | stdout=%d\n\n", in, out);
     switch (ast->type)
     {
     case AST_CMD:
@@ -38,8 +36,8 @@ int exec_piped(struct ast *ast, int in, int out, int *pid)
         print_error(PIPE_NOT_FOUND);
         ret = 1;
     }
-    STDIN = oldin;
-    STDOUT = oldout;
+    close(STDIN_FILENO);
+    close(STDOUT_FILENO);
     return ret;
 }
 
@@ -65,8 +63,10 @@ int exec_pipe(struct ast_pipe *ast)
     DBG_PIPE("[PIPE] START -----\n");
     assert(AST(ast)->type == AST_PIPE);
     struct ast_list *list = AST_LIST(ast);
-    int last_read = dup(STDIN);
-    DBG_PIPE("[PIPE] Duplicate %d in %d\n", STDIN, last_read);
+    // Save
+    int saved[2] = { dup(STDIN_FILENO), dup(STDOUT_FILENO) };
+    int last_read = dup(STDIN_FILENO);
+    DBG_PIPE("[PIPE] Duplicate STDIN in %d\n", last_read);
     int i = 0;
     int *pids = calloc(list->nb_children, sizeof(int));
     for (; i < list->nb_children - 1; i++)
@@ -85,7 +85,7 @@ int exec_pipe(struct ast_pipe *ast)
         last_read = p[0];
     }
     int retval =
-        exec_piped(list->children[i], last_read, STDOUT_FILENO, &pids[i]);
+        exec_piped(list->children[i], last_read, saved[1], &pids[i]);
     close(last_read);
     // Wait for all of them
     for (int j = 0; j < list->nb_children - 1; j++)
@@ -97,6 +97,9 @@ int exec_pipe(struct ast_pipe *ast)
     free(pids);
     if (ast->negated)
         retval = !retval;
+    // restore
+    dup2(saved[0], STDIN_FILENO);
+    dup2(saved[1], STDOUT_FILENO);
     DBG_PIPE("[PIPE] ------ END\n\n");
     return retval;
 }

@@ -2,11 +2,15 @@
 #include "execs.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
+#include "tools/redirection/redirection.h"
 
 int exec_sh(struct ast_sh *sh)
 {
     int ret = 0;
     struct ast *ast = sh->sh_cmd;
+    int *fds = setup_redirs(AST_REDIR(sh));
+    if (!fds)
+        return 1;
     switch (ast->type)
     {
     case AST_IF:
@@ -29,5 +33,6 @@ int exec_sh(struct ast_sh *sh)
         print_error(PIPE_NOT_FOUND);
         break;
     }
+    close_redirs(fds);
     return ret;
 }

@@ -11,7 +11,6 @@ struct env *get_env_flag(void)
         .pretty_print = false,
         .debug_env = false,
         .debug_pipe = false,
-        .fds = { 0, 1, 2, -1 },
     };
     return &flag;
 }

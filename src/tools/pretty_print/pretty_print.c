@@ -131,7 +131,8 @@ static void print_ast_loop(struct ast_loop *ast,
 // Prints the nod and child of the ast of type AST_CMD
 static void print_ast_cmd(struct ast_cmd *ast, int depth) //, bool *closed_nod)
 {
-    printf(RED "CMD\n" RESET);
+    printf(RED "CMD " RESET "(%d redirs) [%zu assignments]\n", ast->redirs.redir_nb,
+           ast->assignment_list.size);
     depth++;
     if (!ast->args_expansion.size)
         return;
@@ -149,7 +150,7 @@ static void print_ast_cmd(struct ast_cmd *ast, int depth) //, bool *closed_nod)
 // Prints the nod and child of the ast of type AST_SH
 static void print_ast_sh(struct ast_sh *ast, int depth) //, bool *closed_nod)
 {
-    printf(RED "SH\n" RESET);
+    printf(RED "SH " RESET "(%d redirs)\n", ast->redirs.redir_nb);
     pretty_print_ast_help(ast->sh_cmd, AST(ast->sh_cmd)->type, depth + 1, true);
     // closed_nod);
 }

@@ -5,7 +5,7 @@
 
 void print_echo(char **argv, int i, bool interpret_bslash, bool print_nline)
 {
-    DBG_PIPE("Echo command [OUT] %d\n", STDOUT);
+    DBG_PIPE("Echo command\n");
     for (; argv[i]; i++)
     {
         const char *content = argv[i];
@@ -18,27 +18,27 @@ void print_echo(char **argv, int i, bool interpret_bslash, bool print_nline)
                 switch (content[id])
                 {
                 case 'n':
-                    dprintf(STDOUT, "\n");
+                    printf("\n");
                     break;
                 case '\\':
-                    dprintf(STDOUT, "\\");
+                    printf("\\");
                     break;
                 case 't':
-                    dprintf(STDOUT, "\t");
+                    printf("\t");
                     break;
                 default:
                     continue;
                 }
             }
             else
-                dprintf(STDOUT, "%c", content[id]);
+                printf("%c", content[id]);
             id++;
         }
         if (argv[i + 1])
-            dprintf(STDOUT, " ");
+            printf(" ");
     }
     if (print_nline)
-        dprintf(STDOUT, "\n");
+        printf("\n");
 }
 
 /***

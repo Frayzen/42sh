@@ -8,7 +8,6 @@
 
 #include "builtins.h"
 #include "builtins/path_utils.h"
-#include "env/env.h"
 #include "env/vars/vars.h"
 #include "exit/error_handler.h"
 
@@ -97,7 +96,7 @@ int builtin_cd(char **argv)
         if (!strcmp(argv[1], "-"))
         {
             arg = read_var("OLDPWD");
-            dprintf(STDOUT, "%s\n", arg);
+            printf("%s\n", arg);
         }
         else
             // Otherwise, try to go to the argument

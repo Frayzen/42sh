@@ -29,8 +29,8 @@ int get_fd(struct redirection *redir)
     if (type & RT_MASK_DUP && is_number(to))
     {
         fd = atoi(to);
-        int ret = dup(FDS[fd]);
-        DBG_PIPE("duplicated as %d and from %d\n", ret, FDS[fd]);
+        int ret = dup(fd);
+        DBG_PIPE("duplicated as %d and from %d\n", ret, fd);
         free(to);
         return ret;
     }
@@ -60,7 +60,7 @@ int get_fd(struct redirection *redir)
 void apply_redir(int from, int to, char *dbg_msg)
 {
     DBG_PIPE(dbg_msg, from, to);
-    dup2(from, FDS[to]);
+    dup2(from, to);
     close(from);
 }
 
@@ -85,13 +85,13 @@ int *setup_redirs(struct ast_redir *ast)
 {
     DBG_PIPE("[REDIR] START\n");
     static int saved[3];
+    DBG_PIPE("[REDIR] Save ")
     for (int i = 0; i < 3; i++)
     {
-        saved[i] = dup(FDS[i]);
-        DBG_PIPE("[REDIR] Save FDS[%d] to %d\n", i, saved[i]);
+        saved[i] = dup(i);
+        DBG_PIPE("%d to %d ; ", i, saved[i]);
     }
-    for (int i = 3; i < 10; i++)
-        FDS[i] = NO_FD;
+    DBG_PIPE("\n");
     for (int i = 0; i < ast->redir_nb; i++)
     {
         struct redirection *redir = ast->redirs[i];
@@ -106,21 +106,14 @@ int *setup_redirs(struct ast_redir *ast)
 
 void close_redirs(int *saved)
 {
+    DBG_PIPE("[REDIR] Restore ")
     for (int i = 0; i < 3; i++)
     {
-        DBG_PIPE("[REDIR] Restore FDS[%d] to %d\n", i, saved[i]);
-        dup2(saved[i], FDS[i]);
+        DBG_PIPE("%d to %d ; ", i, saved[i]);
+        dup2(saved[i], i);
         close(saved[i]);
     }
-    for (int i = 3; i < 10; i++)
-    {
-        if (FDS[i] != NO_FD)
-        {
-            DBG_PIPE("[REDIR] Closing FDS[%d] = %d\n", i, FDS[i]);
-            close(FDS[i]);
-            FDS[i] = NO_FD;
-        }
-    }
+    DBG_PIPE("\n");
     DBG_PIPE("[REDIR] END = \n\n");
 }
 

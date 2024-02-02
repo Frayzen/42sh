@@ -24,8 +24,6 @@ int main(int argc, char *argv[])
     int ret = 0;
     do
     {
-        STDOUT = STDOUT_FILENO;
-        STDIN = STDIN_FILENO;
         switch (gr_input(&ast))
         {
         case ERROR:

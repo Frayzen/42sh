@@ -20,11 +20,6 @@ extern char **environ;
     if (get_env_flag()->verbose)                                               \
         dprintf(DBG_OUT, __VA_ARGS__);
 
-#define STDIN (get_env_flag()->fds[0])
-#define STDOUT (get_env_flag()->fds[1])
-#define STDERR (get_env_flag()->fds[2])
-#define FDS (get_env_flag()->fds)
-
 struct env
 {
     char **environ;
@@ -35,7 +30,6 @@ struct env
     bool debug_pipe;
     bool debug_env;
     bool is_interactive;
-    int fds[1024];
 };
 
 /***
