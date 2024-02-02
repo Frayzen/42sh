@@ -127,4 +127,6 @@ echo e c h o
 ### Not backslahed
 echo 'This is unclosed\' here
 
+### Check with spaces
+echo a \   b \ \ c    \ a\ v  eeee\ 
 
