@@ -191,15 +191,12 @@ void skip_sub_cmd(struct pending *p)
     int brac_cnt = 0;
     while (c && (c != ')' || brac_cnt != 0))
     {
-        // printf("c = %c     %d\n", c, brac_cnt);
         if (c == ')')
         {
             brac_cnt--;
             if (brac_cnt == 0)
             {
                 append_io(p);
-                // printf("resx = %s\n", p->str.value);
-
                 return;
             }
         }
@@ -208,5 +205,4 @@ void skip_sub_cmd(struct pending *p)
         append_io(p);
         c = io_peek();
     }
-    // printf("resx = %s\n", p->str.value);
 }
