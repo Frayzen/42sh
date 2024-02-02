@@ -26,6 +26,13 @@ struct expandable *stringify_expandable(struct expandable *cur);
 char **expand(struct expansion *expansion);
 
 /***
+ * Expand the expansion to a single string
+ * @param expansion the expansion
+ * @return the allocated string
+ */
+char *expand_str(struct expansion *exp);
+
+/***
  * Free the arguments and the argv pointer
  * @param argv the argument list
  */

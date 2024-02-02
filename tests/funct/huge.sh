@@ -5,7 +5,8 @@ cd $(dirname "$0")
 . ./utils.sh
 path_42sh=../../src/42sh
 
-echo echo '$(head -n 10000 /dev/urandom)' | $path_42sh >/dev/null 2>&1
+
+echo "echo '$(tr -dc A-Za-z0-9 </dev/urandom | head -c 10000)'" | $path_42sh >/dev/null 2>&1
 ret=$?
 
 if [ $ret -ne 0 ]; then

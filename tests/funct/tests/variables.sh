@@ -143,3 +143,6 @@ echo $?
 ### Check IFS print
 echo $IFS
 
+###Define unkown
+a=$b
+c=thisis$d\o

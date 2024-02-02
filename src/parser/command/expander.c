@@ -161,3 +161,28 @@ void destroy_expanded(char **argv)
         free(argv[i++]);
     free(argv);
 }
+
+char *expand_str(struct expansion *exp)
+{
+    char **argv = expand(exp);
+    if (!argv || !argv[0])
+    {
+        free(argv);
+        return calloc(1, sizeof(char));
+    }
+    int i = 0;
+    size_t size = 0;
+    while (argv[i])
+        size += strlen(argv[i++]) + 1;
+    char *ret = calloc(size, sizeof(char));
+    i = 0;
+    while (argv[i + 1])
+    {
+        strcat(ret, argv[i]);
+        strcat(ret, " ");
+        i++;
+    }
+    strcat(ret, argv[i]);
+    destroy_expanded(argv);
+    return ret;
+}
