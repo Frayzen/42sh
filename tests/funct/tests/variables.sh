@@ -146,7 +146,7 @@ c=thisis$d\o
 a=3 b=4; echo $a $b
 
 ###Multiple words
-a=test text
+a=test text; echo $a
 
 ###Commented content
-a=#123
+a=#123; echo $a
