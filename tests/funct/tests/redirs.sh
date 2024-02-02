@@ -56,3 +56,10 @@ ls 4<>hello 1>&4 | cat <&4
 echo "This is a test" >ok
 <ok >ok2 cat
 cat ok2
+
+###Redir after cmd
+echo this is a test >ok
+cat ok
+###Redir after sh
+if true; then echo this is a test; fi >ok
+cat ok

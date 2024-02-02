@@ -12,7 +12,6 @@
 #include "env/vars/vars.h"
 #include "exec/builtins/builtins.h"
 #include "exec/commands/execs_cmd.h"
-#include "execs.h"
 #include "exit/error_handler.h"
 #include "parser/command/expander.h"
 #include "tools/assignment/assignment.h"

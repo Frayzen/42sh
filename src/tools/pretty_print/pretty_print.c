@@ -1,15 +1,12 @@
+#include "parser/command/expansion.h"
+#define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "parser/tools/gr_utils.h"
 #include "tools/ast/ast.h"
-
-#define _POSIX_C_SOURCE 200809L
-
-#include <stdio.h>
-#include <string.h>
-
 #include "tools/pretty_print/pretty_print.h"
 
 // Setting colors
@@ -157,16 +154,11 @@ static void print_ast_sh(struct ast_sh *ast, int depth) //, bool *closed_nod)
 // Prints the nod and child of the ast of type AST_FOR
 static void print_ast_for(struct ast_for *ast, int depth) //, bool *closed_nod)
 {
-    printf(CYAN "FOR\n" RESET);
-    // depth++;
-    // if (!ast->item_list)
-    // {
-    //     pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth, true,
-    //                           closed_nod);
-    //     return;
-    // }
-    pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth, false);
-    // closed_nod);
+    printf(CYAN "FOR %s in " RESET, ast->name);
+    expansion_print(&ast->exp);
+    depth++;
+    pretty_print_ast_help(AST(AST_LIST(&ast->cmds)), AST_LIST, depth, true);
+    //                      closed_nod);
 }
 
 // Prints the nod and child of the ast of type AST_AND_OR

@@ -84,7 +84,7 @@ bool setup_redir(struct redirection *redir)
 int *setup_redirs(struct ast_redir *ast)
 {
     DBG_PIPE("[REDIR] START\n");
-    static int saved[3];
+    int *saved = malloc(sizeof(int) * 3);
     for (int i = 0; i < 3; i++)
     {
         saved[i] = dup(FDS[i]);
@@ -122,6 +122,7 @@ void close_redirs(int *saved)
         }
     }
     DBG_PIPE("[REDIR] END = \n\n");
+    free(saved);
 }
 
 enum redir_type get_redir_type(char *chevron)

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "env/env.h"
 #include "tokenizer.h"
 #include "tools/token/token.h"
 
@@ -33,6 +34,12 @@ struct token *tok_peek2(void)
 
 void tok_pop_clean(void)
 {
+    if (next->type == BSZERO)
+    {
+        printf("%s\n", next->str->value);
+        printf("eofiejfoeijfeo\n");
+        get_env_flag()->null_received = true;
+    }
     if (!next)
         next = next_token();
     destroy_token(next);
@@ -42,6 +49,12 @@ void tok_pop_clean(void)
 
 void tok_pop(void)
 {
+    if (next->type == BSZERO)
+    {
+        printf("%s\n", next->str->value);
+        printf("eofiejfoeijfeo\n");
+        get_env_flag()->null_received = true;
+    }
     if (!next)
         next = next_token();
     free(next);

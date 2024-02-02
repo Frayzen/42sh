@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
         switch (gr_input(&ast))
         {
         case ERROR:
+            
             ast = NULL;
             print_error(GRAMMAR_ERROR_ENTRY);
             ret = 2;
@@ -39,11 +40,13 @@ int main(int argc, char *argv[])
             ret = exec_entry(ast);
             assert(DICT->nb_entries == 0);
             fflush(NULL);
+            break;
         case NO_MATCH:
             break;
         }
         destroy_ast(ast);
         ast = NULL;
+        printf("REC %d \n", get_env_flag()->null_received);
     } while (!get_env_flag()->null_received);
     clean(ast);
     return ret;
