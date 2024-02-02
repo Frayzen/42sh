@@ -57,4 +57,10 @@ int exec_and_or(struct ast_and_or *ast);
  */
 int exec_case(struct ast_case *ast);
 
+/***
+ * stores the name and body of a function in the dictionnary
+ * @param ast tree to store
+ */
+int exec_store_funct(struct ast_funct *ast);
+
 #endif /* EXECS_H */

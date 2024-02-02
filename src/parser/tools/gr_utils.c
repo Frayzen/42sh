@@ -46,6 +46,9 @@ struct ast **get_children(struct ast *ast)
         ret[i++] = AST(&AST_LOOP(ast)->cond);
         ret[i++] = AST(&AST_LOOP(ast)->exec);
         break;
+    case AST_FUNCT:
+        ret[i++] = AST(&AST_FUNCT(ast)->body);
+        break;
     default:
         free(ret);
         return NULL;

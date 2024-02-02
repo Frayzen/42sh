@@ -21,6 +21,8 @@ enum token_type
     // operators ?
     PRTH_OPEN,
     PRTH_CLOSED,
+    BRK_OPEN,
+    BRK_CLOSED,
     // redir
     CHEVRON,
     PIPE,
@@ -47,9 +49,6 @@ enum token_type
     IN,
     DO,
     DONE,
-
-    BRK_OPEN,
-    BRK_CLOSED,
 
     NEGATION,
 

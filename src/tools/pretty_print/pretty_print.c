@@ -26,6 +26,7 @@
 
 void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
                            bool is_last_child);
+static void print_ast_sh(struct ast_sh *ast, int depth);
 
 // Aligns the nod according to its depth
 void align(int depth, bool is_last_child)
@@ -34,6 +35,12 @@ void align(int depth, bool is_last_child)
         printf("   ");
     if (depth)
         printf("%s", is_last_child ? "╚══" : "╠══");
+}
+
+static void print_funct(struct ast_funct *ast, int depth)
+{
+    printf(BLUE "FCT\n" RESET);
+    print_ast_sh(AST_SH(ast), depth);
 }
 
 // Prints the nod and child of the ast of type AST_LIST
@@ -241,6 +248,9 @@ void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
         break;
     case AST_CASE:
         print_ast_case(AST_CASE(ast), depth);
+        break;
+    case AST_FUNCT:
+        print_funct(AST_FUNCT(ast), depth);
         break;
     default:
         // Should not happend

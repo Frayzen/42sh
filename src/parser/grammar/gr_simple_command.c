@@ -41,7 +41,8 @@ enum status gr_simple_command(struct ast_list *list)
         consumed = true;
     } while (true);
     struct token *tok_word = tok_peek();
-    if (!IS_COMMAND(tok_word))
+    struct token *tok_word2 = tok_peek2();
+    if (!IS_COMMAND(tok_word) || tok_word2->type == PRTH_OPEN)
     {
         if (!consumed)
             GR_RET_CLEAN(NO_MATCH, cmd);

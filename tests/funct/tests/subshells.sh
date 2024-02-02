@@ -17,5 +17,5 @@ a=3; ( echo $a; a=4; echo $a ); echo $a
    (echo ok; (ls); (      ls      ) );a=3;(echo ok) 
 
 ### Subshell with brackets
-a=3; { echo $a; a=4; echo $a }; echo $a
-a=3; { echo $a; { a=4; echo $a } }; echo $a
+a=3; { echo $a; a=4; echo $a; }; echo $a
+a=3; { echo $a; { a=4; echo $a; } }; echo $a
