@@ -43,7 +43,8 @@ static char *normalize(char *path)
         strcat(ret, path_elems[i]);
         strcat(ret, "/");
     }
-    strcat(ret, path_elems[fold_size - 1]);
+    if (fold_size > 0)
+        strcat(ret, path_elems[fold_size - 1]);
     free(path_elems);
     return ret;
 }
