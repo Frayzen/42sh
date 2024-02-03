@@ -25,43 +25,40 @@ static char *my_str_tok(char *buf, char *delims)
 {
     static char *str = NULL;
     if (buf)
-        str = buf;
+    {
+        char *s = buf;
+        while (*buf)
+            buf++;
+        while (buf > s && is_in(*(buf - 1), delims)
+               && is_in(*(buf - 1), DEFAULT_IFS))
+            buf--;
+        *buf = '\0';
+        str = s;
+    }
     if (!str)
         return NULL;
-    int i = 0;
+    // Skip all leading spaces in delim
+    while (is_in(*str, delims) && is_in(*str, DEFAULT_IFS))
+        str++;
     char *b = str;
-    int not_delim_found = 0;
-    // Go to the next delimiter that is after a not delimiter and not a space
-    // Also increase b for every leading space
-    while (str[i])
-    {
-        if (is_in(str[i], delims))
-        {
-            if (!not_delim_found && is_in(str[i], DEFAULT_IFS))
-                b++;
-            else if (not_delim_found >= 1)
-                break;
-            else
-                not_delim_found++;
-        }
-        else
-            not_delim_found += 2;
+    // Get next delim
+    int i = 0;
+    while (str[i] && !is_in(str[i], delims))
         i++;
-    }
-    if (is_in(*b, delims))
-        b++;
-    while (str[i])
-    {
-        if (is_in(str[i], delims))
-            break;
+    char *e = str + i;
+    // Skip all trailing spaces and go to next
+    while (is_in(str[i], delims) && is_in(str[i], DEFAULT_IFS))
         i++;
-    }
+    // If not trailing space
+    if (is_in(str[i], delims))
+        i++;
+
     if (!str[i])
         str = NULL;
     else
     {
-        str[i] = '\0';
-        str += i + 1;
+        *e = '\0';
+        str += i;
     }
     return b;
 }

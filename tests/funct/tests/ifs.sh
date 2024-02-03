@@ -5,6 +5,14 @@ for a in $b; do
 done
 echo $b "$b"
 
+### Simple IFS
+IFS=" :;"
+b="test ;: ok"
+for a in $b; do
+    echo $a
+done
+
+
 ### Basic ifs
 IFS=" :;"
 b="this;is:a; test  ;: ok"
@@ -46,4 +54,14 @@ echo $b "$b"
 ###Set IFS to ;
 a='this    is;a     test'
 IFS=;
+for b in $a; do echo $b; done
+
+###One space IFS
+IFS=" "
+a="a c"
+for b in $a; do echo $b; done
+
+###Semicolumn IFS
+IFS=";"
+a="a;;c"
 for b in $a; do echo $b; done
