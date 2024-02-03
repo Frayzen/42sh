@@ -60,3 +60,6 @@ mkdir -p test_dir
 ln -s test_dir link
 cd link
 echo $PWD
+
+###Go to root
+cd /
