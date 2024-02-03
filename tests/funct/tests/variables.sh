@@ -143,6 +143,21 @@ echo $?
 ### Check IFS print
 echo $IFS
 
+###Brakets compound list non terminated 
+a=3; { echo $a; a=4; echo $a }; echo $a
+
+###Nested bracekts compound list non terminated 
+a=3; { echo $a; { echo $a; a=4; echo $a } }; echo $a
+
 ###Define unkown
 a=$b
 c=thisis$d\o
+
+###Multiple definition per line
+a=3 b=4; echo $a $b
+
+###Multiple words
+a=test text; echo $a
+
+###Commented content
+a=#123; echo $a
