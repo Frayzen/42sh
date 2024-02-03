@@ -34,6 +34,5 @@ AC_CONFIG_FILES([
                     src/arg_saver/Makefile
                     tests/Makefile
                     tests/funct/Makefile
-                    tests/unit/Makefile
                 ])
 AC_OUTPUT
