@@ -10,13 +10,8 @@
 #include "env/vars/specials.h"
 #include "env/vars/vars.h"
 #include "exec/execs.h"
-#include "exit/error_handler.h"
 #include "expander.h"
-#include "grammar/rules.h"
-#include "io_backend/io_streamers.h"
-#include "parser/grammar/rules.h"
 #include "sys/wait.h"
-#include "tools/pretty_print/pretty_print.h"
 #include "tools/str/string.h"
 #include "unistd.h"
 
@@ -36,16 +31,7 @@ static char *my_str_tok(char *buf, char *delims)
 {
     static char *str = NULL;
     if (buf)
-    {
-        char *s = buf;
-        while (*buf)
-            buf++;
-        while (buf > s && is_in(*(buf - 1), delims)
-               && is_in(*(buf - 1), DEFAULT_IFS))
-            buf--;
-        *buf = '\0';
-        str = s;
-    }
+        str = buf;
     if (!str)
         return NULL;
     // Skip all leading spaces in delim
