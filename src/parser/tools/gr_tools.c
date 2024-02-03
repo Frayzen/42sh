@@ -5,15 +5,9 @@
 
 #include "env/env.h"
 
-#define GET_STATE (set_state(NULL))
 #define GR_DBG_SPACE "|    "
-struct gr_state *set_state(struct gr_state *new)
-{
-    static struct gr_state *last = NULL;
-    if (new != NULL)
-        last = new;
-    return last;
-}
+
+static struct gr_state *last = NULL;
 
 int gr_debug_id(void)
 {
@@ -26,14 +20,14 @@ void gr_debug_start(char *name)
     if (get_env_flag()->debug_grammar)
     {
         struct gr_state *state = calloc(1, sizeof(struct gr_state));
-        state->prev = GET_STATE;
+        state->prev = last;
         state->id = gr_debug_id();
         state->name = name;
-        if (GET_STATE == NULL)
+        if (last == NULL)
             state->depth = 0;
         else
-            state->depth = GET_STATE->depth + 1;
-        set_state(state);
+            state->depth = last->depth + 1;
+        last = state;
         for (int i = 0; i < state->depth; i++)
             printf(GR_DBG_SPACE);
         printf("%s\n", state->name);
@@ -44,8 +38,8 @@ enum status gr_debug_end(enum status status)
 {
     if (get_env_flag()->debug_grammar)
     {
-        struct gr_state *state = GET_STATE;
-        set_state(state->prev);
+        struct gr_state *state = last;
+        last = state->prev;
         for (int i = 0; i < state->depth; i++)
             printf(GR_DBG_SPACE);
         static const char *status_lt[] = {

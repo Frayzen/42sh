@@ -14,6 +14,8 @@
 void export_var(char *name)
 {
     struct sh_var *var = get_var(name);
+    if (!var)
+        return;
     var->exported = true;
     setenv(name, var->value, 1);
 }

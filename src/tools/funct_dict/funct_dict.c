@@ -18,11 +18,12 @@ struct funct_dictionary *get_funct_dict(void)
 
 void funct_dict_push(char *name, struct ast_sh *body)
 {
-    if (FUNCT_DICT->nb_entries == FUNCT_DICT_SIZE)
-        exit_gracefully(FUNCT_DICO_FULL);
-    FUNCT_DICT->entries[FUNCT_DICT->nb_entries].name = name;
-    FUNCT_DICT->entries[FUNCT_DICT->nb_entries].body = body;
-    FUNCT_DICT->nb_entries++;
+    struct funct_dictionary *dict = FUNCT_DICT;
+    dict->entries = realloc(dict->entries,
+                            sizeof(struct funct_pair) * (dict->nb_entries + 1));
+    dict->entries[FUNCT_DICT->nb_entries].name = name;
+    dict->entries[FUNCT_DICT->nb_entries].body = body;
+    dict->nb_entries++;
 }
 
 struct ast_sh *funct_dict_peek_value(char *name)
@@ -60,8 +61,13 @@ void funct_dict_pop(char *name)
     }
     if (index == -1)
         return;
-    FUNCT_DICT->entries[index] =
-        FUNCT_DICT->entries[FUNCT_DICT->nb_entries - 1];
+    struct funct_pair to_rm = FUNCT_DICT->entries[index];
+    for (int i = index; i < FUNCT_DICT->nb_entries - 1; i++)
+    {
+        FUNCT_DICT->entries[i] = FUNCT_DICT->entries[i + 1];
+    }
+    free(to_rm.name);
+    destroy_ast(to_rm.body);
     FUNCT_DICT->nb_entries--;
 }
 

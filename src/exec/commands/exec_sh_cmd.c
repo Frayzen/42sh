@@ -1,10 +1,19 @@
+#include "arg_saver/arg_saver.h"
 #include "commands/execs_cmd.h"
 #include "execs.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 
-int exec_sh(struct ast_sh *sh)
+int exec_sh(struct ast_sh *sh, char **argv)
 {
+    struct arg_info *old = NULL;
+    if (argv)
+    {
+        int len = 0;
+        while (argv[len])
+            len++;
+        old = new_arg_info(len, argv);
+    }
     int ret = 0;
     struct ast *ast = sh->sh_cmd;
     switch (ast->type)
@@ -29,5 +38,7 @@ int exec_sh(struct ast_sh *sh)
         print_error(PIPE_NOT_FOUND);
         break;
     }
+    if (argv)
+        load_arg_info(old);
     return ret;
 }
