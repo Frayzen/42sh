@@ -135,3 +135,10 @@ echo ""
 echo this "" is "" a "" test
 echo ok ""
 echo "" ok
+
+### Unexpected end of file on echo
+echo 'Special characters: $@ \ / ` ' \" '
+
+### Echo with space
+a=a' '; echo $a\b
+a=' '; echo $a\b

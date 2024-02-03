@@ -39,7 +39,11 @@ enum status gr_input(struct ast **ast)
         goto error;
     tok_pop_clean();
     if (empty)
+    {
+        if (tok_peek()->type == BSZERO)
+            tok_pop_clean();
         GR_RET(NO_MATCH);
+    }
     GR_RET(OK);
 error:
     exit_gracefully(GRAMMAR_ERROR_ENTRY);

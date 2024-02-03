@@ -31,6 +31,6 @@ FILE *swap_fd(FILE *new_file);
 FILE *load_file(char *path_to_file);
 
 void io_streamer_stdin(void);
+void io_streamer_string(char *arg);
 
-void io_streamer_string(int argc, char **argv);
 #endif /* !IO_STREAMERS_H */

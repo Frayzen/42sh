@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 
+#include "exit/error_handler.h"
 #include "tools/str/string.h"
 
 #define IS_BLANK(Pending) ((Pending)->blank)
@@ -49,6 +50,7 @@ struct pending
     bool in_quote;
     bool error;
     bool force_str;
+    bool in_sub_cmd;
 };
 
 // In this file, understand 'current character' as the one returned by
@@ -72,5 +74,11 @@ void consume_variable(struct pending *p);
  * @param p the pending struct
  */
 void consume_operators(struct pending *p);
+
+/***
+ * Exit gracefully or set p->error to true if exit fails (interactive mode)
+ * @param type the type of the error
+ */
+void exit_lexer(enum error_type type);
 
 #endif /* FINDER_H */

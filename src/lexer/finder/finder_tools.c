@@ -90,6 +90,15 @@ bool assignment_word(const struct lex_str *str)
     return is_name(begin, size);
 }
 
+static enum expand_type get_expand_type(struct pending *p)
+{
+    if (p->in_sub_cmd)
+        return p->in_quote ? QTD_SUB_CMD : SUB_CMD;
+    else if (p->in_quote)
+        return p->expanding ? QUOTED_VAR : QUOTED_STR;
+    return p->expanding ? UNQUOTED_VAR : STR_LITTERAL;
+}
+
 void append_char(struct pending *p, char c)
 {
     struct lex_str *str = &p->str;
@@ -97,20 +106,7 @@ void append_char(struct pending *p, char c)
     str->value = realloc(str->value, str->size * sizeof(char));
     str->value[id] = c;
     str->expand = realloc(str->expand, str->size * sizeof(enum expand_type));
-    if (p->in_quote)
-    {
-        if (!p->expanding)
-            str->expand[id] = QUOTED_STR;
-        else
-            str->expand[id] = QUOTED_VAR;
-    }
-    else
-    {
-        if (!p->expanding)
-            str->expand[id] = STR_LITTERAL;
-        else
-            str->expand[id] = UNQUOTED_VAR;
-    }
+    str->expand[id] = get_expand_type(p);
     p->blank = false;
 }
 
@@ -122,10 +118,9 @@ void append_io(struct pending *p)
 }
 
 static const char limit_lt[] = {
-    [SKIP_SINGLE_QUOTE] = '\'',
-    [SKIP_DOUBLE_QUOTE] = '"',
-    [SKIP_HASHTAG] = '\n',
-    [SKIP_VARIABLE_BRACKETS] = '}',
+    [SKIP_SINGLE_QUOTE] = '\'', [SKIP_DOUBLE_QUOTE] = '"',
+    [SKIP_HASHTAG] = '\n',      [SKIP_VARIABLE_BRACKETS] = '}',
+    [SKIP_PARENTHESES] = ')',
 };
 
 static void bslash_in_skip(struct pending *p, enum skip_behavior behavior)
@@ -168,7 +163,7 @@ void skip_until(struct pending *p, enum skip_behavior behavior)
         else if (behavior == SKIP_SINGLE_QUOTE)
             append_io(p);
         else if (behavior == SKIP_VARIABLE_BRACKETS && !is_name_char(c))
-            exit_gracefully(BAD_VAR_NAME);
+            exit_lexer(BAD_VAR_NAME);
         else if (c == '\\')
             bslash_in_skip(p, behavior);
         else
@@ -180,4 +175,48 @@ void skip_until(struct pending *p, enum skip_behavior behavior)
         }
         c = io_peek();
     }
+}
+
+static void skip_sub_cmd_bs(struct pending *p)
+{
+    io_pop();
+    if (io_peek() == ')')
+        append_io(p);
+    else
+    {
+        append_char(p, '\\');
+        append_io(p);
+    }
+}
+
+// append evething in the ()
+void skip_sub_cmd(struct pending *p)
+{
+    char c = io_peek();
+    int brac_cnt = 0;
+    while (c && (c != ')' || brac_cnt != 0))
+    {
+        if (c == '\\')
+        {
+            skip_sub_cmd_bs(p);
+            c = io_peek();
+            continue;
+        }
+        else if (c == ')')
+        {
+            brac_cnt--;
+            if (brac_cnt == 0)
+            {
+                append_io(p);
+                return;
+            }
+        }
+        else if (c == '(')
+            brac_cnt++;
+        append_io(p);
+        c = io_peek();
+    }
+    if (brac_cnt != 0)
+        exit_lexer(UNEXPECTED_EOF);
+    p->str.expand[p->str.size - 1] = SUB_CMD_END;
 }

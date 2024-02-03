@@ -45,7 +45,7 @@ void parse_args(int argc, char **argv)
         new_arg_info(0, NULL);
         if (1 >= argc)
             exit_gracefully(ARG_ERROR);
-        io_streamer_string(argc, argv + 1);
+        io_streamer_string(argv[2]);
     }
     else
     {

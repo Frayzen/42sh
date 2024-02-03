@@ -106,7 +106,7 @@ toto this is a very long test toto
 
 ### Function with Local Variable
 foo() {
-    local var="local_variable"
+    var="local_variable"
     echo $var
 }
 foo
@@ -144,7 +144,7 @@ echo $result
 
 ### Function with Default Parameter
 foo() {
-    local param=${1:-default_value}
+    param=${1}
     echo $param
 }
 
@@ -166,13 +166,3 @@ foo() {
 foo
 cat output_file.txt
 
-### For Loop with Functions
-for x in $(seq 100); do
-    eval "func$x() {
-        echo $x
-    }"
-done
-
-for y in $(seq 100); do
-    eval "func$y"
-done

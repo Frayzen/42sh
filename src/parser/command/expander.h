@@ -8,8 +8,9 @@
  * Register the token as part of the futur expansion of the command
  * @param exp the expansion
  * @param tok the token to register
+ * @return true if the registration happendened succesfully
  */
-void exp_register_str(struct expansion *exp, struct lex_str *str);
+int exp_register_str(struct expansion *exp, struct lex_str *str);
 
 /***
  * Stringify an expandable into several str_litt expandable linked list

@@ -130,7 +130,7 @@ static void print_ast_cmd(struct ast_cmd *ast, int depth)
     for (size_t i = 0; i < ast->args_expansion.size; i++)
     {
         align(depth, i == ast->args_expansion.size - 1);
-        printf("%s\n", current->content);
+        printf("%s\n", (char *)current->content);
         current = current->next;
     }
     depth--;
@@ -174,17 +174,19 @@ void pretty_print_exapandable(struct expandable *exp)
 {
     switch (exp->type)
     {
+    default:
+        break;
     case STR_LITTERAL:
-        printf("%s\n", exp->content);
+        printf("%s\n", (char *)exp->content);
         break;
     case QUOTED_STR:
-        printf("\"%s\"\n", exp->content);
+        printf("\"%s\"\n", (char *)exp->content);
         break;
     case QUOTED_VAR:
-        printf("\"$%s\"\n", exp->content);
+        printf("\"$%s\"\n", (char *)exp->content);
         break;
     case UNQUOTED_VAR:
-        printf("$%s\n", exp->content);
+        printf("$%s\n", (char *)exp->content);
         break;
     }
 }
