@@ -96,3 +96,9 @@ $(echo this is a\
 
 ### Subcommand, 300th test
 $(echo echo) $($(echo 'echo')$(seq 100)))
+
+### Sub command echo new lines
+echo "Result: $(echo -e "Line 1\nLine 2\nLine 3")"
+
+### Special chars
+echo "Result: $(echo Special characters: $@ \ /)"

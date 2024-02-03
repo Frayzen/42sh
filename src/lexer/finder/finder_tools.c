@@ -1,5 +1,6 @@
 #include "finder_tools.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -180,10 +181,13 @@ void skip_until(struct pending *p, enum skip_behavior behavior)
 static void skip_sub_cmd_bs(struct pending *p)
 {
     io_pop();
-    if (io_peek() != '\n')
+    if (io_peek() == ')')
         append_io(p);
     else
-        io_pop();
+    {
+        append_char(p, '\\');
+        append_io(p);
+    }
 }
 
 // append evething in the ()
@@ -193,7 +197,13 @@ void skip_sub_cmd(struct pending *p)
     int brac_cnt = 0;
     while (c && (c != ')' || brac_cnt != 0))
     {
-        if (c == ')')
+        if (c == '\\')
+        {
+            skip_sub_cmd_bs(p);
+            c = io_peek();
+            continue;
+        }
+        else if (c == ')')
         {
             brac_cnt--;
             if (brac_cnt == 0)
@@ -201,12 +211,6 @@ void skip_sub_cmd(struct pending *p)
                 append_io(p);
                 return;
             }
-        }
-        else if (c == '\\')
-        {
-            skip_sub_cmd_bs(p);
-            c = io_peek();
-            continue;
         }
         else if (c == '(')
             brac_cnt++;

@@ -6,8 +6,8 @@
 
 bool is_number(char *val);
 
-#define IS_VAR_TYPE(Type)                                                      \
-    ((Type) == QUOTED_VAR || (Type) == UNQUOTED_VAR || (Type) == SUB_CMD)
+#define IS_SUBCMD_TYPE(Type) ((Type) == SUB_CMD || (Type) == QTD_SUB_CMD)
+#define IS_VAR_TYPE(Type) ((Type) == QUOTED_VAR || (Type) == UNQUOTED_VAR)
 #define IS_STR_TYPE(Type) ((Type) == STR_LITTERAL || (Type) == QUOTED_STR)
 enum expand_type
 {

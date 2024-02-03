@@ -43,7 +43,8 @@ int register_expandable(struct expansion *exp, struct lex_str *exp_str,
         do
             end++;
         while (end < exp_str->size && exp_str->expand[end] == type
-               && exp_str->value[end] != '$');
+               && (exp_str->value[end] != '$'
+                   || !IS_VAR_TYPE(exp_str->expand[end])));
     }
     size_t size = end - begin;
     bool is_last = exp_str->size == end;
@@ -64,9 +65,8 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
     while (i < str->size)
     {
         // Skip the dollar if needed
-        if (str->value[i] == '$' && !IS_STR_TYPE(str->expand[i]))
+        if (str->value[i] == '$' && IS_VAR_TYPE(str->expand[i]))
             i++;
-
         i = register_expandable(exp, str, i);
     }
     destroy_lex_str(str);
