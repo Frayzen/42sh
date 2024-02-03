@@ -225,6 +225,8 @@ struct expandable *stringify_expandable(struct expandable *cur)
         return expand_quoted_var(cur);
     case UNQUOTED_VAR:
         return expand_unquoted_var(cur);
+    case SUB_CMD_END:
+        return NULL;
     case SUB_CMD:
     case QTD_SUB_CMD:
         return expand_sub_cmd(cur, SUB_CMD == cur->type);

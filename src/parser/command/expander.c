@@ -169,9 +169,12 @@ char **expand(struct expansion *expansion)
             DBG_VAR("%s ", (char *)e->content);
             if (link_next)
                 DBG_VAR(" -> ");
-            size += strlen(e->content);
-            cur = realloc(cur, sizeof(char) * (size + 1));
-            strcat(cur, e->content);
+            if (e->content)
+            {
+                size += strlen(e->content);
+                cur = realloc(cur, sizeof(char) * (size + 1));
+                strcat(cur, e->content);
+            }
             e = e->next;
         } while (e && link_next);
         DBG_VAR("\n");
