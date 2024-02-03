@@ -21,6 +21,7 @@ enum token_type
     // operators ?
     PRTH_OPEN,
     PRTH_CLOSED,
+    AMPERSAND,
     // redir
     CHEVRON,
     PIPE,
@@ -38,6 +39,8 @@ enum token_type
     ELIF,
     ELSE,
     FI,
+    CASE,
+    ESAC,
 
     WHILE,
     UNTIL,

@@ -15,6 +15,9 @@
 #include "grammar/rules.h"
 #include "io_backend/io_streamers.h"
 #include "tools/ast/ast.h"
+#include "env/env.h"
+#include "env/vars/vars.h"
+#include "parser/command/expansion.h"
 #include "tools/str/string.h"
 //
 // REGISTERING TOKENS
