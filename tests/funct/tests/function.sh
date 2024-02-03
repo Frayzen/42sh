@@ -165,3 +165,14 @@ foo() {
 
 foo
 cat output_file.txt
+
+### For Loop with Functions
+for x in $(seq 100); do
+    eval "func$x() {
+        echo $x
+    }"
+done
+
+for y in $(seq 100); do
+    eval "func$y"
+done
