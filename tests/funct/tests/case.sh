@@ -42,3 +42,6 @@ case a i a) echo toto;; b c) echo tata;; esac
 
 ### Case space
 case ' ' in a) echo toto;; o | ' ') echo tata;; esac
+
+### Case space in string
+case a' ' in a) echo toto;; a' ') echo tata;; esac
