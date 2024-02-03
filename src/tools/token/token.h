@@ -21,9 +21,6 @@ enum token_type
     // operators ?
     PRTH_OPEN,
     PRTH_CLOSED,
-    BRK_OPEN,
-    BRK_CLOSED,
-    AMPERSAND,
     // redir
     CHEVRON,
     PIPE,
@@ -50,6 +47,8 @@ enum token_type
     DONE,
 
     NEGATION,
+    BRK_OPEN,
+    BRK_CLOSED,
 
     // builtins /!\ leave T_TRUE as first one and ECHO as last one
     T_TRUE,

@@ -78,11 +78,10 @@ void apply_assignments(struct assignment_list *asslist)
     {
         // TODO find a better way to do it
         struct assignment *ass = asslist->ass_list[i];
-        char **val = expand(&ass->exp);
-        assert(val && val[0] && !val[1]);
+        char *val = expand_str(&ass->exp);
         ass->prev = retrieve_var(ass->name);
-        assign_var(ass->name, val[0]);
-        destroy_expanded(val);
+        assign_var(ass->name, val);
+        free(val);
     }
 }
 
