@@ -18,6 +18,7 @@ enum status gr_case_clause(struct ast_case *ast)
 {
     GR_START(Case_clause);
 
+    // Necessary because wordable (see gr_case_item)
     if (tok_peek()->type == ESAC)
         return NO_MATCH;
 
@@ -29,11 +30,13 @@ enum status gr_case_clause(struct ast_case *ast)
     while (tok_peek()->type == DBL_SEMI_COLON)
     {
         tok_pop_clean();
-        if (tok_peek()->type == ESAC)
-            break;
 
         while (tok_peek()->type == NEWLINE)
             tok_pop_clean();
+
+        // Necessary because wordable (see gr_case_item)
+        if (tok_peek()->type == ESAC)
+            break;
 
         ast->nb_cond++;
         ast->list_cond = realloc(ast->list_cond, sizeof(char *) * ast->nb_cond);
