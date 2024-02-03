@@ -69,6 +69,41 @@ static void destroy_case(struct ast_case *ast)
     clean_expansion(&ast->name);
 }
 
+void destroy_ast2(void *ast)
+{
+    if (!ast)
+        return;
+    // might be usefull to switch to get_children but need refacto of the fn
+    switch (AST(ast)->type)
+    {
+    case AST_AND_OR:
+        free(AST_AND_OR(ast)->types);
+        goto destroy_list;
+        break;
+    case AST_CASE:
+        destroy_case(AST_CASE(ast));
+        break;
+    case AST_FUNCT:
+        free(AST_FUNCT(ast)->name);
+        // don't need to free the body because it is passed to the dictionnary
+        // it will be freed when the dictionnary is freed
+        break;
+    case AST_FOR:
+        free(AST_FOR(ast)->name);
+        clean_expansion(&AST_FOR(ast)->exp);
+        /* FALLTHROUGH */
+    case AST_PIPE:
+    case AST_SUBSHELL:
+    case AST_LIST:
+    destroy_list:
+        destroy_list(AST_LIST(ast));
+        break;
+    default:
+        break;
+    }
+    free(ast);
+}
+
 void destroy_ast(void *ast)
 {
     if (!ast)
@@ -95,30 +130,9 @@ void destroy_ast(void *ast)
         destroy_list(&AST_IF(ast)->then);
         destroy_ast(AST_IF(ast)->fallback);
         break;
-    case AST_AND_OR:
-        free(AST_AND_OR(ast)->types);
-        goto destroy_list;
-        break;
-    case AST_CASE:
-        destroy_case(AST_CASE(ast));
-        break;
-    case AST_FUNCT:
-        free(AST_FUNCT(ast)->name);
-        // don't need to free the body because it is passed to the dictionnary
-        // it will be freed when the dictionnary is freed
-        break;
-    case AST_FOR:
-        free(AST_FOR(ast)->name);
-        clean_expansion(&AST_FOR(ast)->exp);
-        /* FALLTHROUGH */
-    case AST_PIPE:
-    case AST_SUBSHELL:
-    case AST_LIST:
-    destroy_list:
-        destroy_list(AST_LIST(ast));
-        break;
     default:
-        break;
+        destroy_ast2(ast);
+        return;
     }
     free(ast);
 }
