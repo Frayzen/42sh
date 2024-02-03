@@ -9,6 +9,8 @@
 #include "env/env.h"
 #include "env/vars/specials.h"
 #include "exec/execs.h"
+#include "env/vars/specials.h"
+#include "execs.h"
 #include "execs_cmd.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
@@ -28,7 +30,7 @@ int exec_piped(struct ast *ast, int in, int out, int *pid)
         ret = exec_cmd(AST_CMD(ast), pid);
         break;
     case AST_SH:
-        ret = exec_sh(AST_SH(ast));
+        ret = exec_sh(AST_SH(ast), NULL);
         break;
     case AST_FUNCT:
         ret = exec_store_funct(AST_FUNCT(ast));

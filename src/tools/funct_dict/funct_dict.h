@@ -2,7 +2,6 @@
 #define FUNCT_DICT_H
 
 #define FUNCT_DICT_SIZE 1024
-#define FUNCT_DICT (get_funct_dict())
 
 struct funct_pair
 {

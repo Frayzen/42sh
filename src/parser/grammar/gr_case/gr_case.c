@@ -1,14 +1,10 @@
 #define _POSIX_C_SOURCE 200809L
-#include <stdlib.h>
 
 #include "lexer/token_saver.h"
 #include "parser/command/expander.h"
-#include "parser/command/expansion.h"
 #include "parser/grammar/rules.h"
 #include "parser/tools/gr_tools.h"
-#include "parser/tools/gr_utils.h"
 #include "tools/ast/ast.h"
-#include "tools/str/string.h"
 #include "tools/token/token.h"
 
 // rule_case = 'case' WORD {'\n'} 'in' {'\n'} [case_clause] 'esac' ;
