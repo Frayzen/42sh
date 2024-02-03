@@ -1,15 +1,4 @@
 #define _POSIX_C_SOURCE 200809L
-// #include <assert.h>
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <string.h>
-//
-// #include "command/expansion.h"
-// #include "env/env.h"
-// #include "env/vars/specials.h"
-// #include "env/vars/vars.h"
-// #include "tools/str/string.h"
-// #include "unistd.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -91,8 +80,7 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
 }
 
 //
-// EXPANSIOpStop
-//
+// EXPANSION
 //
 
 static struct expandable *ifs_splitting(char *str, struct expandable *cur)
@@ -107,7 +95,6 @@ static struct expandable *ifs_splitting(char *str, struct expandable *cur)
     {
         last = expandable_init(str, STR_LITTERAL, cur->link_next);
         last->next = cur->next;
-        // free(str);
         return last;
     }
     while (elem)
@@ -131,7 +118,6 @@ static struct expandable *ifs_splitting(char *str, struct expandable *cur)
 // return the new current or NULL if the expansion is empty
 static struct expandable *expand_unquoted_var(struct expandable *cur)
 {
-    // assert(cur->type == UNQUOTED_VAR);
     char *val = retrieve_var(cur->content);
     if (val[0] == '\0')
     {
@@ -181,7 +167,6 @@ static void process_buffer(char *buf)
 
 static struct expandable *expand_sub_cmd(struct expandable *cur)
 {
-    // printf("content = |%s|\n", cur->content);
     int fds[2];
     int err = pipe(fds); // create the pipe reading stdout for the subcmd
                          // (child) into a buffer
@@ -223,8 +208,6 @@ static struct expandable *expand_sub_cmd(struct expandable *cur)
     }
     buf[begin] = '\0';
     process_buffer(buf); // newlines to spaces accroding to SCL
-    // p
-    // printf("buf  = |%s|\n", buf);
 
     int ret;
     waitpid(pid, &ret, 0);
