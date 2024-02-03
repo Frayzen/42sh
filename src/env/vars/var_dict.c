@@ -9,7 +9,12 @@
 
 static struct sh_varlist *list = NULL;
 
-static struct sh_varlist *get_varlist(char *name)
+struct sh_varlist *get_varlist(void)
+{
+    return list;
+}
+
+static struct sh_varlist *get_varlist_item(char *name)
 {
     if (!list)
         return NULL;
@@ -49,15 +54,15 @@ struct sh_var *get_or_create_var(char *name)
 
 struct sh_var *get_var(char *name)
 {
-    struct sh_varlist *varlist = get_varlist(name);
+    struct sh_varlist *varlist = get_varlist_item(name);
     if (!varlist)
         return NULL;
     return &(varlist->var);
 }
 
-BOOL remove_var(char *name)
+int remove_var(char *name)
 {
-    struct sh_varlist *varlist = get_varlist(name);
+    struct sh_varlist *varlist = get_varlist_item(name);
     if (!varlist)
         return false;
     if (varlist->next == varlist)

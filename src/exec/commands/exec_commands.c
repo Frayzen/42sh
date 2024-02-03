@@ -12,7 +12,6 @@
 #include "env/vars/vars.h"
 #include "exec/builtins/builtins.h"
 #include "exec/commands/execs_cmd.h"
-#include "execs.h"
 #include "exit/error_handler.h"
 #include "parser/command/expander.h"
 #include "tools/assignment/assignment.h"
@@ -40,6 +39,7 @@ int exec_prog(char **argv)
             if (i != FDS[i])
                 close(FDS[i]);
         }
+        export_all();
         execvp(argv[0], argv);
         print_error(EXECVP_FAILED);
         exit(127);
@@ -88,7 +88,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         {
             struct ast_sh *function = funct_dict_peek_value(argv[0]);
             if (function)
-                ret = exec_sh(function);
+                ret = exec_sh(function, argv + 1);
             else
             {
                 *pid = exec_prog(argv);
@@ -96,7 +96,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             }
         }
     }
-    discard_assignments(&ast->assignment_list, argv[0]);
+    discard_assignments(&ast->assignment_list, argv[0] != NULL);
     destroy_expanded(argv);
     close_redirs(fds);
     return ret;

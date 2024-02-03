@@ -11,7 +11,7 @@ enum status gr_pipeline(struct ast_list *list)
     GR_START(Pipeline);
     struct ast_pipe *pipe = init_ast(AST_PIPE);
     struct token *token = tok_peek();
-    bool consumed = false;
+    int consumed = false;
     while (token->type == NEGATION)
     {
         consumed = true;

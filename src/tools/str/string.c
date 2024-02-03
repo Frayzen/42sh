@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-bool is_number(char *val)
+int is_number(char *val)
 {
     int i = 0;
     while (val[i])

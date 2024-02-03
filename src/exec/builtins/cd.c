@@ -18,7 +18,7 @@ static char *normalize(char *path)
     memset(ret, 0, sizeof(char) * PATH_MAX);
     char *tmp = strtok(path, "/");
     char **path_elems = NULL;
-    size_t fold_size = 0;
+    int fold_size = 0;
     while (tmp != NULL)
     {
         // NOT A POINT
@@ -38,12 +38,13 @@ static char *normalize(char *path)
         tmp = strtok(NULL, "/");
     }
     strcpy(ret, "/");
-    for (size_t i = 0; i < fold_size - 1; i++)
+    for (int i = 0; i < fold_size - 1; i++)
     {
         strcat(ret, path_elems[i]);
         strcat(ret, "/");
     }
-    strcat(ret, path_elems[fold_size - 1]);
+    if (fold_size > 0)
+        strcat(ret, path_elems[fold_size - 1]);
     free(path_elems);
     return ret;
 }
@@ -60,7 +61,7 @@ static char *compute_path(char *new)
         curpath = new;
     // Check for overflow
     int curpath_len = strlen(curpath);
-    bool need_bslash = curpath[0] != '/' && pwd[pwd_len - 1] != '/';
+    int need_bslash = curpath[0] != '/' && pwd[pwd_len - 1] != '/';
     if (curpath_len + pwd_len + need_bslash > PATH_MAX)
         goto error;
     // STEP 7

@@ -1,8 +1,8 @@
 #include "lexer/token_saver.h"
 #include "parser/command/expander.h"
+#include "parser/tools/gr_tools.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "tools/gr_tools.h"
 #include "tools/token/token.h"
 
 /*
@@ -17,7 +17,8 @@ enum status gr_element(struct ast_cmd *cmd)
     struct token *token = tok_peek();
     if (IS_WORDABLE(token))
     {
-        exp_register_str(&cmd->args_expansion, token->str);
+        if (!exp_register_str(&cmd->args_expansion, token->str))
+            GR_RET(ERROR);
         tok_pop();
         GR_RET(OK);
     }

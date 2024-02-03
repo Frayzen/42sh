@@ -4,14 +4,15 @@
 
 #include "tools/str/string.h"
 
-#define IS_WORDABLE(t) ((t)->type >= IF) // Easy to test, just do echo <input>
-#define IS_COMMAND(t) ((t)->type >= T_TRUE)
-#define IS_OPERATOR(t) ((t)->type == AND || (t)->type == OR)
+#define IS_WORDABLE(Token)                                                     \
+    ((Token)->type >= IF) // Easy to test, just do echo <input>
+#define IS_COMMAND(Token) ((Token)->type >= T_TRUE)
+#define IS_OPERATOR(Token) ((Token)->type == AND || (Token)->type == OR)
 
 // /!\ Do not add gaps inside of this enum (see TOK_TYPES_LT)
 enum token_type
 {
-    TOK_ERROR = -1,
+    TOK_ERROR,
     // end of instruction
     NEWLINE,
     BSZERO,
@@ -21,8 +22,7 @@ enum token_type
     // operators ?
     PRTH_OPEN,
     PRTH_CLOSED,
-    BRK_OPEN,
-    BRK_CLOSED,
+    AMPERSAND,
     // redir
     CHEVRON,
     PIPE,
@@ -40,6 +40,8 @@ enum token_type
     ELIF,
     ELSE,
     FI,
+    CASE,
+    ESAC,
 
     WHILE,
     UNTIL,
@@ -49,6 +51,8 @@ enum token_type
     DONE,
 
     NEGATION,
+    BRK_OPEN,
+    BRK_CLOSED,
 
     // builtins /!\ leave T_TRUE as first one and ECHO as last one
     T_TRUE,
@@ -70,7 +74,7 @@ struct token
 {
     enum token_type type;
     struct lex_str *str;
-    bool terminal;
+    int terminal;
 };
 
 /***

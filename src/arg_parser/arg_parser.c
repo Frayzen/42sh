@@ -37,13 +37,15 @@ void parse_args(int argc, char **argv)
     argv += i - 1;
     if (argc == 0)
     {
+        new_arg_info(0, NULL);
         io_streamer_stdin();
     }
     else if (!strcmp(argv[1], "-c"))
     {
+        new_arg_info(0, NULL);
         if (1 >= argc)
             exit_gracefully(ARG_ERROR);
-        io_streamer_string(argc, argv + 1);
+        io_streamer_string(argv[2]);
     }
     else
     {

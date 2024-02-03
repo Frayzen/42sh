@@ -1,10 +1,10 @@
 #include <stdbool.h>
 
 #include "lexer/token_saver.h"
+#include "parser/tools/gr_tools.h"
+#include "parser/tools/gr_utils.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "tools/gr_tools.h"
-#include "tools/gr_utils.h"
 
 /*
 shell_command =
@@ -13,6 +13,7 @@ shell_command =
 | rule_for
 | rule_while
 | rule_until
+| rule_case
 | rule_if
 ;
 */
@@ -44,7 +45,7 @@ enum status check_compound_token(enum token_type expected_type1,
 
 // Function to verify if the return value is a value that needs to be returned
 // Return false if a return should not occur
-bool checkout(enum status st, enum status *ret)
+int checkout(enum status st, enum status *ret)
 {
     switch (st)
     {
@@ -72,6 +73,8 @@ enum status get_shell_command(struct ast_sh *sh)
     if (checkout(gr_until(sh), &ret))
         return ret;
     if (checkout(gr_for(sh), &ret))
+        return ret;
+    if (checkout(gr_case(sh), &ret))
         return ret;
     return NO_MATCH;
 }

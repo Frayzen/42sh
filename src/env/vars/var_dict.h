@@ -8,7 +8,7 @@ struct sh_var
 {
     char *name;
     char *value;
-    BOOL exported;
+    int exported;
 };
 
 struct sh_varlist
@@ -37,11 +37,17 @@ struct sh_var *get_or_create_var(char *name);
  * @param name the name of the variable
  * @return true if the removal happened
  */
-BOOL remove_var(char *name);
+int remove_var(char *name);
 
 /***
  * Clear all of the variables from the dictionnary
  */
 void clean_variables(void);
+
+/***
+ * Retrieve the begining of the list
+ * @return the begining of the linked list
+ */
+struct sh_varlist *get_varlist(void);
 
 #endif /* !VAR_DICT_H */

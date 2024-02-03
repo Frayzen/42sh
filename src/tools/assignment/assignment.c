@@ -1,7 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include "assignment.h"
 
-#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -31,11 +30,12 @@ struct assignment *init_assignment(struct lex_str *str)
     struct assignment *ass = calloc(1, sizeof(struct assignment));
     size_t eq_pos = eq - str->value;
 
-    str->value[eq_pos] = '\0';
     ass->name = strdup(str->value);
+    ass->name[eq_pos] = '\0';
 
     struct lex_str *value_str = extract_value(str, eq_pos);
-    exp_register_str(&ass->exp, value_str);
+    if (!exp_register_str(&ass->exp, value_str))
+        return NULL;
     return ass;
 }
 
@@ -72,21 +72,41 @@ void clean_assignments(struct assignment_list *assign_list)
     free(assign_list->ass_list);
 }
 
+char *argv_to_str(char **argv)
+{
+    size_t totalLength = 0;
+    int i = 0;
+    while (argv[i] != NULL)
+        totalLength += strlen(argv[i++]) + 1;
+    char *result = (char *)malloc(totalLength);
+    size_t currentPosition = 0;
+    i = 0;
+    while (argv[i] != NULL)
+    {
+        size_t argLength = strlen(argv[i]);
+        memcpy(result + currentPosition, argv[i], argLength);
+        currentPosition += argLength;
+        if (argv[i + 1] != NULL)
+            result[currentPosition++] = ' ';
+        i++;
+    }
+    result[currentPosition] = '\0';
+    return result;
+}
+
 void apply_assignments(struct assignment_list *asslist)
 {
     for (unsigned int i = 0; i < asslist->size; i++)
     {
-        // TODO find a better way to do it
         struct assignment *ass = asslist->ass_list[i];
-        char **val = expand(&ass->exp);
-        assert(val && val[0] && !val[1]);
+        char *val = expand_str(&ass->exp);
         ass->prev = retrieve_var(ass->name);
-        assign_var(ass->name, val[0]);
-        destroy_expanded(val);
+        assign_var(ass->name, val);
+        free(val);
     }
 }
 
-void discard_assignments(struct assignment_list *asslist, bool revert)
+void discard_assignments(struct assignment_list *asslist, int revert)
 {
     for (unsigned int i = 0; i < asslist->size; i++)
     {

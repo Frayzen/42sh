@@ -17,7 +17,7 @@ char *g_ast_types[] = {
     [AST_CMD] = "CMD",       [AST_LIST] = "LST",  [AST_IF] = "IF",
     [AST_PIPE] = "PIPE",     [AST_WHILE] = "WHL", [AST_UNTIL] = "UTL",
     [AST_SH] = "SH",         [AST_ASS] = "ASS",   [AST_FOR] = "FOR",
-    [AST_AND_OR] = "AND_OR", [AST_FUNCT] = "FCT",
+    [AST_AND_OR] = "AND_OR", [AST_CASE] = "CASE", [AST_FUNCT] = "FCT",
 };
 
 int node_to_str(char *buf, struct ast *ast_root)
