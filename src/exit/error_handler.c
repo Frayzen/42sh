@@ -64,6 +64,7 @@ void print_error(enum error_type type)
         [UNEXPECTED_EOF] = "Unexpected end of file",
         [BAD_REDIRECTION] = "Bad redirection",
         [BAD_FD] = "The file descriptor couldn't be open",
+        [BAD_VAR_NAME] = "The variable name is invalid",
         // Numeric argument required
         [CONT_BREAK_NOT_NUM] = "Coninue or break : numeric argument required",
     };
