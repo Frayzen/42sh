@@ -15,6 +15,13 @@ struct token *swap_next_token(struct token *new)
     return tok;
 }
 
+struct token *swap_next_token2(struct token *new)
+{
+    struct token *tok = next2;
+    next2 = new;
+    return tok;
+}
+
 struct token *tok_peek(void)
 {
     if (!next)

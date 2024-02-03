@@ -11,7 +11,7 @@
 // /!\ Do not add gaps inside of this enum (see TOK_TYPES_LT)
 enum token_type
 {
-    TOK_ERROR = -1,
+    TOK_ERROR,
     // end of instruction
     NEWLINE,
     BSZERO,

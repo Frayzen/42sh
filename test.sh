@@ -1,1 +1,1 @@
-echo Special characters: $@ \ /
+echo 'Special' characters: $@ \ / '

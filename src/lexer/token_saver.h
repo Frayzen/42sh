@@ -45,4 +45,11 @@ void tok_pop(void);
  */
 struct token *swap_next_token(struct token *new);
 
+/***
+ * Swap the second saved token
+ * @param new the new second saved token
+ * @return the old second token
+ */
+struct token *swap_next_token2(struct token *new);
+
 #endif /* !TOKEN_SAVER_H */

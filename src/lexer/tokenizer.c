@@ -23,6 +23,8 @@ struct token *next_token(void)
         result->type = WORD;
         result->terminal = false;
     }
+    if (pending->error)
+        result->type = TOK_ERROR;
     if (result->type == BSZERO)
         get_env_flag()->null_received = true;
     if (get_env_flag()->verbose)

@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+
 #include "command/expander.h"
 
 #include <stdio.h>
@@ -8,68 +9,91 @@
 #include <unistd.h>
 
 #include "command/expansion.h"
+#include "env/context.h"
 #include "env/env.h"
 #include "env/vars/vars.h"
+#include "grammar/rules.h"
+#include "io_backend/io_streamers.h"
+#include "tools/ast/ast.h"
 #include "tools/str/string.h"
 //
 // REGISTERING TOKENS
 //
 
-/***
- * Append the next arg found in exp_str to cmd considering its type and begin
- * @param type the type of the arg
- * @param cmd the command to append the new arg to
- * @param exp_str the expand string to read from
- * @return the begin of the next
- */
-int register_expandable(struct expansion *exp, struct lex_str *exp_str,
-                        size_t begin)
+// Find the end of the expand type starting at begin in exp_str
+static int read_until(struct lex_str *exp_str, size_t begin)
 {
     size_t end = begin;
-    enum expand_type type = exp_str->expand[begin];
-    if (IS_STR_TYPE(type))
+    enum expand_type type = exp_str->expand[end];
+    while (end < exp_str->size && type == exp_str->expand[end])
     {
-        while (end < exp_str->size && exp_str->expand[end] == type)
-            end++;
+        if (exp_str->value[end] == '$' && IS_VAR_TYPE(type))
+            break;
+        end++;
     }
-    else if (type == SUB_CMD)
-    {
-        do
-            end++;
-        while (end < exp_str->size && exp_str->expand[end] == SUB_CMD);
-    }
-    else
-    {
-        do
-            end++;
-        while (end < exp_str->size && exp_str->expand[end] == type
-               && (exp_str->value[end] != '$'
-                   || !IS_VAR_TYPE(exp_str->expand[end])));
-    }
-    size_t size = end - begin;
-    bool is_last = exp_str->size == end;
-    char *str = strndup(exp_str->value + begin, size);
-    struct expandable *e = expandable_init(str, type, !is_last);
-    expansion_push_back(exp, e);
+    // In case of the end, include it
+    if (end < exp_str->size && exp_str->expand[end] == SUB_CMD_END)
+        end++;
     return end;
 }
 
-void exp_register_str(struct expansion *exp, struct lex_str *str)
+// NULL on error
+void *create_expandable_content(struct lex_str *str, size_t b, size_t e)
+{
+    enum expand_type type = str->expand[b];
+    char *s = strndup(str->value + b, e - b + 1);
+    if (IS_SUBCMD_TYPE(type))
+    {
+        struct context *old = new_context();
+        io_streamer_string(s); // set the input cmd for the subcmd
+        if (gr_input(AST_ROOT) == ERROR)
+        {
+            free(s);
+            load_context(old);
+            return NULL;
+        }
+        struct ast *ret = *AST_ROOT;
+        *AST_ROOT = NULL;
+        free(s);
+        load_context(old);
+        return ret;
+    }
+    else
+        return s;
+}
+
+// return false in case of an error
+int exp_register_str(struct expansion *exp, struct lex_str *str)
 {
     size_t i = 0;
     if (str->size == 0)
     {
-        expansion_push_back(exp,
-                            expandable_init(strdup(""), STR_LITTERAL, false));
+        expansion_push_back(exp, expandable_init(strdup(""), STR_LITTERAL, false));
+        destroy_lex_str(str);
+        return true;
     }
     while (i < str->size)
     {
-        // Skip the dollar if needed
-        if (str->value[i] == '$' && IS_VAR_TYPE(str->expand[i]))
+        // SKip $
+        if (!IS_STR_TYPE(str->expand[i]))
             i++;
-        i = register_expandable(exp, str, i);
+        // Get the end of the str for expandable
+        size_t end = read_until(str, i);
+        // Create the content (either ast* or char*)
+        void *content = create_expandable_content(str, i, end);
+        if (!end)
+        {
+            destroy_lex_str(str);
+            return false;
+        }
+        // Create and push the new expandable
+        struct expandable *e =
+            expandable_init(content, str->expand[i], end != str->size);
+        expansion_push_back(exp, e);
+        i = end;
     }
     destroy_lex_str(str);
+    return true;
 }
 
 //
@@ -141,7 +165,7 @@ char **expand(struct expansion *expansion)
         do
         {
             link_next = e->link_next;
-            DBG_VAR("%s ", e->content);
+            DBG_VAR("%s ", (char *)e->content);
             if (link_next)
                 DBG_VAR(" -> ");
             size += strlen(e->content);

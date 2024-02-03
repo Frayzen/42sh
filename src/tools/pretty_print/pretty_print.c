@@ -139,7 +139,7 @@ static void print_ast_cmd(struct ast_cmd *ast, int depth) //, bool *closed_nod)
     for (size_t i = 0; i < ast->args_expansion.size; i++)
     {
         align(depth, i == ast->args_expansion.size - 1); //, closed_nod);
-        printf("%s\n", current->content);
+        printf("%s\n", (char *) current->content);
         current = current->next;
     }
     depth--;

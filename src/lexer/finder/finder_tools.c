@@ -1,6 +1,5 @@
 #include "finder_tools.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -164,7 +163,7 @@ void skip_until(struct pending *p, enum skip_behavior behavior)
         else if (behavior == SKIP_SINGLE_QUOTE)
             append_io(p);
         else if (behavior == SKIP_VARIABLE_BRACKETS && !is_name_char(c))
-            exit_gracefully(BAD_VAR_NAME);
+            exit_lexer(BAD_VAR_NAME);
         else if (c == '\\')
             bslash_in_skip(p, behavior);
         else
@@ -218,5 +217,6 @@ void skip_sub_cmd(struct pending *p)
         c = io_peek();
     }
     if (brac_cnt != 0)
-        exit_gracefully(UNEXPECTED_EOF);
+        exit_lexer(UNEXPECTED_EOF);
+    p->str.expand[p->str.size - 1] = SUB_CMD_END;
 }

@@ -102,3 +102,9 @@ echo "Result: $(echo -e "Line 1\nLine 2\nLine 3")"
 
 ### Special chars
 echo "Result: $(echo Special characters: $@ \ /)"
+
+### Special chars more
+echo "Result: $(echo 'Special characters: $@ \ / ` ' \" ')"
+
+### Special chars bslashed
+echo "Result: $(echo Special characters: $@ \\ / \` \' \")"

@@ -1,6 +1,7 @@
+#define _POSIX_C_SOURCE 200809L
+#include "tools/pretty_print/pretty_print.h"
 #include "command/expansion.h"
 #include "tools/str/string.h"
-#define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -189,17 +190,9 @@ static struct expandable *expand_sub_cmd(struct expandable *cur, bool fd_split)
         }
         close(fds[1]);
         DBG_PIPE("set STDOUT to %d\n", STDOUT);
-        struct context *old = new_context();
-        io_streamer_string(cur->content); // set the input cmd for the subcmd
-        if (gr_input(AST_ROOT) == ERROR)
-        {
-            *AST_ROOT = NULL;
-            print_error(GRAMMAR_ERROR_ENTRY);
-        }
-        else
-            exec_entry(*AST_ROOT);
+        exec_entry((struct ast *)cur->content);
+        
         close(fds[0]);
-        load_context(old);
         _exit(0);
     }
     close(fds[1]);
