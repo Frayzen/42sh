@@ -88,7 +88,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         {
             struct ast_sh *function = funct_dict_peek_value(argv[0]);
             if (function)
-                ret = exec_sh(function);
+                ret = exec_sh(function, argv + 1);
             else
             {
                 *pid = exec_prog(argv);

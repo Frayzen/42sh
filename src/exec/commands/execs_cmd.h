@@ -28,7 +28,8 @@ int exec_subshell(struct ast_subshell *ast);
 /***
  * executes the shell command ast
  * @param ast tree to execute
+ * @param argv the arguments of the shell command, possibly NULL
  */
-int exec_sh(struct ast_sh *sh);
+int exec_sh(struct ast_sh *sh, char **argv);
 
 #endif /* !EXECS_CMD_H */
