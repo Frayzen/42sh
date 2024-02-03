@@ -8,30 +8,24 @@
 
 #include "exit/error_handler.h"
 
-struct funct_dictionary *get_funct_dict(void)
-{
-    static struct funct_dictionary *funct_dico = NULL;
-    if (!funct_dico)
-        funct_dico = calloc(1, sizeof(struct funct_dictionary));
-    return funct_dico;
-}
+static struct funct_dictionary dict;
 
 void funct_dict_push(char *name, struct ast_sh *body)
 {
-    if (FUNCT_DICT->nb_entries == FUNCT_DICT_SIZE)
+    if (dict.nb_entries == FUNCT_DICT_SIZE)
         exit_gracefully(FUNCT_DICO_FULL);
-    FUNCT_DICT->entries[FUNCT_DICT->nb_entries].name = name;
-    FUNCT_DICT->entries[FUNCT_DICT->nb_entries].body = body;
-    FUNCT_DICT->nb_entries++;
+    dict.entries[dict.nb_entries].name = name;
+    dict.entries[dict.nb_entries].body = body;
+    dict.nb_entries++;
 }
 
 struct ast_sh *funct_dict_peek_value(char *name)
 {
-    for (int i = 0; i < FUNCT_DICT->nb_entries; i++)
+    for (int i = 0; i < dict.nb_entries; i++)
     {
-        if (!strcmp(FUNCT_DICT->entries[i].name, name))
+        if (!strcmp(dict.entries[i].name, name))
         {
-            return FUNCT_DICT->entries[i].body;
+            return dict.entries[i].body;
         }
     }
     return NULL;
@@ -39,10 +33,10 @@ struct ast_sh *funct_dict_peek_value(char *name)
 
 char *funct_dict_peek_key(struct ast_sh *body)
 {
-    for (int i = 0; i < FUNCT_DICT->nb_entries; i++)
+    for (int i = 0; i < dict.nb_entries; i++)
     {
-        if (FUNCT_DICT->entries[i].body == body)
-            return FUNCT_DICT->entries[i].name;
+        if (dict.entries[i].body == body)
+            return dict.entries[i].name;
     }
     return NULL;
 }
@@ -50,9 +44,9 @@ char *funct_dict_peek_key(struct ast_sh *body)
 void funct_dict_pop(char *name)
 {
     int index = -1;
-    for (int i = 0; i < FUNCT_DICT->nb_entries; ++i)
+    for (int i = 0; i < dict.nb_entries; ++i)
     {
-        if (FUNCT_DICT->entries[i].name == name)
+        if (!strcmp(dict.entries[i].name, name))
         {
             index = i;
             break;
@@ -60,19 +54,16 @@ void funct_dict_pop(char *name)
     }
     if (index == -1)
         return;
-    FUNCT_DICT->entries[index] =
-        FUNCT_DICT->entries[FUNCT_DICT->nb_entries - 1];
-    FUNCT_DICT->nb_entries--;
+    if (index != dict.nb_entries - 1)
+        dict.entries[index] = dict.entries[dict.nb_entries - 1];
+    dict.nb_entries--;
 }
 
 void funct_dict_free(void)
 {
-    if (!FUNCT_DICT)
-        return;
-    for (int i = 0; i < FUNCT_DICT->nb_entries; i++)
+    for (int i = 0; i < dict.nb_entries; i++)
     {
-        free(FUNCT_DICT->entries[i].name);
-        destroy_ast(FUNCT_DICT->entries[i].body);
+        free(dict.entries[i].name);
+        destroy_ast(dict.entries[i].body);
     }
-    free(FUNCT_DICT->entries);
 }

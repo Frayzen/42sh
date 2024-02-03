@@ -32,3 +32,9 @@ unset -f
 
 ### Unset bad arg 
 unset -
+
+### Test unset function
+toto () { echo ok; }
+toto
+unset -f toto
+toto

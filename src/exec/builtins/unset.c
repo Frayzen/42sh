@@ -4,6 +4,7 @@
 #include "builtins.h"
 #include "env/vars/vars.h"
 #include "exit/error_handler.h"
+#include "tools/funct_dict/funct_dict.h"
 
 enum unset_mode
 {
@@ -20,7 +21,7 @@ int set_option(char *arg, enum unset_mode *mode)
 {
     if (arg[0] != '-')
         return OK_NOT_OPTION;
-    int i = 0;
+    int i = 1;
     while (arg[i])
     {
         char c = arg[i];
@@ -81,8 +82,7 @@ int builtin_unset(char **argv)
         if (mode == UNSET_VAR)
             unset_var(argv[i]);
         else
-            // TODO unset function
-            unset_var(argv[i]);
+            funct_dict_pop(argv[i]);
         i++;
     }
     return 0;
