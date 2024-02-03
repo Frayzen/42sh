@@ -1,5 +1,4 @@
 #define _POSIX_C_SOURCE 200809L
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "lexer/token_saver.h"
@@ -66,76 +65,5 @@ enum status gr_case_item(struct ast_case *ast)
     if (gr_compound_list(list_cmd) == OK)
         ast->cmds[ast->nb_cond - 1] = list_cmd;
 
-    GR_RET(OK);
-}
-
-// case_clause = case_item { ';;' {'\n'} case_item } [';;'] {'\n'} ;
-
-enum status gr_case_clause(struct ast_case *ast)
-{
-    if (tok_peek()->type == ESAC)
-        GR_RET(OK);
-    ast->nb_cond++;
-    ast->list_cond = realloc(ast->list_cond, sizeof(char *) * ast->nb_cond);
-    if (gr_case_item(ast) == ERROR)
-        GR_RET(ERROR);
-
-    while (tok_peek()->type == DBL_SEMI_COLON)
-    {
-        tok_pop_clean();
-        if (tok_peek()->type == ESAC)
-            break;
-
-        while (tok_peek()->type == NEWLINE)
-            tok_pop_clean();
-
-        ast->nb_cond++;
-        ast->list_cond = realloc(ast->list_cond, sizeof(char *) * ast->nb_cond);
-        if (gr_case_item(ast) == ERROR)
-            GR_RET(ERROR);
-    }
-
-    if (tok_peek()->type == DBL_SEMI_COLON)
-        tok_pop_clean();
-
-    while (tok_peek()->type == NEWLINE)
-        tok_pop_clean();
-
-    GR_RET(OK);
-}
-
-// rule_case = 'case' WORD {'\n'} 'in' {'\n'} [case_clause] 'esac' ;
-
-enum status gr_case(struct ast_sh *sh)
-{
-    GR_START(Case);
-    if (tok_peek()->type != CASE)
-        GR_RET(NO_MATCH);
-    tok_pop_clean();
-
-    if (!IS_WORDABLE(tok_peek()))
-        GR_RET(ERROR);
-    struct ast_case *case_ast = init_ast(AST_CASE);
-    exp_register_str(&case_ast->name, tok_peek()->str);
-    tok_pop();
-
-    while (tok_peek()->type == NEWLINE)
-        tok_pop_clean();
-
-    if (tok_peek()->type != IN)
-        GR_RET_CLEAN(ERROR, case_ast);
-    tok_pop_clean();
-
-    while (tok_peek()->type == NEWLINE)
-        tok_pop_clean();
-
-    if (gr_case_clause(case_ast) == ERROR)
-        GR_RET_CLEAN(ERROR, case_ast);
-
-    if (tok_peek()->type != ESAC)
-        GR_RET_CLEAN(ERROR, case_ast);
-
-    tok_pop_clean();
-    sh->sh_cmd = AST(case_ast);
     GR_RET(OK);
 }
