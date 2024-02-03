@@ -127,7 +127,7 @@ static struct expandable *expand_quoted_var(struct expandable *cur)
 }
 
 // Expand the string litteral (= duplicate it)
-static struct expandable *expand_str(struct expandable *cur)
+static struct expandable *expand_str_litt(struct expandable *cur)
 {
     assert(IS_STR_TYPE(cur->type));
     struct expandable *new_string =
@@ -150,7 +150,7 @@ static struct expandable *stringify_expandable(struct expandable *cur)
     case UNQUOTED_VAR:
         return expand_unquoted_var(cur);
     default:
-        return expand_str(cur);
+        return expand_str_litt(cur);
     }
 }
 
@@ -246,4 +246,29 @@ void destroy_expanded(char **argv)
     while (argv[i])
         free(argv[i++]);
     free(argv);
+}
+
+char *expand_str(struct expansion *exp)
+{
+    char **argv = expand(exp);
+    if (!argv || !argv[0])
+    {
+        free(argv);
+        return calloc(1, sizeof(char));
+    }
+    int i = 0;
+    size_t size = 0;
+    while (argv[i])
+        size += strlen(argv[i++]) + 1;
+    char *ret = calloc(size, sizeof(char));
+    i = 0;
+    while (argv[i + 1])
+    {
+        strcat(ret, argv[i]);
+        strcat(ret, " ");
+        i++;
+    }
+    strcat(ret, argv[i]);
+    destroy_expanded(argv);
+    return ret;
 }
