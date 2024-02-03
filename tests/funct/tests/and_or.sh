@@ -39,3 +39,10 @@ echo e |||
 ###bad or ;
 true || ;
 echo; || ;
+
+### Check and new line
+echo ok &\
+& echo ok
+
+echo ok |\
+| echo ok
