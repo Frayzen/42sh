@@ -5,12 +5,24 @@
 #include "io_backend/backend_saver.h"
 #include "lexer/finder/finder_tools.h"
 
+static char get_next_char(void)
+{
+    while (io_peek() == '\\')
+    {
+        io_pop();
+        if (io_peek() != '\n')
+            break;
+        io_pop();
+    }
+    return io_peek();
+}
+
 void consume_redir_op(struct pending *p)
 {
     char c = io_peek();
     // Append the first < or >
     append_io(p);
-    char next = io_peek();
+    char next = get_next_char();
     switch (c)
     {
     case '>':
@@ -35,7 +47,7 @@ void consume_control_op(struct pending *p)
     AND_OR_CASES:
     case ';':
         append_io(p);
-        if (io_peek() == c)
+        if (get_next_char() == c)
             append_io(p);
         break;
     case '(':

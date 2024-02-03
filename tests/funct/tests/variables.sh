@@ -37,7 +37,8 @@ echo ${a}here${b} is ${toto}
 
 ###Var in external binary
 a=3; b=4
-file=file cat $file >$a
+file=file
+cat $file >$a
 ls && cat $a >$b;
 rm $a $b
 echo $a$b
@@ -86,12 +87,13 @@ a="oncea upon" b="ime" && echo $a $b
 p="oncep upon" v="me" echo $p $v
 
 ###Check assignment before command
-a=3 b=4 c=5 tot='this is a test' printenv
+testa=3 testabc=4 testabcef=5 testseofia='this is a test' printenv | grep 'test.*=' | sort
 
 ###Double alloc at once
 a=3 q=1
 echo $a $q
-a=4 printenv && env
+a=4 echo $a
+echo $a
 
 ###Args
 a='-ne'
@@ -137,6 +139,9 @@ done
 ###question mark
 cat heheh
 echo $?
+
+### Check IFS print
+echo $IFS
 
 ###Brakets compound list non terminated 
 a=3; { echo $a; a=4; echo $a }; echo $a

@@ -12,6 +12,13 @@
 void exp_register_str(struct expansion *exp, struct lex_str *str);
 
 /***
+ * Stringify an expandable into several str_litt expandable linked list
+ * @param cur the current expandable to expand
+ * @return the list of the expanded str_litt
+ */
+struct expandable *stringify_expandable(struct expandable *cur);
+
+/***
  * Expand the expansion
  * @param expansion the expansion
  * @return the string list

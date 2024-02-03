@@ -124,6 +124,7 @@ const char **toktype_lookup(void)
         [WORD] = NULL,       [T_CONTINUE] = "continue",
         [T_BREAK] = "break", [DBL_SEMI_COLON] = ";;",
         [CASE] = "case",     [ESAC] = "esac",
+        [AMPERSAND] = "&",
     };
     return lookup_table;
 }

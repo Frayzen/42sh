@@ -4,6 +4,7 @@ libparser_a_SOURCES = \
 	command/expansion.c \
 	command/expansion.h \
 	command/expander.c \
+	command/stringify.c \
 	command/expander.h \
 	grammar/gr_element.c \
 	grammar/gr_entry.c \

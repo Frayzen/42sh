@@ -44,4 +44,10 @@ BOOL remove_var(char *name);
  */
 void clean_variables(void);
 
+/***
+ * Retrieve the begining of the list
+ * @return the begining of the linked list
+ */
+struct sh_varlist *get_varlist(void);
+
 #endif /* !VAR_DICT_H */

@@ -86,12 +86,24 @@ void init_env_vars(void)
 
     if (!is_set_var("IFS"))
         init_env_var("IFS", DEFAULT_IFS);
-    char path[PATH_MAX];
-    char *ret = getcwd(path, PATH_MAX);
-    if (!ret)
-        print_error(INVALID_FILE_PATH);
     if (!is_set_var("PWD"))
+    {
+        char path[PATH_MAX];
+        char *ret = getcwd(path, PATH_MAX);
+        if (!ret)
+            print_error(INVALID_FILE_PATH);
         init_env_var("PWD", path);
-    if (!is_set_var("OLDPWD"))
-        init_env_var("OLDPWD", read_var("PWD"));
+    }
+}
+
+void export_all(void)
+{
+    struct sh_varlist *vl = get_varlist();
+    struct sh_varlist *cur = vl;
+    do
+    {
+        cur->var.exported = true;
+        setenv(cur->var.name, cur->var.value, 1);
+        cur = cur->next;
+    } while (cur != vl);
 }
