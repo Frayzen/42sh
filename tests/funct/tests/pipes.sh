@@ -9,9 +9,9 @@ touch this is several files
 find -type f | grep '*s*' | cat
 
 ###Pipe using binaries
-echo testoutput > file
-cat file | echo
-cat file | grep 'test'
+echo testoutput > ok
+cat ok | cat
+cat ok | grep 'test'
 
 ###Pipe using binaries
 echo testoutput > file
