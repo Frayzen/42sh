@@ -1,5 +1,7 @@
-#include "commands/execs_cmd.h"
-#include "execs.h"
+#include <stdio.h>
+
+#include "exec/commands/execs_cmd.h"
+#include "exec/execs.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
 
@@ -24,6 +26,9 @@ int exec_sh(struct ast_sh *sh)
         break;
     case AST_SUBSHELL:
         ret = exec_subshell(AST_SUBSHELL(ast));
+        break;
+    case AST_CASE:
+        ret = exec_case(AST_CASE(ast));
         break;
     default:
         print_error(PIPE_NOT_FOUND);

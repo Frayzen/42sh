@@ -1,7 +1,7 @@
 #ifndef GR_TOOLS_H
 #define GR_TOOLS_H
 
-#include "grammar/rules.h"
+#include "parser/grammar/rules.h"
 struct gr_state
 {
     struct gr_state *prev;

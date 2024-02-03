@@ -72,18 +72,28 @@ static char *my_str_tok(char *buf, char *delims)
     return b;
 }
 
-static struct expandable *ifs_splitting(char *str, struct expandable *cur)
+// Expand the unquoted var (= expand it and split it by ' ')
+// return the new current or NULL if the expansion is empty
+static struct expandable *expand_unquoted_var(struct expandable *cur)
 {
+    assert(cur->type == UNQUOTED_VAR);
+    char *val = retrieve_var(cur->content);
+    if (val[0] == '\0')
+    {
+        free(val);
+        return NULL;
+    }
     char *ifs = DEFAULT_IFS;
     if (is_set_var("IFS"))
         ifs = read_var("IFS");
-    char *elem = my_str_tok(str, ifs);
+    char *elem = my_str_tok(val, ifs);
     struct expandable *last = NULL;
     struct expandable *first = NULL;
     if (!elem)
     {
-        last = expandable_init(str, STR_LITTERAL, cur->link_next);
+        last = expandable_init(val, STR_LITTERAL, cur->link_next);
         last->next = cur->next;
+        free(val);
         return last;
     }
     while (elem)
@@ -99,21 +109,8 @@ static struct expandable *ifs_splitting(char *str, struct expandable *cur)
     }
     last->link_next = cur->link_next;
     last->next = cur->next;
-    free(str);
+    free(val);
     return first;
-}
-
-// Expand the unquoted var (= expand it and split it by ' ')
-// return the new current or NULL if the expansion is empty
-static struct expandable *expand_unquoted_var(struct expandable *cur)
-{
-    char *val = retrieve_var(cur->content);
-    if (val[0] == '\0')
-    {
-        free(val);
-        return NULL;
-    }
-    return ifs_splitting(val, cur);
 }
 
 // Expand the quoted var (= expand it)
@@ -142,76 +139,6 @@ static struct expandable *expand_str_litt(struct expandable *cur)
     new_string->next = cur->next;
     return new_string;
 }
-static void process_buffer(char *buf)
-{
-    size_t len = strlen(buf);
-    while (len > 0 && (buf[len - 1] == '\n' || buf[len - 1] == ' '))
-        len--;
-
-    for (size_t i = 0; i < len; i++)
-        if (buf[i] == '\n' || buf[i] == ' ')
-            buf[i] = ' ';
-    buf[len] = '\0';
-}
-
-#define BUFSIZE 8
-static struct expandable *expand_sub_cmd(struct expandable *cur)
-{
-    int fds[2];
-    int err = pipe(fds); // create the pipe reading stdout for the subcmd
-                         // (child) into a buffer
-    if (err == -1)
-        exit(3);
-    int pid = fork();
-    if (!pid)
-    {
-        close(fds[0]);
-        if (dup2(fds[1], STDOUT_FILENO) == -1)
-        {
-            perror("dup2 failed in child");
-            exit(EXIT_FAILURE);
-        }
-        close(fds[1]);
-        DBG_PIPE("set STDOUT to %d\n", STDOUT);
-        struct context *old = new_context();
-        io_streamer_string(cur->content); // set the input cmd for the subcmd
-        DBG_PIPE("shit\n");
-        if (gr_input(AST_ROOT) == ERROR)
-        {
-            *AST_ROOT = NULL;
-            print_error(GRAMMAR_ERROR_ENTRY);
-        }
-        else
-            exec_entry(*AST_ROOT);
-        close(fds[0]);
-        load_context(old);
-        _exit(0);
-    }
-    char *buf = calloc(BUFSIZE, sizeof(char));
-    close(fds[1]);
-    int begin = 0;
-    ssize_t size;
-    while ((size = read(fds[0], buf + begin, BUFSIZE)) > 0)
-    {
-        begin += size;
-        buf = realloc(buf, begin + BUFSIZE);
-    }
-    buf[begin] = '\0';
-    process_buffer(buf); // newlines to spaces accroding to SCL
-
-    int ret;
-    waitpid(pid, &ret, 0);
-
-    if (!strcmp("", buf))
-    {
-        free(buf);
-        return NULL;
-    }
-
-    cur = ifs_splitting(
-        buf, cur); // if buf has spaces, split into separate expandables
-    return cur;
-}
 
 // This function calls the appropriate subfunction in order to create a string
 // litteral linked list from the currrent expandable
@@ -227,8 +154,6 @@ struct expandable *stringify_expandable(struct expandable *cur)
         return expand_quoted_var(cur);
     case UNQUOTED_VAR:
         return expand_unquoted_var(cur);
-    case SUB_CMD:
-        return expand_sub_cmd(cur);
     default:
         return expand_str_litt(cur);
     }
