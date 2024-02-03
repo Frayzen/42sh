@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 
 #include "finder.h"
 #include "io_backend/backend_saver.h"

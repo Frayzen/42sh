@@ -3,10 +3,10 @@
 #include <criterion/internal/test.h>
 #include <string.h>
 
-#include "exec/redirs/redirs.h"
 #include "io_backend/backend_saver.h"
 #include "tools/ast/ast.h"
 #include "tools/ast/ast_utils.h"
+#include "tools/redirection/redirection.h"
 #include "tools/token/token.h"
 
 TestSuite(Redirs);

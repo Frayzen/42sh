@@ -39,6 +39,8 @@ enum token_type
     ELIF,
     ELSE,
     FI,
+    CASE,
+    ESAC,
 
     WHILE,
     UNTIL,

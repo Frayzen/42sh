@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 #include "env/env.h"
-#include "execs.h"
+#include "exec/execs.h"
 #include "execs_cmd.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"

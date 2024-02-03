@@ -1,8 +1,8 @@
 #include "exit/error_handler.h"
 #include "lexer/token_saver.h"
+#include "parser/tools/gr_tools.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "tools/gr_tools.h"
 #include "tools/token/token.h"
 
 void consume_all(void)

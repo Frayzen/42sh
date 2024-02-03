@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "command/expansion.h"
 #include "env/env.h"
 #include "env/vars/vars.h"
+#include "parser/command/expansion.h"
 #include "tools/str/string.h"
 
 //
