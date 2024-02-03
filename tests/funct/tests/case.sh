@@ -1,6 +1,3 @@
-### Empty case
-case i in esac
-
 ### Basic
 case i in a | b | c) echo toto;; i) echo tata;; esac
 
@@ -49,7 +46,7 @@ case ' ' in a) echo toto;; o | ' ') echo tata;; esac
 ### Case space in string
 case a' ' in a) echo toto;; a' ') echo tata;; esac
 
-### Case escaped carracters
+### Case escaped characters
 string="a*"
 case "$string" in
     "a\*")
@@ -79,3 +76,36 @@ case "$string" in
         echo "No match"
         ;;
 esac
+
+### Syntax Error - Missing ;; after the first command
+case x in a) echo "Matched a" esac
+
+### Syntax Error - Missing in keyword
+case x a) echo "Matched a";;
+
+### Syntax Error - Invalid pattern (missing quotes)
+case x in a*) echo "Matched a";;
+
+### Syntax Error - Invalid pattern (missing quotes and parentheses)
+case x in a*) echo "Matched a" ;;
+
+### Variable Usage
+pattern="b"
+case x in a) echo "Matched a";; $pattern) echo "Matched b";; esac
+
+### Variable Usage with Special Characters
+pattern="a*"
+case x in $pattern) echo "Matched a*";; esac
+
+### Variable Expansion in Commands
+var="world"
+case x in a) echo "Hello $var";; esac
+
+### Quotes in Commands - Nested Quotes
+case x in "a") echo "Matched a";;
+
+### Quotes in Commands with Variables - Nested Quotes
+var="world"
+case x in 'a') echo "Hello $var";;
+
+### Quotes in Multiple Commands - Nested
