@@ -1,7 +1,6 @@
 #ifndef FUNCT_DICT_H
 #define FUNCT_DICT_H
 
-#define FUNCT_DICT_SIZE 1024
 #define FUNCT_DICT (get_funct_dict())
 
 struct funct_pair
@@ -12,7 +11,7 @@ struct funct_pair
 
 struct funct_dictionary
 {
-    struct funct_pair entries[FUNCT_DICT_SIZE];
+    struct funct_pair *entries;
     int nb_entries;
 };
 
