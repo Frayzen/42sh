@@ -47,6 +47,48 @@ int exec_prog(char **argv)
     return pid;
 }
 
+static int exec_argvs(char **argv, int *pid)
+{
+    int ret = 0;
+    if (!strcmp(argv[0], "echo"))
+    {
+        builtin_echo(argv);
+        ret = 0;
+    }
+    else if (!strcmp(argv[0], "cd"))
+        ret = builtin_cd(argv);
+    else if (!strcmp(argv[0], "exit"))
+        builtin_exit(argv);
+    else if (!strcmp(argv[0], "unset"))
+        ret = builtin_unset(argv);
+    else if (!strcmp(argv[0], "."))
+        ret = builtin_dot(argv);
+    else if (!strcmp(argv[0], "true"))
+        ret = 0;
+    else if (!strcmp(argv[0], "false"))
+        ret = 1;
+    else if (!strcmp(argv[0], "."))
+        ret = builtin_dot(argv);
+    else if (!strcmp(argv[0], "export"))
+        ret = builtin_export(argv);
+    else if (!strcmp(argv[0], "continue"))
+        ret = builtin_continue(argv);
+    else if (!strcmp(argv[0], "break"))
+        ret = builtin_break(argv);
+    else
+    {
+        struct ast_sh *function = funct_dict_peek_value(argv[0]);
+        if (function)
+            ret = exec_sh(function, argv + 1);
+        else
+        {
+            *pid = exec_prog(argv);
+            ret = -1;
+        }
+    }
+    return ret;
+}
+
 int exec_cmd(struct ast_cmd *ast, int *pid)
 {
     assert(ast && AST(ast)->type == AST_CMD);
@@ -58,44 +100,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
     apply_assignments(&ast->assignment_list);
     *pid = PID_SET;
     if (argv[0])
-    {
-        if (!strcmp(argv[0], "echo"))
-        {
-            builtin_echo(argv);
-            ret = 0;
-        }
-        else if (!strcmp(argv[0], "cd"))
-            ret = builtin_cd(argv);
-        else if (!strcmp(argv[0], "exit"))
-            builtin_exit(argv);
-        else if (!strcmp(argv[0], "unset"))
-            ret = builtin_unset(argv);
-        else if (!strcmp(argv[0], "."))
-            ret = builtin_dot(argv);
-        else if (!strcmp(argv[0], "true"))
-            ret = 0;
-        else if (!strcmp(argv[0], "false"))
-            ret = 1;
-        else if (!strcmp(argv[0], "."))
-            ret = builtin_dot(argv);
-        else if (!strcmp(argv[0], "export"))
-            ret = builtin_export(argv);
-        else if (!strcmp(argv[0], "continue"))
-            ret = builtin_continue(argv);
-        else if (!strcmp(argv[0], "break"))
-            ret = builtin_break(argv);
-        else
-        {
-            struct ast_sh *function = funct_dict_peek_value(argv[0]);
-            if (function)
-                ret = exec_sh(function, argv + 1);
-            else
-            {
-                *pid = exec_prog(argv);
-                ret = -1;
-            }
-        }
-    }
+       ret = exec_argvs(argv, pid);
     discard_assignments(&ast->assignment_list, argv[0]);
     destroy_expanded(argv);
     close_redirs(fds);

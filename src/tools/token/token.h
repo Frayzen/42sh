@@ -21,6 +21,7 @@ enum token_type
     // operators ?
     PRTH_OPEN,
     PRTH_CLOSED,
+    AMPERSAND,
     // redir
     CHEVRON,
     PIPE,
