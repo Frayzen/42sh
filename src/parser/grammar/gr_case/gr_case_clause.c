@@ -20,7 +20,7 @@ enum status gr_case_clause(struct ast_case *ast)
     ast->nb_cond++;
     ast->list_cond = realloc(ast->list_cond, sizeof(char *) * ast->nb_cond);
     if (gr_case_item(ast) != OK)
-        GR_RET(ERROR); // If NO_MATCH then ERROR in case
+        GR_RET(ERROR);
 
     while (tok_peek()->type == DBL_SEMI_COLON)
     {
