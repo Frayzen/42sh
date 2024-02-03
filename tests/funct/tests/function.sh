@@ -19,7 +19,7 @@ foo() { echo toto; }; foo
 foo() { bar() { echo toto; } }; foo; bar
 
 ###function with args easy
-foo() { echo $@; echo $1; echo $2; }; echo $@; foo toto tata
+foo() { echo $@; echo $1; echo $2; echo $7}; echo $@ $1 $7; foo toto tata
 
 ###function with args medium
-foo() { echo $@; echo $1; echo $2; }; echo $@; foo toto tata; echo $@
+foo() { echo $@; echo $1; echo $2; }; echo $@ $1 $7; foo toto tata; echo $@ $1 $7
