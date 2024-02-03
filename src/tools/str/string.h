@@ -16,6 +16,7 @@ enum expand_type
     QUOTED_VAR,
     UNQUOTED_VAR,
     SUB_CMD,
+    QTD_SUB_CMD,
 };
 
 struct lex_str

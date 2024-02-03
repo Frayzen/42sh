@@ -1,6 +1,7 @@
+#include "command/expansion.h"
+#include "tools/str/string.h"
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
-#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -142,20 +143,35 @@ static struct expandable *expand_str_litt(struct expandable *cur)
     new_string->next = cur->next;
     return new_string;
 }
+
 static void process_buffer(char *buf)
 {
     size_t len = strlen(buf);
-    while (len > 0 && (buf[len - 1] == '\n' || buf[len - 1] == ' '))
+    while (len > 0 && buf[len - 1] == '\n')
         len--;
-
-    for (size_t i = 0; i < len; i++)
-        if (buf[i] == '\n' || buf[i] == ' ')
-            buf[i] = ' ';
     buf[len] = '\0';
 }
 
 #define BUFSIZE 8
-static struct expandable *expand_sub_cmd(struct expandable *cur)
+static char *process_sub_cmd_buf(int fd, int pid)
+{
+    char *buf = calloc(BUFSIZE, sizeof(char));
+    int begin = 0;
+    ssize_t size;
+    while ((size = read(fd, buf + begin, BUFSIZE)) > 0)
+    {
+        begin += size;
+        buf = realloc(buf, begin + BUFSIZE);
+    }
+    buf[begin] = '\0';
+    process_buffer(buf); // discard trailing newlines accroding to SCL
+
+    int ret;
+    waitpid(pid, &ret, 0);
+    return buf;
+}
+
+static struct expandable *expand_sub_cmd(struct expandable *cur, bool fd_split)
 {
     int fds[2];
     int err = pipe(fds); // create the pipe reading stdout for the subcmd
@@ -175,7 +191,6 @@ static struct expandable *expand_sub_cmd(struct expandable *cur)
         DBG_PIPE("set STDOUT to %d\n", STDOUT);
         struct context *old = new_context();
         io_streamer_string(cur->content); // set the input cmd for the subcmd
-        DBG_PIPE("shit\n");
         if (gr_input(AST_ROOT) == ERROR)
         {
             *AST_ROOT = NULL;
@@ -187,30 +202,20 @@ static struct expandable *expand_sub_cmd(struct expandable *cur)
         load_context(old);
         _exit(0);
     }
-    char *buf = calloc(BUFSIZE, sizeof(char));
     close(fds[1]);
-    int begin = 0;
-    ssize_t size;
-    while ((size = read(fds[0], buf + begin, BUFSIZE)) > 0)
+    char *buf = process_sub_cmd_buf(fds[0], pid);
+    // if buf has spaces, split into separate expandables
+    close(fds[0]);
+    if (fd_split)
     {
-        begin += size;
-        buf = realloc(buf, begin + BUFSIZE);
+        if (!buf[0])
+        {
+            free(buf);
+            return NULL;
+        }
+        return ifs_splitting(buf, cur);
     }
-    buf[begin] = '\0';
-    process_buffer(buf); // newlines to spaces accroding to SCL
-
-    int ret;
-    waitpid(pid, &ret, 0);
-
-    if (!strcmp("", buf))
-    {
-        free(buf);
-        return NULL;
-    }
-
-    cur = ifs_splitting(
-        buf, cur); // if buf has spaces, split into separate expandables
-    return cur;
+    return expandable_init(buf, STR_LITTERAL, cur->link_next);
 }
 
 // This function calls the appropriate subfunction in order to create a string
@@ -228,7 +233,8 @@ struct expandable *stringify_expandable(struct expandable *cur)
     case UNQUOTED_VAR:
         return expand_unquoted_var(cur);
     case SUB_CMD:
-        return expand_sub_cmd(cur);
+    case QTD_SUB_CMD:
+        return expand_sub_cmd(cur, SUB_CMD == cur->type);
     default:
         return expand_str_litt(cur);
     }

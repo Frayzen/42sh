@@ -34,9 +34,11 @@ echo "Result: $(echo)"
 
 ### Empty command
 echo "Result: $( )"
+echo Result: $( )
 
-### Long utput
-echo "Result: $(seq 100000)"
+### Seq
+echo "Result: $(seq 10)"
+echo Result: $(seq 10)
 
 ### Undefined command
 echo "Result: $(undefined_command)"
@@ -91,3 +93,6 @@ $(echo this is a\)
 ###Invalid end
 $(echo this is a\
 )
+
+### Subcommand, 300th test
+$(echo echo) $($(echo 'echo')$(seq 100)))

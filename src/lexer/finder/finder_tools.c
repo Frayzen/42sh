@@ -90,6 +90,15 @@ bool assignment_word(const struct lex_str *str)
     return is_name(begin, size);
 }
 
+static enum expand_type get_expand_type(struct pending *p)
+{
+    if (p->in_sub_cmd)
+        return p->in_quote ? QTD_SUB_CMD : SUB_CMD;
+    else if (p->in_quote)
+        return p->expanding ? QUOTED_VAR : QUOTED_STR;
+    return p->expanding ? UNQUOTED_VAR : STR_LITTERAL;
+}
+
 void append_char(struct pending *p, char c)
 {
     struct lex_str *str = &p->str;
@@ -97,23 +106,7 @@ void append_char(struct pending *p, char c)
     str->value = realloc(str->value, str->size * sizeof(char));
     str->value[id] = c;
     str->expand = realloc(str->expand, str->size * sizeof(enum expand_type));
-
-    if (p->in_sub_cmd)
-        str->expand[id] = SUB_CMD;
-    else if (p->in_quote)
-    {
-        if (!p->expanding)
-            str->expand[id] = QUOTED_STR;
-        else
-            str->expand[id] = QUOTED_VAR;
-    }
-    else
-    {
-        if (!p->expanding)
-            str->expand[id] = STR_LITTERAL;
-        else
-            str->expand[id] = UNQUOTED_VAR;
-    }
+    str->expand[id] = get_expand_type(p);
     p->blank = false;
 }
 
