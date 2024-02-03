@@ -19,6 +19,9 @@ case a in a) ls; echo toto; ls; for i in 1 2 3; do if false; then echo else; eli
 ### Empty command
 case a in a) echo toto ;;b) ;;c) echo toto;; esac
 
+### echo esac
+case a in a) echo esac;; esac
+
 ### Bad grammar no ;;
 case a in b) echo toto esaccasesh
 
