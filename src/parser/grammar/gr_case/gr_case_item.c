@@ -21,7 +21,7 @@ enum status gr_case_item(struct ast_case *ast)
     if (!IS_WORDABLE(tok_peek()))
     {
         ast->nb_cond--;
-        GR_RET(ERROR);
+        GR_RET(NO_MATCH);
     }
     ast->list_cond[ast->nb_cond - 1] = malloc(sizeof(char *));
     ast->list_cond[ast->nb_cond - 1][0] = calloc(1, sizeof(struct expansion));

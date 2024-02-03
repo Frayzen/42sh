@@ -51,7 +51,7 @@ void destroy_list(struct ast_list *list)
     free(list->children);
 }
 
-void destroy_case(struct ast_case *ast)
+static void destroy_case(struct ast_case *ast)
 {
     for (int i = 0; i < ast->nb_cond; i++)
     {

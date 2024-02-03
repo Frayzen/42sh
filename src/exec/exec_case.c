@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <regex.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "execs.h"
@@ -32,24 +33,25 @@ bool match_pattern(char *pattern, char *str)
 int exec_case(struct ast_case *ast)
 {
     assert(ast && AST(ast)->type == AST_CASE);
-    char **name = expand(&ast->name);
-    assert(!name[1]);
+    char *name = expand_str(&ast->name);
     int ret = 0;
-    bool found = false;
     for (int i = 0; i < ast->nb_cond; i++)
     {
         for (int j = 0; ast->list_cond[i][j]; j++)
         {
-            char **pattern = expand(ast->list_cond[i][j]);
-            if (!found && match_pattern(pattern[0], name[0]))
+            char *pattern = expand_str(ast->list_cond[i][j]);
+            if (match_pattern(pattern, name))
             {
-                found = true;
                 if (ast->cmds[i])
-                    ret = exec_list(ast->cmds[i]);
+                {
+                    free(pattern);
+                    free(name);
+                    return exec_list(ast->cmds[i]);
+                }
             }
-            destroy_expanded(pattern);
+            free(pattern);
         }
     }
-    destroy_expanded(name);
+    free(name);
     return ret;
 }

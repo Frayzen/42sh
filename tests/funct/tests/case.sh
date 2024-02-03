@@ -39,3 +39,6 @@ case a in toto
 
 ### Bad grammar no pipe
 case a i a) echo toto;; b c) echo tata;; esac
+
+### Case space
+case ' ' in a) echo toto;; o | ' ') echo tata;; esac
