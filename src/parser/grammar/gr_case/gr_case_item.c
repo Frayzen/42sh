@@ -1,3 +1,4 @@
+#include <stdio.h>
 #define _POSIX_C_SOURCE 200809L
 #include <stdlib.h>
 
@@ -18,7 +19,7 @@ enum status gr_case_item(struct ast_case *ast)
     if (tok_peek()->type == PRTH_OPEN)
         tok_pop_clean();
 
-    if (!IS_WORDABLE(tok_peek()))
+    if (!IS_WORDABLE(tok_peek()) || tok_peek()->type == ESAC)
     {
         ast->nb_cond--;
         GR_RET(NO_MATCH);

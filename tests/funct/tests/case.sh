@@ -45,3 +45,34 @@ case ' ' in a) echo toto;; o | ' ') echo tata;; esac
 
 ### Case space in string
 case a' ' in a) echo toto;; a' ') echo tata;; esac
+
+### Case escaped carracters
+string="a*"
+case "$string" in
+    "a\*")
+        echo "Matched 'a\*'"
+        ;;
+    "a*")
+        echo "Matched 'b*'"
+        ;;
+    *)
+        echo "No match"
+        ;;
+esac
+
+### Complex escaped
+string="abc\*def"
+case "$string" in
+    "123\\456" | "abc\*def")
+        echo "Matched '123\\456' or 'abc\*def'"
+        ;;
+    "xyz*" | "abc\*def")
+        echo "Matched 'xyz*' or 'abc\*def'"
+        ;;
+    "foo\?bar")
+        echo "Matched 'foo?bar'"
+        ;;
+    *)
+        echo "No match"
+        ;;
+esac
