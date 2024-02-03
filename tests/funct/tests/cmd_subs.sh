@@ -1,11 +1,15 @@
 ### Command substitution with "ls"
 $(echo ls)
 
+### Command substitution with "ls -l"
+$(echo ls -l)
+
 ### Command substitution with "cat"
 echo $(echo toto | cat)
 
 ### Command substitution with "pwd"
-$(echo ls -l)
+directory=$(pwd)
+echo "Current directory is: $directory"
 
 ### Command substitution with "date"
 $(echo date)
@@ -15,6 +19,30 @@ $(echo whoami)
 
 ### Command substitution with "echo" and multiple arguments
 $(echo echo Hello World)
+
+### Get date function
+get_date() {
+    echo "Today's date is: $(date)"
+}
+get_date
+
+### Sed
+echo "Content after replacing 'foo' with 'bar': $(echo 'foo baz' | sed 's/foo/bar/')"
+
+### Empty command output
+echo "Result: $(echo)"
+
+### Empty command
+echo "Result: $( )"
+
+### Long utput
+echo "Result: $(seq 100000)"
+
+### Undefined command
+echo "Result: $(undefined_command)"
+
+### Quotes
+echo "Result: "$(echo "Command substitution within quotes")""
 
 ###with variables
 x=3
