@@ -14,3 +14,21 @@ echo first $abc $abcd test
 a=3
 if unset a; then echo ok; fi
 if unset a; then echo ok2; fi
+
+### Unset nothing
+unset
+
+### Unset bad arg 
+unset -e
+
+### Unset bad arg
+unset ---
+
+### Unset empty var
+unset
+
+### Unset empty function
+unset -f
+
+### Unset bad arg 
+unset -
