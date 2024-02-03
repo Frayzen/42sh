@@ -99,14 +99,10 @@ void apply_assignments(struct assignment_list *asslist)
     for (unsigned int i = 0; i < asslist->size; i++)
     {
         struct assignment *ass = asslist->ass_list[i];
-        char **argv = expand(&ass->exp);
-        assert(argv);
-        char *val = NULL;
-        val = argv[1] ? argv_to_str(argv) : strdup(argv[0]);
+        char *val = expand_str(&ass->exp);
         ass->prev = retrieve_var(ass->name);
         assign_var(ass->name, val);
         free(val);
-        destroy_expanded(argv);
     }
 }
 
