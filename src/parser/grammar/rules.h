@@ -139,6 +139,27 @@ enum status gr_for(struct ast_sh *sh);
 enum status gr_and_or(struct ast_list *list);
 
 /***
+ * Grammar rule for case
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_case(struct ast_sh *sh);
+
+/***
+ * Grammar rule for case clause
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_case_clause(struct ast_case *ast);
+
+/***
+ * Grammar rule for case item
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_case_item(struct ast_case *ast);
+
+/***
  * Grammar rule for functions
  * @param ast: the tree to be updated
  * @return enum that tells the status

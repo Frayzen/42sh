@@ -78,3 +78,20 @@ echo ok | thisisnotright | cat | ls
 
 ###Pipe with an error 2
 oeifeojf | echo ok | cat | wc -l
+
+###Only |
+|
+###Only ;
+;
+###Only &
+&
+
+###No word after redir cmd
+echo this is a test >
+###No word before redir cmd
+> & echo this is a test
+
+###No word before redir sh
+> & if true; then echo this is a test; fi
+###No word after redir sh
+if true; then echo this is a test; fi >
