@@ -7,9 +7,7 @@
 #include "parser/command/expansion.h"
 #include "parser/grammar/rules.h"
 #include "parser/tools/gr_tools.h"
-#include "parser/tools/gr_utils.h"
 #include "tools/ast/ast.h"
-#include "tools/str/string.h"
 #include "tools/token/token.h"
 
 // case_item = ['('] WORD { '|' WORD } ')' {'\n'} [compound_list] ;
@@ -25,7 +23,7 @@ enum status gr_case_item(struct ast_case *ast)
         ast->nb_cond--;
         GR_RET(NO_MATCH);
     }
-    struct expansion **list = ast->list_cond[ast->nb_cond];
+    struct expansion **list = ast->list_cond[ast->nb_cond - 1];
     list = malloc(sizeof(char *));
     list[0] = calloc(1, sizeof(struct expansion));
     exp_register_str(list[0], tok_peek()->str);

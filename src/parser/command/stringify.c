@@ -5,9 +5,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "env/context.h"
+#include "env/env.h"
 #include "env/vars/specials.h"
 #include "env/vars/vars.h"
+#include "exec/execs.h"
+#include "exit/error_handler.h"
 #include "expander.h"
+#include "grammar/rules.h"
+#include "io_backend/io_streamers.h"
+#include "parser/grammar/rules.h"
+#include "sys/wait.h"
+#include "unistd.h"
 
 // Find the first delimiter
 static int is_in(char c, char *delims)
