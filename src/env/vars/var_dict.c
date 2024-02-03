@@ -1,8 +1,8 @@
 #define _POSIX_C_SOURCE 200809L
 #include "var_dict.h"
 
-#include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,7 +37,7 @@ struct sh_var *get_or_create_var(char *name)
     var = &(nl->var);
     var->name = strdup(name);
     var->value = NULL;
-    var->exported = false;
+    var->exported = FALSE_B;
     nl->next = list;
     if (list)
         nl->prev = list->prev;
@@ -60,11 +60,11 @@ struct sh_var *get_var(char *name)
     return &(varlist->var);
 }
 
-BOOL remove_var(char *name)
+int remove_var(char *name)
 {
     struct sh_varlist *varlist = get_varlist_item(name);
     if (!varlist)
-        return false;
+        return FALSE_B;
     if (varlist->next == varlist)
         list = NULL;
     else
@@ -76,7 +76,7 @@ BOOL remove_var(char *name)
     free(varlist->var.value);
     free(varlist->var.name);
     free(varlist);
-    return true;
+    return TRUE_B;
 }
 
 void clean_variables(void)

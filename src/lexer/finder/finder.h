@@ -1,7 +1,7 @@
 #ifndef FINDER_H
 #define FINDER_H
 
-#include <stdbool.h>
+#include <stdint.h>
 
 #include "tools/str/string.h"
 
@@ -43,12 +43,12 @@ REDIR_OPS_CASES:                                                               \
 struct pending
 {
     struct lex_str str;
-    bool backslashed;
-    bool blank;
-    bool expanding;
-    bool in_quote;
-    bool error;
-    bool force_str;
+    int backslashed;
+    int blank;
+    int expanding;
+    int in_quote;
+    int error;
+    int force_str;
 };
 
 // In this file, understand 'current character' as the one returned by

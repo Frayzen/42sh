@@ -3,7 +3,7 @@
 #include "specials.h"
 
 #include <assert.h>
-#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,18 +13,18 @@
 #include "parser/command/expansion.h"
 #include "tools/str/string.h"
 
-static bool is_arg_index(char *name)
+static int is_arg_index(char *name)
 {
     assert(name != NULL);
     if (*name == '0')
-        return false;
+        return FALSE_B;
     while (*name)
     {
         if (*name > '9' || *name < '0')
-            return false;
+            return FALSE_B;
         name++;
     }
-    return true;
+    return TRUE_B;
 }
 
 static enum var_type get_var_type(char *name)
@@ -83,10 +83,10 @@ struct expandable *build_argv(struct arg_info *arg_info, struct expandable *cur)
 
 struct expandable *expand_special_var(struct expandable *cur, int *valid)
 {
-    *valid = false;
+    *valid = FALSE_B;
     if (!IS_VAR_TYPE(cur->type))
         return NULL;
-    *valid = true;
+    *valid = TRUE_B;
     enum var_type type = get_var_type(cur->content);
     struct arg_info *arg_info = get_arg_info();
     switch (type)
@@ -116,7 +116,7 @@ struct expandable *expand_special_var(struct expandable *cur, int *valid)
         return expandable_init(strdup(arg_info->argstr), STR_LITTERAL,
                                cur->link_next);
     default:
-        *valid = false;
+        *valid = FALSE_B;
         return NULL;
     }
 }

@@ -6,16 +6,16 @@
 #include "tools/gr_utils.h"
 #include "tools/token/token.h"
 
-bool is_builtin(enum token_type type)
+int is_builtin(enum token_type type)
 {
     switch (type)
     {
     case ECHO:
-    case T_TRUE:
-    case T_FALSE:
-        return true;
+    case T_TRUE_B:
+    case T_FALSE_B:
+        return TRUE_B;
     default:
-        return false;
+        return FALSE_B;
     }
 }
 
@@ -30,7 +30,7 @@ enum status gr_simple_command(struct ast_list *list)
     GR_START(SimpleCommand);
     struct ast_cmd *cmd = init_ast(AST_CMD);
     // {prefix}
-    bool consumed = false;
+    int consumed = FALSE_B;
     enum status st;
     do
     {
@@ -39,8 +39,8 @@ enum status gr_simple_command(struct ast_list *list)
             GR_RET_CLEAN(ERROR, cmd);
         if (st == NO_MATCH)
             break;
-        consumed = true;
-    } while (true);
+        consumed = TRUE_B;
+    } while (TRUE_B);
     struct token *tok_word = tok_peek();
     struct token *tok_word2 = tok_peek2();
     if (!IS_COMMAND(tok_word) || tok_word2->type == PRTH_OPEN)

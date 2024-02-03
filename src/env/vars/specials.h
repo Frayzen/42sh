@@ -1,7 +1,7 @@
 #ifndef SPECIALS_H
 #define SPECIALS_H
 
-#include <stdbool.h>
+#include <stdint.h>
 
 #define CHECK_ARGS(Arginfo)                                                    \
     if (!(Arginfo))                                                            \
@@ -22,7 +22,7 @@ enum var_type
 /***
  * Apply the special variable if any, return null if the variable is not known
  * @param cur, the current expandable
- * @param valid, a pointer wich is set to true or false if the variable is a
+ * @param valid, a pointer wich is set to TRUE_B or FALSE_B if the variable is a
  * special one
  * @return NULL if the variable is not special, the stringified expandable
  * otherwise

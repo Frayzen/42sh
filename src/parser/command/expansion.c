@@ -42,11 +42,11 @@ void expansion_push_back(struct expansion *exp, struct expandable *item)
 }
 
 struct expandable *expandable_init(char *content, enum expand_type type,
-                                   bool link_next)
+                                   int link_next)
 {
     struct expandable *e = calloc(1, sizeof(struct expandable));
     if (!e)
-        return false;
+        return FALSE_B;
     e->content = content;
     e->link_next = link_next;
     e->type = type;

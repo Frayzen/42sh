@@ -1,6 +1,7 @@
 #ifndef ENV_H
 #define ENV_H
-
+#define _POSIX_C_SOURCE 200809L
+#include <stdio.h>
 #include <sys/wait.h>
 
 #include "tools/redirection/redirection.h"
@@ -28,13 +29,13 @@ extern char **environ;
 struct env
 {
     char **environ;
-    bool null_received;
-    bool pretty_print;
-    bool verbose;
-    bool debug_grammar;
-    bool debug_pipe;
-    bool debug_env;
-    bool is_interactive;
+    int null_received;
+    int pretty_print;
+    int verbose;
+    int debug_grammar;
+    int debug_pipe;
+    int debug_env;
+    int is_interactive;
     int fds[1024];
 };
 

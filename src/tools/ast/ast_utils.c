@@ -1,5 +1,5 @@
 #include <assert.h>
-#include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 
 #include "parser/tools/gr_utils.h"

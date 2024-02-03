@@ -1,5 +1,5 @@
 #include <assert.h>
-#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 
 #include "execs.h"
@@ -10,14 +10,14 @@ int exec_loop(struct ast_loop *ast)
 {
     assert(AST(ast)->type == AST_WHILE || AST(ast)->type == AST_UNTIL);
     set_nb_loop(NB_LOOPS + 1);
-    bool negate = AST(ast)->type == AST_UNTIL;
+    int negate = AST(ast)->type == AST_UNTIL;
     int ret = exec_list(&ast->cond);
     //! ret for 0
     while (negate ? ret : !ret)
     {
         if (CNTU_LAYER)
         {
-            negate = false;
+            negate = FALSE_B;
             if (IS_CUR_LOOP(CNTU_LAYER - 1))
             {
                 set_continue(CNTU_LAYER - 1);
@@ -27,7 +27,7 @@ int exec_loop(struct ast_loop *ast)
         }
         if (BREAK_LAYER)
         {
-            negate = false;
+            negate = FALSE_B;
             if (IS_CUR_LOOP(CNTU_LAYER - 1))
             {
                 set_break(BREAK_LAYER - 1);

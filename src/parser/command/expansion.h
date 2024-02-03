@@ -1,15 +1,16 @@
 #ifndef EXPANSION_H
 #define EXPANSION_H
-#include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
+#include "tools/definitions.h"
 #include "tools/str/string.h"
 
 struct expandable
 {
     struct expandable *next;
     // If the next element is separated from the current
-    bool link_next;
+    int link_next;
     char *content;
     enum expand_type type;
 };
@@ -30,7 +31,7 @@ struct expansion *expansion_init(void);
 /***
  * Push the expandable to back of the expansion items
  * @param exp the expansion
- * @return true if everything went fine
+ * @return TRUE_B if everything went fine
  */
 void expansion_push_back(struct expansion *exp, struct expandable *item);
 
@@ -42,7 +43,7 @@ void expansion_push_back(struct expansion *exp, struct expandable *item);
  * @return the new expandable
  */
 struct expandable *expandable_init(char *content, enum expand_type type,
-                                   bool link_next);
+                                   int link_next);
 /***
  * Print expansion
  * @param exp the expansion

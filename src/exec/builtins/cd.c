@@ -61,7 +61,7 @@ static char *compute_path(char *new)
         curpath = new;
     // Check for overflow
     int curpath_len = strlen(curpath);
-    bool need_bslash = curpath[0] != '/' && pwd[pwd_len - 1] != '/';
+    int need_bslash = curpath[0] != '/' && pwd[pwd_len - 1] != '/';
     if (curpath_len + pwd_len + need_bslash > PATH_MAX)
         goto error;
     // STEP 7

@@ -1,30 +1,31 @@
 #ifndef FINDER_TOOLS_H
 #define FINDER_TOOLS_H
 
-#include <stdbool.h>
+#include <stdint.h>
 
 #include "lexer/finder/finder.h"
+#include "tools/definitions.h"
 #include "tools/str/string.h"
 #include "tools/token/token.h"
 
 /***
  * Check if a type is terminating
  * @param type the type to check
- * @return true if the token type is a terminating one
+ * @return TRUE_B if the token type is a terminating one
  */
-bool is_terminating(enum token_type type);
+int is_terminating(enum token_type type);
 /***
  * Check if a string matches one of the chevrons
  * @param str the string to check
- * @return true if the string matches
+ * @return TRUE_B if the string matches
  */
-bool chevron_type(const struct lex_str *str);
+int chevron_type(const struct lex_str *str);
 /***
  * Check if a string could be an assignment word
  * @param str the string to check
- * @return true if could
+ * @return TRUE_B if could
  */
-bool assignment_word(const struct lex_str *str);
+int assignment_word(const struct lex_str *str);
 
 enum skip_behavior
 {
@@ -56,16 +57,16 @@ void append_io(struct pending *p);
 /***
  * Check if the char could be part of a name
  * @param c the char to test
- * @return true if the char might be in a name
+ * @return TRUE_B if the char might be in a name
  */
-bool is_name_char(char c);
+int is_name_char(char c);
 
 /***
  * Check if the given string is a valid name for a variable
  * @param str the buffer
  * @param size the size of the buffer
- * @return true if it is valid name
+ * @return TRUE_B if it is valid name
  */
-bool is_name(char *str, size_t size);
+int is_name(char *str, size_t size);
 
 #endif /* !FINDER_TOOLS_H */

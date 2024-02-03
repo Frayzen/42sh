@@ -1,11 +1,11 @@
 #ifndef TOKEN_H
 #define TOKEN_H
-#include <stdbool.h>
+#include <stdint.h>
 
 #include "tools/str/string.h"
 
 #define IS_WORDABLE(t) ((t)->type >= IF) // Easy to test, just do echo <input>
-#define IS_COMMAND(t) ((t)->type >= T_TRUE)
+#define IS_COMMAND(t) ((t)->type >= T_TRUE_B)
 #define IS_OPERATOR(t) ((t)->type == AND || (t)->type == OR)
 
 // /!\ Do not add gaps inside of this enum (see TOK_TYPES_LT)
@@ -53,9 +53,9 @@ enum token_type
     BRK_OPEN,
     BRK_CLOSED,
 
-    // builtins /!\ leave T_TRUE as first one and ECHO as last one
-    T_TRUE,
-    T_FALSE,
+    // builtins /!\ leave T_TRUE_B as first one and ECHO as last one
+    T_TRUE_B,
+    T_FALSE_B,
     T_CONTINUE,
     T_BREAK,
     DOT,
@@ -73,7 +73,7 @@ struct token
 {
     enum token_type type;
     struct lex_str *str;
-    bool terminal;
+    int terminal;
 };
 
 /***

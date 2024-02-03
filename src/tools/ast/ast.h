@@ -1,7 +1,7 @@
 #ifndef AST_H
 #define AST_H
 #include <fcntl.h>
-#include <stdbool.h>
+#include <stdint.h>
 
 #include "parser/command/expansion.h"
 #include "tools/assignment/assignment.h"
@@ -47,7 +47,7 @@ struct ast_list
 struct ast_pipe
 {
     struct ast_list list;
-    bool negated;
+    int negated;
 };
 
 #define AST_IF(Base) ((struct ast_if *)(Base))

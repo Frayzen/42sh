@@ -4,16 +4,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-bool is_number(char *val)
+int is_number(char *val)
 {
     int i = 0;
     while (val[i])
     {
         if (val[i] > '9' || val[i] < '0')
-            return false;
+            return FALSE_B;
         i++;
     }
-    return true;
+    return TRUE_B;
 }
 
 void print_lex_str(struct lex_str *str)

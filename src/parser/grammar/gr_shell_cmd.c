@@ -1,4 +1,4 @@
-#include <stdbool.h>
+#include <stdint.h>
 
 #include "lexer/token_saver.h"
 #include "parser/tools/gr_tools.h"
@@ -44,16 +44,16 @@ enum status check_compound_token(enum token_type expected_type1,
 }
 
 // Function to verify if the return value is a value that needs to be returned
-// Return false if a return should not occur
-bool checkout(enum status st, enum status *ret)
+// Return FALSE_B if a return should not occur
+int checkout(enum status st, enum status *ret)
 {
     switch (st)
     {
     case NO_MATCH:
-        return false;
+        return FALSE_B;
     default:
         *ret = st;
-        return true;
+        return TRUE_B;
     }
 }
 

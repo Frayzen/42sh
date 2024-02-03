@@ -1,7 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 #include <assert.h>
 #include <fcntl.h>
-#include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -72,9 +72,9 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             ret = builtin_unset(argv);
         else if (!strcmp(argv[0], "."))
             ret = builtin_dot(argv);
-        else if (!strcmp(argv[0], "true"))
+        else if (!strcmp(argv[0], "TRUE_B"))
             ret = 0;
-        else if (!strcmp(argv[0], "false"))
+        else if (!strcmp(argv[0], "FALSE_B"))
             ret = 1;
         else if (!strcmp(argv[0], "."))
             ret = builtin_dot(argv);
@@ -96,7 +96,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             }
         }
     }
-    discard_assignments(&ast->assignment_list, argv[0]);
+    discard_assignments(&ast->assignment_list, argv[0] != NULL);
     destroy_expanded(argv);
     close_redirs(fds);
     return ret;

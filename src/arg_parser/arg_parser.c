@@ -12,15 +12,15 @@ int set_options(int argc, char **argv)
     while (i < argc)
     {
         if (!strcmp(argv[i], "--pretty-print") || !strcmp(argv[i], "-p"))
-            get_env_flag()->pretty_print = true;
+            get_env_flag()->pretty_print = TRUE_B;
         else if (!strcmp(argv[i], "--verbose") || !strcmp(argv[i], "-v"))
-            get_env_flag()->verbose = true;
+            get_env_flag()->verbose = TRUE_B;
         else if (!strcmp(argv[i], "--debug-pipe") || !strcmp(argv[i], "-d"))
-            get_env_flag()->debug_pipe = true;
+            get_env_flag()->debug_pipe = TRUE_B;
         else if (!strcmp(argv[i], "--debug-env") || !strcmp(argv[i], "-e"))
-            get_env_flag()->debug_env = true;
+            get_env_flag()->debug_env = TRUE_B;
         else if (!strcmp(argv[i], "--debug-grammar") || !strcmp(argv[i], "-g"))
-            get_env_flag()->debug_grammar = true;
+            get_env_flag()->debug_grammar = TRUE_B;
         else
             break;
         i++;

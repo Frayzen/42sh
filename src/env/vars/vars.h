@@ -1,6 +1,6 @@
 #ifndef VARS_H
 #define VARS_H
-#include <stdbool.h>
+#include <stdint.h>
 
 #define _POSIX_C_SOURCE 200809L
 #define DEFAULT_IFS " \t\n"
@@ -34,14 +34,14 @@ char *read_var(char *name);
 /*
  * Unset the variable
  * @param name the name of the var
- * @return true if the variable what set
+ * @return TRUE_B if the variable what set
  */
 int unset_var(char *name);
 
 /*
  * Check for the existence of the variable
  * @param name the name of the var
- * @return true if the variable exists
+ * @return TRUE_B if the variable exists
  */
 int is_set_var(char *name);
 

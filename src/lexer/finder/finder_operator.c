@@ -34,7 +34,7 @@ void consume_redir_op(struct pending *p)
             append_io(p);
         break;
     default:
-        assert(false);
+        assert(FALSE_B);
         break;
     }
 }
@@ -56,7 +56,7 @@ void consume_control_op(struct pending *p)
         append_io(p);
         break;
     default:
-        assert(false);
+        assert(FALSE_B);
         break;
     }
 }
@@ -75,7 +75,7 @@ void consume_operators(struct pending *p)
         consume_control_op(p);
         break;
     default:
-        assert(false);
+        assert(FALSE_B);
         break;
     }
 }

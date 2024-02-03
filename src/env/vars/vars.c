@@ -14,7 +14,7 @@
 void export_var(char *name)
 {
     struct sh_var *var = get_var(name);
-    var->exported = true;
+    var->exported = TRUE_B;
     setenv(name, var->value, 1);
 }
 
@@ -53,7 +53,7 @@ int unset_var(char *name)
 {
     struct sh_var *var = get_var(name);
     if (!var)
-        return false;
+        return FALSE_B;
     if (var->exported)
         unsetenv(name);
     DBG_VAR("[VAR] unset |%s|\n", name);
@@ -102,7 +102,7 @@ void export_all(void)
     struct sh_varlist *cur = vl;
     do
     {
-        cur->var.exported = true;
+        cur->var.exported = TRUE_B;
         setenv(cur->var.name, cur->var.value, 1);
         cur = cur->next;
     } while (cur != vl);

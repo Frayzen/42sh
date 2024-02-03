@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
+#include "../tools/definitions.h"
 /***
  * Return the following of the current stream
  * @return the next character

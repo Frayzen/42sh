@@ -26,14 +26,14 @@ struct token *tok_peek2(void);
 /***
  * Jump to the next token of the buffer and destroy the token (INCLUDING the
  * string)
- * @return true if the jump happened, false if the buffer is empty
+ * @return TRUE_B if the jump happened, FALSE_B if the buffer is empty
  * @see tok_peek() to get the current token value
  */
 void tok_pop_clean(void);
 
 /***
  * Jump to the next token of the buffer and free the token (but NOT the string)
- * @return true if the jump happened, false if the buffer is empty
+ * @return TRUE_B if the jump happened, FALSE_B if the buffer is empty
  * @see tok_peek() to get the current token value
  */
 void tok_pop(void);

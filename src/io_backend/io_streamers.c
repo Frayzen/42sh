@@ -21,16 +21,16 @@ FILE *swap_fd(FILE *new_file)
     return streamer;
 }
 
-bool is_executable(char *path_to_file)
+int is_executable(char *path_to_file)
 {
-    if (access(path_to_file, X_OK) == true)
-        return false;
+    if (access(path_to_file, X_OK) == TRUE_B)
+        return FALSE_B;
     struct stat file_info;
-    if (stat(path_to_file, &file_info) == true)
-        return false;
+    if (stat(path_to_file, &file_info) == TRUE_B)
+        return FALSE_B;
     if (!S_ISREG(file_info.st_mode))
-        return false;
-    return true;
+        return FALSE_B;
+    return TRUE_B;
 }
 
 FILE *load_file(char *path_to_file)
@@ -74,7 +74,7 @@ void io_streamer_string(int argc, char **argv)
 
 void io_streamer_stdin(void)
 {
-    get_env_flag()->is_interactive = true;
+    get_env_flag()->is_interactive = TRUE_B;
     streamer = stdin;
 }
 

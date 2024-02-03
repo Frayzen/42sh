@@ -39,7 +39,7 @@ int register_expandable(struct expansion *exp, struct lex_str *exp_str,
                && exp_str->value[end] != '$');
     }
     size_t size = end - begin;
-    bool is_last = exp_str->size == end;
+    int is_last = exp_str->size == end;
     char *str = strndup(exp_str->value + begin, size);
     struct expandable *e = expandable_init(str, type, !is_last);
     expansion_push_back(exp, e);
@@ -52,7 +52,7 @@ void exp_register_str(struct expansion *exp, struct lex_str *str)
     if (str->size == 0)
     {
         expansion_push_back(exp,
-                            expandable_init(strdup(""), STR_LITTERAL, false));
+                            expandable_init(strdup(""), STR_LITTERAL, FALSE_B));
     }
     while (i < str->size)
     {
@@ -127,7 +127,7 @@ char **expand(struct expansion *expansion)
         argv = realloc(argv, sizeof(char *) * ++argc);
         char *cur = calloc(1, sizeof(char));
         size_t size = 0;
-        bool link_next;
+        int link_next;
         // for all str in the current arg
         DBG_VAR("ARG[%d] ", argc - 1);
         do

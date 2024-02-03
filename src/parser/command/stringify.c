@@ -13,7 +13,7 @@
 static int is_in(char c, char *delims)
 {
     if (!c)
-        return false;
+        return FALSE_B;
     int i = 0;
     while (delims[i] && delims[i] != c)
         i++;
@@ -90,7 +90,7 @@ static struct expandable *expand_unquoted_var(struct expandable *cur)
     while (elem)
     {
         struct expandable *new_string =
-            expandable_init(strdup(elem), STR_LITTERAL, false);
+            expandable_init(strdup(elem), STR_LITTERAL, FALSE_B);
         if (last)
             last->next = new_string;
         else

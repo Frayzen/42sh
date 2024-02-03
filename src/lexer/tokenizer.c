@@ -5,6 +5,7 @@
 
 #include "env/env.h"
 #include "finder/finder.h"
+#include "tools/definitions.h"
 #include "tools/token/token.h"
 struct token *next_token(void)
 {
@@ -21,10 +22,10 @@ struct token *next_token(void)
     if (pending->force_str && result->type != ASSMT)
     {
         result->type = WORD;
-        result->terminal = false;
+        result->terminal = FALSE_B;
     }
     if (result->type == BSZERO)
-        get_env_flag()->null_received = true;
+        get_env_flag()->null_received = TRUE_B;
     if (get_env_flag()->verbose)
         print_token(result);
     return result;

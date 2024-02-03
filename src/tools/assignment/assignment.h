@@ -50,7 +50,7 @@ void clean_assignments(struct assignment_list *assign_list);
  * Revert the assignments made by apply_assignments
  * @param asslist the list of assignment
  */
-void discard_assignments(struct assignment_list *asslist, bool revert);
+void discard_assignments(struct assignment_list *asslist, int revert);
 
 /***
  * Apply the assignments contained in apply_assignments

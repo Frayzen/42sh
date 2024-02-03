@@ -63,8 +63,8 @@ void apply_redir(int from, int to, char *dbg_msg)
     close(from);
 }
 
-// return true if everything has been fine
-bool setup_redir(struct redirection *redir)
+// return TRUE_B if everything has been fine
+int setup_redir(struct redirection *redir)
 {
     int fd_left = redir->io_number;
     if (fd_left == NO_FD)
@@ -74,10 +74,10 @@ bool setup_redir(struct redirection *redir)
     {
         // An error happened
         print_error(BAD_FD);
-        return false;
+        return FALSE_B;
     }
     apply_redir(fd_right, fd_left, "[REDIR] Close and copy %d in FD[%d] IN)\n");
-    return true;
+    return TRUE_B;
 }
 
 int *setup_redirs(struct ast_redir *ast)

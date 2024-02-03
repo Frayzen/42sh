@@ -1,10 +1,11 @@
 #ifndef STRING_H
 #define STRING_H
-
-#include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
-bool is_number(char *val);
+#include "tools/definitions.h"
+
+int is_number(char *val);
 
 #define IS_VAR_TYPE(Type) ((Type) == QUOTED_VAR || (Type) == UNQUOTED_VAR)
 #define IS_STR_TYPE(Type) ((Type) == STR_LITTERAL || (Type) == QUOTED_STR)

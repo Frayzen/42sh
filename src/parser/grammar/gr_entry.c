@@ -23,13 +23,13 @@ enum status gr_input(struct ast **ast)
 {
     GR_START(Input);
     enum status st = gr_list(ast);
-    bool empty = true;
+    int empty = TRUE_B;
     switch (st)
     {
     case NO_MATCH:
         break;
     case OK:
-        empty = false;
+        empty = FALSE_B;
         break;
     case ERROR:
         goto error;

@@ -1,5 +1,5 @@
 #include <assert.h>
-#include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 
 #include "parser/command/expansion.h"
@@ -25,11 +25,11 @@
 #define RESET "\033[0m"
 
 void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
-                           bool is_last_child);
+                           int is_last_child);
 static void print_ast_sh(struct ast_sh *ast, int depth);
 
 // Aligns the nod according to its depth
-void align(int depth, bool is_last_child)
+void align(int depth, int is_last_child)
 {
     for (int i = 0; i < depth - 1; i++)
         printf("   ");
@@ -60,7 +60,7 @@ static void print_ast_list(struct ast_list *ast, int depth)
 }
 
 static void print_ast_subshell(struct ast_subshell *sub_shell,
-                               int depth) //, bool *closed_nod)
+                               int depth) //, int *closed_nod)
 {
     printf(YELLOW "SUB SHELL\n" RESET);
     struct ast **children = get_children(AST(sub_shell));
@@ -83,8 +83,8 @@ static void print_ast_pipe(struct ast_pipe *ast, int depth)
     struct ast **children = get_children(AST(ast));
     if (!children)
         return;
-    char *neg = ast->negated ? "neg = true" : "neg = false";
-    align(++depth, false);
+    char *neg = ast->negated ? "neg = TRUE_B" : "neg = FALSE_B";
+    align(++depth, FALSE_B);
     printf("%s\n", neg);
     int i = 0;
     while (children[i])
@@ -99,14 +99,14 @@ static void print_ast_pipe(struct ast_pipe *ast, int depth)
 static void print_ast_if(struct ast_if *ast, int depth)
 {
     printf(GREEN "IF\n" RESET);
-    pretty_print_ast_help(AST(&ast->cond), AST_LIST, depth + 1, false);
+    pretty_print_ast_help(AST(&ast->cond), AST_LIST, depth + 1, FALSE_B);
 
     pretty_print_ast_help(AST(&ast->then), AST_LIST, depth + 1, !ast->fallback);
 
     if (ast->fallback)
     {
         pretty_print_ast_help(ast->fallback, ast->fallback->type, depth + 1,
-                              true);
+                              TRUE_B);
     }
 }
 
@@ -114,9 +114,9 @@ static void print_ast_if(struct ast_if *ast, int depth)
 void print_ast_loop(struct ast_loop *ast, int depth)
 {
     printf(PURPLE "LOOP\n" RESET);
-    pretty_print_ast_help(AST(&ast->cond), AST_LIST, depth + 1, false);
+    pretty_print_ast_help(AST(&ast->cond), AST_LIST, depth + 1, FALSE_B);
 
-    pretty_print_ast_help(AST(&ast->exec), AST_LIST, depth + 1, true);
+    pretty_print_ast_help(AST(&ast->exec), AST_LIST, depth + 1, TRUE_B);
 }
 
 // Prints the nod and child of the ast of type AST_CMD
@@ -141,14 +141,15 @@ static void print_ast_cmd(struct ast_cmd *ast, int depth)
 static void print_ast_sh(struct ast_sh *ast, int depth)
 {
     printf(RED "SH\n" RESET);
-    pretty_print_ast_help(ast->sh_cmd, AST(ast->sh_cmd)->type, depth + 1, true);
+    pretty_print_ast_help(ast->sh_cmd, AST(ast->sh_cmd)->type, depth + 1,
+                          TRUE_B);
 }
 
 // Prints the nod and child of the ast of type AST_FOR
 static void print_ast_for(struct ast_for *ast, int depth)
 {
     printf(CYAN "FOR\n" RESET);
-    pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth, false);
+    pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth, FALSE_B);
 }
 
 // Prints the nod and child of the ast of type AST_AND_OR
@@ -157,7 +158,7 @@ static void print_ast_and_or(struct ast_and_or *ast, int depth)
     printf(YELLOW "AND_OR\n" RESET);
     if (ast->types)
     {
-        align(depth, false);
+        align(depth, FALSE_B);
         printf("and_or\n");
         int i = 0;
         while (ast->types[i])
@@ -167,7 +168,7 @@ static void print_ast_and_or(struct ast_and_or *ast, int depth)
             i++;
         }
     }
-    pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth + 1, true);
+    pretty_print_ast_help(AST(AST_LIST(ast)), AST_LIST, depth + 1, TRUE_B);
 }
 
 void pretty_print_exapandable(struct expandable *exp)
@@ -193,7 +194,7 @@ static void print_ast_case(struct ast_case *ast, int depth)
 {
     printf(GREEN "CASE\n" RESET);
     depth++;
-    align(depth, false);
+    align(depth, FALSE_B);
     printf("name=");
     pretty_print_exapandable(ast->name.head);
     align(depth, !ast->nb_cond);
@@ -207,13 +208,13 @@ static void print_ast_case(struct ast_case *ast, int depth)
             pretty_print_exapandable(ast->list_cond[i][j]->head);
             j++;
         }
-        pretty_print_ast_help(AST(ast->cmds[i]), AST_LIST, depth + 1, true);
+        pretty_print_ast_help(AST(ast->cmds[i]), AST_LIST, depth + 1, TRUE_B);
     }
     depth--;
 }
 
 void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
-                           bool is_last_child)
+                           int is_last_child)
 {
     align(depth, is_last_child);
     switch (type)
@@ -254,7 +255,7 @@ void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
         break;
     default:
         // Should not happend
-        assert(false);
+        assert(FALSE_B);
         break;
     }
 }
@@ -266,5 +267,5 @@ void pretty_print_ast(struct ast *ast)
         printf("\nNULL AST\n");
         return;
     }
-    pretty_print_ast_help(ast, AST(ast)->type, 0, true);
+    pretty_print_ast_help(ast, AST(ast)->type, 0, TRUE_B);
 }
