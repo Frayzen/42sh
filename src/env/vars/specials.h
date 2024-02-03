@@ -3,11 +3,9 @@
 
 #include <stdbool.h>
 
-#define CHECK_ARGS(arginfo)                                                    \
-    if (!(arginfo) || (arginfo)->argc == 0)                                    \
-    {                                                                          \
-        return NULL;                                                           \
-    }
+#define CHECK_ARGS(Arginfo)                                                    \
+    if (!(Arginfo))                                                            \
+        return NULL;
 
 enum var_type
 {
@@ -24,10 +22,12 @@ enum var_type
 /***
  * Apply the special variable if any, return null if the variable is not known
  * @param cur, the current expandable
+ * @param valid, a pointer wich is set to true or false if the variable is a
+ * special one
  * @return NULL if the variable is not special, the stringified expandable
  * otherwise
  */
-struct expandable *expand_special_var(struct expandable *cur);
+struct expandable *expand_special_var(struct expandable *cur, int *valid);
 
 /***
  * Set the ret_val for the special variable $?
