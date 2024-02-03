@@ -1,6 +1,4 @@
-#include "env/vars/specials.h"
 #define _POSIX_C_SOURCE 200809L
-
 #include <assert.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -9,7 +7,9 @@
 #include <unistd.h>
 
 #include "env/env.h"
+#include "env/vars/specials.h"
 #include "exec/execs.h"
+#include "execs.h"
 #include "execs_cmd.h"
 #include "exit/error_handler.h"
 #include "tools/ast/ast.h"
@@ -29,7 +29,7 @@ int exec_piped(struct ast *ast, int in, int out, int *pid)
         ret = exec_cmd(AST_CMD(ast), pid);
         break;
     case AST_SH:
-        ret = exec_sh(AST_SH(ast));
+        ret = exec_sh(AST_SH(ast), NULL);
         break;
     case AST_FUNCT:
         ret = exec_store_funct(AST_FUNCT(ast));
