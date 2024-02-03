@@ -38,6 +38,8 @@ struct arg_info *init_arg_info(char **argv, int argc)
 
 void destroy_arg_info(struct arg_info *arg_info)
 {
+    if (!arg_info)
+        return;
     free(arg_info->argstr);
     free(arg_info);
 }
@@ -60,4 +62,24 @@ void load_arg_info(struct arg_info *old_arg_info)
 {
     destroy_arg_info(arg_info);
     arg_info = old_arg_info;
+}
+
+int get_argc(char **argv)
+{
+    size_t i = 0;
+    while (argv[i])
+        i++;
+    return i;
+}
+
+char **copy_argv(char **argv)
+{
+    char **ar = calloc(get_argc(argv) + 1, sizeof(char *));
+    size_t i = 0;
+    while (argv[i])
+    {
+        ar[i] = strdup(argv[i]);
+        i++;
+    }
+    return ar;
 }

@@ -48,7 +48,7 @@ enum status gr_function(struct ast_list *ast)
     tok_pop_clean();
     while (tok_peek()->type == NEWLINE)
         tok_pop_clean();
-    
+
     if (gr_shell_cmd(AST(ast_funct)) != OK)
         GR_RET_CLEAN(ERROR, ast_funct);
     add_child(ast, AST(ast_funct));

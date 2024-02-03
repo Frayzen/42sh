@@ -2,12 +2,14 @@
 #include <assert.h>
 #include <fcntl.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include "arg_saver/arg_saver.h"
 #include "env/env.h"
 #include "env/vars/vars.h"
 #include "exec/builtins/builtins.h"
@@ -88,7 +90,19 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
         {
             struct ast_sh *function = funct_dict_peek_value(argv[0]);
             if (function)
+            {
+                int old_argc = 0;
+                char **old_argv = NULL;
+                struct arg_info *old_arg_info = get_arg_info();
+                if (old_arg_info->argc)
+                {
+                    old_argc = old_arg_info->argc;
+                    old_argv = copy_argv(old_arg_info->argv);
+                }
+                load_arg_info(init_arg_info(argv + 1, get_argc(argv) - 1));
                 ret = exec_sh(function);
+                load_arg_info(init_arg_info(old_argv, old_argc));
+            }
             else
             {
                 *pid = exec_prog(argv);

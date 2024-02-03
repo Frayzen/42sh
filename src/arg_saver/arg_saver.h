@@ -16,4 +16,16 @@ struct arg_info *new_arg_info(int argc, char **argv);
 struct arg_info *get_arg_info(void);
 
 void load_arg_info(struct arg_info *old_arg_info);
+
+/*** gets the argc based on the argv
+ * @param argv, the argv to get the length from
+ * @return the length of argv
+ */
+int get_argc(char **argv);
+
+/*** creates a deep copy of argv
+ * @param argv, the argv to copy
+ * @return new char ** containing the elements in argv
+ */
+char **copy_argv(char **argv);
 #endif // !ARG_SAVER_H
