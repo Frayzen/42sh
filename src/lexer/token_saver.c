@@ -25,16 +25,22 @@ struct token *swap_next_token2(struct token *new)
 struct token *tok_peek(void)
 {
     if (!next)
-        next = next_token();
+    {
+        if (next2)
+        {
+            next = next2;
+            next2 = NULL;
+        }
+        else
+            next = next_token();
+    }
     return next;
 }
 
 struct token *tok_peek2(void)
 {
-    if (!next)
-        return tok_peek();
-    if (!next2)
-        next2 = next_token();
+    tok_peek();
+    next2 = next_token();
     return next2;
 }
 

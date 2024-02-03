@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "env.h"
 #include "io_backend/backend_saver.h"
 #include "io_backend/io_streamers.h"
 #include "lexer/token_saver.h"
@@ -36,9 +37,10 @@ void load_context(struct context *c)
     destroy_ast(old_root);
 
     swap_next_char(c->saved_char);
-    free(swap_next_token(c->saved_token));
     free(swap_next_token2(c->saved_token2));
+    free(swap_next_token(c->saved_token));
     FILE *file = swap_fd(c->saved_file);
     fclose(file);
+    get_env_flag()->null_received = false;
     free(c);
 }

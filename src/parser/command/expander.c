@@ -41,7 +41,7 @@ static int read_until(struct lex_str *exp_str, size_t begin)
 void *create_expandable_content(struct lex_str *str, size_t b, size_t e)
 {
     enum expand_type type = str->expand[b];
-    char *s = strndup(str->value + b, e - b + 1);
+    char *s = strndup(str->value + b, e - b);
     if (IS_SUBCMD_TYPE(type))
     {
         struct context *old = new_context();

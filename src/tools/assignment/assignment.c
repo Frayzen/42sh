@@ -1,7 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include "assignment.h"
 
-#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -31,11 +30,12 @@ struct assignment *init_assignment(struct lex_str *str)
     struct assignment *ass = calloc(1, sizeof(struct assignment));
     size_t eq_pos = eq - str->value;
 
-    str->value[eq_pos] = '\0';
     ass->name = strdup(str->value);
+    ass->name[eq_pos] = '\0';
 
     struct lex_str *value_str = extract_value(str, eq_pos);
-    exp_register_str(&ass->exp, value_str);
+    if (!exp_register_str(&ass->exp, value_str))
+        return NULL;
     return ass;
 }
 
