@@ -1,12 +1,10 @@
 #define _POSIX_C_SOURCE 200809L
-#include "tools/pretty_print/pretty_print.h"
-#include "command/expansion.h"
-#include "tools/str/string.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "command/expansion.h"
 #include "env/context.h"
 #include "env/env.h"
 #include "env/vars/specials.h"
@@ -18,6 +16,8 @@
 #include "io_backend/io_streamers.h"
 #include "parser/grammar/rules.h"
 #include "sys/wait.h"
+#include "tools/pretty_print/pretty_print.h"
+#include "tools/str/string.h"
 #include "unistd.h"
 
 // Find the first delimiter
@@ -191,7 +191,7 @@ static struct expandable *expand_sub_cmd(struct expandable *cur, bool fd_split)
         close(fds[1]);
         DBG_PIPE("set STDOUT to %d\n", STDOUT);
         exec_entry((struct ast *)cur->content);
-        
+
         close(fds[0]);
         _exit(0);
     }

@@ -17,7 +17,7 @@ FILE *swap_fd(FILE *new_file)
 {
     if (new_file == NULL)
         return streamer;
-    FILE* old = streamer;
+    FILE *old = streamer;
     streamer = new_file;
     return old;
 }

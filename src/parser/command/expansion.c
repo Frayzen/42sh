@@ -24,7 +24,7 @@ void expansion_print(const struct expansion *exp)
     struct expandable *e = exp->head;
     while (e)
     {
-        printf("[%s] '%s' (%p) %c\n", exp_type_lt[e->type], (char *) e->content,
+        printf("[%s] '%s' (%p) %c\n", exp_type_lt[e->type], (char *)e->content,
                (void *)e, e->link_next ? '|' : '=');
         e = e->next;
     }

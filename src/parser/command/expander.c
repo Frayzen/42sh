@@ -68,7 +68,8 @@ int exp_register_str(struct expansion *exp, struct lex_str *str)
     size_t i = 0;
     if (str->size == 0)
     {
-        expansion_push_back(exp, expandable_init(strdup(""), STR_LITTERAL, false));
+        expansion_push_back(exp,
+                            expandable_init(strdup(""), STR_LITTERAL, false));
         destroy_lex_str(str);
         return true;
     }

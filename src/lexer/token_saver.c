@@ -40,7 +40,8 @@ struct token *tok_peek(void)
 struct token *tok_peek2(void)
 {
     tok_peek();
-    next2 = next_token();
+    if (!next2)
+        next2 = next_token();
     return next2;
 }
 
