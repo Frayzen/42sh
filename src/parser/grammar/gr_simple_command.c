@@ -6,7 +6,7 @@
 #include "tools/gr_utils.h"
 #include "tools/token/token.h"
 
-bool is_builtin(enum token_type type)
+int is_builtin(enum token_type type)
 {
     switch (type)
     {
@@ -30,7 +30,7 @@ enum status gr_simple_command(struct ast_list *list)
     GR_START(SimpleCommand);
     struct ast_cmd *cmd = init_ast(AST_CMD);
     // {prefix}
-    bool consumed = false;
+    int consumed = false;
     enum status st;
     do
     {

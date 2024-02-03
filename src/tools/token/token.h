@@ -74,7 +74,7 @@ struct token
 {
     enum token_type type;
     struct lex_str *str;
-    bool terminal;
+    int terminal;
 };
 
 /***

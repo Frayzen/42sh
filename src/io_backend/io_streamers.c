@@ -22,7 +22,7 @@ FILE *swap_fd(FILE *new_file)
     return old;
 }
 
-bool is_executable(char *path_to_file)
+int is_executable(char *path_to_file)
 {
     if (access(path_to_file, X_OK) == true)
         return false;

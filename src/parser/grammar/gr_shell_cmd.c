@@ -45,7 +45,7 @@ enum status check_compound_token(enum token_type expected_type1,
 
 // Function to verify if the return value is a value that needs to be returned
 // Return false if a return should not occur
-bool checkout(enum status st, enum status *ret)
+int checkout(enum status st, enum status *ret)
 {
     switch (st)
     {

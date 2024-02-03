@@ -9,7 +9,7 @@ struct expandable
 {
     struct expandable *next;
     // If the next element is separated from the current
-    bool link_next;
+    int link_next;
     // either an ast (sub command) or a char (other cases)
     void *content;
     enum expand_type type;
@@ -43,7 +43,7 @@ void expansion_push_back(struct expansion *exp, struct expandable *item);
  * @return the new expandable
  */
 struct expandable *expandable_init(void *content, enum expand_type type,
-                                   bool link_next);
+                                   int link_next);
 /***
  * Print expansion
  * @param exp the expansion

@@ -106,7 +106,7 @@ void apply_assignments(struct assignment_list *asslist)
     }
 }
 
-void discard_assignments(struct assignment_list *asslist, bool revert)
+void discard_assignments(struct assignment_list *asslist, int revert)
 {
     for (unsigned int i = 0; i < asslist->size; i++)
     {

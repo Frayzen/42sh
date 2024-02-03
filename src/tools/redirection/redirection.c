@@ -64,7 +64,7 @@ void apply_redir(int from, int to, char *dbg_msg)
 }
 
 // return true if everything has been fine
-bool setup_redir(struct redirection *redir)
+int setup_redir(struct redirection *redir)
 {
     int fd_left = redir->io_number;
     if (fd_left == NO_FD)

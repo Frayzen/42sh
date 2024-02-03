@@ -9,7 +9,7 @@
 #include "tools/str/string.h"
 #include "tools/token/token.h"
 
-bool is_terminating(enum token_type type)
+int is_terminating(enum token_type type)
 {
     switch (type)
     {
@@ -22,7 +22,7 @@ bool is_terminating(enum token_type type)
     }
 }
 
-bool chevron_type(const struct lex_str *str)
+int chevron_type(const struct lex_str *str)
 {
     if (!strcmp(">", str->value))
         return 1;
@@ -41,7 +41,7 @@ bool chevron_type(const struct lex_str *str)
     return 0;
 }
 
-bool is_name_char(char c)
+int is_name_char(char c)
 {
     if (c == '_')
         return true;
@@ -54,7 +54,7 @@ bool is_name_char(char c)
     return false;
 }
 
-bool is_name(char *str, size_t size)
+int is_name(char *str, size_t size)
 {
     if (size == 0)
         return false;
@@ -75,7 +75,7 @@ bool is_name(char *str, size_t size)
     return true;
 }
 
-bool assignment_word(const struct lex_str *str)
+int assignment_word(const struct lex_str *str)
 {
     char *begin = str->value;
     char *first_eq = strchr(begin, '=');
@@ -155,7 +155,7 @@ static void bslash_in_skip(struct pending *p, enum skip_behavior behavior)
 void skip_until(struct pending *p, enum skip_behavior behavior)
 {
     char c = io_peek();
-    bool append = behavior != SKIP_HASHTAG;
+    int append = behavior != SKIP_HASHTAG;
     while (c && c != limit_lt[behavior])
     {
         if (!append)

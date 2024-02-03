@@ -158,7 +158,7 @@ static char *process_sub_cmd_buf(int fd, int pid)
     return buf;
 }
 
-static struct expandable *expand_sub_cmd(struct expandable *cur, bool fd_split)
+static struct expandable *expand_sub_cmd(struct expandable *cur, int fd_split)
 {
     int fds[2];
     int err = pipe(fds); // create the pipe reading stdout for the subcmd

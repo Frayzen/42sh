@@ -161,7 +161,7 @@ char **expand(struct expansion *expansion)
         argv = realloc(argv, sizeof(char *) * ++argc);
         char *cur = calloc(1, sizeof(char));
         size_t size = 0;
-        bool link_next;
+        int link_next;
         // for all str in the current arg
         DBG_VAR("ARG[%d] ", argc - 1);
         do

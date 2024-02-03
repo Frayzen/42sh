@@ -25,11 +25,11 @@
 #define RESET "\033[0m"
 
 void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
-                           bool is_last_child);
+                           int is_last_child);
 static void print_ast_sh(struct ast_sh *ast, int depth);
 
 // Aligns the nod according to its depth
-void align(int depth, bool is_last_child)
+void align(int depth, int is_last_child)
 {
     for (int i = 0; i < depth - 1; i++)
         printf("   ");
@@ -60,7 +60,7 @@ static void print_ast_list(struct ast_list *ast, int depth)
 }
 
 static void print_ast_subshell(struct ast_subshell *sub_shell,
-                               int depth) //, bool *closed_nod)
+                               int depth) //, int *closed_nod)
 {
     printf(YELLOW "SUB SHELL\n" RESET);
     struct ast **children = get_children(AST(sub_shell));
@@ -215,7 +215,7 @@ static void print_ast_case(struct ast_case *ast, int depth)
 }
 
 void pretty_print_ast_help(struct ast *ast, enum ast_type type, int depth,
-                           bool is_last_child)
+                           int is_last_child)
 {
     align(depth, is_last_child);
     switch (type)

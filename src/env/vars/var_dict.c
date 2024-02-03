@@ -60,7 +60,7 @@ struct sh_var *get_var(char *name)
     return &(varlist->var);
 }
 
-BOOL remove_var(char *name)
+int remove_var(char *name)
 {
     struct sh_varlist *varlist = get_varlist_item(name);
     if (!varlist)

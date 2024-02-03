@@ -44,13 +44,13 @@ REDIR_OPS_CASES:                                                               \
 struct pending
 {
     struct lex_str str;
-    bool backslashed;
-    bool blank;
-    bool expanding;
-    bool in_quote;
-    bool error;
-    bool force_str;
-    bool in_sub_cmd;
+    int backslashed;
+    int blank;
+    int expanding;
+    int in_quote;
+    int error;
+    int force_str;
+    int in_sub_cmd;
 };
 
 // In this file, understand 'current character' as the one returned by

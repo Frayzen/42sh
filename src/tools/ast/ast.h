@@ -47,7 +47,7 @@ struct ast_list
 struct ast_pipe
 {
     struct ast_list list;
-    bool negated;
+    int negated;
 };
 
 #define AST_IF(Base) ((struct ast_if *)(Base))

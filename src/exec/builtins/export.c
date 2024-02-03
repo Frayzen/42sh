@@ -5,7 +5,7 @@
 #include "exit/error_handler.h"
 #include "lexer/finder/finder_tools.h"
 
-bool my_strchr(char *str, char chr, char **end)
+int my_strchr(char *str, char chr, char **end)
 {
     int i = 0;
     while (str[i] && str[i] != chr)
@@ -24,7 +24,7 @@ int builtin_export(char **argv)
     {
         arg = argv[i];
         i++;
-        bool is_assignment = my_strchr(arg, '=', &eq);
+        int is_assignment = my_strchr(arg, '=', &eq);
         *eq = '\0';
         if (!is_name(arg, eq - arg))
         {

@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-bool is_number(char *val);
+int is_number(char *val);
 
 #define IS_SUBCMD_TYPE(Type)                                                   \
     ((Type) == SUB_CMD || (Type) == QTD_SUB_CMD || (Type == SUB_CMD_END))

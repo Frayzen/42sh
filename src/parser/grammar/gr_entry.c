@@ -23,7 +23,7 @@ enum status gr_input(struct ast **ast)
 {
     GR_START(Input);
     enum status st = gr_list(ast);
-    bool empty = true;
+    int empty = true;
     switch (st)
     {
     case NO_MATCH:

@@ -96,7 +96,7 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             }
         }
     }
-    discard_assignments(&ast->assignment_list, argv[0]);
+    discard_assignments(&ast->assignment_list, argv[0] != NULL);
     destroy_expanded(argv);
     close_redirs(fds);
     return ret;

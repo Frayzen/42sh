@@ -13,7 +13,7 @@
 #include "parser/command/expansion.h"
 #include "tools/str/string.h"
 
-static bool is_arg_index(char *name)
+static int is_arg_index(char *name)
 {
     assert(name != NULL);
     if (*name == '0')
