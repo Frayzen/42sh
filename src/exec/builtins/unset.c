@@ -59,12 +59,12 @@ int consume_options(char **argv, enum unset_mode *mode, int *i)
         if (ret == OK_NOT_OPTION)
             break;
         if (ret == ERROR)
-            return false;
+            return 0;
         (*i)++;
     }
     if (*mode == UNDEFINED)
         *mode = UNSET_VAR;
-    return true;
+    return 1;
 }
 
 int builtin_unset(char **argv)
