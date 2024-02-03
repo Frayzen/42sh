@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-
 #include "builtins.h"
 #include "env/vars/vars.h"
 #include "exit/error_handler.h"
@@ -56,6 +53,8 @@ int builtin_unset(char **argv)
 {
     int i = 1;
     enum unset_mode mode = UNDEFINED;
+    if (!argv[i])
+        return 0;
     int err = consume_options(argv, &mode, &i);
     if (err)
         return err;

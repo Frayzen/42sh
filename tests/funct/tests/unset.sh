@@ -14,3 +14,6 @@ echo first $abc $abcd test
 a=3
 if unset a; then echo ok; fi
 if unset a; then echo ok2; fi
+
+### Unset nothing
+unset

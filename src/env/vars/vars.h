@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 #define _POSIX_C_SOURCE 200809L
-#define DEFAULT_IFS "\t\r "
+#define DEFAULT_IFS " \t\n"
 
 /***
  * set the variable named name to the value
@@ -50,5 +50,10 @@ int is_set_var(char *name);
  * @param name the name of the variable to export
  */
 void export_var(char *name);
+
+/***
+ * Export all the variable that are not
+ */
+void export_all(void);
 
 #endif /* !VARS_H */

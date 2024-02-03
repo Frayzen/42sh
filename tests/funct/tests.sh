@@ -141,6 +141,7 @@ parallelize_entry() {
                 if [ $save -ne 0 ]; then
                     build="$build$line timflochaslm"
                 fi
+                ;;
         esac
     done < ../funct/"$entry"
     launch_test
