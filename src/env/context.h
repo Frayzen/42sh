@@ -7,6 +7,7 @@ struct context
     FILE *saved_file;
     char saved_char;
     struct token *saved_token;
+    struct token *saved_token2;
     struct ast **ast_root;
 };
 

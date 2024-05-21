@@ -10,7 +10,8 @@ struct expandable
     struct expandable *next;
     // If the next element is separated from the current
     bool link_next;
-    char *content;
+    // either an ast (sub command) or a char (other cases)
+    void *content;
     enum expand_type type;
 };
 
@@ -37,11 +38,11 @@ void expansion_push_back(struct expansion *exp, struct expandable *item);
 /***
  * Create and expandable from parameters
  * @param content the value of the expandable
- * @param type either VAR or STR
+ * @param type either VAR STR or SUB_CMD
  * @param link_next if the next argument is separated form the current
  * @return the new expandable
  */
-struct expandable *expandable_init(char *content, enum expand_type type,
+struct expandable *expandable_init(void *content, enum expand_type type,
                                    bool link_next);
 /***
  * Print expansion

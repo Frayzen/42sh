@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 
 #include "commands/execs_cmd.h"
 #include "execs.h"

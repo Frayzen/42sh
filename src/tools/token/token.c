@@ -73,7 +73,8 @@ char *to_upper(const char *type)
     return str;
 }
 
-#define UNDER_EXPAND_CHAR(Type) (IS_VAR_TYPE(Type) ? '^' : ' ')
+#define UNDER_EXPAND_CHAR(Type)                                                \
+    (IS_VAR_TYPE(Type) ? '^' : (IS_SUBCMD_TYPE(Type) ? '~' : ' '))
 void print_token(struct token *token)
 {
     if (!token)
@@ -96,7 +97,12 @@ void print_token(struct token *token)
         {
             printf("       ");
             for (size_t i = 0; i < token->str->size; i++)
-                printf("%c", UNDER_EXPAND_CHAR(token->str->expand[i]));
+            {
+                if (token->str->expand[i] == SUB_CMD_END)
+                    printf("$");
+                else
+                    printf("%c", UNDER_EXPAND_CHAR(token->str->expand[i]));
+            }
         }
         free(type);
     }
@@ -106,23 +112,25 @@ void print_token(struct token *token)
 const char **toktype_lookup(void)
 {
     static const char *lookup_table[] = {
-        [IF] = "if",         [THEN] = "then",
-        [ELIF] = "elif",     [ELSE] = "else",
-        [FI] = "fi",         [SEMI_COLON] = ";",
-        [NEWLINE] = "\n",    [ECHO] = "echo",
-        [T_TRUE] = "true",   [T_FALSE] = "false",
-        [BSZERO] = "\0",     [CHEVRON] = "CHEVRON",
-        [IO_NUMBER] = "NB",  [NEGATION] = "!",
-        [PIPE] = "|",        [WHILE] = "while",
-        [DO] = "do",         [DONE] = "done",
-        [UNTIL] = "until",   [OR] = "||",
-        [AND] = "&&",        [FOR] = "for",
-        [IN] = "in",         [UNSET] = "unset",
-        [DOT] = ".",         [ASSMT] = "ASMT",
-        [BRK_OPEN] = "{",    [BRK_CLOSED] = "}",
-        [PRTH_OPEN] = "(",   [PRTH_CLOSED] = ")",
-        [WORD] = NULL,       [T_CONTINUE] = "continue",
-        [T_BREAK] = "break", [DBL_SEMI_COLON] = ";;",
+        [IF] = "if",           [THEN] = "then",
+        [ELIF] = "elif",       [ELSE] = "else",
+        [FI] = "fi",           [SEMI_COLON] = ";",
+        [NEWLINE] = "\n",      [ECHO] = "echo",
+        [T_TRUE] = "true",     [T_FALSE] = "false",
+        [BSZERO] = "\0",       [CHEVRON] = "CHEVRON",
+        [IO_NUMBER] = "NB",    [NEGATION] = "!",
+        [PIPE] = "|",          [WHILE] = "while",
+        [DO] = "do",           [DONE] = "done",
+        [UNTIL] = "until",     [OR] = "||",
+        [AND] = "&&",          [FOR] = "for",
+        [IN] = "in",           [UNSET] = "unset",
+        [DOT] = ".",           [ASSMT] = "ASMT",
+        [BRK_OPEN] = "{",      [BRK_CLOSED] = "}",
+        [PRTH_OPEN] = "(",     [PRTH_CLOSED] = ")",
+        [WORD] = NULL,         [T_CONTINUE] = "continue",
+        [T_BREAK] = "break",   [DBL_SEMI_COLON] = ";;",
+        [TOK_ERROR] = "ERROR", [CASE] = "case",
+        [ESAC] = "esac",       [AMPERSAND] = "&",
     };
     return lookup_table;
 }

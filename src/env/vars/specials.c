@@ -64,6 +64,8 @@ void set_ret_val(int ret_val)
 
 struct expandable *build_argv(struct arg_info *arg_info, struct expandable *cur)
 {
+    if (arg_info->argc == 0)
+        return NULL;
     struct expandable *ret = expandable_init(strdup(arg_info->argv[0]),
                                              STR_LITTERAL, cur->link_next);
     int i = 1;
@@ -79,10 +81,12 @@ struct expandable *build_argv(struct arg_info *arg_info, struct expandable *cur)
     return ret;
 }
 
-struct expandable *expand_special_var(struct expandable *cur)
+struct expandable *expand_special_var(struct expandable *cur, int *valid)
 {
+    *valid = false;
     if (!IS_VAR_TYPE(cur->type))
         return NULL;
+    *valid = true;
     enum var_type type = get_var_type(cur->content);
     struct arg_info *arg_info = get_arg_info();
     switch (type)
@@ -99,20 +103,20 @@ struct expandable *expand_special_var(struct expandable *cur)
         return expandable_init(itoa(arg_info->argc), STR_LITTERAL,
                                cur->link_next);
     case POSITIONAL_PARAM: {
-        CHECK_ARGS(arg_info);
-        int pos = atoi(cur->content) - 1;
-        return expandable_init(strdup(arg_info->argv[pos]), STR_LITTERAL,
+        int pos = atoi(cur->content);
+        if (arg_info->argc < pos)
+            return NULL;
+        return expandable_init(strdup(arg_info->argv[pos - 1]), STR_LITTERAL,
                                cur->link_next);
     }
     case SPECIAL_PARAMS: {
-        CHECK_ARGS(arg_info);
         return build_argv(arg_info, cur);
     }
     case PARAMS:
-        CHECK_ARGS(arg_info);
         return expandable_init(strdup(arg_info->argstr), STR_LITTERAL,
                                cur->link_next);
     default:
+        *valid = false;
         return NULL;
     }
 }

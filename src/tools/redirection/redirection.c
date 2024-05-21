@@ -19,10 +19,9 @@
 // If we have 2<&1, it duplicates FD[1]
 int get_fd(struct redirection *redir)
 {
-    char **val = expand(&redir->exp);
-    assert(val && val[0] && !val[1]);
-    char *to = strdup(val[0]);
-    destroy_expanded(val);
+    char *val = expand_str(&redir->exp);
+    char *to = strdup(val);
+    free(val);
     int fd = NO_FD;
     DBG_PIPE("[REDIR] '%s' has been ", to);
     int type = redir->type;
@@ -77,12 +76,7 @@ bool setup_redir(struct redirection *redir)
         print_error(BAD_FD);
         return false;
     }
-    if (redir->type == RT_READ_WRITE || !(redir->type & RT_MASK_IN))
-        apply_redir(fd_right, fd_left,
-                    "[REDIR] Close and copy %d in FD[%d] OUT)\n");
-    else
-        apply_redir(fd_left, fd_right,
-                    "[REDIR] Close and copy %d in FD[%d] IN)\n");
+    apply_redir(fd_right, fd_left, "[REDIR] Close and copy %d in FD[%d] IN)\n");
     return true;
 }
 

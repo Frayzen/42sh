@@ -32,6 +32,7 @@ enum skip_behavior
     SKIP_DOUBLE_QUOTE,
     SKIP_VARIABLE_BRACKETS,
     SKIP_HASHTAG,
+    SKIP_PARENTHESES,
 };
 
 /***
@@ -68,4 +69,5 @@ bool is_name_char(char c);
  */
 bool is_name(char *str, size_t size);
 
+void skip_sub_cmd(struct pending *p);
 #endif /* !FINDER_TOOLS_H */

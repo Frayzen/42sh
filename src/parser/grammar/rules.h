@@ -91,10 +91,10 @@ enum status gr_if(struct ast_sh *sh);
 
 /***
  * Grammar rule for shell comand
- * @param list: the list to be updated
+ * @param list: the ast to be updated
  * @return enum that tells the status
  */
-enum status gr_shell_cmd(struct ast_list *list);
+enum status gr_shell_cmd(struct ast *list);
 
 /***
  * Grammar rule for redirection
@@ -137,5 +137,33 @@ enum status gr_for(struct ast_sh *sh);
  * @return enum that tells the status
  */
 enum status gr_and_or(struct ast_list *list);
+
+/***
+ * Grammar rule for case
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_case(struct ast_sh *sh);
+
+/***
+ * Grammar rule for case clause
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_case_clause(struct ast_case *ast);
+
+/***
+ * Grammar rule for case item
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_case_item(struct ast_case *ast);
+
+/***
+ * Grammar rule for functions
+ * @param ast: the tree to be updated
+ * @return enum that tells the status
+ */
+enum status gr_function(struct ast_list *list);
 
 #endif /* !RULES_H */

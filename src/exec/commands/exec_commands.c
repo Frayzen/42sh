@@ -16,8 +16,8 @@
 #include "parser/command/expander.h"
 #include "tools/assignment/assignment.h"
 #include "tools/ast/ast.h"
+#include "tools/funct_dict/funct_dict.h"
 #include "tools/redirection/redirection.h"
-
 // Fork execute the binary and return pid in parent
 int exec_prog(char **argv)
 {
@@ -39,6 +39,7 @@ int exec_prog(char **argv)
             if (i != FDS[i])
                 close(FDS[i]);
         }
+        export_all();
         execvp(argv[0], argv);
         print_error(EXECVP_FAILED);
         exit(127);
@@ -85,8 +86,14 @@ int exec_cmd(struct ast_cmd *ast, int *pid)
             ret = builtin_break(argv);
         else
         {
-            *pid = exec_prog(argv);
-            ret = -1;
+            struct ast_sh *function = funct_dict_peek_value(argv[0]);
+            if (function)
+                ret = exec_sh(function, argv + 1);
+            else
+            {
+                *pid = exec_prog(argv);
+                ret = -1;
+            }
         }
     }
     discard_assignments(&ast->assignment_list, argv[0]);

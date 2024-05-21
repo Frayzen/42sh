@@ -1,7 +1,7 @@
 #include "lexer/token_saver.h"
+#include "parser/tools/gr_tools.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "tools/gr_tools.h"
 #include "tools/token/token.h"
 // rule_if = 'if' compound_list 'then' compound_list [else_clause] 'fi' ;
 enum status gr_if(struct ast_sh *sh)

@@ -127,4 +127,18 @@ echo e c h o
 ### Not backslahed
 echo 'This is unclosed\' here
 
+### Check with spaces
+echo a \   b \ \ c    \ a\ v  eeee\ 
 
+### Echo weird quotes
+echo ""
+echo this "" is "" a "" test
+echo ok ""
+echo "" ok
+
+### Unexpected end of file on echo
+echo 'Special characters: $@ \ / ` ' \" '
+
+### Echo with space
+a=a' '; echo $a\b
+a=' '; echo $a\b

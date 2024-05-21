@@ -7,7 +7,6 @@
 
 #include "env/env.h"
 #include "tools/ast/ast.h"
-
 // Do NOT expect this function to exit the program
 void exit_gracefully(enum error_type type)
 {
@@ -44,6 +43,7 @@ void print_error(enum error_type type)
     static const char *const error_names[] = {
         // General Errors -> 1
         [MALLOC_NULL] = "Memory error : running out of RAM ?",
+        [CD_BAD_PATH] = "CD: bad path provided",
         [UNSET_NOT_VAR_AND_FN] = "Cannot unset function AND variable at once",
         [ADD_CHILD_ERROR] = "Tried to add a child to an ast with NULL children",
         [LIST_NOT_FOUND] = "The element in the list ast is invalid",

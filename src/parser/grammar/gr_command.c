@@ -7,9 +7,22 @@ simple_command
 | shell_command { redirection }
 ;
 */
+
+enum status consume_redirs(struct ast_redir *redir)
+{
+    enum status st;
+
+    do
+        st = gr_redir(AST_REDIR(redir));
+    while (st == OK);
+    return st == ERROR ? ERROR : OK;
+}
+
+#define LAST_CHILD(List) ((List)->children[(List)->nb_children - 1])
 enum status gr_command(struct ast_pipe *pipe)
 {
     GR_START(Command);
+    enum status st;
     struct ast_list *list = AST_LIST(pipe);
     switch (gr_simple_command(list))
     {
@@ -20,16 +33,15 @@ enum status gr_command(struct ast_pipe *pipe)
     default:
         break;
     }
-    enum status st = gr_shell_cmd(list);
-    switch (st)
-    {
-    case OK: {
-        struct ast_sh *sh = AST_SH(list->children[list->nb_children - 1]);
-        while (gr_redir(AST_REDIR(sh)) == OK)
-            ;
-        GR_RET(OK);
-    }
-    default:
-        GR_RET(st);
-    }
+    st = gr_shell_cmd(AST(list));
+    if (st == ERROR)
+        GR_RET(ERROR);
+    if (st == OK)
+        return consume_redirs(AST_REDIR(LAST_CHILD(list)));
+    st = gr_function(list);
+    if (st == ERROR)
+        GR_RET(ERROR);
+    if (st == OK)
+        return consume_redirs(AST_REDIR(LAST_CHILD(list)));
+    GR_RET(NO_MATCH);
 }

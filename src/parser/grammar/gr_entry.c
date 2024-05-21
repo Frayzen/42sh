@@ -1,8 +1,8 @@
 #include "exit/error_handler.h"
 #include "lexer/token_saver.h"
+#include "parser/tools/gr_tools.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "tools/gr_tools.h"
 #include "tools/token/token.h"
 
 void consume_all(void)
@@ -39,7 +39,11 @@ enum status gr_input(struct ast **ast)
         goto error;
     tok_pop_clean();
     if (empty)
+    {
+        if (tok_peek()->type == BSZERO)
+            tok_pop_clean();
         GR_RET(NO_MATCH);
+    }
     GR_RET(OK);
 error:
     exit_gracefully(GRAMMAR_ERROR_ENTRY);

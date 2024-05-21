@@ -1,10 +1,10 @@
 #include <stdbool.h>
 
 #include "lexer/token_saver.h"
+#include "parser/tools/gr_tools.h"
+#include "parser/tools/gr_utils.h"
 #include "rules.h"
 #include "tools/ast/ast.h"
-#include "tools/gr_tools.h"
-#include "tools/gr_utils.h"
 
 /*
 shell_command =
@@ -13,6 +13,7 @@ shell_command =
 | rule_for
 | rule_while
 | rule_until
+| rule_case
 | rule_if
 ;
 */
@@ -73,10 +74,13 @@ enum status get_shell_command(struct ast_sh *sh)
         return ret;
     if (checkout(gr_for(sh), &ret))
         return ret;
+    if (checkout(gr_case(sh), &ret))
+        return ret;
     return NO_MATCH;
 }
 
-enum status gr_shell_cmd(struct ast_list *list)
+// ast is either a function or a list
+enum status gr_shell_cmd(struct ast *ast)
 {
     GR_START(ShellCmd);
     struct ast_sh *sh = init_ast(AST_SH);
@@ -89,6 +93,9 @@ enum status gr_shell_cmd(struct ast_list *list)
     case OK:
         break;
     }
-    add_child(list, AST(sh));
+    if (ast->type == AST_FUNCT)
+        AST_FUNCT(ast)->body = sh;
+    else
+        add_child(AST_LIST(ast), AST(sh));
     GR_RET(OK);
 }

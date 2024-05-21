@@ -17,6 +17,9 @@ enum status gr_prefix(struct ast_cmd *cmd)
     if (token->type == ASSMT)
     {
         struct assignment *ass = init_assignment(token->str);
+
+        if (!ass)
+            GR_RET(ERROR);
         append_ass_list(&cmd->assignment_list, ass);
         tok_pop_clean();
         GR_RET(OK);

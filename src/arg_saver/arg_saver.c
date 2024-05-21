@@ -3,10 +3,12 @@
 
 #include <stddef.h>
 
-#include "tools/ast/ast.h"
+#include "stdlib.h"
 
 char *build_argstr(char **argv, int argc)
 {
+    if (argc == 0)
+        return calloc(1, sizeof(char));
     int totalSize = 0;
 
     for (int i = 0; i < argc; i++)
