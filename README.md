@@ -27,7 +27,8 @@ cd 42sh
 ```
 
 Generate the configuration files using Autotools:
-```sh autoreconf -i
+```sh
+autoreconf -i
 ```
 
 Configure the project:
