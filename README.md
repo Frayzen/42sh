@@ -36,16 +36,11 @@ Configure the project:
 ./configure
 ```
 
+### Usage
+
 Compile the project:
 ```sh
 make
-```
-
-### Usage
-
-To create the shell executable:
-```sh
-make create
 ```
 
 This will generate the `./src/42sh` executable.
