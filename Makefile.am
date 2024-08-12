@@ -13,6 +13,9 @@ export LIB_LIST=exec/libexec.a \
 
 export CFLAGS_42SH=-std=c99 -Werror -Wall -Wextra -Wvla -pedantic -O2 -fsanitize=address
 
+setup: clean
+	bear -- make -j8
+
 funct_errors: all
 	chmod +x ./tests/funct/*.sh
 	./tests/funct/launch.sh errors

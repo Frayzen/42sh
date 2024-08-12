@@ -9,7 +9,7 @@
 
 struct expansion *expansion_init(void)
 {
-    struct expansion *r = calloc(sizeof(struct expansion), 1);
+    struct expansion *r = calloc(1, sizeof(struct expansion));
     return r;
 }
 
