@@ -63,5 +63,5 @@ This project is developed as part of the EPITA curriculum. We thank our instruct
 
 ### Google Slide Presentation for Defense
 We have created a Google Slide presentation to support our defense of the 42sh project. The presentation includes:
-[https://docs.google.com/presentation/d/1x9QjPQar7kT1-aK1lZbPzEg8iUtT91ix0EM9TU9YInw/edit?usp=sharing](The link is available here)
+[The link is available here](https://docs.google.com/presentation/d/1x9QjPQar7kT1-aK1lZbPzEg8iUtT91ix0EM9TU9YInw/edit?usp=sharing)
 
